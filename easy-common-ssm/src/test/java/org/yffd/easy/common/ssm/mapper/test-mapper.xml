@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.yffd.easy.common.ssm.dao.impl.BaseDaoImpl">
+	<resultMap id="resultId" type="org.yffd.easy.common.ssm.model.TestModel">
+		<result property="id" column="id"/>
+		<result property="userCode" column="user_code"/>
+		<result property="userName" column="user_name"/>
+		<result property="createTime" column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	
+	<sql id="columId">
+		id, user_code, user_name, create_time
+	</sql>
+	
+	<select id="listRange" parameterType="java.util.Map" resultMap="resultId">
+		select <include refid="columId"/>
+		from t_test
+		<where>
+			<if test="userName != null and userName !='' ">and user_name like CONCAT('%','${userName}','%' )</if>
+			<if test="userCode != null and userCode !='' ">and user_code=#{userCode}</if>
+		</where>
+	</select>
+	
+	<select id="listPage" parameterType="java.util.Map" resultMap="resultId">
+		select <include refid="columId"/>
+		from t_test
+		<where>
+			<if test="userName != null and userName !='' ">and user_name like CONCAT('%','${userName}','%' )</if>
+			<if test="userCode != null and userCode !='' ">and user_code=#{userCode}</if>
+		</where>
+		limit ${startRowNum},${numPerPage}
+	</select>
+	<select id="listPageCount" parameterType="java.util.Map" resultType="java.lang.Long">
+		select count(1)
+		from t_test
+		<where>
+			<if test="userName != null and userName !='' ">and user_name like CONCAT('%','${userName}','%' )</if>
+			<if test="userCode != null and userCode !='' ">and user_code=#{userCode}</if>
+		</where>
+	</select>
+	
+	<select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="resultId">
+		select <include refid="columId"/>
+		from t_test
+		<where>
+			<if test="userName != null and userName !='' ">and user_name like CONCAT('%','${userName}','%' )</if>
+			<if test="userCode != null and userCode !='' ">and user_code=#{userCode}</if>
+		</where>
+	</select>
+	
+	<select id="listBy" parameterType="java.util.Map" resultMap="resultId">
+		select <include refid="columId"/>
+		from t_test
+		<where>
+			<if test="userName != null and userName !='' ">and user_name like CONCAT('%','${userName}','%' )</if>
+			<if test="userCode != null and userCode !='' ">and user_code=#{userCode}</if>
+		</where>
+	</select>
+	
+	<select id="listByColumn" parameterType="java.util.Map" resultMap="resultId">
+		select <include refid="columId"/>
+		from t_test
+		<where>
+			<if test="userName != null and userName !='' ">and user_name like CONCAT('%','${userName}','%' )</if>
+			<if test="userCode != null and userCode !='' ">and user_code=#{userCode}</if>
+		</where>
+	</select>
+	
+	<select id="getCountByColumn" parameterType="java.util.Map" resultType="java.lang.Long">
+		select count(1) from t_test
+		<where>
+			<if test="userName != null and userName !='' ">and user_name like CONCAT('%','${userName}','%' )</if>
+			<if test="userCode != null and userCode !='' ">and user_code=#{userCode}</if>
+		</where>
+	</select>
+	
+	<delete id="batchDeleteByColumn" parameterType="java.util.Map">
+		delete from t_test
+		<where>
+			<if test="userName != null and userName !='' ">and user_name=#{userName}</if>
+			<if test="userCode != null and userCode !='' ">and user_code=#{userCode}</if>
+		</where>
+	</delete>
+	
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+			delete from t_test
+			where id=#{item.id}
+        </foreach>
+	</delete>
+	
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from t_test
+		<where>
+			<if test="_parameter != null and _parameter !='' ">and id=#{_parameter}</if> 
+		</where>
+	</delete>
+	
+	<update id="batchUpdateByColumn" parameterType="java.util.Map">
+		update t_test
+		<set>
+			<if test="createTime != null">create_time=#{createTime,javaType=java.util.Date,jdbcType=TIMESTAMP},</if>
+		</set>
+		<where>
+			<if test="userName != null and userName !='' ">and user_name=#{userName}</if>
+			<if test="userCode != null and userCode !='' ">and user_code=#{userCode}</if>
+		</where>
+	</update>
+	
+	<update id="batchUpdateByIds" parameterType="org.yffd.easy.common.ssm.model.TestModel">
+		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+			update t_test
+            <set>
+				<if test="item.userName != null and item.userName !='' ">user_name=#{item.userName},</if>
+				<if test="item.userCode != null and item.userCode !='' ">user_code=#{item.userCode},</if>
+				<if test="item.createTime != null">create_time=#{item.createTime,jdbcType=TIMESTAMP},</if>
+			</set>
+			where id=#{item.id}
+        </foreach>
+	</update>
+	
+	<update id="updateByPrimaryKey" parameterType="org.yffd.easy.common.ssm.model.TestModel">
+		update t_test
+		<set>
+			<if test="userName != null and userName !='' ">user_name=#{userName},</if>
+			<if test="userCode != null and userCode !='' ">user_code=#{userCode},</if>
+			<if test="createTime != null">create_time=#{createTime,javaType=java.util.Date,jdbcType=TIMESTAMP},</if>
+		</set>
+		where id=#{id}
+	</update>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="org.yffd.easy.common.ssm.model.TestModel">
+		insert into t_test(user_code, user_name, create_time) 
+			values(#{userCode}, #{userName}, current_timestamp)
+	</insert>
+	
+	<insert id="batchInsert" parameterType="java.util.List">
+		insert t_test(user_code, user_name, create_time)
+		values
+		<foreach collection="list" item="item" index="index" separator="," >  
+        	(#{item.userCode},#{item.userName},current_timestamp)  
+    	</foreach>
+	</insert>
+	
+	
+</mapper>

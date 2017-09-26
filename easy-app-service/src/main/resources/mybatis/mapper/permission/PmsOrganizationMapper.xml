@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.yffd.easy.app.permission.dao.impl.PmsOrganizationDaoImpl">
+
+	<!-- ##############################   基础sql开始   ############################## -->
+
+	<resultMap id="resutlId" type="org.yffd.easy.app.permission.entity.PmsOrganization">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+		<result column="creater" property="creater" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="editor" property="editor" jdbcType="VARCHAR" />
+		<result column="edit_time" property="editTime" jdbcType="TIMESTAMP" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		
+		<result column="org_name" property="orgName" jdbcType="VARCHAR" />
+		<result column="org_code" property="orgCode" jdbcType="VARCHAR" />
+		<result column="p_code" property="parentCode" jdbcType="VARCHAR" />
+		<result column="org_num" property="orgNum" jdbcType="FLOAT" />
+	</resultMap>
+
+	<sql id="pms_organization_table"> pms_organization </sql>
+	<sql id="pms_organization_columns"> id, version, status, creater, create_time, editor, edit_time, remark,
+	 org_name, org_code, p_code, org_num </sql>
+	<!-- 动态组装复合查询条件 -->
+	<sql id="pms_organization_where">
+		<!-- Equal query -->
+		<if test="orgCode != null and orgCode != ''"> and org_code= #{orgCode} </if>
+		<if test="parentCode != null and parentCode != ''"> and p_code= #{parentCode} </if>
+		<!-- Like query -->
+		<if test="orgName != null and orgName != ''"> and org_name like CONCAT(CONCAT('%', #{orgName}), '%') </if>
+	</sql>
+	
+	<select id="selectByPK" parameterType="java.lang.String" resultMap="resutlId">
+		select
+		<include refid="pms_organization_columns"/>
+		from
+		<include refid="pms_organization_table" />
+		where id = #{_parameter}
+	</select>
+	
+	<!-- selectListBy、selectBy、selectAll -->
+	<select id="selectListBy" parameterType="java.util.Map" resultMap="resutlId">
+		select
+		<include refid="pms_organization_columns"/>
+		from
+		<include refid="pms_organization_table" />
+		<where>
+			<include refid="pms_organization_where" />
+		</where>
+	</select>
+	
+	<insert id="insert" parameterType="org.yffd.easy.app.permission.entity.PmsOrganization" keyProperty="id" useGeneratedKeys="true">
+		insert into
+		<include refid="pms_organization_table" />
+		(version, status, creater, create_time, editor, edit_time, remark, 
+		org_name, org_code, p_code, org_num)
+		values
+		(0,#{status}, #{creater}, #{createTime}, #{editor}, #{editTime}, #{remark}, 
+		#{orgName}, #{orgCode}, #{parentCode}, #{orgNum})
+	</insert>
+	
+	<insert id="insertBatch" parameterType="java.util.List">
+		insert into 
+		<include refid="pms_organization_table" />
+		(version, status, creater, create_time, editor, edit_time, remark, 
+		org_name, org_code, p_code, org_num)
+		values
+		<foreach collection="list" item="item" index="index" separator="," >  
+		(0, #{item.status}, #{item.creater}, #{item.createTime}, #{item.editor}, #{item.editTime}, #{item.remark}, 
+		#{item.orgName}, #{item.orgCode}, #{item.parentCode}, #{item.orgNum})
+    	</foreach>
+	</insert> 
+	
+	<update id="updateByPK" parameterType="org.yffd.easy.app.permission.entity.PmsOrganization">
+		update <include refid="pms_organization_table" />
+		<set>
+			version = #{version} + 1,
+			creater = #{creater, jdbcType=VARCHAR},
+			create_time = #{createTime, jdbcType=TIMESTAMP},
+			editor = #{editor, jdbcType=VARCHAR},
+			edit_time = #{editTime, jdbcType=TIMESTAMP},
+			remark = #{remark, jdbcType=VARCHAR},
+			org_name = #{orgName, jdbcType=VARCHAR},
+			org_code = #{orgCode, jdbcType=VARCHAR},
+			p_code = #{parentCode, jdbcType=FLOAT},
+			org_num = #{orgNum, jdbcType=VARCHAR},
+		</set>
+		<where>
+			id = #{id} and version = #{version}
+		</where>
+	</update>
+	
+	<update id="updateBatch" parameterType="java.util.List">
+		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+			update <include refid="pms_organization_table" />
+            <set>
+				version = #{item.version} + 1,
+				<if test="item.creater != null and item.creater !='' ">creater = #{item.creater,jdbcType=VARCHAR},</if>
+				<if test="item.createTime != null">create_time = #{item.createTime,jdbcType=TIMESTAMP},</if>
+				<if test="item.editor != null and item.editor !='' ">editor = #{item.editor,jdbcType=VARCHAR},</if>
+				<if test="item.editTime != null">edit_time = #{item.editTime,jdbcType=TIMESTAMP},</if>
+				<if test="item.remark != null and item.remark !='' ">remark = #{item.remark,jdbcType=VARCHAR},</if>
+				<if test="item.orgName != null and item.orgName !='' ">org_name = #{item.orgName, jdbcType=VARCHAR},</if>
+				<if test="item.orgCode != null and item.orgCode !='' ">org_code = #{item.orgCode, jdbcType=VARCHAR},</if>
+				<if test="item.parentCode != null and item.parentCode !='' ">p_code = #{item.parentCode, jdbcType=FLOAT},</if>
+				<if test="item.orgNum != null and item.orgNum !='' ">org_num = #{item.orgNum, jdbcType=VARCHAR},</if>
+			</set>
+			where id=#{item.id} and version = #{item.version}
+        </foreach>
+	</update>
+	
+	<delete id="deleteByPK" parameterType="java.lang.String">
+		delete from
+		<include refid="pms_organization_table" />
+		where id = #{_parameter}
+	</delete>
+	
+	<delete id="deleteBy" parameterType="java.util.Map">
+		delete from
+		<include refid="pms_organization_table" />
+		<where>
+			<include refid="pms_organization_where" />
+		</where>
+	</delete>
+	
+	<delete id="deleteBatch" parameterType="java.util.List">
+		delete from
+		<include refid="pms_organization_table" />
+		where id in
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">#{item.id}</foreach>
+	</delete>
+	
+	<!-- ##############################   基础sql结束    ############################## -->
+	
+</mapper>

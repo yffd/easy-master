@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.yffd.easy.app.permission.dao.impl.PmsRoleDaoImpl">
+
+	<!-- ##############################   基础sql开始   ############################## -->
+
+	<resultMap id="resultId" type="org.yffd.easy.app.permission.entity.PmsRole">
+		<!-- 公共属性 -->
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+		<result column="creater" property="creater" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="editor" property="editor" jdbcType="VARCHAR" />
+		<result column="edit_time" property="editTime" jdbcType="TIMESTAMP" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<!-- 特有属性 -->
+		<result column="role_code" property="roleCode" jdbcType="VARCHAR" />
+		<result column="role_name" property="roleName" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<sql id="pms_role_table"> pms_role </sql>
+	<sql id="pms_role_columns"> id,version,status,creater,create_time, editor, edit_time, remark, role_code, role_name </sql>
+	<!-- 动态组装复合查询条件 -->
+	<sql id="pms_role_where">
+		<!-- Equal query -->
+		<if test="roleCode != null and roleCode != ''"> and role_code = #{roleCode} </if>
+		<!-- Like query -->
+		<if test="roleName != null and roleName != ''"> and role_name like CONCAT(CONCAT('%', #{roleName}), '%') </if>
+	</sql>
+	
+	<!-- 分页查询 -->
+	<select id="selectPage" parameterType="java.util.Map" resultMap="resultId">
+		select
+		<include refid="pms_role_columns"/>
+		from
+		<include refid="pms_role_table" />
+		<where>
+			<include refid="pms_role_where" />
+		</where>
+		order by create_time desc limit #{startRowNum}, #{numPerPage}
+	</select>
+
+	<select id="selectCountBy" parameterType="java.util.Map" resultType="long">
+		select count(1) from
+		<include refid="pms_role_table" />
+		<where>
+			<include refid="pms_role_where" />
+		</where>
+	</select>
+	
+	<select id="selectByPK" parameterType="java.lang.String" resultMap="resultId">
+		select
+		<include refid="pms_role_columns"/>
+		from
+		<include refid="pms_role_table" />
+		where id = #{_parameter}
+	</select>
+	
+	<!-- selectListBy、selectBy、selectAll -->
+	<select id="selectListBy" parameterType="java.util.Map" resultMap="resultId">
+		select
+		<include refid="pms_role_columns"/>
+		from
+		<include refid="pms_role_table" />
+		<where>
+			<include refid="pms_role_where" />
+		</where>
+	</select>
+	
+	<insert id="insert" parameterType="org.yffd.easy.app.permission.entity.PmsRole" keyProperty="id" useGeneratedKeys="true">
+		insert into
+		<include refid="pms_role_table" />
+		(version,status,creater,create_time, editor, edit_time, remark, 
+		role_code, role_name)
+		values
+		(0, #{status}, #{creater}, #{createTime}, #{editor}, #{editTime}, #{remark}, 
+		#{roleCode}, #{roleName})
+	</insert>
+		
+	<insert id="insertBatch" parameterType="java.util.List">
+		insert into 
+		<include refid="pms_role_table" />
+		(version,status,creater,create_time, editor, edit_time, remark, 
+		role_code, role_name)
+		values
+		<foreach collection="list" item="item" index="index" separator="," >  
+		(0, #{item.status}, #{item.creater}, #{item.createTime}, #{item.editor}, #{item.editTime}, #{item.remark}, 
+		#{item.roleCode}, #{item.roleName})
+    	</foreach>
+	</insert> 
+
+	<update id="updateByPK" parameterType="org.yffd.easy.app.permission.entity.PmsRole">
+		update <include refid="pms_role_table" />
+		<set>
+			version = #{version} + 1,
+			creater = #{creater, jdbcType=VARCHAR},
+			create_time = #{createTime, jdbcType=TIMESTAMP},
+			editor = #{editor, jdbcType=VARCHAR},
+			edit_time = #{editTime, jdbcType=TIMESTAMP},
+			remark = #{remark, jdbcType=VARCHAR},
+			role_code = #{roleCode, jdbcType=VARCHAR},
+			role_name = #{roleName, jdbcType=VARCHAR},
+		</set>
+		<where>
+			id = #{id} and version = #{version}
+		</where>
+	</update>
+	
+	<update id="updateBatch" parameterType="java.util.List">
+		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+			update <include refid="pms_role_table" />
+            <set>
+				version = #{item.version} + 1,
+				<if test="item.creater != null and item.creater !='' ">creater = #{item.creater,jdbcType=VARCHAR},</if>
+				<if test="item.createTime != null">create_time = #{item.createTime, jdbcType=TIMESTAMP},</if>
+				<if test="item.editor != null and item.editor !='' ">editor = #{item.editor, jdbcType=VARCHAR},</if>
+				<if test="item.editTime != null">edit_time = #{item.editTime, jdbcType=TIMESTAMP},</if>
+				<if test="item.remark != null and item.remark !='' ">remark = #{item.remark, jdbcType=VARCHAR},</if>
+				<if test="item.roleCode != null and item.roleCode !='' ">role_code = #{item.roleCode, jdbcType=VARCHAR},</if>
+				<if test="item.roleName != null and item.roleName !='' ">role_name = #{item.roleName, jdbcType=VARCHAR},</if>
+			</set>
+			where id=#{item.id} and version = #{item.version}
+        </foreach>
+	</update>
+	
+	<delete id="deleteByPK" parameterType="java.lang.String">
+		delete from
+		<include refid="pms_role_table" />
+		where id = #{_parameter}
+	</delete>
+	
+	<delete id="deleteBy" parameterType="java.util.Map">
+		delete from
+		<include refid="pms_role_table" />
+		<where>
+			<include refid="pms_role_where" />
+		</where>
+	</delete>
+	
+	<delete id="deleteBatch" parameterType="java.util.List">
+		delete from
+		<include refid="pms_role_table" />
+		where id in
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">#{item.id}</foreach>
+	</delete>
+	
+	<!-- ##############################   基础sql结束    ############################## -->
+	
+</mapper>

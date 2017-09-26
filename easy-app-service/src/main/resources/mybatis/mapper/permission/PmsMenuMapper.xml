@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.yffd.easy.app.permission.dao.impl.PmsMenuDaoImpl">
+
+	<!-- ##############################   基础sql开始   ############################## -->
+	
+	<resultMap id="resutlId" type="org.yffd.easy.app.permission.entity.PmsMenu">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+		<result column="creater" property="creater" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="editor" property="editor" jdbcType="VARCHAR" />
+		<result column="edit_time" property="editTime" jdbcType="TIMESTAMP" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		
+		<result column="menu_name" property="menuName" jdbcType="VARCHAR" />
+		<result column="menu_code" property="menuCode" jdbcType="VARCHAR" />
+		<result column="menu_url" property="menuUrl" jdbcType="VARCHAR" />
+		<result column="p_code" property="parentCode" jdbcType="VARCHAR" />
+		<result column="menu_num" property="menuNum" jdbcType="FLOAT" />
+		<result column="menu_icon" property="menuIcon" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<resultMap id="resutlId_1" type="org.yffd.easy.app.permission.entity.PmsMenu">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+		<result column="creater" property="creater" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="editor" property="editor" jdbcType="VARCHAR" />
+		<result column="edit_time" property="editTime" jdbcType="TIMESTAMP" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		
+		<result column="menu_name" property="menuName" jdbcType="VARCHAR" />
+		<result column="menu_code" property="menuCode" jdbcType="VARCHAR" />
+		<result column="menu_url" property="menuUrl" jdbcType="VARCHAR" />
+		<result column="p_code" property="parentCode" jdbcType="VARCHAR" />
+		<result column="menu_num" property="menuNum" jdbcType="FLOAT" />
+		<result column="menu_icon" property="menuIcon" jdbcType="VARCHAR" />
+		<!-- 查询子菜单 -->
+		<collection property="children" ofType="org.yffd.easy.app.permission.entity.PmsMenu">
+			<id column="c_id" property="id" jdbcType="INTEGER" />
+			<result column="c_version" property="version" jdbcType="INTEGER" />
+			<result column="c_status" property="status" jdbcType="VARCHAR" />
+			<result column="c_creater" property="creater" jdbcType="VARCHAR" />
+			<result column="c_create_time" property="createTime" jdbcType="TIMESTAMP" />
+			<result column="c_editor" property="editor" jdbcType="VARCHAR" />
+			<result column="c_edit_time" property="editTime" jdbcType="TIMESTAMP" />
+			<result column="c_remark" property="remark" jdbcType="VARCHAR" />
+			
+			<result column="c_menu_name" property="menuName" jdbcType="VARCHAR" />
+			<result column="c_menu_code" property="menuCode" jdbcType="VARCHAR" />
+			<result column="c_menu_url" property="menuUrl" jdbcType="VARCHAR" />
+			<result column="c_p_code" property="parentCode" jdbcType="VARCHAR" />
+			<result column="c_menu_num" property="menuNum" jdbcType="FLOAT" />
+			<result column="menu_icon" property="menuIcon" jdbcType="VARCHAR" />
+		</collection>
+	</resultMap>
+
+	<sql id="pms_menu_table"> pms_menu </sql>
+	<sql id="pms_menu_columns"> id, version, status, creater, create_time, editor, edit_time, remark,
+	 menu_name, menu_code, menu_url, p_code, menu_num, menu_icon </sql>
+	<!-- 动态组装复合查询条件 -->
+	<sql id="pms_menu_where">
+		<!-- Equal query -->
+		<if test="menuCode != null and menuCode != ''"> and menu_code= #{menuCode} </if>
+		<if test="parentCode != null and parentCode != ''"> and p_code= #{parentCode} </if>
+		<!-- Like query -->
+		<if test="menuName != null and menuName != ''"> and menu_name like CONCAT(CONCAT('%', #{menuName}), '%') </if>
+	</sql>
+	
+	<select id="selectByPK" parameterType="java.lang.String" resultMap="resutlId">
+		select
+		<include refid="pms_menu_columns"/>
+		from
+		<include refid="pms_menu_table" />
+		where id = #{_parameter}
+	</select>
+	
+	<select id="selectBy" parameterType="java.util.Map" resultMap="resutlId">
+		select
+		<include refid="pms_menu_columns"/>
+		from
+		<include refid="pms_menu_table" />
+		<where>
+			<include refid="pms_menu_where" />
+		</where>
+	</select>
+	
+	<!-- selectListBy、selectBy、selectAll -->
+	<select id="selectListBy" parameterType="java.util.Map" resultMap="resutlId">
+		select
+		<include refid="pms_menu_columns"/>
+		from
+		<include refid="pms_menu_table" />
+		<where>
+			<include refid="pms_menu_where" />
+		</where>
+	</select>
+<!-- 	<select id="selectListBy" parameterType="java.util.Map" resultMap="resutlId_1"> -->
+<!-- 		select  -->
+<!-- 		t1.id, t1.version, t1.status, t1.creater, t1.create_time, t1.editor, t1.edit_time, t1.remark, t1.menu_name, t1.menu_code, t1.menu_url, t1.p_code, t1.menu_num, t1.menu_icon, -->
+<!-- 		t2.c_id, t2.c_version, t2.c_status, t2.c_creater, t2.c_create_time, t2.c_editor, t2.c_edit_time, t2.c_remark, t2.c_menu_name, t2.c_menu_code, t2.c_menu_url, t2.c_p_code, t2.c_menu_num, t2.c_menu_icon -->
+<!-- 		from -->
+<!-- 		(select id, version, status, creater, create_time, editor, edit_time, remark, menu_name, menu_code, menu_url, p_code, menu_num, menu_icon from pms_menu) t1 -->
+<!-- 		left join -->
+<!-- 		(select id as c_id, version as c_version, status as c_status, creater as c_creater, create_time as c_create_time, editor as c_editor, edit_time as c_edit_time, remark as c_remark, menu_name as c_menu_name, menu_code as c_menu_code, menu_url as c_menu_url, p_code as c_p_code, menu_num as c_menu_num, menu_icon as c_menu_icon from pms_menu) t2 -->
+<!-- 		on t1.menu_code=t2.c_p_code -->
+<!-- 		where t2.c_p_code is not null -->
+<!-- 		order by t1.menu_num, t2.c_menu_num -->
+<!-- 	</select> -->
+	
+	<insert id="insert" parameterType="org.yffd.easy.app.permission.entity.PmsMenu" keyProperty="id" useGeneratedKeys="true">
+		insert into
+		<include refid="pms_menu_table" />
+		(version, status, creater, create_time, editor, edit_time, remark, 
+		menu_name, menu_code, menu_url, p_code, menu_num, menu_icon)
+		values
+		(0,#{status}, #{creater}, #{createTime}, #{editor}, #{editTime}, #{remark}, 
+		#{menuName}, #{menuCode}, #{menuUrl}, #{parentCode}, #{menuNum}, {menuIcon})
+	</insert>
+	
+	<insert id="insertBatch" parameterType="java.util.List">
+		insert into 
+		<include refid="pms_menu_table" />
+		(version, status, creater, create_time, editor, edit_time, remark, 
+		menu_name, menu_code, menu_url, p_code, menu_num, menu_icon)
+		values
+		<foreach collection="list" item="item" index="index" separator="," >  
+		(0, #{item.status}, #{item.creater}, #{item.createTime}, #{item.editor}, #{item.editTime}, #{item.remark}, 
+		#{item.menuName}, #{item.menuCode}, #{item.menuUrl}, #{item.parentCode}, #{item.menuNum}, #{item.menuIcon})
+    	</foreach>
+	</insert> 
+	
+	<update id="updateByPK" parameterType="org.yffd.easy.app.permission.entity.PmsMenu">
+		update <include refid="pms_menu_table" />
+		<set>
+			version = #{version} + 1,
+			editor = #{editor, jdbcType=VARCHAR},
+			edit_time = #{editTime, jdbcType=TIMESTAMP},
+			remark = #{remark, jdbcType=VARCHAR},
+			menu_name = #{menuName, jdbcType=VARCHAR},
+			menu_code = #{menuCode, jdbcType=VARCHAR},
+			menu_url = #{menuUrl, jdbcType=VARCHAR},
+			p_code = #{parentCode, jdbcType=VARCHAR},
+			menu_num = #{menuNum, jdbcType=FLOAT},
+			menu_icon = #{menuIcon, jdbcType=VARCHAR},
+		</set>
+		<where>
+			menu_code = #{menuCode} and version = #{version}
+		</where>
+	</update>
+	
+	<update id="updateBatch" parameterType="java.util.List">
+		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+			update <include refid="pms_menu_table" />
+            <set>
+				version = #{item.version} + 1,
+				<if test="item.creater != null and item.creater !='' ">creater = #{item.creater,jdbcType=VARCHAR},</if>
+				<if test="item.createTime != null">create_time = #{item.createTime,jdbcType=TIMESTAMP},</if>
+				<if test="item.editor != null and item.editor !='' ">editor = #{item.editor,jdbcType=VARCHAR},</if>
+				<if test="item.editTime != null">edit_time = #{item.editTime,jdbcType=TIMESTAMP},</if>
+				<if test="item.remark != null and item.remark !='' ">remark = #{item.remark,jdbcType=VARCHAR},</if>
+				<if test="item.menuName != null and item.menuName !='' ">menu_name = #{item.menuName, jdbcType=VARCHAR},</if>
+				<if test="item.menuCode != null and item.menuCode !='' ">menu_code = #{item.menuCode, jdbcType=VARCHAR},</if>
+				<if test="item.menuUrl != null and item.menuUrl !='' ">menu_url = #{item.menuUrl, jdbcType=VARCHAR},</if>
+				<if test="item.parentCode != null and item.parentCode !='' ">p_code = #{item.parentCode, jdbcType=VARCHAR},</if>
+				<if test="item.menuNum != null and item.menuNum !='' ">menu_num = #{item.menuNum, jdbcType=FLOAT},</if>
+				<if test="item.menuIcon != null and item.menuIcon !='' ">menu_icon = #{item.menuIcon, jdbcType=VARCHAR},</if>
+			</set>
+			where menu_code=#{item.menuCode} and version = #{item.version}
+        </foreach>
+	</update>
+	
+	<delete id="deleteByPK" parameterType="java.lang.String">
+		delete from
+		<include refid="pms_menu_table" />
+		where menu_code = #{_parameter}
+	</delete>
+	
+	<delete id="deleteBy" parameterType="java.util.Map">
+		delete from
+		<include refid="pms_menu_table" />
+		<where>
+			<include refid="pms_menu_where" />
+		</where>
+	</delete>
+	
+	<delete id="deleteBatch" parameterType="java.util.List">
+		delete from
+		<include refid="pms_menu_table" />
+		where id in
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">#{item.id}</foreach>
+	</delete>
+	
+	<!-- ##############################   基础sql结束    ############################## -->
+	
+</mapper>
