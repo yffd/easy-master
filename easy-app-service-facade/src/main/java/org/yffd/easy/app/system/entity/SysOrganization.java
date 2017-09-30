@@ -18,13 +18,13 @@ public class SysOrganization extends PersistEntity {
 	private static final long serialVersionUID = 8507597194623600620L;
 
 	private String orgName;
-	private String shortName;
 	private String orgCode;
 	private String parentCode;
 	private String managerCode;
 	private String deputyManagerCode;
 	private String icon;
 	private Integer staffNum;
+	private String shortName;
 	private String tel;
 	private String fax;
 	

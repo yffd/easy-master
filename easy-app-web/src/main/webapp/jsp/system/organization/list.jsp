@@ -63,76 +63,28 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	
 	//弹窗增加
 	function addRowsOpenDlg() {
-		console.info(parent.$);
-		var row = $dg.treegrid('getSelected');
-		if(row){
-			if(row.type=="O"){
-				parent.$.messager.show({
-					title: "提示",
-					msg: "操作暂无下层!",
-					timeout: 1000 * 3
-				});
-			}else{
-				parent.$.modalDialog({
-					title: "添加组织机构",
-					width: 600,
-					height: 400,
-					href: "jsp/system/organization/edit.jsp",
-					onLoad:function(){
-						if(row){
-							var f = parent.$.modalDialog.handler.find("#form");
-							f.form("load", {"pid":row.permissionId});
-						}
-					},	
-					buttons: [{
-						text: '保存',
-						iconCls: 'icon-ok',
-						handler: function() {
-							parent.$.modalDialog.openner= $grid;//因为添加成功之后，需要刷新这个treegrid，所以先预定义好
-							var f = parent.$.modalDialog.handler.find("#form");
-							f.submit();
-						}
-					}, {
-						text: '取消',
-						iconCls: 'icon-cancel',
-						handler: function() {
-							parent.$.modalDialog.handler.dialog('destroy');
-							parent.$.modalDialog.handler = undefined;
-						}
-					}
-					]
-				});
-			}
-		}else{
-			parent.$.modalDialog({
-				title: "添加组织机构",
-				width: 600,
-				height: 400,
-				href: "jsp/system/organization/edit.jsp",
-				onLoad:function(){
-					if(row){
-						var f = parent.$.modalDialog.handler.find("#form");
-						f.form("load", {"pid":row.permissionId});
-					}
-				},	
-				buttons: [{
-					text: '保存',
-					iconCls: 'icon-ok',
-					handler: function() {
-						parent.$.modalDialog.openner= $grid;//因为添加成功之后，需要刷新这个treegrid，所以先预定义好
-						var f = parent.$.modalDialog.handler.find("#form");
-						f.submit();
-					}
-				},{
-					text: '取消',
-					iconCls: 'icon-cancel',
-					handler: function() {
-						parent.$.modalDialog.handler.dialog('destroy');
-						parent.$.modalDialog.handler = undefined;
-					}
-				}]
-			});
-		}
+		parent.$.modalDialog({
+			title: "添加组织机构",
+			width: 600,
+			height: 400,
+			href: "jsp/system/organization/edit.jsp",
+			buttons: [{
+				text: '保存',
+				iconCls: 'icon-ok',
+				handler: function() {
+// 					parent.$.modalDialog.openner= $grid;//因为添加成功之后，需要刷新这个treegrid，所以先预定义好
+					var form = parent.$.modalDialog.handler.find("#form");
+					form.submit();
+				}
+			},{
+				text: '取消',
+				iconCls: 'icon-cancel',
+				handler: function() {
+					parent.$.modalDialog.handler.dialog('destroy');
+					parent.$.modalDialog.handler = undefined;
+				}
+			}]
+		});
 	}
 </script>
 </head>

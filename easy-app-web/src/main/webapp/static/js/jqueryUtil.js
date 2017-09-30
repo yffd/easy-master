@@ -66,7 +66,6 @@
 	 * @param top
 	 */
 	var easyuiPanelOnMove = function(left, top) {
-		console.info(">>jqueryUtil>>>easyuiPanelOnMove");
 		var l = left;
 		var t = top;
 		if (l < 1) {

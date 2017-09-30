@@ -20,29 +20,31 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<div data-options="region:'center',border:false" style="overflow: hidden;padding: 10px;">
 			<form id="form" method="post">
 				<fieldset>
-					<legend><img src="extend/fromedit.png" style="margin-bottom: -3px;"/> 组织编辑</legend>
-					<input name="organizationId" id="organizationId"  type="hidden"/>
-					<input name="created" id="created"  type="hidden"/>
-					<input name="creater" id="creater"  type="hidden"/>
-					<input name="status" id="status"  type="hidden"/>
+					<legend>编辑</legend>
 					 <table>
 						 <tr>
 						    <th>组织名称</th>
-							<td><input name="fullName" id="fullName" placeholder="请输入组织名称" class="easyui-textbox easyui-validatebox" type="text" data-options="required:true"/></td>
+							<td><input type="text" name="name" id="name_id" placeholder="请输入名称" class="easyui-textbox easyui-validatebox" data-options="required:true"/></td>
 							<th>组织编码</th>
-							<td><input name="myid" id="myid" type="text"  class="easyui-textbox easyui-validatebox" data-options="required:true"/></td>
+							<td><input type="text" name="code" id="code_id" class="easyui-textbox easyui-validatebox" data-options="required:true"/></td>
 						 </tr>
+<!-- 						 <tr> -->
+<!-- 						    <th>负责人</th> -->
+<!-- 							<td><input type="text" name="managerCode" id="managerCode_id" class="easyui-textbox easyui-validatebox"/></td> -->
+<!-- 							<th>副负责人</th> -->
+<!-- 							<td><input type="text" name="deputyManagerCode" id="deputyManagerCode_id" class="easyui-textbox easyui-validatebox"/></td> -->
+<!-- 						 </tr> -->
 						 <tr>
-						    <th>英文名称</th>
-							<td><input name="ename" id="ename" type="text" class="easyui-textbox easyui-validatebox"/></td>
 							<th>简称</th>
-							<td><input id="shortName" name="shortName" type="text" class="easyui-textbox easyui-validatebox"/></td>
+							<td><input name="shortName" id="shortName_id" type="text" class="easyui-textbox easyui-validatebox"/></td>
+						    <th>人员数</th>
+							<td><input name="staffNum" id="staffNum_id" type="text" class="easyui-textbox easyui-validatebox"/></td>
 						 </tr>
 						  <tr>
 						    <th>上层组织</th>
-							<td><input id="pid" name="pid" type="text" class="easyui-textbox easyui-validatebox"/></td>
+							<td><input name="parentCode" id="parentCode_id" type="text" class="easyui-textbox easyui-validatebox"/></td>
 							<th>组织图标</th>
-							<td><input id=iconCls name="iconCls" type="text" class="easyui-textbox"/></td>
+							<td><input name="iconCls" id=iconCls type="text" class="easyui-textbox"/></td>
 						 </tr>
 						 <tr>
 						    <th>电话</th>
