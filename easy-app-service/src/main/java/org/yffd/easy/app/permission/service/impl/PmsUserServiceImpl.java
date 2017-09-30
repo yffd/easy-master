@@ -65,7 +65,7 @@ public class PmsUserServiceImpl implements PmsUserService {
 	public void updatePwd(String userCode, String userPwd) {
 		PmsUser pmsUser = this.pmsUserDao.selectByPK(userCode);
 		pmsUser.setUserPwd(userPwd);
-		this.pmsUserDao.updateByPK(pmsUser);
+		this.pmsUserDao.updateBy(pmsUser);
 
 	}
 

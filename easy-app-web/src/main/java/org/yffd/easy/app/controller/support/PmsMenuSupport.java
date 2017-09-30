@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
+import org.yffd.easy.app.controller.system.support.MenuTreeEntity;
 import org.yffd.easy.app.permission.entity.PmsMenu;
-import org.yffd.easy.common.core.entity.MenuTreeEntity;
 import org.yffd.easy.common.core.tree.TreeBuilder;
 import org.yffd.easy.common.core.util.ValidUtils;
 

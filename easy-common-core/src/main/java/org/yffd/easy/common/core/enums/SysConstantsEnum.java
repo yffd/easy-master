@@ -9,12 +9,12 @@ package org.yffd.easy.common.core.enums;
  * @see 	 
  */
 public enum SysConstantsEnum {
-	SUCCESS("ok", "成功"),
-	ERROR("faild", "失败"),
-	YES("1", "是"),
-	NO("0", "否"),
-	ACTIVE("1", "激活"),
-	UNACTIVE("0", "冻结"),
+	SUCCESS("OK", "成功"),
+	ERROR("FAILD", "失败"),
+	YES("Y", "是"),
+	NO("N", "否"),
+	ACTIVE("A", "激活"),
+	UNACTIVE("I", "冻结"),
 	REQUEST_ASYNC("async", "异步"),
 	REQUEST_SYNC("sync", "同步"),
 	;

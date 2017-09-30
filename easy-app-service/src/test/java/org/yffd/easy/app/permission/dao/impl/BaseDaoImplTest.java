@@ -106,7 +106,7 @@ public class BaseDaoImplTest {
 	
 	public void updateByPKTest() {
 		PersistEntity entity = this.getEntity();
-		int result = this.getDaoImpl().updateByPK(entity);
+		int result = this.getDaoImpl().updateBy(entity);
 		Assert.assertEquals(true, result > 0);
 		System.out.println("::updateByPK::");
 	}

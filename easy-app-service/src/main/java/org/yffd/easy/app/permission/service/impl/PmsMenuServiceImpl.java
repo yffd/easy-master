@@ -56,7 +56,7 @@ public class PmsMenuServiceImpl implements PmsMenuService {
 
 	@Override
 	public void update(PmsMenu pmsMenu) {
-		this.pmsMenuDao.updateByPK(pmsMenu);
+		this.pmsMenuDao.updateBy(pmsMenu);
 	}
 
 	@Override

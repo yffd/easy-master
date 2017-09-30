@@ -28,7 +28,7 @@ public class TransactionServiceImpl {
         
 //        if(true) throw BizException.DB_INSERT_RESULT_0;
         
-        int restult2 = this.baseDao.updateByPK(update);
+        int restult2 = this.baseDao.updateBy(update);
         System.out.println(">>>result2="+restult2);
     }
 }

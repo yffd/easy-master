@@ -23,7 +23,7 @@ public class TreeBuilder {
 	public static List<TreeNode> bulid(List<TreeNode> treeNodes) {
         List<TreeNode> trees = new ArrayList<TreeNode>();
         for (TreeNode treeNode : treeNodes) {
-            if ("0".equals(treeNode.getParentId())) {
+            if (null==treeNode.getParentId() || "0".equals(treeNode.getParentId())) {
                 trees.add(treeNode);
             }
             for (TreeNode it : treeNodes) {
@@ -48,7 +48,7 @@ public class TreeBuilder {
 	public static List<? extends TreeNode> buildByRecursive(List<? extends TreeNode> treeNodes) {
         List<TreeNode> trees = new ArrayList<TreeNode>();  
         for (TreeNode treeNode : treeNodes) {
-            if ("0".equals(treeNode.getParentId())) {
+            if (null==treeNode.getParentId() || "0".equals(treeNode.getParentId())) {
                 trees.add(findChildren(treeNode, treeNodes));
             }
         }

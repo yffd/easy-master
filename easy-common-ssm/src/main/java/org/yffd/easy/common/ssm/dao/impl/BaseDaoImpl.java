@@ -40,8 +40,8 @@ public class BaseDaoImpl<T extends PersistEntity> implements IBaseDao<T> {
     /** mapper xml 中的SQL ID，即statement=insert */
     public static final String SQL_INSERT_BATCH = "insertBatch";
     
-    /** mapper xml 中的SQL ID，即statement=updateByPK */
-    public static final String SQL_UPDATE_BY_PK = "updateByPK";
+    /** mapper xml 中的SQL ID，即statement=updateBy */
+    public static final String SQL_UPDATE_BY = "updateBy";
     /** mapper xml 中的SQL ID，即statement=updateBatch */
     public static final String SQL_UPDATE_BATCH = "updateBatch";
     
@@ -227,18 +227,18 @@ public class BaseDaoImpl<T extends PersistEntity> implements IBaseDao<T> {
 	}
 
 	/**
-	 * sqlid : {@link org.yffd.easy.common.ssm.dao.impl.BaseDaoImpl#SQL_UPDATE_BY_PK} <br/>
+	 * sqlid : {@link org.yffd.easy.common.ssm.dao.impl.BaseDaoImpl#SQL_UPDATE_BY} <br/>
 	 * @Date	2017年9月14日 下午4:54:08 <br/>
 	 * @author  zhangST
 	 * @param entity
 	 * @return
-	 * @see org.yffd.easy.common.ssm.dao.IBaseDao#updateByPK(java.lang.Object)
+	 * @see org.yffd.easy.common.ssm.dao.IBaseDao#updateBy(java.lang.Object)
 	 */
 	@Override
-	public int updateByPK(T entity) {
-        int result = sqlSession.update(getStatement(SQL_UPDATE_BY_PK), entity);
+	public int updateBy(T entity) {
+        int result = sqlSession.update(getStatement(SQL_UPDATE_BY), entity);
         if (result <= 0) {
-            throw DaoException.DB_UPDATE_RESULT_0(getStatement(SQL_UPDATE_BY_PK));
+            throw DaoException.DB_UPDATE_RESULT_0(getStatement(SQL_UPDATE_BY));
         }
         return result;
 	}

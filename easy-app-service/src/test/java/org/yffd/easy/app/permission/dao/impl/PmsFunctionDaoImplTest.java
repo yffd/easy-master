@@ -201,7 +201,7 @@ public class PmsFunctionDaoImplTest extends SpringBaseTestCase {
 		entity.setFuncName("权限管理-菜单-查看-");
 		entity.setFuncCode("pms:menu:view-");
 		entity.setMenuCode("qxgl");
-		this.pmsFunctionDao.updateByPK(entity);
+		this.pmsFunctionDao.updateBy(entity);
 	}
 	
 	@Test

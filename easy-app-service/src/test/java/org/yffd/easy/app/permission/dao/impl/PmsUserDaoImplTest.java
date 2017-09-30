@@ -147,7 +147,7 @@ public class PmsUserDaoImplTest extends SpringBaseTestCase {
 		entity.setUserPwd("123456");
 		entity.setRealName("张三-");
 		entity.setMobileNo("22222222222");
-		this.dao.updateByPK(entity);
+		this.dao.updateBy(entity);
 	}
 	
 	@Test

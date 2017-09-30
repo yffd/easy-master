@@ -159,7 +159,7 @@ public class PmsRoleFuncDaoImplTest extends SpringBaseTestCase {
 		entity.setId("1000");
 		entity.setFuncCode("pms:menu:view-");
 		entity.setRoleCode("admin-");
-		this.dao.updateByPK(entity);
+		this.dao.updateBy(entity);
 	}
 	
 	@Test

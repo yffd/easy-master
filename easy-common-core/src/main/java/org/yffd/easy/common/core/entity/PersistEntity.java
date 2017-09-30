@@ -88,7 +88,6 @@ public class PersistEntity implements Serializable {
     	this.setEditor("admin");
     	this.setEditTime(date);
     	this.setStatus("1");
-    	this.setRemark("激活");
     }
 }
 

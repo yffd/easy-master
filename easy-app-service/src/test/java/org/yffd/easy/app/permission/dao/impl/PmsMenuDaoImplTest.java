@@ -158,7 +158,7 @@ public class PmsMenuDaoImplTest extends SpringBaseTestCase {
         menu.setMenuUrl("/test/test-");
         menu.setParentCode("1000");
         menu.setMenuNum(2.0F);
-		this.pmsMenuDao.updateByPK(menu);
+		this.pmsMenuDao.updateBy(menu);
 	}
 
 	@Test

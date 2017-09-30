@@ -100,13 +100,13 @@ public interface IBaseDao<T> {
     int insertBatch(List<T> list);
     
     /**
-     * 根据主键更新数据
+     * 更新数据
      * @Date	2017年9月14日 下午4:19:16 <br/>
      * @author  zhangST
      * @param entity
      * @return
      */
-    int updateByPK(T entity);
+    int updateBy(T entity);
 
     /**
      * 批量更新数据

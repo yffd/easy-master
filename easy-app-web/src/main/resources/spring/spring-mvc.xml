@@ -17,8 +17,8 @@
 	<!-- JSP视图解析器，对模型视图名称的解析，在请求时模型视图名称添加前后缀 -->
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<!-- 自动给后面action的方法return的字符串加上前缀和后缀，变成一个 可用的url地址 -->
-		<property name="prefix" value="/html/" />
-		<property name="suffix" value=".html" />
+		<property name="prefix" value="/jsp/" />
+		<property name="suffix" value=".jsp" />
 		<property name="order" value="0"/>
 	</bean>
 

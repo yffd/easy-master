@@ -90,7 +90,7 @@ public class PmsOrganizationDaoImplTest extends SpringBaseTestCase {
 		entity.setOrgCode("cwbm-");
 		entity.setParentCode("1");
 		entity.setOrgNum(2.0F);
-		this.dao.updateByPK(entity);
+		this.dao.updateBy(entity);
 	}
 
 	@Test

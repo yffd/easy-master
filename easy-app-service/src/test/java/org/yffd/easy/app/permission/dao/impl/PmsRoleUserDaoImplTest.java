@@ -128,7 +128,7 @@ public class PmsRoleUserDaoImplTest extends SpringBaseTestCase {
 		entity.setId("1000");
 		entity.setUserCode("zhangsan-");
 		entity.setRoleCode("admin-");
-		this.dao.updateByPK(entity);
+		this.dao.updateBy(entity);
 	}
 	
 	@Test
