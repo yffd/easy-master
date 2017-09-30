@@ -2,14 +2,6 @@
 {
     //全局系统对象
     window['jqueryUtil'] = {};
-	//修改ajax默认设置
-	$.ajaxSetup({
-		type : 'POST',
-		error : function(XMLHttpRequest, textStatus, errorThrown) {
-			$.messager.progress('close');
-			$.messager.alert('错误', XMLHttpRequest.responseText);
-		}
-	});
 		
 	var easyuiErrorFunction = function(XMLHttpRequest) {
 		console.info(">>jqueryUtil>>>easyuiErrorFunction");
@@ -48,10 +40,6 @@
 		}, 1);
 		$.parser.auto = true;
 	});
-	//IE检测
-	jqueryUtil.isLessThanIe8 = function() {
-		return ($.support.msie && $.support.version < 8);
-	};
 	/**
 	 * 使panel和datagrid在加载时提示
 	 * @requires jQuery,EasyUI
@@ -255,21 +243,6 @@
 		}
 		return data;
 	};
-	//序列化表单到对象
-	jqueryUtil.serializeObject = function(form) {
-		console.info(">>jqueryUtil>>>serializeObject");
-		//console.dir(form.serializeArray());
-		var o = {};
-		$.each(form.serializeArray(), function(index) {
-			if (o[this['name']]) {
-				o[this['name']] = o[this['name']] + "," + (this['value']==''?' ':this['value']);
-			} else {
-				o[this['name']] = this['value']==''?' ':this['value'];
-			}
-		});
-		//console.dir(o);
-		return o;
-	};
 		
 	/**
 	 * 扩展树表格级联选择（点击checkbox才生效）：
@@ -382,139 +355,14 @@
 			selectChildren(target,childId,idField,deepCascade,status);//递归选择子节点
 		}
 	}
-	//cookies
-	 jqueryUtil.cookies = (function (){
-        var fn = function ()
-        {
-        };
-        fn.prototype.get = function (name)
-        {
-            var cookieValue = "";
-            var search = name + "=";
-            if (document.cookie.length > 0)
-            {
-                offset = document.cookie.indexOf(search);
-                if (offset != -1)
-                {
-                    offset += search.length;
-                    end = document.cookie.indexOf(";", offset);
-                    if (end == -1) end = document.cookie.length;
-                    cookieValue = decodeURIComponent(document.cookie.substring(offset, end))
-                }
-            }
-            return cookieValue;
-        };
-        fn.prototype.set = function (cookieName, cookieValue, DayValue)
-        {
-            var expire = "";
-            var day_value = 1;
-            if (DayValue != null)
-            {
-                day_value = DayValue;
-            }
-            expire = new Date((new Date()).getTime() + day_value * 86400000);
-            expire = "; expires=" + expire.toGMTString();
-            document.cookie = cookieName + "=" + encodeURIComponent(cookieValue) + ";path=/" + expire;
-        }
-        fn.prototype.remvoe = function (cookieName)
-        {
-            var expire = "";
-            expire = new Date((new Date()).getTime() - 1);
-            expire = "; expires=" + expire.toGMTString();
-            document.cookie = cookieName + "=" + escape("") + ";path=/" + expire;
-            /*path=/*/
-        };
-
-        return new fn();
-    })();
-	//获取随机时间
-	 jqueryUtil.getRandTime=function(){
-		 	var nowDate=new Date();
-		 	var str="";
-			var hour=nowDate.getHours();//HH
-			str+=((hour<10)?"0":"")+hour;
-			var min=nowDate.getMinutes();//MM
-			str+=((min<10)?"0":"")+min;
-			var sec=nowDate.getSeconds(); //SS
-			str+=((sec<10)?"0":"")+sec;
-			return Number(str);
-	 };
-	//切换皮肤
-	jqueryUtil.chgSkin=function(selectId,cookiesColor){
-        	 docchgskin(document,selectId,cookiesColor);
-            $("iframe").each(function (){   
-                var dc=this.contentWindow.document;
-                docchgskin(dc,selectId,cookiesColor);
-            });
-            function docchgskin(dc,selectId,cookiesColor){
-						removejscssfile(dc,"themes/"+cookiesColor+"/easyui.css", "css");
-                        createLink(dc,"themes/"+selectId+"/easyui.css");
-        	}
-            function createLink(dc,url){
-		    	var urls = url.replace(/[,]\s*$/ig,"").split(",");
-		    	var links = [];
-		    	for( var i = 0; i < urls.length; i++ ){
-			    links[i] = dc.createElement("link");
-			    links[i].rel = "stylesheet";
-			    links[i].href = urls[i];
-			    dc.getElementsByTagName("head")[0].appendChild(links[i]);
-		     	}
-	    	}
-            function removejscssfile(dc,filename, filetype){
-	            var targetelement=(filetype=="js")? "script" : (filetype=="css")? "link" : "none"
-	            var targetattr=(filetype=="js")? "src" : (filetype=="css")? "href" : "none"
-	            var allsuspects=dc.getElementsByTagName(targetelement)
-	            for (var i=allsuspects.length; i>=0; i--)
-	            {
-	                if (allsuspects[i] && allsuspects[i].getAttribute(targetattr)!=null && allsuspects[i].getAttribute(targetattr).indexOf(filename)!=-1)
-	                allsuspects[i].parentNode.removeChild(allsuspects[i])
-	            }
-        	}  
-        };
-        /* 
-    	 * 格式化字符串
-    	 */
-        $.formatString = function(str) {
-        	for ( var i = 0; i < arguments.length - 1; i++) {
-        		str = str.replace("{" + i + "}", arguments[i + 1]);
-        	}
-        	return str;
-        };
-        
-      //高级查询
-        jqueryUtil.gradeSearch=function($dg,formId,url) {
-        	console.info(">>jqueryUtil>>>gradeSearch");
-			$("<div/>").dialog({
-				href : url,
-				modal : true,
-				title : '高级查询',
-				top : 120,
-				width : 480,
-				buttons : [ {
-					text : '增加一行',
-					iconCls : 'icon-add',
-					handler : function() {
-						var currObj = $(this).closest('.panel').find('table');
-						currObj.find('tr:last').clone().appendTo(currObj);
-						currObj.find('tr:last a').show();
-					}
-				}, {
-					text : '确定',
-					iconCls : 'icon-ok',
-					handler : function() {
-						$dg.datagrid('reload',jqueryUtil.serializeObject($(formId)));
-					}
-				}, {
-					text : '取消',
-					iconCls : 'icon-cancel',
-					handler : function() {
-						$(this).closest('.window-body').dialog('destroy');
-					}
-				} ],
-				onClose : function() {
-					$(this).dialog('destroy');
-				}
-			});
+	 /**
+		 * 格式化字符串
+		 */
+		$.formatString = function(str) {
+	       	for (var i = 0; i < arguments.length - 1; i++) {
+	       		str = str.replace("{" + i + "}", arguments[i + 1]);
+	       	}
+	       	return str;
 		};
 		
 		/**
@@ -546,87 +394,4 @@
 			}
 		};
 		
-	/* 
-	 * 定义图标样式的数组
-	 */
-	$.iconData = [ {
-		value : '',
-		text : '默认'
-	},{
-		value : 'icon-adds',
-		text : 'icon-adds'
-	}
-	,{
-		value : 'icon-ok',
-		text : 'icon-ok'
-	},{
-		value : 'icon-edit',
-		text : 'icon-edit'
-	} ,{
-		value : 'icon-tip',
-		text : 'icon-tip'
-	},{
-		value : 'icon-back',
-		text : 'icon-back'
-	},{
-		value : 'icon-remove',
-		text : 'icon-remove'
-	},{
-		value : 'icon-undo',
-		text : 'icon-undo'
-	},{
-		value : 'icon-cancel',
-		text : 'icon-cancel'
-	}
-	,{
-		value : 'icon-save',
-		text : 'icon-save'
-	}
-	,{
-		value : 'icon-config',
-		text : 'icon-config'
-	},{
-		value : 'icon-comp',
-		text : 'icon-comp'
-	},{
-		value : 'icon-sys',
-		text : 'icon-sys'
-	},{
-		value : 'icon-db',
-		text : 'icon-db'
-	},{
-		value : 'icon-pro',
-		text : 'icon-pro'
-	},{
-		value : 'icon-role',
-		text : 'icon-role'
-	},{
-		value : 'icon-end',
-		text : 'icon-end'
-	},{
-		value : 'icon-bug',
-		text : 'icon-bug'
-	},{
-		value : 'icon-badd',
-		text : 'icon-badd'
-	},{
-		value : 'icon-bedit',
-		text : 'icon-bedit'
-	},{
-		value : 'icon-bdel',
-		text : 'icon-bdel'
-	},{
-		value : 'icon-item',
-		text : 'icon-item'
-	},{
-		value : 'icon-excel',
-		text : 'icon-excel'
-	},{
-		value : 'icon-auto',
-		text : 'icon-auto'
-	},{
-		value : 'icon-time',
-		text : 'icon-time'
-	}
-	];
 })(jQuery);
