@@ -2,7 +2,7 @@ package org.yffd.easy.app.system.dao.impl;
 
 import org.springframework.stereotype.Repository;
 import org.yffd.easy.app.system.dao.SysOrganizationDao;
-import org.yffd.easy.app.system.entity.SysOrganization;
+import org.yffd.easy.app.system.model.SysOrganization;
 import org.yffd.easy.common.ssm.dao.impl.BaseDaoImpl;
 
 /**

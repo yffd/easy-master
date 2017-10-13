@@ -2,7 +2,7 @@ package org.yffd.easy.common.ssm.model;
 
 import java.util.Date;
 
-import org.yffd.easy.common.core.entity.PersistEntity;
+import org.yffd.easy.common.core.model.PersistEntity;
 
 /**
  * @Description  简单描述该类的功能（可选）.

@@ -1,6 +1,6 @@
 package org.yffd.easy.app.system.dao;
 
-import org.yffd.easy.app.system.entity.SysOrganization;
+import org.yffd.easy.app.system.model.SysOrganization;
 import org.yffd.easy.common.ssm.dao.IBaseDao;
 
 /**

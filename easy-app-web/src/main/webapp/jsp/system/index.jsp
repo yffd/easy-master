@@ -15,11 +15,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <title>欢迎</title>
 <base href="<%=basePath%>">
 <jsp:include page="layout/script.jsp"></jsp:include>
-
 <script type="text/javascript">
 $(function(){
 	initMenu();
-	if (jqueryUtil.isLessThanIe8()) {
+	if (utils.isLessThanIe8()) {
 		$.messager.show({
 			title : '警告',
 			msg : '您使用的浏览器版本太低！<br/>建议您使用谷歌浏览器来获得更快的页面响应效果！',
@@ -29,9 +28,9 @@ $(function(){
 });
 
 function initMenu(){
-	$.post("sys/func/listMenu", {userCode:"1"}, function(data) {
+	$.post("sys/menu/tree", {userCode:"1"}, function(data) {
 		if(data.respData && data.respData.length>0) {
-			indexLayout.initLeftMenu(data.respData);
+			commonindex.initLeftMenu(data.respData);
 		} else {return;}
 	}, "json").error(function() {
 		$.messager.alert("提示", "获取菜单出错,请重新登陆!");

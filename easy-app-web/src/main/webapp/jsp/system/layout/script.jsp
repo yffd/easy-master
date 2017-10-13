@@ -1,5 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
-<link rel="stylesheet" type="text/css" href="static/easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="static/easyui/themes/metro/easyui.css">
 <link rel="stylesheet" type="text/css" href="static/easyui/themes/icon.css">
 <link rel="stylesheet" type="text/css" href="static/css/css.css">
 <link rel="stylesheet" type="text/css" href="static/css/icon.css">
@@ -7,8 +7,9 @@
 <!-- <script type="text/javascript" src="static/easyui/jquery.min.js"></script> -->
 <script type="text/javascript" src="static/easyui/jquery.easyui.min.js"></script>
 <script type="text/javascript" src="static/easyui/easyui-lang-zh_CN.js"></script>
-<script type="text/javascript" src="static/js/indexLayout.js"></script>
-<script type="text/javascript" src="static/js/jqueryUtil.js"></script>
+<script type="text/javascript" src="static/js/easy.common.ui.js"></script>
+<script type="text/javascript" src="static/js/easy.common.index.js"></script>
+<script type="text/javascript" src="static/js/easy.common.utils.js"></script>
 
 <style type="text/css">
 	body {

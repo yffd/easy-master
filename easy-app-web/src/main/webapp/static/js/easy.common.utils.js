@@ -91,6 +91,76 @@
 		return Number(str);
 	};
 	
-	 
+	/**
+	 * 格式化字符串
+	 */
+	utils.formatString = function(str) {
+       	for (var i = 0; i < arguments.length - 1; i++) {
+       		str = str.replace("{" + i + "}", arguments[i + 1]);
+       	}
+       	return str;
+	};
 	
-}){jQuery}
+	/**
+	 * 扩展javascript Date对象，将 Date 转化为指定格式的String；
+	 * 月(M)、日(d)、12小时(h)、24小时(H)、分(m)、秒(s)、周(E)、季度(q) 可以用 1-2 个占位符；
+	 * 年(y)可以用 1-4 个占位符；
+	 * 毫秒(S)只能用 1 个占位符(是 1-3 位的数字)
+	 * eg:	(new Date()).format("yyyy-MM-dd") ==> 2017-10-13
+	 *		(new Date()).format("yyyy-MM-dd HH:mm:ss") ==> 2017-10-13 13:45:33
+	 *		(new Date()).format("yyyy-M-d h:m:s.S") ==> 2017-10-13 1:45:33.2
+	 *		(new Date()).format("yyyy-MM-dd hh:mm:ss.S") ==> 2017-10-13 01:45:33.2
+	 *		(new Date()).format("yyyy-MM-dd E HH:mm:ss") ==> 2017-10-13 五 13:45:33
+	 *		(new Date()).format("yyyy-MM-dd EE hh:mm:ss") ==> 2017-10-13 周五 01:45:33
+	 *		(new Date()).format("yyyy-MM-dd EEE hh:mm:ss") ==> 2017-10-13 星期五 01:45:33
+	 *		(new Date()).format("yyyy-MM-dd EEE hh:mm:ss") ==> 2017-10-13 星期五 01:45:33 04
+	 */
+	Date.prototype.format = function(fmt) {
+		var obj = {
+			"M+" : this.getMonth()+1, //月份
+			"d+" : this.getDate(), //日
+		    "h+" : this.getHours()%12 == 0 ? 12 : this.getHours()%12, //小时
+		    "H+" : this.getHours(), //小时
+		    "m+" : this.getMinutes(), //分
+		    "s+" : this.getSeconds(), //秒
+		    "q+" : Math.floor((this.getMonth()+3)/3), //季度
+		    "S" : this.getMilliseconds() //毫秒
+		};
+		var week = {
+			"0" : "\u65e5",
+		    "1" : "\u4e00",
+		    "2" : "\u4e8c",
+		    "3" : "\u4e09",
+		    "4" : "\u56db",
+		    "5" : "\u4e94",
+		    "6" : "\u516d"
+		};
+		if(/(y+)/.test(fmt)){
+	        fmt = fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));         
+	    }         
+	    if(/(E+)/.test(fmt)){         
+	        fmt = fmt.replace(RegExp.$1, ((RegExp.$1.length>1) ? (RegExp.$1.length>2 ? "\u661f\u671f" : "\u5468") : "") + week[this.getDay()+""]);         
+	    }         
+	    for(var k in obj){         
+	        if(new RegExp("("+ k +")").test(fmt)){         
+	            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (obj[k]) : (("00"+ obj[k]).substr((""+ obj[k]).length)));         
+	        }         
+	    }         
+	    return fmt;
+	}
+	
+	/**
+	 * 长格式日期字符串:yyyy-MM-dd HH:mm:ss
+	 */
+	Date.prototype.formatDate = function() {
+		return this.format('yyyy-MM-dd HH:mm:ss');
+	}
+	
+	/**
+	 * 短格式日期字符串:yyyy-MM-dd
+	 */
+	Date.prototype.formatShortDate = function() {
+		return this.format('yyyy-MM-dd');
+	}
+	
+})(jQuery)

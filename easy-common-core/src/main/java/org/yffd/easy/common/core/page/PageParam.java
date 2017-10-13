@@ -18,20 +18,20 @@ public class PageParam implements Serializable {
      */
     private static final long serialVersionUID = -6381874871206323550L;
     /** 默认为第一页 */
-    public static final int DEFAULT_PAGE_NUM = 1;
+    public static final Long DEFAULT_PAGE_NUM = 1L;
     /** 默认每页记录数(15) */
-    public static final int DEFAULT_NUM_PER_PAGE = 15;
+    public static final Long DEFAULT_NUM_PER_PAGE = 15L;
     /** 最大每页记录数(100) */
-    public static final int MAX_PAGE_SIZE = 100;
+    public static final Long MAX_PAGE_SIZE = 100L;
     
-    private int currentPage; // 当前页数
-    private int numPerPage; // 每页记录数
+    private Long currentPage; // 当前页数
+    private Long numPerPage; // 每页记录数
     
-    private int startRowNum; // 开始行号
-    private int endRowNum; //结束行号
+    private Long startRowNum; // 开始行号
+    private Long endRowNum; //结束行号
 
-    private int totalRecord; // 总记录数
-    private int totalPage; //总页数
+    private Long totalRecord; // 总记录数
+    private Long totalPage; //总页数
     
     /** 是否进行自动count计算总条数，默认为自动计算：true:是，false:否 */
     private boolean autoCount = true;
@@ -39,12 +39,12 @@ public class PageParam implements Serializable {
     public PageParam() {
     }
     
-    public PageParam(int currentPage, int numPerPage) {
+    public PageParam(Long currentPage, Long numPerPage) {
         this.currentPage = currentPage;
         this.numPerPage = numPerPage;
     }
     
-    public PageParam(int currentPage, int numPerPage, int totalRecord) {
+    public PageParam(Long currentPage, Long numPerPage, Long totalRecord) {
         this.currentPage = currentPage;
         this.numPerPage = numPerPage;
         this.totalRecord = totalRecord;
@@ -59,7 +59,7 @@ public class PageParam implements Serializable {
      * @param numPerPage
      * @return
      */
-    public static int countStartRowNum(int currentPage, int numPerPage) {
+    public static Long countStartRowNum(Long currentPage, Long numPerPage) {
         return (currentPage - 1) * numPerPage;
     }
     
@@ -72,7 +72,7 @@ public class PageParam implements Serializable {
      * @param numPerPage
      * @return
      */
-    public static int countEndRowNum(int currentPage, int numPerPage) {
+    public static Long countEndRowNum(Long currentPage, Long numPerPage) {
         return currentPage * numPerPage;
     }
     
@@ -85,7 +85,7 @@ public class PageParam implements Serializable {
      *            每页记录数.
      * @return totalPage 总页数.
      */
-    public static int countTotalPage(int totalRecord, int numPerPage) {
+    public static Long countTotalPage(Long totalRecord, Long numPerPage) {
         if (totalRecord % numPerPage == 0) {
             // 刚好整除
             return totalRecord / numPerPage;
@@ -104,7 +104,7 @@ public class PageParam implements Serializable {
      *            输入的当前页数 .
      * @return currentPage .
      */
-    public static int checkCurrentPage(int currentPage) {
+    public static Long checkCurrentPage(Long currentPage) {
         return currentPage < 1 ? 1 : currentPage;
     }
     
@@ -123,17 +123,17 @@ public class PageParam implements Serializable {
      *            输入的当前页数 .
      * @return currentPage .
      */
-    public static int checkCurrentPage(int totalRecord, int numPerPage, int currentPage) {
-        int totalPage = PageParam.countTotalPage(totalRecord, numPerPage); // 最大页数
+    public static Long checkCurrentPage(Long totalRecord, Long numPerPage, Long currentPage) {
+    	Long totalPage = PageParam.countTotalPage(totalRecord, numPerPage); // 最大页数
         if (currentPage > totalPage) {
             // 如果页面提交过来的页数大于总页数，则将当前页设为总页数
             // 此时要求totalPage要大于获等于1
             if (totalPage < 1) {
-                return 1;
+                return 1L;
             }
             return totalPage;
         } else if (currentPage < 1) {
-            return 1; // 当前页不能小于1（避免页面输入不正确值）
+            return 1L; // 当前页不能小于1（避免页面输入不正确值）
         } else {
             return currentPage;
         }
@@ -148,7 +148,7 @@ public class PageParam implements Serializable {
      *            页面输入的每页记录数 .
      * @return checkNumPerPage .
      */
-    public static int checkNumPerPage(int numPerPage) {
+    public static Long checkNumPerPage(Long numPerPage) {
         if (numPerPage > PageParam.MAX_PAGE_SIZE) {
             return PageParam.MAX_PAGE_SIZE;
         } else if (numPerPage < 1) {
@@ -159,51 +159,51 @@ public class PageParam implements Serializable {
     }
     
     /** 当前页数 */
-    public int getCurrentPage() {
+    public Long getCurrentPage() {
         return currentPage;
     }
     /** 当前页数 */
-    public void setCurrentPage(int currentPage) {
+    public void setCurrentPage(Long currentPage) {
         this.currentPage = currentPage;
     }
     /** 每页记录数 */
-    public int getNumPerPage() {
+    public Long getNumPerPage() {
         return numPerPage;
     }
     /** 每页记录数 */
-    public void setNumPerPage(int numPerPage) {
+    public void setNumPerPage(Long numPerPage) {
         this.numPerPage = numPerPage;
     }
     /** 开始行号 */
-    public int getStartRowNum() {
+    public Long getStartRowNum() {
         return startRowNum;
     }
     /** 开始行号 */
-    public void setStartRowNum(int startRowNum) {
+    public void setStartRowNum(Long startRowNum) {
         this.startRowNum = startRowNum;
     }
     /** 结束行号 */
-    public int getEndRowNum() {
+    public Long getEndRowNum() {
         return endRowNum;
     }
     /** 结束行号 */
-    public void setEndRowNum(int endRowNum) {
+    public void setEndRowNum(Long endRowNum) {
         this.endRowNum = endRowNum;
     }
     /** 总记录数 */
-    public int getTotalRecord() {
+    public Long getTotalRecord() {
         return totalRecord;
     }
     /** 总记录数 */
-    public void setTotalRecord(int totalRecord) {
+    public void setTotalRecord(Long totalRecord) {
         this.totalRecord = totalRecord;
     }
     /** 总页数 */
-    public int getTotalPage() {
+    public Long getTotalPage() {
         return totalPage;
     }
     /** 总页数 */
-    public void setTotalPage(int totalPage) {
+    public void setTotalPage(Long totalPage) {
         this.totalPage = totalPage;
     }
 

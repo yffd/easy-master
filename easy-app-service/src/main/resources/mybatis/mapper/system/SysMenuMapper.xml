@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.yffd.easy.app.system.dao.impl.SysMenuDaoImpl">
+
+	<!-- ##############################   基础sql开始   ############################## -->
+	
+	<resultMap id="resutlId" type="org.yffd.easy.app.system.model.SysMenu">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="del_flag" property="delFlag" jdbcType="VARCHAR" />
+		<result column="creater" property="creater" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="editor" property="editor" jdbcType="VARCHAR" />
+		<result column="edit_time" property="editTime" jdbcType="TIMESTAMP" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="code" property="code" jdbcType="VARCHAR" />
+		<result column="p_code" property="parentCode" jdbcType="VARCHAR" />
+		<result column="url" property="url" jdbcType="VARCHAR" />
+		<result column="icon" property="icon" jdbcType="VARCHAR" />
+		<result column="sort" property="sort" jdbcType="FLOAT" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="sys_menu_table"> sys_menu </sql>
+	<sql id="sys_menu_columns"> id, version, del_flag, creater, create_time, editor, edit_time, remark, 
+	name, code, p_code, url, icon, sort, status </sql>
+	<!-- 动态组装复合查询条件 -->
+	<sql id="sys_menu_where">
+		<!-- Equal query -->
+		<if test="code != null and code != ''"> and code = #{code} </if>
+		<if test="parentCode != null and parentCode != ''"> and p_code = #{parentCode} </if>
+		<if test="status != null and status != ''"> and status = #{status} </if>
+		<!-- Like query -->
+		<if test="name != null and name != ''"> and name like CONCAT(CONCAT('%', #{name}), '%') </if>
+	</sql>
+	
+	<select id="selectCountBy" parameterType="java.util.Map" resultType="long">
+		select count(1) from
+		<include refid="sys_menu_table" />
+		<where>
+			<include refid="sys_menu_where" />
+		</where>
+	</select>
+	
+	<select id="selectByPK" parameterType="java.lang.String" resultMap="resutlId">
+		select
+		<include refid="sys_menu_columns"/>
+		from
+		<include refid="sys_menu_table" />
+		where id = #{_parameter}
+	</select>
+	
+	<!-- selectListBy、selectBy、selectAll -->
+	<select id="selectListBy" parameterType="java.util.Map" resultMap="resutlId">
+		select
+		<include refid="sys_menu_columns"/>
+		from
+		<include refid="sys_menu_table" />
+		<where>
+			<include refid="sys_menu_where" />
+		</where>
+		order by sort asc
+	</select>
+	
+	<insert id="insert" parameterType="org.yffd.easy.app.system.model.SysMenu" keyProperty="id" useGeneratedKeys="true">
+		insert into
+		<include refid="sys_menu_table" />
+		(version, del_flag, creater, create_time, editor, edit_time, remark, 
+		name, code, p_code, url, icon, sort, status)
+		values
+		(0, #{delFlag}, #{creater}, #{createTime}, #{editor}, #{editTime}, #{remark}, 
+		#{name}, #{code}, #{parentCode}, #{url}, #{icon}, #{sort}, #{status})
+	</insert>
+	
+	<update id="updateByPK" parameterType="org.yffd.easy.app.system.model.SysMenu">
+		update <include refid="sys_menu_table" />
+		<set>
+			version = version + 1,
+			editor = #{editor, jdbcType=VARCHAR},
+			edit_time = #{editTime, jdbcType=TIMESTAMP},
+			remark = #{remark, jdbcType=VARCHAR},
+			name = #{name, jdbcType=VARCHAR},
+			code = #{code, jdbcType=VARCHAR},
+			p_code = #{parentCode, jdbcType=VARCHAR},
+			url = #{url, jdbcType=VARCHAR},
+			icon = #{icon, jdbcType=VARCHAR},
+			sort = #{sort, jdbcType=FLOAT},
+			status = #{status, jdbcType=VARCHAR},
+		</set>
+		where code = #{code}
+	</update>
+	
+	<delete id="deleteByPK" parameterType="java.lang.String">
+		delete from
+		<include refid="sys_menu_table" />
+		where code = #{_parameter}
+	</delete>
+	
+	<delete id="deleteBy" parameterType="java.util.Map">
+		delete from
+		<include refid="sys_menu_table" />
+		<where>
+			<include refid="sys_menu_where" />
+		</where>
+	</delete>
+	
+	<delete id="deleteBatch" parameterType="java.util.List">
+		delete from
+		<include refid="sys_menu_table" />
+		where code in 
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">#{item.code}</foreach>
+	</delete>
+	
+	<!-- ##############################   基础sql结束    ############################## -->
+	
+</mapper>

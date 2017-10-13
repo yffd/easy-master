@@ -14,7 +14,9 @@ public enum SysConstantsEnum {
 	YES("Y", "是"),
 	NO("N", "否"),
 	ACTIVE("A", "激活"),
-	UNACTIVE("I", "冻结"),
+	INACTIVE("I", "冻结"),
+	DEL_FLAG_UNENABLE("0", "未删除"),
+	DEL_FLAG_ENABLE("1", "已删除"),
 	REQUEST_ASYNC("async", "异步"),
 	REQUEST_SYNC("sync", "同步"),
 	;

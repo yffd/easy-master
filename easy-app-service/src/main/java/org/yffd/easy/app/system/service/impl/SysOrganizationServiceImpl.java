@@ -7,7 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.yffd.easy.app.system.dao.SysOrganizationDao;
-import org.yffd.easy.app.system.entity.SysOrganization;
+import org.yffd.easy.app.system.model.SysOrganization;
 import org.yffd.easy.app.system.service.SysOrganizationService;
 
 /**
@@ -25,6 +25,12 @@ public class SysOrganizationServiceImpl implements SysOrganizationService {
 	private SysOrganizationDao sysOrganizationDao;
 	
 	@Override
+	public List<SysOrganization> findAll() {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		return this.sysOrganizationDao.selectListBy(paramMap);
+	}
+
+	@Override
 	public List<SysOrganization> findByParentCode(String parentCode) {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("parentCode", parentCode);
@@ -32,13 +38,13 @@ public class SysOrganizationServiceImpl implements SysOrganizationService {
 	}
 
 	@Override
-	public void add(SysOrganization sysFunction) {
-		this.sysOrganizationDao.insert(sysFunction);
+	public void add(SysOrganization sysOrganization) {
+		this.sysOrganizationDao.insert(sysOrganization);
 	}
 
 	@Override
-	public void edit(SysOrganization sysFunction) {
-		this.sysOrganizationDao.updateBy(sysFunction);
+	public void edit(SysOrganization sysOrganization) {
+		this.sysOrganizationDao.updateBy(sysOrganization);
 	}
 
 	@Override

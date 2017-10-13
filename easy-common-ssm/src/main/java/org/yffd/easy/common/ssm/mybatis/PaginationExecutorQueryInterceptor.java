@@ -77,10 +77,10 @@ public class PaginationExecutorQueryInterceptor implements Interceptor {
                     break;
             }
             
-            int numPerPage = PageParam.checkNumPerPage(pageParam.getNumPerPage());
-            int currentPage = PageParam.checkCurrentPage(pageParam.getCurrentPage());
-            int startRowNum = PageParam.countStartRowNum(currentPage, numPerPage);
-            int endRowNum = PageParam.countEndRowNum(currentPage, numPerPage);
+            Long numPerPage = PageParam.checkNumPerPage(pageParam.getNumPerPage());
+            Long currentPage = PageParam.checkCurrentPage(pageParam.getCurrentPage());
+            Long startRowNum = PageParam.countStartRowNum(currentPage, numPerPage);
+            Long endRowNum = PageParam.countEndRowNum(currentPage, numPerPage);
             pageParam.setNumPerPage(numPerPage);
             pageParam.setCurrentPage(currentPage);
             pageParam.setStartRowNum(startRowNum);

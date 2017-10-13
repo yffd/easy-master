@@ -99,8 +99,8 @@ public class PaginationResultSetInterceptor implements Interceptor {
             LoggerFormat.info(LOG, "分页拦截器生成的统计SQL :"  + CommonUtils.getLineSeparator() + conuntSql);
             
             Long totalRecord = getTotalRecord(configuration, parameterHandler, conuntSql);
-            pageParam.setTotalRecord(totalRecord.intValue());  //设置总记录数
-            pageParam.setTotalPage(PageParam.countTotalPage(totalRecord.intValue(), pageParam.getNumPerPage())); //设置总页数
+            pageParam.setTotalRecord(totalRecord);  //设置总记录数
+            pageParam.setTotalPage(PageParam.countTotalPage(totalRecord, pageParam.getNumPerPage())); //设置总页数
         }
         return invocation.proceed();
     }

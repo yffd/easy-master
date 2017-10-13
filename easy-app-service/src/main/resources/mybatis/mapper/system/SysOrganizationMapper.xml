@@ -5,7 +5,7 @@
 
 	<!-- ##############################   基础sql开始   ############################## -->
 
-	<resultMap id="resutlId" type="org.yffd.easy.app.system.entity.SysOrganization">
+	<resultMap id="resutlId" type="org.yffd.easy.app.system.model.SysOrganization">
 		<id column="id" property="id" jdbcType="INTEGER" />
 		<result column="version" property="version" jdbcType="INTEGER" />
 		<result column="status" property="status" jdbcType="VARCHAR" />
@@ -59,17 +59,17 @@
 		</where>
 	</select>
 	
-	<insert id="insert" parameterType="org.yffd.easy.app.system.entity.SysOrganization" keyProperty="id" useGeneratedKeys="true">
+	<insert id="insert" parameterType="org.yffd.easy.app.system.model.SysOrganization" keyProperty="id" useGeneratedKeys="true">
 		insert into
 		<include refid="sys_organization_table" />
 		(version, status, creater, create_time, editor, edit_time, remark, 
-		org_name, org_code, p_code, manager_code,deputy_manager_code ,icon ,staff_num,shot_name, tel ,fax)
+		org_name, org_code, p_code, manager_code,deputy_manager_code ,icon ,staff_num,short_name, tel ,fax)
 		values
 		(0,#{status}, #{creater}, #{createTime}, #{editor}, #{editTime}, #{remark}, 
 		#{orgName}, #{orgCode}, #{parentCode}, #{managerCode}, #{deputyManagerCode}, #{icon}, #{staffNum}, #{shortName}, #{tel}, #{fax})
 	</insert>
 	
-	<update id="updateBy" parameterType="org.yffd.easy.app.system.entity.SysOrganization">
+	<update id="updateBy" parameterType="org.yffd.easy.app.system.model.SysOrganization">
 		update <include refid="sys_organization_table" />
 		<set>
 			version = #{version} + 1,
@@ -85,7 +85,7 @@
 			deputy_manager_code = #{deputyManagerCode, jdbcType=VARCHAR},
 			icon = #{icon, jdbcType=VARCHAR},
 			staff_num = #{staffNum, jdbcType=INTEGER},
-			shot_name = #{shortName, jdbcType=VARCHAR},
+			short_name = #{shortName, jdbcType=VARCHAR},
 			tel = #{tel, jdbcType=VARCHAR},
 			fax = #{fax, jdbcType=VARCHAR},
 		</set>

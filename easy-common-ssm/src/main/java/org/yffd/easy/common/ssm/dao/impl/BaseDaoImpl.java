@@ -6,8 +6,8 @@ import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.yffd.easy.common.core.entity.PersistEntity;
 import org.yffd.easy.common.core.exception.DaoException;
+import org.yffd.easy.common.core.model.PersistEntity;
 import org.yffd.easy.common.core.page.PageParam;
 import org.yffd.easy.common.core.page.PageResult;
 import org.yffd.easy.common.core.util.ValidUtils;
@@ -42,6 +42,8 @@ public class BaseDaoImpl<T extends PersistEntity> implements IBaseDao<T> {
     
     /** mapper xml 中的SQL ID，即statement=updateBy */
     public static final String SQL_UPDATE_BY = "updateBy";
+    /** mapper xml 中的SQL ID，即statement=updateByPK */
+    public static final String SQL_UPDATE_BY_PK = "updateByPK";
     /** mapper xml 中的SQL ID，即statement=updateBatch */
     public static final String SQL_UPDATE_BATCH = "updateBatch";
     
@@ -92,15 +94,15 @@ public class BaseDaoImpl<T extends PersistEntity> implements IBaseDao<T> {
         paramMap.remove("pageParam"); // 与 listRange区分，保证越过分页拦截器
         // 统计总记录数
         Long totalRecord = sqlSession.selectOne(getStatement(SQL_SELECT_COUNT_BY), paramMap);
-        pageParam.setTotalRecord(totalRecord.intValue());
+        pageParam.setTotalRecord(totalRecord);
         // 校验当前页数
-        int currentPage = PageParam.checkCurrentPage(totalRecord.intValue(), pageParam.getNumPerPage(), pageParam.getCurrentPage());
+        Long currentPage = PageParam.checkCurrentPage(totalRecord, pageParam.getNumPerPage(), pageParam.getCurrentPage());
         pageParam.setCurrentPage(currentPage); // 为当前页重新设值
         // 校验页面输入的每页记录数numPerPage是否合法
-        int numPerPage = PageParam.checkNumPerPage(pageParam.getNumPerPage()); // 校验每页记录数
+        Long numPerPage = PageParam.checkNumPerPage(pageParam.getNumPerPage()); // 校验每页记录数
         pageParam.setNumPerPage(numPerPage); // 重新设值
 
-        pageParam.setTotalPage(PageParam.countTotalPage(totalRecord.intValue(), numPerPage));
+        pageParam.setTotalPage(PageParam.countTotalPage(totalRecord, numPerPage));
         pageParam.setStartRowNum(PageParam.countStartRowNum(pageParam.getCurrentPage(), pageParam.getNumPerPage()));
         pageParam.setEndRowNum(PageParam.countEndRowNum(pageParam.getCurrentPage(), pageParam.getNumPerPage()));
         // 根据页面传来的分页参数构造SQL分页参数
@@ -239,6 +241,23 @@ public class BaseDaoImpl<T extends PersistEntity> implements IBaseDao<T> {
         int result = sqlSession.update(getStatement(SQL_UPDATE_BY), entity);
         if (result <= 0) {
             throw DaoException.DB_UPDATE_RESULT_0(getStatement(SQL_UPDATE_BY));
+        }
+        return result;
+	}
+
+	/**
+	 * sqlid : {@link org.yffd.easy.common.ssm.dao.impl.BaseDaoImpl#SQL_UPDATE_BY_PK} <br/>
+	 * @Date	2017年9月14日 下午4:54:08 <br/>
+	 * @author  zhangST
+	 * @param entity
+	 * @return
+	 * @see org.yffd.easy.common.ssm.dao.IBaseDao#updateByPK(java.lang.Object)
+	 */
+	@Override
+	public int updateByPK(T entity) {
+		int result = sqlSession.update(getStatement(SQL_UPDATE_BY_PK), entity);
+        if (result <= 0) {
+            throw DaoException.DB_UPDATE_RESULT_0(getStatement(SQL_UPDATE_BY_PK));
         }
         return result;
 	}

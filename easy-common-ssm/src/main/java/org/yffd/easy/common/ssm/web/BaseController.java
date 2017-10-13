@@ -1,7 +1,8 @@
 package org.yffd.easy.common.ssm.web;
 
-import org.yffd.easy.common.core.entity.RespEntity;
 import org.yffd.easy.common.core.enums.SysConstantsEnum;
+import org.yffd.easy.common.core.model.RespEntity;
+import org.yffd.easy.common.core.view.support.ViewModelSupport;
 
 /**
  * @Description  web控制转发器基类.
@@ -11,7 +12,7 @@ import org.yffd.easy.common.core.enums.SysConstantsEnum;
  * @since		 JDK 1.7+
  * @see 	 
  */
-public abstract class BaseController {
+public abstract class BaseController extends ViewModelSupport {
 	
 	/**
 	 * 同步请求：成功

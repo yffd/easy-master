@@ -107,6 +107,15 @@ public interface IBaseDao<T> {
      * @return
      */
     int updateBy(T entity);
+    
+    /**
+     * 根据主键更新数据
+     * @Date	2017年9月14日 下午4:19:16 <br/>
+     * @author  zhangST
+     * @param entity
+     * @return
+     */
+    int updateByPK(T entity);
 
     /**
      * 批量更新数据
