@@ -41,7 +41,7 @@ $(function() {
 		    editable:false
 		});
 	});
-	
+	//初始化tree，并绑定点击事件
 	$('#tree_id').tree({
 	    url:'sys/menu/tree',
 	    loadFilter: function(data) {if(data.respData!=null) {return data.respData;} else {return [];}},
@@ -90,11 +90,12 @@ $(function() {
 });
 
 /**
- * 打开添加消息框
+ * 打开添加对话框
  */
 function openAddDlg() {
+	var openWindow = this;
 	parent.$.modalDialog({
-		title: "菜单编辑",
+		title: "编辑",
 		width: 600,
 		height: 500,
 		href: "jsp/admin/menu/edit.jsp",
@@ -102,9 +103,10 @@ function openAddDlg() {
 			text: '确定',
 			iconCls: 'icon-ok',
 			handler: function() {
-				parent.$.modalDialog.openner= $('#tree_id');//因为添加成功之后，需要刷新这个tree，所以先预定义好
-				var form = parent.$.modalDialog.handler.find("#form_id");
-				form.submit();
+				parent.$.modalDialog.openWindow = openWindow;//定义打开对话框的窗口
+				parent.$.modalDialog.openner = $('#tree_id');//定义对话框关闭要刷新的grid
+				var editForm = parent.$.modalDialog.handler.find("#form_id");
+				editForm.submit();
 			}
 		},{
 			text: '取消',

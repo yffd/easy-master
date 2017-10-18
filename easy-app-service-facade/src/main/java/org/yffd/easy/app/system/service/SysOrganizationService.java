@@ -18,9 +18,11 @@ public interface SysOrganizationService {
 	
 	List<SysOrganization> findByParentCode(String parentCode);
 	
-	void add(SysOrganization sysFunction);
+	SysOrganization findByCode(String code);
 	
-	void edit(SysOrganization sysFunction);
+	void add(SysOrganization sysOrganization);
+	
+	void editByCode(SysOrganization sysOrganization);
 	
 	void delByCode(String code);
 	

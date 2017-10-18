@@ -261,7 +261,6 @@
 	 * panel关闭时回收内存
 	 */
 	$.fn.panel.defaults.onBeforeDestroy = function() {
-		console.info(">>common.ui>>>onBeforeDestroy");
 		var frame = $('iframe', this);
 		try {
 			if (frame.length > 0) {
@@ -383,8 +382,10 @@
 			var gridBody = panel.find("div.datagrid-body");
 			var idField = opts.idField;//这里的idField其实就是API里方法的id参数
 			gridBody.find("div.datagrid-cell-check input[type=checkbox]").unbind(".treegrid").click(function(e){
+				console.info(">>common.ui>>>$.fn.treegrid.default>>onLoadSuccess   1");
 				if(opts.singleSelect) return;//单选不管
 				if(opts.cascadeCheck||opts.deepCascadeCheck){
+					console.info(">>common.ui>>>$.fn.treegrid.default>>onLoadSuccess   2");
 					var id=$(this).parent().parent().parent().attr("node-id");
 					var status = false;
 					if($(this).attr("checked")){
@@ -399,6 +400,7 @@
 				}
 				e.stopPropagation();//停止事件传播
 			});
+			console.info(">>common.ui>>>$.fn.treegrid.default>>onLoadSuccess  end");
 		}
 	});
 		

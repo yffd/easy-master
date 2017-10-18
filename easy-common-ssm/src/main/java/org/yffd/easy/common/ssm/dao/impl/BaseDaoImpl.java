@@ -276,6 +276,9 @@ public class BaseDaoImpl<T extends PersistEntity> implements IBaseDao<T> {
             return 0;
         }
         int result = sqlSession.update(getStatement(SQL_UPDATE_BATCH), list);
+        if (result <= 0) {
+            throw DaoException.DB_UPDATE_RESULT_0(getStatement(SQL_UPDATE_BY_PK));
+        }
         return result;
 	}
 
@@ -289,7 +292,14 @@ public class BaseDaoImpl<T extends PersistEntity> implements IBaseDao<T> {
 	 */
 	@Override
 	public int deleteByPK(String primaryKey) {
-		return sqlSession.delete(getStatement(SQL_DELETE_BY_PK), primaryKey);
+		if (ValidUtils.isEmpty(primaryKey)) {
+            return 0;
+        }
+		int result = sqlSession.delete(getStatement(SQL_DELETE_BY_PK), primaryKey);
+		if (result <= 0) {
+            throw DaoException.DB_DELETE_RESULT_0(getStatement(SQL_UPDATE_BY_PK));
+        }
+        return result;
 	}
 
 	/**
@@ -304,9 +314,12 @@ public class BaseDaoImpl<T extends PersistEntity> implements IBaseDao<T> {
 	public int deleteBy(Map<String, Object> paramMap) {
 		if (ValidUtils.isEmpty(paramMap)) {
             return 0;
-        } else {
-            return sqlSession.delete(getStatement(SQL_DELETE_BY), paramMap);
         }
+		int result = sqlSession.delete(getStatement(SQL_DELETE_BY), paramMap);
+		if (result <= 0) {
+            throw DaoException.DB_DELETE_RESULT_0(getStatement(SQL_UPDATE_BY_PK));
+        }
+        return result;
 	}
 
 	/**
@@ -321,9 +334,12 @@ public class BaseDaoImpl<T extends PersistEntity> implements IBaseDao<T> {
 	public int deleteBatch(List<T> list) {
 		if (ValidUtils.isEmpty(list)) {
             return 0;
-        } else {
-            return sqlSession.delete(getStatement(SQL_DELETE_BATCH), list);
         }
+		int result = sqlSession.delete(getStatement(SQL_DELETE_BATCH), list);
+		if (result <= 0) {
+            throw DaoException.DB_DELETE_RESULT_0(getStatement(SQL_UPDATE_BY_PK));
+        }
+        return result;
 	}
 
 	@Override

@@ -70,7 +70,7 @@ public class SysMenuController extends BaseController {
 	@RequestMapping(value="/edit", method=RequestMethod.POST)
 	@ResponseBody
 	public RespEntity edit(HttpServletRequest req, SysMenu sysMenu) {
-		if(ValidUtils.isEmpty(sysMenu) || ValidUtils.isEmpty(sysMenu.getCode()) 
+		if(ValidUtils.isNull(sysMenu) || ValidUtils.isEmpty(sysMenu.getCode()) 
 				|| ValidUtils.isEmpty(sysMenu.getParentCode())) {
 			return this.errorAjax("参数无效");
 		}
@@ -82,7 +82,7 @@ public class SysMenuController extends BaseController {
 	@RequestMapping(value="/add", method=RequestMethod.POST)
 	@ResponseBody
 	public RespEntity add(HttpServletRequest req, SysMenu sysMenu) {
-		if(ValidUtils.isEmpty(sysMenu) || ValidUtils.isEmpty(sysMenu.getCode()) 
+		if(ValidUtils.isNull(sysMenu) || ValidUtils.isEmpty(sysMenu.getCode()) 
 				|| ValidUtils.isEmpty(sysMenu.getParentCode())) {
 			return this.errorAjax("参数无效");
 		}

@@ -2,7 +2,6 @@ package org.yffd.easy.app.system.service.impl;
 
 import java.util.List;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.yffd.easy.app.SpringBaseTestCase;
@@ -26,7 +25,7 @@ public class SysOrganizationServiceImplTest extends SpringBaseTestCase {
 	public void findByParentCodeTest() {
 		List<SysOrganization> list = this.sysOrganizationService.findByParentCode("1002");
 		for(SysOrganization entity:list) {
-			System.out.println(entity.getOrgCode());
+			System.out.println(entity.getCode());
 		}
 		System.out.println(list.size());
 	}
@@ -35,22 +34,18 @@ public class SysOrganizationServiceImplTest extends SpringBaseTestCase {
 	public void addTest() {
 		for(int i=0;i<5;i++) {
 			SysOrganization entity = new SysOrganization();
-			entity.setOrgCode("100"+i);
-			entity.setOrgName("一级机构_"+i);
+			entity.setCode("100"+i);
+			entity.setName("一级机构_"+i);
 			entity.setParentCode("-1");
-			entity.setShortName("一级机构");
-			entity.setIcon("icon-sys");
 			entity.setDefault();
 			this.sysOrganizationService.add(entity);
 		}
 		for(int i=0;i<5;i++) {
 			for(int j=0;j<5;j++) {
 				SysOrganization entity = new SysOrganization();
-				entity.setOrgCode(i+2+"00"+j);
-				entity.setOrgName("二级机构_"+i+"_"+j);
+				entity.setCode(i+2+"00"+j);
+				entity.setName("二级机构_"+i+"_"+j);
 				entity.setParentCode("100"+i);
-				entity.setShortName("二级机构");
-				entity.setIcon("icon-sys");
 				entity.setDefault();
 				this.sysOrganizationService.add(entity);
 			}

@@ -11,10 +11,11 @@ import java.util.List;
  * @since		 JDK 1.7+
  * @see 	 
  */
-public class DataGridVO {
+public class DataGridVO extends BaseViewVO {
 
 	private Long total = 0L;
 	private List<?> rows = new ArrayList();
+	private List<?> footer = new ArrayList();
 	
 	public Long getTotal() {
 		return total;
@@ -27,6 +28,12 @@ public class DataGridVO {
 	}
 	public void setRows(List<?> list) {
 		this.rows = list;
+	}
+	public List<?> getFooter() {
+		return footer;
+	}
+	public void setFooter(List<?> footer) {
+		this.footer = footer;
 	}
 	
 }

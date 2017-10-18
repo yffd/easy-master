@@ -48,15 +48,15 @@ $(function() {
 			parent.$.messager.progress('close');
 			result = $.parseJSON(result);
 			if(result.statusCode=='OK') {
-				parent.$.modalDialog.handler.dialog('close');
-				parent.$.modalDialog.openner.tree('reload');//parent.$.modalDialog.openner#tree这个对象在列表页面已预定义
-				$.messager.show({
+				parent.$.modalDialog.handler.dialog('close');//打开此窗口时预定义的对象
+				parent.$.modalDialog.openner.tree('reload');//打开此窗口时预定义的对象
+				parent.$.modalDialog.openWindow.$.messager.show({
 					title : '系统提示',
 					msg : result.statusDesc,
 					timeout : 1000 * 2
 				});
 			} else {
-				$.messager.show({
+				parent.$.modalDialog.openWindow.$.messager.show({
 					title : '系统提示',
 					msg : result.statusDesc,
 					timeout : 1000 * 2

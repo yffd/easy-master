@@ -1,5 +1,7 @@
 package org.yffd.easy.common.core.view.support;
 
+import java.util.List;
+
 import org.yffd.easy.common.core.page.PageParam;
 import org.yffd.easy.common.core.page.PageResult;
 import org.yffd.easy.common.core.view.vo.DataGridVO;
@@ -26,6 +28,21 @@ public class ViewModelSupport {
 		DataGridVO vo = new DataGridVO();
 		vo.setRows(pageResult.getRecordList());
 		Long total = (long) pageResult.getPageInfo().getTotalRecord();
+		vo.setTotal(total);
+		return vo;
+	}
+	
+	/**
+	 * 将后台集合结果转换成EasyUI分页数据格式
+	 * @Date	2017年10月12日 下午6:13:01 <br/>
+	 * @author  zhangST
+	 * @param list
+	 * @return
+	 */
+	public DataGridVO toDataGrid(List<?> list) {
+		DataGridVO vo = new DataGridVO();
+		vo.setRows(list);
+		Long total = (long) list.size();
 		vo.setTotal(total);
 		return vo;
 	}

@@ -33,8 +33,24 @@ public class SysPermissionServiceImpl implements SysPermissionService {
 	}
 
 	@Override
-	public void add(SysPermission permission) {
-		this.sysPermissionDao.insert(permission);
+	public SysPermission findByCode(String code) {
+		SysPermission pms = this.sysPermissionDao.selectByPK(code);
+		return pms;
+	}
+	
+	@Override
+	public void add(SysPermission sysPermission) {
+		this.sysPermissionDao.insert(sysPermission);
+	}
+
+	@Override
+	public void editByCode(SysPermission sysPermission) {
+		this.sysPermissionDao.updateByPK(sysPermission);
+	}
+
+	@Override
+	public void delByCode(String code) {
+		this.sysPermissionDao.deleteByPK(code);
 	}
 
 }

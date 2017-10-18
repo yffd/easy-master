@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
-import org.yffd.easy.app.controller.system.vo.SysOrganizationTreeVO;
+import org.yffd.easy.app.controller.system.vo.SysOrgVO;
 import org.yffd.easy.app.system.model.SysOrganization;
 import org.yffd.easy.common.core.util.ValidUtils;
 import org.yffd.easy.common.core.view.tree.TreeBuilder;
-
-import com.alibaba.fastjson.JSON;
+import org.yffd.easy.common.core.view.vo.ComboTreeVO;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -22,29 +21,40 @@ import com.alibaba.fastjson.JSON;
 @Component("sysOrgSupport")
 public class SysOrgSupport {
 	
-	public String getJsonTree(List<SysOrganization> list) {
-		if(ValidUtils.isEmpty(list)) return "";
-		List<SysOrganizationTreeVO> treeList = this.getTreeList(list);
-		String json = JSON.toJSONString(treeList);
-		return json;
-	}
-	
-	public List<SysOrganizationTreeVO> getTreeList(List<SysOrganization> list) {
+	public List<ComboTreeVO> toListTreeVO(List<SysOrganization> list) {
 		if(ValidUtils.isEmpty(list)) return null;
-		List<SysOrganizationTreeVO> nodes = toEntityList(list);
-		return (List<SysOrganizationTreeVO>) TreeBuilder.buildByRecursive(nodes);
+	    
+		List<ComboTreeVO> voList = new ArrayList<ComboTreeVO>();
+		for(SysOrganization org : list) {
+			ComboTreeVO vo = new ComboTreeVO();
+			vo.setId(org.getCode());
+			vo.setPid(org.getParentCode());
+			vo.setText(org.getName());
+			vo.setChecked(false);
+			vo.setState("closed");
+			voList.add(vo);
+		}
+		List<ComboTreeVO> treeList = (List<ComboTreeVO>) TreeBuilder.buildByRecursive(voList);
+		if(ValidUtils.isEmpty(treeList)) return null;
+		return treeList;
 	}
 	
-	private List<SysOrganizationTreeVO> toEntityList(List<SysOrganization> list) {
-		List<SysOrganizationTreeVO> ret = new ArrayList<SysOrganizationTreeVO>();
-		for(SysOrganization sysOrg : list) {
-			SysOrganizationTreeVO entity = new SysOrganizationTreeVO();
-		    entity.setId(sysOrg.getOrgCode());
-		    entity.setPid(sysOrg.getParentCode());
-		    entity.setText(sysOrg.getOrgName());
-		    entity.setIconCls(sysOrg.getIcon());
-		    entity.setState("open");
-		    ret.add(entity);
+	public List<SysOrgVO> toListVO(List<SysOrganization> list) {
+		if(ValidUtils.isEmpty(list)) return null;
+		List<SysOrgVO> ret = new ArrayList<SysOrgVO>();
+		for(SysOrganization org : list) {
+			SysOrgVO vo = new SysOrgVO();
+			vo.setState("closed");
+			vo.setId(org.getId());
+			vo.setName(org.getName());
+			vo.setCode(org.getCode());
+			vo.setFirstManagerCode(org.getFirstManagerCode());
+			vo.setSecondManagerCode(org.getSecondManagerCode());
+			vo.setParentCode(org.getParentCode());
+			vo.setFax(org.getFax());
+			vo.setTel(org.getTel());
+			vo.setRemark(org.getRemark());
+			ret.add(vo);
 		}
 		return ret;
 	}

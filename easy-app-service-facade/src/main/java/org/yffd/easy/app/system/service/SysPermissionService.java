@@ -16,6 +16,12 @@ public interface SysPermissionService {
 
 	PageResult<SysPermission> findList(String name, String code, PageParam pageParam);
 	
-	void add(SysPermission permission);
+	public SysPermission findByCode(String code);
+	
+	void add(SysPermission sysPermission);
+	
+	void editByCode(SysPermission sysPermission);
+	
+	void delByCode(String code);
 }
 

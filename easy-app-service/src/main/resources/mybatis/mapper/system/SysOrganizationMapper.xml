@@ -8,36 +8,32 @@
 	<resultMap id="resutlId" type="org.yffd.easy.app.system.model.SysOrganization">
 		<id column="id" property="id" jdbcType="INTEGER" />
 		<result column="version" property="version" jdbcType="INTEGER" />
-		<result column="status" property="status" jdbcType="VARCHAR" />
+		<result column="del_flag" property="delFlag" jdbcType="CHAR" />
 		<result column="creater" property="creater" jdbcType="VARCHAR" />
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
 		<result column="editor" property="editor" jdbcType="VARCHAR" />
 		<result column="edit_time" property="editTime" jdbcType="TIMESTAMP" />
 		<result column="remark" property="remark" jdbcType="VARCHAR" />
 		
-		<result column="org_name" property="orgName" jdbcType="VARCHAR" />
-		<result column="org_code" property="orgCode" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="code" property="code" jdbcType="VARCHAR" />
 		<result column="p_code" property="parentCode" jdbcType="VARCHAR" />
-		<result column="manager_code" property="managerCode" jdbcType="VARCHAR" />
-		<result column="deputy_manager_code" property="deputyManagerCode" jdbcType="VARCHAR" />
-		<result column="icon" property="icon" jdbcType="VARCHAR" />
-		<result column="staff_num" property="staffNum" jdbcType="INTEGER" />
-		<result column="short_name" property="shortName" jdbcType="VARCHAR" />
+		<result column="first_manager_code" property="firstManagerCode" jdbcType="VARCHAR" />
+		<result column="second_manager_code" property="secondManagerCode" jdbcType="VARCHAR" />
 		<result column="tel" property="tel" jdbcType="VARCHAR" />
 		<result column="fax" property="fax" jdbcType="VARCHAR" />
 	</resultMap>
 
 	<sql id="sys_organization_table"> sys_organization </sql>
-	<sql id="sys_organization_columns"> id, version, status, creater, create_time, editor, edit_time, remark,
-	 org_name, org_code, p_code, manager_code,deputy_manager_code ,icon ,staff_num ,short_name, tel ,fax  </sql>
+	<sql id="sys_organization_columns"> id, version, del_flag, creater, create_time, editor, edit_time, remark,
+	 name, code, p_code, first_manager_code, second_manager_code, tel, fax  </sql>
 	<!-- 动态组装复合查询条件 -->
 	<sql id="sys_organization_where">
 		<!-- Equal query -->
-		<if test="orgCode != null and orgCode != ''"> and org_code= #{orgCode} </if>
+		<if test="code != null and code != ''"> and code= #{code} </if>
 		<if test="parentCode != null and parentCode != ''"> and p_code= #{parentCode} </if>
 		<!-- Like query -->
-		<if test="orgName != null and orgName != ''"> and org_name like CONCAT(CONCAT('%', #{orgName}), '%') </if>
-		<if test="shortName != null and shortName != ''"> and short_name like CONCAT(CONCAT('%', #{shortName}), '%') </if>
+		<if test="name != null and name != ''"> and name like CONCAT(CONCAT('%', #{name}), '%') </if>
 	</sql>
 	
 	<select id="selectByPK" parameterType="java.lang.String" resultMap="resutlId">
@@ -45,7 +41,7 @@
 		<include refid="sys_organization_columns"/>
 		from
 		<include refid="sys_organization_table" />
-		where id = #{_parameter}
+		where code = #{_parameter}
 	</select>
 	
 	<!-- selectListBy、selectBy、selectAll -->
@@ -62,42 +58,35 @@
 	<insert id="insert" parameterType="org.yffd.easy.app.system.model.SysOrganization" keyProperty="id" useGeneratedKeys="true">
 		insert into
 		<include refid="sys_organization_table" />
-		(version, status, creater, create_time, editor, edit_time, remark, 
-		org_name, org_code, p_code, manager_code,deputy_manager_code ,icon ,staff_num,short_name, tel ,fax)
+		(version, del_flag, creater, create_time, editor, edit_time, remark, 
+		name, code, p_code, first_manager_code, second_manager_code, tel ,fax)
 		values
-		(0,#{status}, #{creater}, #{createTime}, #{editor}, #{editTime}, #{remark}, 
-		#{orgName}, #{orgCode}, #{parentCode}, #{managerCode}, #{deputyManagerCode}, #{icon}, #{staffNum}, #{shortName}, #{tel}, #{fax})
+		(0, #{delFlag}, #{creater}, #{createTime}, #{editor}, #{editTime}, #{remark}, 
+		#{name}, #{code}, #{parentCode}, #{firstManagerCode}, #{secondManagerCode}, #{tel}, #{fax})
 	</insert>
 	
-	<update id="updateBy" parameterType="org.yffd.easy.app.system.model.SysOrganization">
+	<update id="updateByPK" parameterType="org.yffd.easy.app.system.model.SysOrganization">
 		update <include refid="sys_organization_table" />
 		<set>
-			version = #{version} + 1,
-			creater = #{creater, jdbcType=VARCHAR},
-			create_time = #{createTime, jdbcType=TIMESTAMP},
+			version = version + 1,
 			editor = #{editor, jdbcType=VARCHAR},
 			edit_time = #{editTime, jdbcType=TIMESTAMP},
 			remark = #{remark, jdbcType=VARCHAR},
-			org_name = #{orgName, jdbcType=VARCHAR},
-			org_code = #{orgCode, jdbcType=VARCHAR},
+			name = #{name, jdbcType=VARCHAR},
+			code = #{name, jdbcType=VARCHAR},
 			p_code = #{parentCode, jdbcType=VARCHAR},
-			manager_code = #{managerCode, jdbcType=VARCHAR},
-			deputy_manager_code = #{deputyManagerCode, jdbcType=VARCHAR},
-			icon = #{icon, jdbcType=VARCHAR},
-			staff_num = #{staffNum, jdbcType=INTEGER},
-			short_name = #{shortName, jdbcType=VARCHAR},
+			first_manager_code = #{firstManagerCode, jdbcType=VARCHAR},
+			second_manager_code = #{secondManagerCode, jdbcType=VARCHAR},
 			tel = #{tel, jdbcType=VARCHAR},
 			fax = #{fax, jdbcType=VARCHAR},
 		</set>
-		<where>
-			<include refid="sys_organization_where" />
-		</where>
+		where code = #{code}
 	</update>
 	
 	<delete id="deleteByPK" parameterType="java.lang.String">
 		delete from
 		<include refid="sys_organization_table" />
-		where id = #{_parameter}
+		where code = #{_parameter}
 	</delete>
 	
 	<delete id="deleteBy" parameterType="java.util.Map">
@@ -111,7 +100,7 @@
 	<delete id="deleteBatch" parameterType="java.util.List">
 		delete from
 		<include refid="sys_organization_table" />
-		where id in
+		where code in
 		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">#{item.id}</foreach>
 	</delete>
 	

@@ -38,20 +38,23 @@ public class SysOrganizationServiceImpl implements SysOrganizationService {
 	}
 
 	@Override
+	public SysOrganization findByCode(String code) {
+		return this.sysOrganizationDao.selectByPK(code);
+	}
+
+	@Override
 	public void add(SysOrganization sysOrganization) {
 		this.sysOrganizationDao.insert(sysOrganization);
 	}
 
 	@Override
-	public void edit(SysOrganization sysOrganization) {
-		this.sysOrganizationDao.updateBy(sysOrganization);
+	public void editByCode(SysOrganization sysOrganization) {
+		this.sysOrganizationDao.updateByPK(sysOrganization);
 	}
 
 	@Override
 	public void delByCode(String code) {
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("code", code);
-		this.sysOrganizationDao.deleteBy(paramMap);
+		this.sysOrganizationDao.deleteByPK(code);
 	}
 
 }

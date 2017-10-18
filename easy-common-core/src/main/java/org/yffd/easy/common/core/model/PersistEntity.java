@@ -107,6 +107,7 @@ public class PersistEntity implements Serializable {
     
     /**
      * 持久化操作-添加实体，设置实体的默认属性：
+     * 					version：	0
      * 					delFlag：	0
      * 					creater：	user
      * 					createTime：	time
@@ -118,6 +119,7 @@ public class PersistEntity implements Serializable {
      * @param time
      */
     public void setDefaultAdd(String user, Date time) {
+    	this.setVersion(0);
     	this.setDelFlag("0");
     	this.setCreater(user);
     	this.setCreateTime(time);

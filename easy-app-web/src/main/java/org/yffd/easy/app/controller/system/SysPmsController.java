@@ -1,5 +1,7 @@
 package org.yffd.easy.app.controller.system;
 
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.yffd.easy.app.system.service.SysPermissionService;
 import org.yffd.easy.common.core.model.RespEntity;
 import org.yffd.easy.common.core.page.PageParam;
 import org.yffd.easy.common.core.page.PageResult;
+import org.yffd.easy.common.core.util.ValidUtils;
 import org.yffd.easy.common.core.view.vo.DataGridVO;
 import org.yffd.easy.common.core.view.vo.SearchBoxVO;
 import org.yffd.easy.common.ssm.web.BaseController;
@@ -41,5 +44,41 @@ public class SysPmsController extends BaseController {
 		return this.successAjax(dataGrid);
 	}
 	
+	@RequestMapping(value="/add", method=RequestMethod.POST)
+	@ResponseBody
+	public RespEntity add(HttpServletRequest req, SysPermission sysPermission) {
+		if(ValidUtils.isNull(sysPermission) || ValidUtils.isEmpty(sysPermission.getCode())) {
+			return this.error("参数无效");
+		}
+		SysPermission pms = this.sysPermissionService.findByCode(sysPermission.getCode());
+		if(!ValidUtils.isNull(pms)) {
+			return this.errorAjax("编号已存在");
+		}
+		sysPermission.setDefaultAdd("admin", new Date());
+		this.sysPermissionService.add(sysPermission);
+		return this.successAjax();
+	}
+	
+	@RequestMapping(value="/edit", method=RequestMethod.POST)
+	@ResponseBody
+	public RespEntity edit(HttpServletRequest req, SysPermission sysPermission) {
+		if(ValidUtils.isNull(sysPermission) || ValidUtils.isEmpty(sysPermission.getCode())) {
+			return this.error("参数无效");
+		}
+		sysPermission.setDefaultUpdate("admin", new Date());
+		this.sysPermissionService.editByCode(sysPermission);
+		return this.successAjax();
+	}
+	
+	@RequestMapping(value="/del", method=RequestMethod.POST)
+	@ResponseBody
+	public RespEntity del(HttpServletRequest req) {
+		String code = req.getParameter("code");
+		if(ValidUtils.isEmpty(code)) {
+			return this.errorAjax("参数无效");
+		}
+		this.sysPermissionService.delByCode(code);
+		return this.successAjax();
+	}
 }
 
