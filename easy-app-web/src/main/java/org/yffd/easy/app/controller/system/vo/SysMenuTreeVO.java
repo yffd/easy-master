@@ -23,13 +23,8 @@ public class SysMenuTreeVO extends TreeNode {
     private List<TreeNode> children;
     
     public SysMenuTreeVO() {
-    	super();
     }
     
-    public SysMenuTreeVO(String id, String name, String pid) {
-		super(id, name, pid);
-	}
-
 	public String getId() {
 		return id;
 	}

@@ -82,6 +82,51 @@
 		text : '默认',
 		selected : true
 	},{
+		value : 'icon-adds',
+		text : 'icon-adds'
+	},{
+		value : 'icon-ok',
+		text : 'icon-ok'
+	},{
+		value : 'icon-tip',
+		text : 'icon-tip'
+	},{
+		value : 'icon-remove',
+		text : 'icon-remove'
+	},{
+		value : 'icon-undo',
+		text : 'icon-undo'
+	},{
+		value : 'icon-cancel',
+		text : 'icon-cancel'
+	},{
+		value : 'icon-save',
+		text : 'icon-save'
+	},{
+		value : 'icon-config',
+		text : 'icon-config'
+	},{
+		value : 'icon-comp',
+		text : 'icon-comp'
+	},{
+		value : 'icon-sys',
+		text : 'icon-sys'
+	},{
+		value : 'icon-db',
+		text : 'icon-db'
+	},{
+		value : 'icon-pro',
+		text : 'icon-pro'
+	},{
+		value : 'icon-role',
+		text : 'icon-role'
+	},{
+		value : 'icon-bug',
+		text : 'icon-bug'
+	},{
+		value : 'icon-time',
+		text : 'icon-time'
+	},{
 		value : 'icon-easy icon-easy-sys',
 		text : 'icon-easy-sys'
 	},{

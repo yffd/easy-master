@@ -85,10 +85,10 @@ public interface IBaseDao<T> {
      * 插入数据
      * @Date	2017年9月14日 下午4:18:46 <br/>
      * @author  zhangST
-     * @param entity
+     * @param model
      * @return
      */
-    int insert(T entity);
+    int insert(T model);
 
     /**
      * 批量插入数据
@@ -103,19 +103,19 @@ public interface IBaseDao<T> {
      * 更新数据
      * @Date	2017年9月14日 下午4:19:16 <br/>
      * @author  zhangST
-     * @param entity
+     * @param model
      * @return
      */
-    int updateBy(T entity);
+    int updateBy(T model);
     
     /**
      * 根据主键更新数据
      * @Date	2017年9月14日 下午4:19:16 <br/>
      * @author  zhangST
-     * @param entity
+     * @param model
      * @return
      */
-    int updateByPK(T entity);
+    int updateByPK(T model);
 
     /**
      * 批量更新数据

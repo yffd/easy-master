@@ -7,7 +7,7 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.yffd.easy.common.core.exception.DaoException;
-import org.yffd.easy.common.core.model.PersistEntity;
+import org.yffd.easy.common.core.model.PersistModel;
 import org.yffd.easy.common.core.page.PageParam;
 import org.yffd.easy.common.core.page.PageResult;
 import org.yffd.easy.common.core.util.ValidUtils;
@@ -21,7 +21,7 @@ import org.yffd.easy.common.ssm.dao.IBaseDao;
  * @since		 JDK 1.7+
  * @see 	 
  */
-public class BaseDaoImpl<T extends PersistEntity> implements IBaseDao<T> {
+public class BaseDaoImpl<T extends PersistModel> implements IBaseDao<T> {
 
 	/** mapper xml 中的SQL ID，即statement=selectRange */
     public static final String SQL_SELECT_RANGE = "selectRange";
@@ -195,13 +195,13 @@ public class BaseDaoImpl<T extends PersistEntity> implements IBaseDao<T> {
 	 * sqlid : {@link org.yffd.easy.common.ssm.dao.impl.BaseDaoImpl#SQL_INSERT} <br/>
 	 * @Date	2017年9月14日 下午4:50:11 <br/>
 	 * @author  zhangST
-	 * @param entity
+	 * @param model
 	 * @return
 	 * @see org.yffd.easy.common.ssm.dao.IBaseDao#insert(java.lang.Object)
 	 */
 	@Override
-	public int insert(T entity) {
-		int result = sqlSession.insert(getStatement(SQL_INSERT), entity);
+	public int insert(T model) {
+		int result = sqlSession.insert(getStatement(SQL_INSERT), model);
         if (result <= 0) {
             throw DaoException.DB_INSERT_RESULT_0(getStatement(SQL_INSERT));
         }
@@ -232,13 +232,13 @@ public class BaseDaoImpl<T extends PersistEntity> implements IBaseDao<T> {
 	 * sqlid : {@link org.yffd.easy.common.ssm.dao.impl.BaseDaoImpl#SQL_UPDATE_BY} <br/>
 	 * @Date	2017年9月14日 下午4:54:08 <br/>
 	 * @author  zhangST
-	 * @param entity
+	 * @param model
 	 * @return
 	 * @see org.yffd.easy.common.ssm.dao.IBaseDao#updateBy(java.lang.Object)
 	 */
 	@Override
-	public int updateBy(T entity) {
-        int result = sqlSession.update(getStatement(SQL_UPDATE_BY), entity);
+	public int updateBy(T model) {
+        int result = sqlSession.update(getStatement(SQL_UPDATE_BY), model);
         if (result <= 0) {
             throw DaoException.DB_UPDATE_RESULT_0(getStatement(SQL_UPDATE_BY));
         }
@@ -249,13 +249,13 @@ public class BaseDaoImpl<T extends PersistEntity> implements IBaseDao<T> {
 	 * sqlid : {@link org.yffd.easy.common.ssm.dao.impl.BaseDaoImpl#SQL_UPDATE_BY_PK} <br/>
 	 * @Date	2017年9月14日 下午4:54:08 <br/>
 	 * @author  zhangST
-	 * @param entity
+	 * @param model
 	 * @return
 	 * @see org.yffd.easy.common.ssm.dao.IBaseDao#updateByPK(java.lang.Object)
 	 */
 	@Override
-	public int updateByPK(T entity) {
-		int result = sqlSession.update(getStatement(SQL_UPDATE_BY_PK), entity);
+	public int updateByPK(T model) {
+		int result = sqlSession.update(getStatement(SQL_UPDATE_BY_PK), model);
         if (result <= 0) {
             throw DaoException.DB_UPDATE_RESULT_0(getStatement(SQL_UPDATE_BY_PK));
         }

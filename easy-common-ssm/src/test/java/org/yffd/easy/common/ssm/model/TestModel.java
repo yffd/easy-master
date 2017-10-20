@@ -2,7 +2,7 @@ package org.yffd.easy.common.ssm.model;
 
 import java.util.Date;
 
-import org.yffd.easy.common.core.model.PersistEntity;
+import org.yffd.easy.common.core.model.PersistModel;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -12,7 +12,7 @@ import org.yffd.easy.common.core.model.PersistEntity;
  * @since		 JDK 1.7+
  * @see 	 
  */
-public class TestModel extends PersistEntity {
+public class TestModel extends PersistModel {
     
     /**
      * serialVersionUID:TODO(用一句话描述这个变量表示什么).

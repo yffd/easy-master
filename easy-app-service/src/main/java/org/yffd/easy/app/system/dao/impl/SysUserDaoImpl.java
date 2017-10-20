@@ -1,8 +1,8 @@
 package org.yffd.easy.app.system.dao.impl;
 
 import org.springframework.stereotype.Repository;
-import org.yffd.easy.app.system.dao.SysOrganizationDao;
-import org.yffd.easy.app.system.model.SysOrganizationModel;
+import org.yffd.easy.app.system.dao.SysUserDao;
+import org.yffd.easy.app.system.model.SysUserModel;
 import org.yffd.easy.common.ssm.dao.impl.BaseDaoImpl;
 
 /**
@@ -14,8 +14,8 @@ import org.yffd.easy.common.ssm.dao.impl.BaseDaoImpl;
  * @since		 JDK 1.7+
  * @see 	 
  */
-@Repository("sysOrganizationDao")
-public class SysOrganizationDaoImpl extends BaseDaoImpl<SysOrganizationModel> implements SysOrganizationDao {
+@Repository("sysUserDao")
+public class SysUserDaoImpl extends BaseDaoImpl<SysUserModel> implements SysUserDao {
 	
 }
 

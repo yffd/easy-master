@@ -1,6 +1,6 @@
 package org.yffd.easy.app.system.dao;
 
-import org.yffd.easy.app.system.model.SysOrganizationModel;
+import org.yffd.easy.app.system.model.SysUserModel;
 import org.yffd.easy.common.ssm.dao.IBaseDao;
 
 /**
@@ -12,7 +12,7 @@ import org.yffd.easy.common.ssm.dao.IBaseDao;
  * @since		 JDK 1.7+
  * @see 	 
  */
-public interface SysOrganizationDao extends IBaseDao<SysOrganizationModel> {
+public interface SysUserDao extends IBaseDao<SysUserModel> {
 	
 }
 
