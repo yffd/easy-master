@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50634
 File Encoding         : 65001
 
-Date: 2017-10-20 17:52:20
+Date: 2017-10-24 17:54:18
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -35,49 +35,49 @@ CREATE TABLE `sys_function` (
   `ACTIVE` char(1) DEFAULT NULL COMMENT 'A:ACTIVE,I:INACTIVE',
   `SORT` float(4,1) DEFAULT NULL,
   `ICONCLS` varchar(100) DEFAULT NULL COMMENT '图标样式',
-  `STATE` varchar(20) DEFAULT NULL COMMENT 'closed,open',
   `REMARK` varchar(300) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=1042 DEFAULT CHARSET=utf8 COMMENT='系统 》 功能表';
+) ENGINE=InnoDB AUTO_INCREMENT=1043 DEFAULT CHARSET=utf8 COMMENT='系统 》 功能表';
 
 -- ----------------------------
 -- Records of sys_function
 -- ----------------------------
-INSERT INTO `sys_function` VALUES ('1004', '0', 'admin', '2017-10-18 17:52:47', 'admin', '2017-10-18 17:52:47', '0', '一级_0', 'code_0', '-1', 'www.baidu.com', 'M', 'I', '1.1', 'icon-sys', 'closed', null);
-INSERT INTO `sys_function` VALUES ('1005', '0', 'admin', '2017-10-18 17:52:47', 'admin', '2017-10-18 17:52:47', '0', '二级_0_0', 'code_0_0', 'code_0', 'www.baidu.com', 'M', 'I', '1.1', 'icon-sys', 'closed', null);
-INSERT INTO `sys_function` VALUES ('1006', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_0_1', 'code_0_1', 'code_0', 'www.baidu.com', 'M', 'I', '1.1', 'icon-sys', 'closed', null);
-INSERT INTO `sys_function` VALUES ('1007', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_0_2', 'code_0_2', 'code_0', 'www.baidu.com', 'M', 'I', '1.1', 'icon-sys', 'closed', null);
-INSERT INTO `sys_function` VALUES ('1008', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_0_3', 'code_0_3', 'code_0', 'www.baidu.com', 'M', 'I', '1.1', 'icon-sys', 'closed', null);
-INSERT INTO `sys_function` VALUES ('1009', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_0_4', 'code_0_4', 'code_0', 'www.baidu.com', 'M', 'I', '1.1', 'icon-sys', 'closed', null);
-INSERT INTO `sys_function` VALUES ('1010', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '一级_1', 'code_1', '-1', 'www.baidu.com', 'M', 'I', '2.1', 'icon-sys', 'closed', null);
-INSERT INTO `sys_function` VALUES ('1011', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_1_0', 'code_1_0', 'code_1', 'www.baidu.com', 'M', 'I', '2.1', 'icon-sys', 'closed', null);
-INSERT INTO `sys_function` VALUES ('1012', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_1_1', 'code_1_1', 'code_1', 'www.baidu.com', 'M', 'I', '2.1', 'icon-sys', 'closed', null);
-INSERT INTO `sys_function` VALUES ('1013', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_1_2', 'code_1_2', 'code_1', 'www.baidu.com', 'M', 'I', '2.1', 'icon-sys', 'closed', null);
-INSERT INTO `sys_function` VALUES ('1014', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_1_3', 'code_1_3', 'code_1', 'www.baidu.com', 'M', 'I', '2.1', 'icon-sys', 'closed', null);
-INSERT INTO `sys_function` VALUES ('1015', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_1_4', 'code_1_4', 'code_1', 'www.baidu.com', 'M', 'I', '2.1', 'icon-sys', 'closed', null);
-INSERT INTO `sys_function` VALUES ('1016', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '一级_2', 'code_2', '-1', 'www.baidu.com', 'M', 'I', '3.1', 'icon-sys', 'closed', null);
-INSERT INTO `sys_function` VALUES ('1017', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_2_0', 'code_2_0', 'code_2', 'www.baidu.com', 'M', 'I', '3.1', 'icon-sys', 'closed', null);
-INSERT INTO `sys_function` VALUES ('1018', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_2_1', 'code_2_1', 'code_2', 'www.baidu.com', 'M', 'I', '3.1', 'icon-sys', 'closed', null);
-INSERT INTO `sys_function` VALUES ('1019', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_2_2', 'code_2_2', 'code_2', 'www.baidu.com', 'M', 'I', '3.1', 'icon-sys', 'closed', null);
-INSERT INTO `sys_function` VALUES ('1020', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_2_3', 'code_2_3', 'code_2', 'www.baidu.com', 'M', 'I', '3.1', 'icon-sys', 'closed', null);
-INSERT INTO `sys_function` VALUES ('1021', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_2_4', 'code_2_4', 'code_2', 'www.baidu.com', 'M', 'I', '3.1', 'icon-sys', 'closed', null);
-INSERT INTO `sys_function` VALUES ('1022', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '一级_3', 'code_3', '-1', 'www.baidu.com', 'M', 'I', '4.1', 'icon-sys', 'closed', null);
-INSERT INTO `sys_function` VALUES ('1023', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_3_0', 'code_3_0', 'code_3', 'www.baidu.com', 'M', 'I', '4.1', 'icon-sys', 'closed', null);
-INSERT INTO `sys_function` VALUES ('1024', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_3_1', 'code_3_1', 'code_3', 'www.baidu.com', 'M', 'I', '4.1', 'icon-sys', 'closed', null);
-INSERT INTO `sys_function` VALUES ('1025', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_3_2', 'code_3_2', 'code_3', 'www.baidu.com', 'M', 'I', '4.1', 'icon-sys', 'closed', null);
-INSERT INTO `sys_function` VALUES ('1026', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_3_3', 'code_3_3', 'code_3', 'www.baidu.com', 'M', 'I', '4.1', 'icon-sys', 'closed', null);
-INSERT INTO `sys_function` VALUES ('1027', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_3_4', 'code_3_4', 'code_3', 'www.baidu.com', 'M', 'I', '4.1', 'icon-sys', 'closed', null);
-INSERT INTO `sys_function` VALUES ('1028', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '一级_4', 'code_4', '-1', 'www.baidu.com', 'M', 'I', '5.1', 'icon-sys', 'closed', null);
-INSERT INTO `sys_function` VALUES ('1029', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_4_0', 'code_4_0', 'code_4', 'www.baidu.com', 'M', 'I', '5.1', 'icon-sys', 'closed', null);
-INSERT INTO `sys_function` VALUES ('1030', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_4_1', 'code_4_1', 'code_4', 'www.baidu.com', 'M', 'I', '5.1', 'icon-sys', 'closed', null);
-INSERT INTO `sys_function` VALUES ('1031', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_4_2', 'code_4_2', 'code_4', 'www.baidu.com', 'M', 'I', '5.1', 'icon-sys', 'closed', null);
-INSERT INTO `sys_function` VALUES ('1032', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_4_3', 'code_4_3', 'code_4', 'www.baidu.com', 'M', 'I', '5.1', 'icon-sys', 'closed', null);
-INSERT INTO `sys_function` VALUES ('1033', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_4_4', 'code_4_4', 'code_4', 'www.baidu.com', 'M', 'I', '5.1', 'icon-sys', 'closed', null);
-INSERT INTO `sys_function` VALUES ('1034', '0', 'admin', '2017-10-19 11:18:47', 'admin', '2017-10-19 11:18:47', '0', '系统管理', 'sys', '-1', 'javascript:void(0);', 'M', 'A', '1.0', 'icon-sys', 'closed', '系统管理 》 菜单');
-INSERT INTO `sys_function` VALUES ('1035', '2', 'admin', '2017-10-19 11:18:47', 'admin', '2017-10-19 16:52:33', '0', '功能管理', 'sys-func', 'sys', 'jsp/system/function/functionMain.jsp', 'M', 'A', '1.1', 'icon-sys', 'closed', '系统管理 》 菜单');
-INSERT INTO `sys_function` VALUES ('1036', '8', 'admin', '2017-10-19 16:17:26', 'admin', '2017-10-19 16:52:45', '0', '机构管理', 'sys-org', 'sys', 'jsp/system/organization/organizationMain.jsp', 'M', 'A', '1.2', 'icon-sys', 'closed', '系统管理 》 菜单');
-INSERT INTO `sys_function` VALUES ('1040', '2', 'admin', '2017-10-19 17:42:13', 'admin', '2017-10-19 17:44:35', '0', '用户管理', 'sys-user', 'sys', 'jsp/system/user/userMain.jsp', 'M', 'A', '1.3', 'icon-sys', 'closed', '系统管理 》 菜单');
-INSERT INTO `sys_function` VALUES ('1041', '1', 'admin', '2017-10-20 16:49:40', 'admin', '2017-10-20 16:50:00', '0', '角色管理', 'sys-role', 'sys', 'jsp/system/role/roleMain.jsp', 'M', 'A', '1.4', 'icon-sys', 'closed', '系统管理 》 菜单');
+INSERT INTO `sys_function` VALUES ('1004', '0', 'admin', '2017-10-18 17:52:47', 'admin', '2017-10-18 17:52:47', '0', '一级_0', 'code_0', '-1', 'www.baidu.com', 'M', 'I', '1.1', 'icon-sys', null);
+INSERT INTO `sys_function` VALUES ('1005', '0', 'admin', '2017-10-18 17:52:47', 'admin', '2017-10-18 17:52:47', '0', '二级_0_0', 'code_0_0', 'code_0', 'www.baidu.com', 'M', 'I', '1.1', 'icon-sys', null);
+INSERT INTO `sys_function` VALUES ('1006', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_0_1', 'code_0_1', 'code_0', 'www.baidu.com', 'M', 'I', '1.1', 'icon-sys', null);
+INSERT INTO `sys_function` VALUES ('1007', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_0_2', 'code_0_2', 'code_0', 'www.baidu.com', 'M', 'I', '1.1', 'icon-sys', null);
+INSERT INTO `sys_function` VALUES ('1008', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_0_3', 'code_0_3', 'code_0', 'www.baidu.com', 'M', 'I', '1.1', 'icon-sys', null);
+INSERT INTO `sys_function` VALUES ('1009', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_0_4', 'code_0_4', 'code_0', 'www.baidu.com', 'M', 'I', '1.1', 'icon-sys', null);
+INSERT INTO `sys_function` VALUES ('1010', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '一级_1', 'code_1', '-1', 'www.baidu.com', 'M', 'I', '2.1', 'icon-sys', null);
+INSERT INTO `sys_function` VALUES ('1011', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_1_0', 'code_1_0', 'code_1', 'www.baidu.com', 'M', 'I', '2.1', 'icon-sys', null);
+INSERT INTO `sys_function` VALUES ('1012', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_1_1', 'code_1_1', 'code_1', 'www.baidu.com', 'M', 'I', '2.1', 'icon-sys', null);
+INSERT INTO `sys_function` VALUES ('1013', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_1_2', 'code_1_2', 'code_1', 'www.baidu.com', 'M', 'I', '2.1', 'icon-sys', null);
+INSERT INTO `sys_function` VALUES ('1014', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_1_3', 'code_1_3', 'code_1', 'www.baidu.com', 'M', 'I', '2.1', 'icon-sys', null);
+INSERT INTO `sys_function` VALUES ('1015', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_1_4', 'code_1_4', 'code_1', 'www.baidu.com', 'M', 'I', '2.1', 'icon-sys', null);
+INSERT INTO `sys_function` VALUES ('1016', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '一级_2', 'code_2', '-1', 'www.baidu.com', 'M', 'I', '3.1', 'icon-sys', null);
+INSERT INTO `sys_function` VALUES ('1017', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_2_0', 'code_2_0', 'code_2', 'www.baidu.com', 'M', 'I', '3.1', 'icon-sys', null);
+INSERT INTO `sys_function` VALUES ('1018', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_2_1', 'code_2_1', 'code_2', 'www.baidu.com', 'M', 'I', '3.1', 'icon-sys', null);
+INSERT INTO `sys_function` VALUES ('1019', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_2_2', 'code_2_2', 'code_2', 'www.baidu.com', 'M', 'I', '3.1', 'icon-sys', null);
+INSERT INTO `sys_function` VALUES ('1020', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_2_3', 'code_2_3', 'code_2', 'www.baidu.com', 'M', 'I', '3.1', 'icon-sys', null);
+INSERT INTO `sys_function` VALUES ('1021', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_2_4', 'code_2_4', 'code_2', 'www.baidu.com', 'M', 'I', '3.1', 'icon-sys', null);
+INSERT INTO `sys_function` VALUES ('1022', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '一级_3', 'code_3', '-1', 'www.baidu.com', 'M', 'I', '4.1', 'icon-sys', null);
+INSERT INTO `sys_function` VALUES ('1023', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_3_0', 'code_3_0', 'code_3', 'www.baidu.com', 'M', 'I', '4.1', 'icon-sys', null);
+INSERT INTO `sys_function` VALUES ('1024', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_3_1', 'code_3_1', 'code_3', 'www.baidu.com', 'M', 'I', '4.1', 'icon-sys', null);
+INSERT INTO `sys_function` VALUES ('1025', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_3_2', 'code_3_2', 'code_3', 'www.baidu.com', 'M', 'I', '4.1', 'icon-sys', null);
+INSERT INTO `sys_function` VALUES ('1026', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_3_3', 'code_3_3', 'code_3', 'www.baidu.com', 'M', 'I', '4.1', 'icon-sys', null);
+INSERT INTO `sys_function` VALUES ('1027', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_3_4', 'code_3_4', 'code_3', 'www.baidu.com', 'M', 'I', '4.1', 'icon-sys', null);
+INSERT INTO `sys_function` VALUES ('1028', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '一级_4', 'code_4', '-1', 'www.baidu.com', 'M', 'I', '5.1', 'icon-sys', null);
+INSERT INTO `sys_function` VALUES ('1029', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_4_0', 'code_4_0', 'code_4', 'www.baidu.com', 'M', 'I', '5.1', 'icon-sys', null);
+INSERT INTO `sys_function` VALUES ('1030', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_4_1', 'code_4_1', 'code_4', 'www.baidu.com', 'M', 'I', '5.1', 'icon-sys', null);
+INSERT INTO `sys_function` VALUES ('1031', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_4_2', 'code_4_2', 'code_4', 'www.baidu.com', 'M', 'I', '5.1', 'icon-sys', null);
+INSERT INTO `sys_function` VALUES ('1032', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_4_3', 'code_4_3', 'code_4', 'www.baidu.com', 'M', 'I', '5.1', 'icon-sys', null);
+INSERT INTO `sys_function` VALUES ('1033', '0', 'admin', '2017-10-18 17:52:48', 'admin', '2017-10-18 17:52:48', '0', '二级_4_4', 'code_4_4', 'code_4', 'www.baidu.com', 'M', 'I', '5.1', 'icon-sys', null);
+INSERT INTO `sys_function` VALUES ('1034', '0', 'admin', '2017-10-19 11:18:47', 'admin', '2017-10-19 11:18:47', '0', '系统管理', 'sys', '-1', 'javascript:void(0);', 'M', 'A', '1.0', 'icon-sys', '系统管理 》 菜单');
+INSERT INTO `sys_function` VALUES ('1035', '2', 'admin', '2017-10-19 11:18:47', 'admin', '2017-10-19 16:52:33', '0', '功能管理', 'sys-func', 'sys', 'jsp/system/function/functionMain.jsp', 'M', 'A', '1.1', 'icon-sys', '系统管理 》 菜单');
+INSERT INTO `sys_function` VALUES ('1036', '8', 'admin', '2017-10-19 16:17:26', 'admin', '2017-10-19 16:52:45', '0', '机构管理', 'sys-org', 'sys', 'jsp/system/organization/organizationMain.jsp', 'M', 'A', '1.2', 'icon-sys', '系统管理 》 菜单');
+INSERT INTO `sys_function` VALUES ('1040', '2', 'admin', '2017-10-19 17:42:13', 'admin', '2017-10-19 17:44:35', '0', '用户管理', 'sys-user', 'sys', 'jsp/system/user/userMain.jsp', 'M', 'A', '1.3', 'icon-sys', '系统管理 》 菜单');
+INSERT INTO `sys_function` VALUES ('1041', '1', 'admin', '2017-10-20 16:49:40', 'admin', '2017-10-20 16:50:00', '0', '角色管理', 'sys-role', 'sys', 'jsp/system/role/roleMain.jsp', 'M', 'A', '1.4', 'icon-sys', '系统管理 》 菜单');
+INSERT INTO `sys_function` VALUES ('1042', '0', 'admin', '2017-10-24 15:06:26', 'admin', '2017-10-24 15:06:26', '0', '权限管理', 'sys-pms', 'sys', 'jsp/system/permission/permissionMain.jsp', 'M', 'A', '1.5', 'icon-sys', '系统管理 》  菜单');
 
 -- ----------------------------
 -- Table structure for `sys_organization`
@@ -182,6 +182,129 @@ INSERT INTO `sys_permission` VALUES ('1039', '7', 'admin', '2017-10-16 13:51:52'
 INSERT INTO `sys_permission` VALUES ('1040', '5', 'admin', '2017-10-16 15:01:37', 'admin', '2017-10-16 15:12:04', '0', '对对对ddddsss', '对对对', 'sdf');
 
 -- ----------------------------
+-- Table structure for `sys_role`
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_role`;
+CREATE TABLE `sys_role` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `VERSION` int(11) NOT NULL,
+  `CREATER` varchar(50) NOT NULL COMMENT '创建人',
+  `CREATE_TIME` datetime NOT NULL COMMENT '创建时间',
+  `EDITOR` varchar(50) DEFAULT NULL COMMENT '修改人',
+  `EDIT_TIME` datetime DEFAULT NULL COMMENT '修改时间',
+  `DEL_FLAG` char(1) DEFAULT NULL COMMENT '删除标记，1：删除、0：未删除',
+  `ROLE_NAME` varchar(100) DEFAULT NULL COMMENT '名称',
+  `ROLE_CODE` varchar(100) DEFAULT NULL COMMENT '编号',
+  `REMARK` varchar(300) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=1072 DEFAULT CHARSET=utf8 COMMENT='系统 》 角色表';
+
+-- ----------------------------
+-- Records of sys_role
+-- ----------------------------
+INSERT INTO `sys_role` VALUES ('1035', '0', 'admin', '2017-10-23 11:41:39', 'admin', '2017-10-23 11:41:39', '0', 'role_0', 'code_0', '备注');
+INSERT INTO `sys_role` VALUES ('1036', '0', 'admin', '2017-10-23 11:41:39', 'admin', '2017-10-23 11:41:39', '0', 'role_1', 'code_1', '备注');
+INSERT INTO `sys_role` VALUES ('1037', '0', 'admin', '2017-10-23 11:41:39', 'admin', '2017-10-23 11:41:39', '0', 'role_2', 'code_2', '备注');
+INSERT INTO `sys_role` VALUES ('1038', '0', 'admin', '2017-10-23 11:41:39', 'admin', '2017-10-23 11:41:39', '0', 'role_3', 'code_3', '备注');
+INSERT INTO `sys_role` VALUES ('1039', '0', 'admin', '2017-10-23 11:41:39', 'admin', '2017-10-23 11:41:39', '0', 'role_4', 'code_4', '备注');
+INSERT INTO `sys_role` VALUES ('1040', '0', 'admin', '2017-10-23 11:41:39', 'admin', '2017-10-23 11:41:39', '0', 'role_5', 'code_5', '备注');
+INSERT INTO `sys_role` VALUES ('1041', '0', 'admin', '2017-10-23 11:41:39', 'admin', '2017-10-23 11:41:39', '0', 'role_6', 'code_6', '备注');
+INSERT INTO `sys_role` VALUES ('1042', '0', 'admin', '2017-10-23 11:41:39', 'admin', '2017-10-23 11:41:39', '0', 'role_7', 'code_7', '备注');
+INSERT INTO `sys_role` VALUES ('1043', '0', 'admin', '2017-10-23 11:41:40', 'admin', '2017-10-23 11:41:40', '0', 'role_8', 'code_8', '备注');
+INSERT INTO `sys_role` VALUES ('1044', '0', 'admin', '2017-10-23 11:41:40', 'admin', '2017-10-23 11:41:40', '0', 'role_9', 'code_9', '备注');
+INSERT INTO `sys_role` VALUES ('1045', '0', 'admin', '2017-10-23 11:41:40', 'admin', '2017-10-23 11:41:40', '0', 'role_10', 'code_10', '备注');
+INSERT INTO `sys_role` VALUES ('1046', '0', 'admin', '2017-10-23 11:41:40', 'admin', '2017-10-23 11:41:40', '0', 'role_11', 'code_11', '备注');
+INSERT INTO `sys_role` VALUES ('1047', '0', 'admin', '2017-10-23 11:41:40', 'admin', '2017-10-23 11:41:40', '0', 'role_12', 'code_12', '备注');
+INSERT INTO `sys_role` VALUES ('1048', '0', 'admin', '2017-10-23 11:41:40', 'admin', '2017-10-23 11:41:40', '0', 'role_13', 'code_13', '备注');
+INSERT INTO `sys_role` VALUES ('1049', '0', 'admin', '2017-10-23 11:41:40', 'admin', '2017-10-23 11:41:40', '0', 'role_14', 'code_14', '备注');
+INSERT INTO `sys_role` VALUES ('1050', '0', 'admin', '2017-10-23 11:41:40', 'admin', '2017-10-23 11:41:40', '0', 'role_15', 'code_15', '备注');
+INSERT INTO `sys_role` VALUES ('1051', '0', 'admin', '2017-10-23 11:41:40', 'admin', '2017-10-23 11:41:40', '0', 'role_16', 'code_16', '备注');
+INSERT INTO `sys_role` VALUES ('1052', '0', 'admin', '2017-10-23 11:41:40', 'admin', '2017-10-23 11:41:40', '0', 'role_17', 'code_17', '备注');
+INSERT INTO `sys_role` VALUES ('1053', '0', 'admin', '2017-10-23 11:41:40', 'admin', '2017-10-23 11:41:40', '0', 'role_18', 'code_18', '备注');
+INSERT INTO `sys_role` VALUES ('1054', '0', 'admin', '2017-10-23 11:41:40', 'admin', '2017-10-23 11:41:40', '0', 'role_19', 'code_19', '备注');
+INSERT INTO `sys_role` VALUES ('1055', '0', 'admin', '2017-10-23 11:41:40', 'admin', '2017-10-23 11:41:40', '0', 'role_20', 'code_20', '备注');
+INSERT INTO `sys_role` VALUES ('1056', '0', 'admin', '2017-10-23 11:41:40', 'admin', '2017-10-23 11:41:40', '0', 'role_21', 'code_21', '备注');
+INSERT INTO `sys_role` VALUES ('1057', '0', 'admin', '2017-10-23 11:41:40', 'admin', '2017-10-23 11:41:40', '0', 'role_22', 'code_22', '备注');
+INSERT INTO `sys_role` VALUES ('1058', '0', 'admin', '2017-10-23 11:41:40', 'admin', '2017-10-23 11:41:40', '0', 'role_23', 'code_23', '备注');
+INSERT INTO `sys_role` VALUES ('1059', '0', 'admin', '2017-10-23 11:41:40', 'admin', '2017-10-23 11:41:40', '0', 'role_24', 'code_24', '备注');
+INSERT INTO `sys_role` VALUES ('1060', '0', 'admin', '2017-10-23 11:41:40', 'admin', '2017-10-23 11:41:40', '0', 'role_25', 'code_25', '备注');
+INSERT INTO `sys_role` VALUES ('1061', '0', 'admin', '2017-10-23 11:41:40', 'admin', '2017-10-23 11:41:40', '0', 'role_26', 'code_26', '备注');
+INSERT INTO `sys_role` VALUES ('1062', '0', 'admin', '2017-10-23 11:41:40', 'admin', '2017-10-23 11:41:40', '0', 'role_27', 'code_27', '备注');
+INSERT INTO `sys_role` VALUES ('1063', '0', 'admin', '2017-10-23 11:41:40', 'admin', '2017-10-23 11:41:40', '0', 'role_28', 'code_28', '备注');
+INSERT INTO `sys_role` VALUES ('1064', '0', 'admin', '2017-10-23 11:41:40', 'admin', '2017-10-23 11:41:40', '0', 'role_29', 'code_29', '备注');
+INSERT INTO `sys_role` VALUES ('1065', '0', 'admin', '2017-10-23 11:41:40', 'admin', '2017-10-23 11:41:40', '0', 'role_30', 'code_30', '备注');
+INSERT INTO `sys_role` VALUES ('1066', '0', 'admin', '2017-10-23 11:41:40', 'admin', '2017-10-23 11:41:40', '0', 'role_31', 'code_31', '备注');
+INSERT INTO `sys_role` VALUES ('1067', '0', 'admin', '2017-10-23 11:41:41', 'admin', '2017-10-23 11:41:41', '0', 'role_32', 'code_32', '备注');
+INSERT INTO `sys_role` VALUES ('1068', '0', 'admin', '2017-10-23 11:41:41', 'admin', '2017-10-23 11:41:41', '0', 'role_33', 'code_33', '备注');
+INSERT INTO `sys_role` VALUES ('1069', '0', 'admin', '2017-10-23 11:41:41', 'admin', '2017-10-23 11:41:41', '0', 'role_34', 'code_34', '备注');
+INSERT INTO `sys_role` VALUES ('1071', '1', 'admin', '2017-10-23 14:37:11', 'admin', '2017-10-23 14:38:32', '0', 'ssff', 'ss', 'sssfff');
+
+-- ----------------------------
+-- Table structure for `sys_role_func`
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_role_func`;
+CREATE TABLE `sys_role_func` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `VERSION` int(11) NOT NULL,
+  `CREATER` varchar(50) NOT NULL COMMENT '创建人',
+  `CREATE_TIME` datetime NOT NULL COMMENT '创建时间',
+  `EDITOR` varchar(50) DEFAULT NULL COMMENT '修改人',
+  `EDIT_TIME` datetime DEFAULT NULL COMMENT '修改时间',
+  `DEL_FLAG` char(1) DEFAULT NULL COMMENT '删除标记，1：删除、0：未删除',
+  `ROLE_CODE` varchar(100) DEFAULT NULL COMMENT '角色编号',
+  `FUNC_CODE` varchar(100) DEFAULT NULL COMMENT '功能编号',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=1030 DEFAULT CHARSET=utf8 COMMENT='系统 》 角色-功能关系表';
+
+-- ----------------------------
+-- Records of sys_role_func
+-- ----------------------------
+INSERT INTO `sys_role_func` VALUES ('1003', '0', 'admin', '2017-10-23 17:40:52', null, null, '0', 'code_0', 'code_0_0');
+INSERT INTO `sys_role_func` VALUES ('1004', '0', 'admin', '2017-10-23 17:40:52', null, null, '0', 'code_0', 'code_0_2');
+INSERT INTO `sys_role_func` VALUES ('1005', '0', 'admin', '2017-10-23 17:40:52', null, null, '0', 'code_0', 'code_0_3');
+INSERT INTO `sys_role_func` VALUES ('1006', '0', 'admin', '2017-10-23 17:40:52', null, null, '0', 'code_0', 'code_0_4');
+INSERT INTO `sys_role_func` VALUES ('1013', '0', 'admin', '2017-10-24 14:48:58', null, null, '0', 'code_32', 'sys');
+INSERT INTO `sys_role_func` VALUES ('1014', '0', 'admin', '2017-10-24 14:48:58', null, null, '0', 'code_32', 'sys-func');
+INSERT INTO `sys_role_func` VALUES ('1015', '0', 'admin', '2017-10-24 14:48:58', null, null, '0', 'code_32', 'sys-org');
+INSERT INTO `sys_role_func` VALUES ('1016', '0', 'admin', '2017-10-24 14:50:40', null, null, '0', 'code_33', 'sys');
+INSERT INTO `sys_role_func` VALUES ('1017', '0', 'admin', '2017-10-24 14:50:40', null, null, '0', 'code_33', 'sys-role');
+INSERT INTO `sys_role_func` VALUES ('1024', '0', 'admin', '2017-10-24 14:57:01', null, null, '0', 'ss', 'code_0');
+INSERT INTO `sys_role_func` VALUES ('1025', '0', 'admin', '2017-10-24 14:57:01', null, null, '0', 'ss', 'code_0_0');
+INSERT INTO `sys_role_func` VALUES ('1026', '0', 'admin', '2017-10-24 14:57:01', null, null, '0', 'ss', 'code_0_1');
+INSERT INTO `sys_role_func` VALUES ('1027', '0', 'admin', '2017-10-24 14:57:01', null, null, '0', 'ss', 'code_0_3');
+INSERT INTO `sys_role_func` VALUES ('1028', '0', 'admin', '2017-10-24 14:57:01', null, null, '0', 'ss', 'code_1');
+INSERT INTO `sys_role_func` VALUES ('1029', '0', 'admin', '2017-10-24 14:57:01', null, null, '0', 'ss', 'code_1_1');
+
+-- ----------------------------
+-- Table structure for `sys_role_user`
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_role_user`;
+CREATE TABLE `sys_role_user` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `VERSION` int(11) NOT NULL,
+  `CREATER` varchar(50) NOT NULL COMMENT '创建人',
+  `CREATE_TIME` datetime NOT NULL COMMENT '创建时间',
+  `EDITOR` varchar(50) DEFAULT NULL COMMENT '修改人',
+  `EDIT_TIME` datetime DEFAULT NULL COMMENT '修改时间',
+  `DEL_FLAG` char(1) DEFAULT NULL COMMENT '删除标记，1：删除、0：未删除',
+  `ROLE_CODE` varchar(100) DEFAULT NULL COMMENT '角色编号',
+  `USER_CODE` varchar(100) DEFAULT NULL COMMENT '用户编号',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=1010 DEFAULT CHARSET=utf8 COMMENT='系统 》 角色-用户关系表';
+
+-- ----------------------------
+-- Records of sys_role_user
+-- ----------------------------
+INSERT INTO `sys_role_user` VALUES ('1002', '0', 'admin', '2017-10-24 17:20:35', null, null, '0', 'code_32', 'zhangsan');
+INSERT INTO `sys_role_user` VALUES ('1003', '0', 'admin', '2017-10-24 17:20:35', null, null, '0', 'code_33', 'zhangsan');
+INSERT INTO `sys_role_user` VALUES ('1004', '0', 'admin', '2017-10-24 17:20:35', null, null, '0', 'code_34', 'zhangsan');
+INSERT INTO `sys_role_user` VALUES ('1005', '0', 'admin', '2017-10-24 17:25:12', null, null, '0', 'code_32', 'zhangsan');
+INSERT INTO `sys_role_user` VALUES ('1006', '0', 'admin', '2017-10-24 17:25:12', null, null, '0', 'code_33', 'zhangsan');
+INSERT INTO `sys_role_user` VALUES ('1007', '0', 'admin', '2017-10-24 17:25:12', null, null, '0', 'code_34', 'zhangsan');
+INSERT INTO `sys_role_user` VALUES ('1008', '0', 'admin', '2017-10-24 17:25:12', null, null, '0', 'code_8', 'zhangsan');
+INSERT INTO `sys_role_user` VALUES ('1009', '0', 'admin', '2017-10-24 17:25:12', null, null, '0', 'code_92', 'zhangsan');
+
+-- ----------------------------
 -- Table structure for `sys_user`
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_user`;
@@ -203,7 +326,7 @@ CREATE TABLE `sys_user` (
   `EMAIL` varchar(200) DEFAULT NULL COMMENT '电子邮箱',
   `REMARK` varchar(300) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=79 DEFAULT CHARSET=utf8 COMMENT='系统 》 用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=77 DEFAULT CHARSET=utf8 COMMENT='系统 》 用户表';
 
 -- ----------------------------
 -- Records of sys_user
@@ -232,7 +355,7 @@ INSERT INTO `sys_user` VALUES ('61', '0', 'admin', '2017-10-20 10:32:32', 'admin
 INSERT INTO `sys_user` VALUES ('62', '0', 'admin', '2017-10-20 10:32:32', 'admin', '2017-10-20 10:32:32', '0', 'user_21', 'code_21', 'admin', '123456', '2000', 'A', '12345678', 'test@com', '备注');
 INSERT INTO `sys_user` VALUES ('63', '0', 'admin', '2017-10-20 10:32:32', 'admin', '2017-10-20 10:32:32', '0', 'user_22', 'code_22', 'admin', '123456', '2000', 'A', '12345678', 'test@com', '备注');
 INSERT INTO `sys_user` VALUES ('64', '0', 'admin', '2017-10-20 10:32:32', 'admin', '2017-10-20 10:32:32', '0', 'user_23', 'code_23', 'admin', '123456', '2000', 'A', '12345678', 'test@com', '备注');
-INSERT INTO `sys_user` VALUES ('65', '0', 'admin', '2017-10-20 10:32:32', 'admin', '2017-10-20 10:32:32', '0', 'user_24', 'code_24', 'admin', '123456', '2000', 'A', '12345678', 'test@com', '备注');
+INSERT INTO `sys_user` VALUES ('65', '1', 'admin', '2017-10-20 10:32:32', 'admin', '2017-10-23 11:53:54', '0', 'user_24', 'code_24', 'admin', '123456', '1000', 'A', '12345678', 'test@com', '备注ss');
 INSERT INTO `sys_user` VALUES ('66', '0', 'admin', '2017-10-20 10:32:32', 'admin', '2017-10-20 10:32:32', '0', 'user_25', 'code_25', 'admin', '123456', '2000', 'A', '12345678', 'test@com', '备注');
 INSERT INTO `sys_user` VALUES ('67', '0', 'admin', '2017-10-20 10:32:32', 'admin', '2017-10-20 10:32:32', '0', 'user_26', 'code_26', 'admin', '123456', '2000', 'A', '12345678', 'test@com', '备注');
 INSERT INTO `sys_user` VALUES ('68', '0', 'admin', '2017-10-20 10:32:32', 'admin', '2017-10-20 10:32:32', '0', 'user_27', 'code_27', 'admin', '123456', '2000', 'A', '12345678', 'test@com', '备注');
@@ -243,4 +366,4 @@ INSERT INTO `sys_user` VALUES ('72', '0', 'admin', '2017-10-20 10:32:32', 'admin
 INSERT INTO `sys_user` VALUES ('73', '0', 'admin', '2017-10-20 10:32:32', 'admin', '2017-10-20 10:32:32', '0', 'user_32', 'code_32', 'admin', '123456', '2000', 'A', '12345678', 'test@com', '备注');
 INSERT INTO `sys_user` VALUES ('74', '0', 'admin', '2017-10-20 10:32:32', 'admin', '2017-10-20 10:32:32', '0', 'user_33', 'code_33', 'admin', '123456', '2000', 'A', '12345678', 'test@com', '备注');
 INSERT INTO `sys_user` VALUES ('75', '0', 'admin', '2017-10-20 10:32:32', 'admin', '2017-10-20 10:32:32', '0', 'user_34', 'code_34', 'admin', '123456', '2000', 'A', '12345678', 'test@com', '备注');
-INSERT INTO `sys_user` VALUES ('76', '0', 'admin', '2017-10-20 15:49:30', 'admin', '2017-10-20 15:49:30', '0', 'zhangsan', 'zhangsan', 'zhangsan', 'zhangsan', '3001', 'A', '', '', 'zhangsan');
+INSERT INTO `sys_user` VALUES ('76', '1', 'admin', '2017-10-20 15:49:30', 'admin', '2017-10-23 11:53:32', '0', 'zhangsan1', 'zhangsan', 'zhangsan', 'zhangsan', '1000', 'A', '', '', 'zhangsan1');
