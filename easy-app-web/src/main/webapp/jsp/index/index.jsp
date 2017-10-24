@@ -53,7 +53,7 @@ $(function(){
 function initMenu(){
 	var $ma = $("#menuAccordion");
 	$ma.accordion({animate:true,fit:true,border:false});
-	$.post("sys/func/menuTree", {userCode:"1"}, function(data) {
+	$.post("sys/func/listLeftMenu", {userCode:"1"}, function(data) {
 		if(data.respData && data.respData.length>0) {
 			$.each(data.respData, function(i, n) {
 				var menulist ="<div class=\"well well-small\">";

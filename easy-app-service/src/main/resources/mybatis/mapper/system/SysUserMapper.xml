@@ -4,7 +4,7 @@
 
 	<!-- ##############################   基础sql开始   ############################## -->
 	
-	<resultMap id="resutlId" type="org.yffd.easy.app.system.model.SysUserModel">
+	<resultMap id="resutlId" type="org.yffd.easy.app.system.model.SysUser">
 		<id column="ID" property="id" jdbcType="INTEGER" />
 		<result column="VERSION" property="version" jdbcType="INTEGER" />
 		<result column="DEL_FLAG" property="delFlag" jdbcType="CHAR" />
@@ -23,7 +23,7 @@
 		<result column="EMAIL" property="email" jdbcType="VARCHAR" />
 		<result column="REMARK" property="remark" jdbcType="VARCHAR" />
 		
-		<association property="sysOrganization" javaType="org.yffd.easy.app.system.model.SysOrganizationModel">
+		<association property="sysOrganization" javaType="org.yffd.easy.app.system.model.SysOrganization">
 			<id column="ID" property="id" jdbcType="INTEGER" />
 			<result column="_VERSION" property="version" jdbcType="INTEGER" />
 			<result column="_DEL_FLAG" property="delFlag" jdbcType="CHAR" />
@@ -103,7 +103,7 @@
 		order by CREATE_TIME desc
 	</select>
 	
-	<insert id="insert" parameterType="org.yffd.easy.app.system.model.SysUserModel" keyProperty="id" useGeneratedKeys="true">
+	<insert id="insert" parameterType="org.yffd.easy.app.system.model.SysUser" keyProperty="id" useGeneratedKeys="true">
 		insert into
 		<include refid="sys_user_table" />
 		(VERSION, DEL_FLAG, CREATER, CREATE_TIME, EDITOR, EDIT_TIME,
@@ -113,7 +113,7 @@
 		#{userName}, #{userCode}, #{account}, #{password}, #{orgCode}, #{active}, #{tel}, #{email}, #{remark})
 	</insert>
 	
-	<update id="updateByPK" parameterType="org.yffd.easy.app.system.model.SysUserModel">
+	<update id="updateByPK" parameterType="org.yffd.easy.app.system.model.SysUser">
 		update <include refid="sys_user_table" />
 		<set>
 			version = version + 1,

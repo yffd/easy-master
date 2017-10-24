@@ -10,7 +10,7 @@ import org.yffd.easy.common.core.model.PersistModel;
  * @since		 JDK 1.7+
  * @see 	 
  */
-public class SysUserModel extends PersistModel {
+public class SysUser extends PersistModel {
 	
 	/**
 	 * serialVersionUID:TODO(用一句话描述这个变量表示什么).
@@ -27,7 +27,7 @@ public class SysUserModel extends PersistModel {
 	private String tel;
 	private String email;
 	private String remark;
-	private SysOrganizationModel sysOrganization;
+	private SysOrganization sysOrganization;
 	
 	public String getUserName() {
 		return userName;
@@ -83,10 +83,10 @@ public class SysUserModel extends PersistModel {
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
-	public SysOrganizationModel getSysOrganization() {
+	public SysOrganization getSysOrganization() {
 		return sysOrganization;
 	}
-	public void setSysOrganization(SysOrganizationModel sysOrganization) {
+	public void setSysOrganization(SysOrganization sysOrganization) {
 		this.sysOrganization = sysOrganization;
 	}
 	

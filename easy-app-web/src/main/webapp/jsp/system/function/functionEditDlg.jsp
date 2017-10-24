@@ -62,14 +62,14 @@ $(function() {
 	});
 	$("#parentCode_id").combotree({
 		width:171,
-		url:"sys/func/menuTree",
+		url:"sys/func/listAllMenu",
 		idFiled:'id',
 	 	textFiled:'text',
 	 	loadFilter:function(data,parent) {
-			var jsonData = data.respData;
-			var obj = {id:'', text:'顶层名称', checked:true, children:null};
-			obj.children = data.respData;
-			return [obj];
+// 			var jsonData = data.respData;
+// 			var obj = {id:'', text:'顶层名称', checked:true, children:null};
+// 			obj.children = data.respData;
+			return data.respData;
 		},
 	});
 	
@@ -121,7 +121,7 @@ $(function() {
 					</tr>
 					<tr>
 						<th>父名称</th>
-						<td><input id="parentCode_id" name="parentCode" class="easyui-textbox" required="required"/></td>
+						<td><input id="parentCode_id" name="parentCode" class="easyui-textbox" /></td>
 						<th>链接地址</th>
 						<td><input name="url" class="easyui-textbox"/></td>
 					</tr>

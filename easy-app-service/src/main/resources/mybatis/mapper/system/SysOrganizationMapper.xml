@@ -5,7 +5,7 @@
 
 	<!-- ##############################   基础sql开始   ############################## -->
 
-	<resultMap id="resutlId" type="org.yffd.easy.app.system.model.SysOrganizationModel">
+	<resultMap id="resutlId" type="org.yffd.easy.app.system.model.SysOrganization">
 		<id column="ID" property="id" jdbcType="INTEGER" />
 		<result column="VERSION" property="version" jdbcType="INTEGER" />
 		<result column="DEL_FLAG" property="delFlag" jdbcType="CHAR" />
@@ -55,7 +55,7 @@
 		</where>
 	</select>
 	
-	<insert id="insert" parameterType="org.yffd.easy.app.system.model.SysOrganizationModel" keyProperty="id" useGeneratedKeys="true">
+	<insert id="insert" parameterType="org.yffd.easy.app.system.model.SysOrganization" keyProperty="id" useGeneratedKeys="true">
 		insert into
 		<include refid="sys_organization_table" />
 		(VERSION, DEL_FLAG, CREATER, CREATE_TIME, EDITOR, EDIT_TIME,
@@ -65,7 +65,7 @@
 		#{orgName}, #{orgCode}, #{parentCode}, #{firstManagerCode}, #{secondManagerCode}, #{tel}, #{fax}, #{remark})
 	</insert>
 	
-	<update id="updateByPK" parameterType="org.yffd.easy.app.system.model.SysOrganizationModel">
+	<update id="updateByPK" parameterType="org.yffd.easy.app.system.model.SysOrganization">
 		update <include refid="sys_organization_table" />
 		<set>
 			VERSION = version + 1,

@@ -420,32 +420,28 @@
 	 */
 	$.extend($.fn.treegrid.defaults,{
 		onLoadSuccess : function() {
-			console.info(">>common.ui>>>$.fn.treegrid.default>>onLoadSuccess");
 			var target = $(this);
 			var opts = $.data(this, "treegrid").options;
 			var panel = $(this).datagrid("getPanel");
 			var gridBody = panel.find("div.datagrid-body");
 			var idField = opts.idField;//这里的idField其实就是API里方法的id参数
-			gridBody.find("div.datagrid-cell-check input[type=checkbox]").unbind(".treegrid").click(function(e){
-				console.info(">>common.ui>>>$.fn.treegrid.default>>onLoadSuccess   1");
+			gridBody.find("div.datagrid-cell-check input[type=checkbox]").unbind(".treegrid").click(function(e) {
 				if(opts.singleSelect) return;//单选不管
-				if(opts.cascadeCheck||opts.deepCascadeCheck){
-					console.info(">>common.ui>>>$.fn.treegrid.default>>onLoadSuccess   2");
-					var id=$(this).parent().parent().parent().attr("node-id");
+				if(opts.cascadeCheck || opts.deepCascadeCheck) {
+					var id = $(this).parent().parent().parent().attr("node-id");
 					var status = false;
 					if($(this).attr("checked")){
-						target.treegrid('select',id);
+						target.treegrid('select', id);
 						status = true;
 					}else{
-						target.treegrid('unselect',id);
+						target.treegrid('unselect', id);
 					}
 					//级联选择父节点
-					selectParent(target,id,idField,status);
-					selectChildren(target,id,idField,opts.deepCascadeCheck,status);
+					selectParent(target, id, idField, status);
+					selectChildren(target, id, idField, opts. deepCascadeCheck, status);
 				}
 				e.stopPropagation();//停止事件传播
 			});
-			console.info(">>common.ui>>>$.fn.treegrid.default>>onLoadSuccess  end");
 		}
 	});
 		
@@ -459,8 +455,7 @@
 	     *			id:勾选的节点ID
 	     *			deepCascade:是否深度级联
 		 */
-		cascadeCheck : function(target,param){
-			console.info(">>common.ui>>>$.fn.treegrid.methods>>cascadeCheck");
+		cascadeCheck : function(target, param){
 			var opts = $.data(target[0], "treegrid").options;
 			if(opts.singleSelect)
 				return;
@@ -482,18 +477,29 @@
 	 * id 节点ID
 	 * status 节点状态，true:勾选，false:未勾选
 	 */
-	function selectParent(target,id,idField,status){
-		console.info(">>common.ui>>>selectParent");
-		var parent = target.treegrid('getParent',id);
+	function selectParent(target, id, idField, status) {
+		var parent = target.treegrid('getParent', id);
 		if(parent){
 			var parentId = parent[idField];
-			if(status)
-				target.treegrid('select',parentId);
-			else
-				target.treegrid('unselect',id);
-			selectParent(target,parentId,idField,status);
+			if(status) {
+				target.treegrid('select', parentId);
+			} else {
+				var isSelect = false;
+				var children = target.treegrid('getChildren', parentId);
+				if(children) {
+					var checkedRows = target.treegrid("getChecked");
+					$.each(checkedRows, function(i, obj) {
+						$.each(children, function(j, m) {
+							if(obj==m) { isSelect = true; return false; }
+						});
+					});
+				}
+				if(!isSelect) target.treegrid('unselect', parentId);
+			}
+			selectParent(target, parentId, idField, status);
 		}
 	}
+	
 	/**
 	 * 级联选择子节点
 	 * @param {Object} target
@@ -502,20 +508,19 @@
 	 * @param {Object} status 节点状态，true:勾选，false:未勾选
 	 * @return {TypeName} 
 	 */
-	function selectChildren(target,id,idField,deepCascade,status){
-		console.info(">>common.ui>>>selectChildren");
+	function selectChildren(target, id, idField, deepCascade, status) {
 		//深度级联时先展开节点
 		if(status&&deepCascade)
-			target.treegrid('expand',id);
+			target.treegrid('expand', id);
 		//根据ID获取下层孩子节点
-		var children = target.treegrid('getChildren',id);
-		for(var i=0;i<children.length;i++){
+		var children = target.treegrid('getChildren', id);
+		for(var i=0;i<children.length;i++) {
 			var childId = children[i][idField];
 			if(status)
-				target.treegrid('select',childId);
+				target.treegrid('select', childId);
 			else
-				target.treegrid('unselect',childId);
-			selectChildren(target,childId,idField,deepCascade,status);//递归选择子节点
+				target.treegrid('unselect', childId);
+			selectChildren(target, childId, idField, deepCascade, status);//递归选择子节点
 		}
 	}
 	

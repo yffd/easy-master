@@ -17,7 +17,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	$(function() {
 		$dg = $('#dg_id');
 		$dg.treegrid({
-		    url:'sys/func/listMenu',
+		    url:'sys/func/asyncList',
 		    width: 'auto',
 			height: $(this).height()-90,
 			rownumbers: true,
@@ -130,7 +130,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						parent.$.modalDialog.openner = $dg;//定义对话框关闭要刷新的grid
 						var editForm = parent.$.modalDialog.handler.find("#form_id");
 						editForm.attr("action", "sys/func/edit");
-						parent.$.modalDialog.handler.find('#funcCode_id').attr('readonly',true);
 						editForm.submit();
 					}
 				},{

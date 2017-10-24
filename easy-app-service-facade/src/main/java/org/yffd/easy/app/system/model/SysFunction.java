@@ -10,7 +10,7 @@ import org.yffd.easy.common.core.model.PersistModel;
  * @since		 JDK 1.7+
  * @see 	 
  */
-public class SysFunctionModel extends PersistModel {
+public class SysFunction extends PersistModel {
 	
 	/**
 	 * serialVersionUID:TODO(用一句话描述这个变量表示什么).
@@ -26,7 +26,6 @@ public class SysFunctionModel extends PersistModel {
 	private String active;
 	private Float sort;
 	private String iconCls;
-	private String state;
 	private String remark;
 	public String getFuncName() {
 		return funcName;
@@ -75,12 +74,6 @@ public class SysFunctionModel extends PersistModel {
 	}
 	public void setIconCls(String iconCls) {
 		this.iconCls = iconCls;
-	}
-	public String getState() {
-		return state;
-	}
-	public void setState(String state) {
-		this.state = state;
 	}
 	public String getRemark() {
 		return remark;

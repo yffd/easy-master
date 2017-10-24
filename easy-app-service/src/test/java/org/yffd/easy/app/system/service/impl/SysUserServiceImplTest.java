@@ -5,7 +5,7 @@ import java.util.Date;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.yffd.easy.app.SpringBaseTestCase;
-import org.yffd.easy.app.system.model.SysUserModel;
+import org.yffd.easy.app.system.model.SysUser;
 import org.yffd.easy.app.system.service.SysUserService;
 import org.yffd.easy.common.core.page.PageParam;
 import org.yffd.easy.common.core.page.PageResult;
@@ -29,15 +29,15 @@ public class SysUserServiceImplTest extends SpringBaseTestCase {
 		String name = null;
 		String code = null;
 		String orgCode = null;
-		SysUserModel sysUserModel = null;
-		PageResult<SysUserModel> page = this.sysUserService.findList(sysUserModel, pageParam);
+		SysUser sysUser = null;
+		PageResult<SysUser> page = this.sysUserService.findList(sysUser, pageParam);
 		System.out.println(page.getRecordList().size());
 	}
 	
 	@Test
 	public void addTest() {
 		for(int i=0;i<35;i++) {
-			SysUserModel model = new SysUserModel();
+			SysUser model = new SysUser();
 			model.setUserCode("code_"+i);
 			model.setUserName("user_"+i);
 			model.setAccount("admin");

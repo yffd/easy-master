@@ -30,8 +30,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			striped: true,
 			singleSelect: true,
 			toolbar: '#tb_id',
-			idField: 'userCode',
-			treeField: 'userName',
 		    loadFilter: function(data) {if(data.respData!=null) {return data.respData;} else {return [];}},
 			frozenColumns: [[{field: 'userName', title: '名称', width:parseInt($(this).width()*0.2),
 								formatter:function(value){
@@ -65,7 +63,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		$("#searchbox_id").searchbox({
 			menu:"#mm",
 			prompt :'请输入',
-			height: 28,
+// 			height: 28,
 			searcher:function(value, name) {
 				var obj = {};
 				obj[name] = value;
@@ -75,9 +73,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 	});
 	
-	/**
-	 * 打开添加对话框
-	 */
+	// 打开添加对话框
 	function openAddDlg() {
 		parent.$.modalDialog({
 			title: "添加",
@@ -105,9 +101,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		});
 	}
 	
-	/**
-	 * 打开修改对话框
-	 */
+	// 打开修改对话框
 	function openEditDlg() {
 		var row = $dg.datagrid('getSelected');
 		if(row) {
@@ -130,7 +124,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						parent.$.modalDialog.openner = $dg;//定义对话框关闭要刷新的grid
 						var editForm = parent.$.modalDialog.handler.find("#form_id");
 						editForm.attr("action", "sys/user/edit");
-						parent.$.modalDialog.handler.find('#userCode_id').attr('readonly',true);
 						editForm.submit();
 					}
 				},{
@@ -151,9 +144,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		}
 	}
 	
-	/**
-	 * 删除
-	 */
+	// 删除
 	function removeFunc() {
 		var row = $dg.datagrid('getSelected');
 		if(row) {
@@ -187,6 +178,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		}
 	}
 
+	// 清除搜索条件
+	function clearSearch() {
+		$('#searchbox_id').searchbox('setValue', '');
+	}
 </script>
 </head>
 <body>
@@ -206,6 +201,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</td>
 				<td style="padding-left:2px;padding-bottom:2px;">
 					<input id="searchbox_id" type="text"/>
+				</td>
+				<td style="padding-left:2px">
+					<a class="easyui-linkbutton" data-options="iconCls:'icon-clear',plain:'true'" onclick="clearSearch();" href="javascript:void(0);"></a>
 				</td>
 			</tr>
 		</table>

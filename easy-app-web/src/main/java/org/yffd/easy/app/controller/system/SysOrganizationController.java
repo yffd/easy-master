@@ -11,12 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.yffd.easy.app.controller.system.support.SysOrganizationSupport;
-import org.yffd.easy.app.controller.system.vo.SysOrganizationVO;
-import org.yffd.easy.app.system.model.SysOrganizationModel;
+import org.yffd.easy.app.controller.system.vo.SysOrganizationTreeGridVO;
+import org.yffd.easy.app.system.model.SysOrganization;
 import org.yffd.easy.app.system.service.SysOrganizationService;
 import org.yffd.easy.common.core.model.RespModel;
 import org.yffd.easy.common.core.util.ValidUtils;
-import org.yffd.easy.common.core.view.vo.ComboTreeVO;
 import org.yffd.easy.common.ssm.web.BaseController;
 
 /**
@@ -39,9 +38,9 @@ public class SysOrganizationController extends BaseController {
 	@RequestMapping(value="/orgTree", method=RequestMethod.POST)
 	@ResponseBody
 	public RespModel listTree(HttpServletRequest req) {
-		List<SysOrganizationModel> list = this.sysOrganizationService.findAll();
+		List<SysOrganization> list = this.sysOrganizationService.findAll();
 		if(!ValidUtils.isEmpty(list)) {
-			List<ComboTreeVO> treeList = this.sysOrganizationSupport.toListTreeVO(list);
+			List<SysOrganizationTreeGridVO> treeList = this.sysOrganizationSupport.toSyncTreeGridVO(list);
 			return this.successAjax(treeList);
 		}
 		return this.errorAjax("未找到有效数据");
@@ -54,9 +53,9 @@ public class SysOrganizationController extends BaseController {
 		if(ValidUtils.isEmpty(code)) {
 			code = "-1";
 		}
-		List<SysOrganizationModel> list = this.sysOrganizationService.findByParentCode(code);
+		List<SysOrganization> list = this.sysOrganizationService.findByParentCode(code);
 		if(!ValidUtils.isEmpty(list)) {
-			List<SysOrganizationVO> voList = this.sysOrganizationSupport.toListVO(list);
+			List<SysOrganizationTreeGridVO> voList = this.sysOrganizationSupport.toAsyncTreeGridVO(list);
 			return this.successAjax(voList);
 		}
 		return this.errorAjax("未找到有效数据");
@@ -64,12 +63,12 @@ public class SysOrganizationController extends BaseController {
 	
 	@RequestMapping(value="/add", method=RequestMethod.POST)
 	@ResponseBody
-	public RespModel add(HttpServletRequest req, SysOrganizationModel sysOrganization) {
+	public RespModel add(HttpServletRequest req, SysOrganization sysOrganization) {
 		if(ValidUtils.isNull(sysOrganization) 
 				|| ValidUtils.isEmpty(sysOrganization.getOrgCode())) {
 			return this.error("参数无效");
 		}
-		SysOrganizationModel org = this.sysOrganizationService.findByCode(sysOrganization.getOrgCode());
+		SysOrganization org = this.sysOrganizationService.findByCode(sysOrganization.getOrgCode());
 		if(!ValidUtils.isNull(org)) {
 			return this.errorAjax("编号已存在");
 		}
@@ -83,7 +82,7 @@ public class SysOrganizationController extends BaseController {
 	
 	@RequestMapping(value="/edit", method=RequestMethod.POST)
 	@ResponseBody
-	public RespModel edit(HttpServletRequest req, SysOrganizationModel sysOrganization) {
+	public RespModel edit(HttpServletRequest req, SysOrganization sysOrganization) {
 		if(ValidUtils.isNull(sysOrganization) 
 				|| ValidUtils.isEmpty(sysOrganization.getOrgCode())) {
 			return this.error("参数无效");

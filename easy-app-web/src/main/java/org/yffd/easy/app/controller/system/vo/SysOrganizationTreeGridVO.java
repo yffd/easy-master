@@ -1,22 +1,18 @@
-package org.yffd.easy.app.system.model;
+package org.yffd.easy.app.controller.system.vo;
 
-import org.yffd.easy.common.core.model.PersistModel;
+import org.yffd.easy.common.core.view.tree.TreeNode;
 
 /**
- * @Description  系统模块：组织机构.
- * @Date		 2017年9月27日 下午3:41:11 <br/>
+ * @Description  简单描述该类的功能（可选）.
+ * @Date		 2017年10月9日 上午11:26:11 <br/>
  * @author       zhangST
  * @version		 1.0
  * @since		 JDK 1.7+
  * @see 	 
  */
-public class SysOrganizationModel extends PersistModel {
-	/**
-	 * serialVersionUID:TODO(用一句话描述这个变量表示什么).
-	 * @since JDK 1.7+
-	 */
-	private static final long serialVersionUID = 8507597194623600620L;
-
+public class SysOrganizationTreeGridVO extends TreeNode {
+	private String id;
+	private String state = "closed";
 	private String orgName;
 	private String orgCode;
 	private String parentCode;
@@ -26,6 +22,18 @@ public class SysOrganizationModel extends PersistModel {
 	private String fax;
 	private String remark;
 	
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public String getState() {
+		return state;
+	}
+	public void setState(String state) {
+		this.state = state;
+	}
 	public String getOrgName() {
 		return orgName;
 	}
@@ -74,6 +82,5 @@ public class SysOrganizationModel extends PersistModel {
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
-	
 }
 

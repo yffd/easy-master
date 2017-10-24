@@ -6,7 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.yffd.easy.app.system.dao.SysUserDao;
-import org.yffd.easy.app.system.model.SysUserModel;
+import org.yffd.easy.app.system.model.SysUser;
 import org.yffd.easy.app.system.service.SysUserService;
 import org.yffd.easy.common.core.page.PageParam;
 import org.yffd.easy.common.core.page.PageResult;
@@ -27,7 +27,7 @@ public class SysUserServiceImpl implements SysUserService {
 	private SysUserDao sysUserDao;
 	
 	@Override
-	public PageResult<SysUserModel> findList(SysUserModel sysUser, PageParam pageParam) {
+	public PageResult<SysUser> findList(SysUser sysUser, PageParam pageParam) {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		if(!ValidUtils.isEmpty(sysUser)) {
 			paramMap.put("userCode", sysUser.getUserCode());
@@ -40,23 +40,24 @@ public class SysUserServiceImpl implements SysUserService {
 	}
 
 	@Override
-	public SysUserModel findByCode(String userCode) {
+	public SysUser findByCode(String userCode) {
 		if(ValidUtils.isBlank(userCode)) return null;
 		return this.sysUserDao.selectByPK(userCode);
 	}
 
 	@Override
-	public void add(SysUserModel sysUserModel) {
-		this.sysUserDao.insert(sysUserModel);
+	public void add(SysUser sysUser) {
+		this.sysUserDao.insert(sysUser);
 	}
 
 	@Override
-	public void editByCode(SysUserModel sysUserModel) {
-		this.sysUserDao.updateByPK(sysUserModel);
+	public void editByCode(SysUser sysUser) {
+		this.sysUserDao.updateByPK(sysUser);
 	}
 
 	@Override
 	public void delByCode(String userCode) {
+		if(ValidUtils.isBlank(userCode)) return;
 		this.sysUserDao.deleteByPK(userCode);
 	}
 

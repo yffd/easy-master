@@ -7,7 +7,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.yffd.easy.app.system.dao.SysFunctionDao;
-import org.yffd.easy.app.system.model.SysFunctionModel;
+import org.yffd.easy.app.system.model.SysFunction;
+import org.yffd.easy.app.system.model.SysUser;
 import org.yffd.easy.app.system.service.SysFunctionService;
 
 /**
@@ -24,44 +25,43 @@ public class SysFunctionServiceImpl implements SysFunctionService {
 	private SysFunctionDao sysFunctionDao;
 	
 	@Override
-	public List<SysFunctionModel> findAll() {
+	public List<SysFunction> findAll() {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		return this.sysFunctionDao.selectListBy(paramMap);
 	}
 
 	@Override
-	public List<SysFunctionModel> findAllMenu() {
+	public List<SysFunction> findAllMenu() {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("type", "M");
 		return this.sysFunctionDao.selectListBy(paramMap);
 	}
 
 	@Override
-	public List<SysFunctionModel> findByParentCode(String parentCode) {
+	public List<SysFunction> findMenuByUser(SysUser user) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<SysFunction> findByParentCode(String parentCode) {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("parentCode", parentCode);
 		return this.sysFunctionDao.selectListBy(paramMap);
 	}
 
 	@Override
-	public SysFunctionModel findByCode(String funcCode) {
+	public SysFunction findByCode(String funcCode) {
 		return this.sysFunctionDao.selectByPK(funcCode);
 	}
 
 	@Override
-	public List<SysFunctionModel> findOperation() {
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("type", "O");
-		return this.sysFunctionDao.selectListBy(paramMap);
-	}
-
-	@Override
-	public void add(SysFunctionModel model) {
+	public void add(SysFunction model) {
 		this.sysFunctionDao.insert(model);
 	}
 
 	@Override
-	public void editByCode(SysFunctionModel model) {
+	public void editByCode(SysFunction model) {
 		this.sysFunctionDao.updateByPK(model);
 	}
 
@@ -70,5 +70,10 @@ public class SysFunctionServiceImpl implements SysFunctionService {
 		this.sysFunctionDao.deleteByPK(funcCode);
 	}
 
+	@Override
+	public List<SysFunction> findByRole(String roleCode) {
+		return this.sysFunctionDao.findByRole(roleCode);
+	}
+	
 }
 

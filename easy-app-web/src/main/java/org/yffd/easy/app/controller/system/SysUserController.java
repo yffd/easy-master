@@ -9,7 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.yffd.easy.app.system.model.SysUserModel;
+import org.yffd.easy.app.system.model.SysUser;
 import org.yffd.easy.app.system.service.SysUserService;
 import org.yffd.easy.common.core.model.RespModel;
 import org.yffd.easy.common.core.page.PageParam;
@@ -36,39 +36,39 @@ public class SysUserController extends BaseController {
 	
 	@RequestMapping(value="/listPage", method=RequestMethod.POST)
 	@ResponseBody
-	public RespModel listPage(SysUserModel sysUserModel, SearchBoxVO searchBoxVO) {
+	public RespModel listPage(SysUser sysUser, SearchBoxVO searchBoxVO) {
 		PageParam pageParam = this.getPageParam(searchBoxVO);
-		PageResult<SysUserModel> pageResult = this.sysUserService.findList(sysUserModel, pageParam );
+		PageResult<SysUser> pageResult = this.sysUserService.findList(sysUser, pageParam );
 		DataGridVO dataGridVO = this.toDataGrid(pageResult);
 		return this.successAjax(dataGridVO);
 	}
 	
 	@RequestMapping(value="/add", method=RequestMethod.POST)
 	@ResponseBody
-	public RespModel add(SysUserModel sysUserModel) {
-		if(ValidUtils.isNull(sysUserModel) 
-				|| ValidUtils.isEmpty(sysUserModel.getUserCode())
-				|| ValidUtils.isEmpty(sysUserModel.getUserName())) {
+	public RespModel add(SysUser sysUser) {
+		if(ValidUtils.isNull(sysUser) 
+				|| ValidUtils.isEmpty(sysUser.getUserCode())
+				|| ValidUtils.isEmpty(sysUser.getUserName())) {
 			return this.error("参数无效");
 		}
-		SysUserModel org = this.sysUserService.findByCode(sysUserModel.getUserCode());
+		SysUser org = this.sysUserService.findByCode(sysUser.getUserCode());
 		if(!ValidUtils.isNull(org)) {
 			return this.errorAjax("编号已存在");
 		}
-		sysUserModel.setDefaultAdd("admin", new Date());
-		this.sysUserService.add(sysUserModel);
+		sysUser.setDefaultAdd("admin", new Date());
+		this.sysUserService.add(sysUser);
 		return this.successAjax();
 	}
 	
 	@RequestMapping(value="/edit", method=RequestMethod.POST)
 	@ResponseBody
-	public RespModel edit(SysUserModel sysUserModel) {
-		if(ValidUtils.isNull(sysUserModel) 
-				|| ValidUtils.isEmpty(sysUserModel.getUserCode())) {
+	public RespModel edit(SysUser sysUser) {
+		if(ValidUtils.isNull(sysUser) 
+				|| ValidUtils.isEmpty(sysUser.getUserCode())) {
 			return this.error("参数无效");
 		}
-		sysUserModel.setDefaultUpdate("admin", new Date());
-		this.sysUserService.editByCode(sysUserModel);
+		sysUser.setDefaultUpdate("admin", new Date());
+		this.sysUserService.editByCode(sysUser);
 		return this.successAjax();
 	}
 	

@@ -2,11 +2,11 @@ package org.yffd.easy.app.system.dao.impl;
 
 import org.springframework.stereotype.Repository;
 import org.yffd.easy.app.system.dao.SysOrganizationDao;
-import org.yffd.easy.app.system.model.SysOrganizationModel;
+import org.yffd.easy.app.system.model.SysOrganization;
 import org.yffd.easy.common.ssm.dao.impl.BaseDaoImpl;
 
 /**
- * @Description  系统模块：组织机构.
+ * @Description  系统模块：机构管理.
  * @Date		 2017年9月15日 上午11:19:22 <br/>
  * @author       zhangST
  * @version		 1.0
@@ -15,7 +15,7 @@ import org.yffd.easy.common.ssm.dao.impl.BaseDaoImpl;
  * @see 	 
  */
 @Repository("sysOrganizationDao")
-public class SysOrganizationDaoImpl extends BaseDaoImpl<SysOrganizationModel> implements SysOrganizationDao {
+public class SysOrganizationDaoImpl extends BaseDaoImpl<SysOrganization> implements SysOrganizationDao {
 	
 }
 

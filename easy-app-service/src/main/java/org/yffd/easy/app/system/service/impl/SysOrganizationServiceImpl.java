@@ -7,7 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.yffd.easy.app.system.dao.SysOrganizationDao;
-import org.yffd.easy.app.system.model.SysOrganizationModel;
+import org.yffd.easy.app.system.model.SysOrganization;
 import org.yffd.easy.app.system.service.SysOrganizationService;
 
 /**
@@ -25,30 +25,30 @@ public class SysOrganizationServiceImpl implements SysOrganizationService {
 	private SysOrganizationDao sysOrganizationDao;
 	
 	@Override
-	public List<SysOrganizationModel> findAll() {
+	public List<SysOrganization> findAll() {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		return this.sysOrganizationDao.selectListBy(paramMap);
 	}
 
 	@Override
-	public List<SysOrganizationModel> findByParentCode(String parentCode) {
+	public List<SysOrganization> findByParentCode(String parentCode) {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("parentCode", parentCode);
 		return this.sysOrganizationDao.selectListBy(paramMap);
 	}
 
 	@Override
-	public SysOrganizationModel findByCode(String orgCode) {
+	public SysOrganization findByCode(String orgCode) {
 		return this.sysOrganizationDao.selectByPK(orgCode);
 	}
 
 	@Override
-	public void add(SysOrganizationModel sysOrganization) {
+	public void add(SysOrganization sysOrganization) {
 		this.sysOrganizationDao.insert(sysOrganization);
 	}
 
 	@Override
-	public void editByCode(SysOrganizationModel sysOrganization) {
+	public void editByCode(SysOrganization sysOrganization) {
 		this.sysOrganizationDao.updateByPK(sysOrganization);
 	}
 

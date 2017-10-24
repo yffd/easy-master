@@ -1,7 +1,5 @@
 package org.yffd.easy.app.controller.system.vo;
 
-import java.util.List;
-
 import org.yffd.easy.common.core.view.tree.TreeNode;
 
 /**
@@ -16,9 +14,98 @@ public class SysFunctionTreeGridVO extends TreeNode {
 	
     private String state;
     
+    private String funcName;
+	private String funcCode;
+	private String parentCode;
+	private String url;
+	private String type;
+	private String active;
+	private Float sort;
+	private String iconCls;
+	private String remark;
+    
     public SysFunctionTreeGridVO() {
     }
-    
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public String getFuncName() {
+		return funcName;
+	}
+
+	public void setFuncName(String funcName) {
+		this.funcName = funcName;
+	}
+
+	public String getFuncCode() {
+		return funcCode;
+	}
+
+	public void setFuncCode(String funcCode) {
+		this.funcCode = funcCode;
+	}
+
+	public String getParentCode() {
+		return parentCode;
+	}
+
+	public void setParentCode(String parentCode) {
+		this.parentCode = parentCode;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getActive() {
+		return active;
+	}
+
+	public void setActive(String active) {
+		this.active = active;
+	}
+
+	public Float getSort() {
+		return sort;
+	}
+
+	public void setSort(Float sort) {
+		this.sort = sort;
+	}
+
+	public String getIconCls() {
+		return iconCls;
+	}
+
+	public void setIconCls(String iconCls) {
+		this.iconCls = iconCls;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
     
 }
 

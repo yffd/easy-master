@@ -2,7 +2,7 @@ package org.yffd.easy.app.system.service;
 
 import java.util.List;
 
-import org.yffd.easy.app.system.model.SysOrganizationModel;
+import org.yffd.easy.app.system.model.SysOrganization;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -14,15 +14,15 @@ import org.yffd.easy.app.system.model.SysOrganizationModel;
  */
 public interface SysOrganizationService {
 
-	List<SysOrganizationModel> findAll();
+	List<SysOrganization> findAll();
 	
-	List<SysOrganizationModel> findByParentCode(String parentCode);
+	List<SysOrganization> findByParentCode(String parentCode);
 	
-	SysOrganizationModel findByCode(String orgCode);
+	SysOrganization findByCode(String orgCode);
 	
-	void add(SysOrganizationModel sysOrganization);
+	void add(SysOrganization sysOrganization);
 	
-	void editByCode(SysOrganizationModel sysOrganization);
+	void editByCode(SysOrganization sysOrganization);
 	
 	void delByCode(String orgCode);
 	

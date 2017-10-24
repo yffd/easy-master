@@ -2,7 +2,8 @@ package org.yffd.easy.app.system.service;
 
 import java.util.List;
 
-import org.yffd.easy.app.system.model.SysFunctionModel;
+import org.yffd.easy.app.system.model.SysFunction;
+import org.yffd.easy.app.system.model.SysUser;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -14,22 +15,23 @@ import org.yffd.easy.app.system.model.SysFunctionModel;
  */
 public interface SysFunctionService {
 
-	List<SysFunctionModel> findAll();
+	List<SysFunction> findAll();
 	
-	List<SysFunctionModel> findAllMenu();
+	List<SysFunction> findAllMenu();
 	
-	List<SysFunctionModel> findByParentCode(String parentCode);
+	List<SysFunction> findMenuByUser(SysUser user);
 	
-	SysFunctionModel findByCode(String funcCode);
+	List<SysFunction> findByParentCode(String parentCode);
 	
-	List<SysFunctionModel> findOperation();
+	SysFunction findByCode(String funcCode);
 	
-	void add(SysFunctionModel model);
+	void add(SysFunction model);
 	
-	void editByCode(SysFunctionModel model);
+	void editByCode(SysFunction model);
 	
 	void delByCode(String funcCode);
 	
+	List<SysFunction> findByRole(String roleCode);
 	
 }
 

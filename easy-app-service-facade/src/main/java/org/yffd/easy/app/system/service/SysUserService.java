@@ -1,6 +1,6 @@
 package org.yffd.easy.app.system.service;
 
-import org.yffd.easy.app.system.model.SysUserModel;
+import org.yffd.easy.app.system.model.SysUser;
 import org.yffd.easy.common.core.page.PageParam;
 import org.yffd.easy.common.core.page.PageResult;
 
@@ -14,13 +14,13 @@ import org.yffd.easy.common.core.page.PageResult;
  */
 public interface SysUserService {
 
-	PageResult<SysUserModel> findList(SysUserModel sysUser, PageParam pageParam);
+	PageResult<SysUser> findList(SysUser sysUser, PageParam pageParam);
 	
-	SysUserModel findByCode(String userCode);
+	SysUser findByCode(String userCode);
 	
-	void add(SysUserModel sysUserModel);
+	void add(SysUser sysUser);
 	
-	void editByCode(SysUserModel sysUserModel);
+	void editByCode(SysUser sysUser);
 	
 	void delByCode(String userCode);
 	

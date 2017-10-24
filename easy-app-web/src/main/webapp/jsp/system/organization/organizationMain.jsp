@@ -112,7 +112,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						parent.$.modalDialog.openner = $dg;//定义对话框关闭要刷新的grid
 						var editForm = parent.$.modalDialog.handler.find("#form_id");
 						editForm.attr("action", "sys/org/edit");
-						parent.$.modalDialog.handler.find('#orgCode_id').attr('readonly',true);
 						editForm.submit();
 					}
 				},{

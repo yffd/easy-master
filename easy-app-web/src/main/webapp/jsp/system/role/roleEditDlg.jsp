@@ -52,27 +52,6 @@
 
 <script type="text/javascript">
 $(function() {
-	$('#parentCode_id').combotree({
-		url:"sys/org/orgTree",
-		idFiled:'id',
-	 	textFiled:'text',
-		editable:false,
-		loadFilter:function(data,parent) {
-			var jsonData = data.respData;
-// 			var obj = {id:'', text:'顶层名称', checked:true, children:null};
-// 			obj.children = data.respData;
-// 			return [obj];
-			return data.respData;
-		},
-		onBeforeExpand:function(node) {
-			var children = $('#parentCode_id').tree("getChildren", node.target);
-			if(children && children.length>0) {
-				return true;
-			} else {
-				return false;
-			}
-		}
-	});
 	
 	$("#form_id").form({
 		onSubmit: function() {
@@ -91,7 +70,7 @@ $(function() {
 			result = $.parseJSON(result);
 			if(result.statusCode=='OK') {
 				parent.$.modalDialog.handler.dialog('close');//打开此窗口时预定义的对象
-				parent.$.modalDialog.openner.treegrid('reload');//打开此窗口时预定义的对象
+				parent.$.modalDialog.openner.datagrid('reload');//打开此窗口时预定义的对象
 				parent.$.modalDialog.openWindow.$.messager.show({
 					title : '系统提示',
 					msg : result.statusDesc,
@@ -115,30 +94,14 @@ $(function() {
 				<legend>编辑</legend>
 				<table>
 					<tr>
-					    <th>名称</th>
-						<td><input name="orgName" class="easyui-textbox easyui-validatebox" data-options="required:true" placeholder="请输入名称"/></td>
-						<th>编码</th>
-						<td><input id="orgCode_id" name="orgCode" class="easyui-textbox easyui-validatebox" data-options="required:true"/></td>
-					 </tr>
-					 <tr>
-					    <th>主负责人</th>
-						<td><input type="text" name="firstManagerCode" class="easyui-textbox"/></td>
-						<th>副负责人</th>
-						<td><input type="text" name="secondManagerCode" class="easyui-textbox"/></td>
-					 </tr>
-					 <tr>
-					    <th>电话</th>
-						<td><input name="tel" type="text" class="easyui-textbox easyui-validatebox"/></td>
-						<th>传真</th>
-						<td><input name="fax" type="text" class="easyui-textbox easyui-validatebox"/></td>
-					 </tr>
-					 <tr>
-					    <th>父机构</th>
-						<td><input id="parentCode_id" name="parentCode" class="easyui-textbox"/></td>
-					 </tr>
-					 <tr>
+						<th>名称</th>
+						<td><input name="roleName" class="easyui-textbox easyui-validatebox" required="required" placeholder="请输入名称" /></td>
+						<th>编号</th>
+						<td><input id="roleCode_id" name="roleCode" class="easyui-textbox easyui-validatebox" required="required"/></td>
+					</tr>
+					<tr>
 						<th>描述</th>
-						<td colspan="3"><textarea class="easyui-textbox" name="remark" style="width: 435px;height: 100px;"></textarea></td>
+						<td colspan="3"><textarea name="remark" class="easyui-textbox" style="width: 435px;height: 100px;"></textarea></td>
 					</tr>	
 					 
 				</table>
