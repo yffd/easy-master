@@ -14,6 +14,7 @@ import org.yffd.easy.app.system.service.SysUserService;
 import org.yffd.easy.common.core.model.RespModel;
 import org.yffd.easy.common.core.page.PageParam;
 import org.yffd.easy.common.core.page.PageResult;
+import org.yffd.easy.common.core.util.EncryptUtils;
 import org.yffd.easy.common.core.util.ValidUtils;
 import org.yffd.easy.common.core.view.vo.DataGridVO;
 import org.yffd.easy.common.core.view.vo.SearchBoxVO;
@@ -55,6 +56,10 @@ public class SysUserController extends BaseController {
 		if(!ValidUtils.isNull(org)) {
 			return this.errorAjax("编号已存在");
 		}
+		String password = sysUser.getPassword();
+		if(!ValidUtils.isBlank(password)) {// 密码加密
+			sysUser.setPassword(EncryptUtils.encodeMD5String(password));
+		}
 		sysUser.setDefaultAdd("admin", new Date());
 		this.sysUserService.add(sysUser);
 		return this.successAjax();
@@ -66,6 +71,10 @@ public class SysUserController extends BaseController {
 		if(ValidUtils.isNull(sysUser) 
 				|| ValidUtils.isEmpty(sysUser.getUserCode())) {
 			return this.error("参数无效");
+		}
+		String password = sysUser.getPassword();
+		if(!ValidUtils.isBlank(password)) {// 密码加密
+			sysUser.setPassword(EncryptUtils.encodeMD5String(password));
 		}
 		sysUser.setDefaultUpdate("admin", new Date());
 		this.sysUserService.editByCode(sysUser);

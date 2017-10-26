@@ -15,14 +15,31 @@
   
 		<result column="USER_NAME" property="userName" jdbcType="VARCHAR" />
 		<result column="USER_CODE" property="userCode" jdbcType="VARCHAR" />
-		<result column="ACCOUNT" property="account" jdbcType="VARCHAR" />
 		<result column="PASSWORD" property="password" jdbcType="VARCHAR" />
 		<result column="ORG_CODE" property="orgCode" jdbcType="VARCHAR" />
 		<result column="ACTIVE" property="active" jdbcType="VARCHAR" />
 		<result column="TEL" property="tel" jdbcType="VARCHAR" />
 		<result column="EMAIL" property="email" jdbcType="VARCHAR" />
 		<result column="REMARK" property="remark" jdbcType="VARCHAR" />
-		
+	</resultMap>
+	
+	<resultMap id="cascadeResutlId" type="org.yffd.easy.app.system.model.SysUser">
+		<id column="ID" property="id" jdbcType="INTEGER" />
+		<result column="VERSION" property="version" jdbcType="INTEGER" />
+		<result column="DEL_FLAG" property="delFlag" jdbcType="CHAR" />
+		<result column="CREATER" property="creater" jdbcType="VARCHAR" />
+		<result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="EDITOR" property="editor" jdbcType="VARCHAR" />
+		<result column="EDIT_TIME" property="editTime" jdbcType="TIMESTAMP" />
+  
+		<result column="USER_NAME" property="userName" jdbcType="VARCHAR" />
+		<result column="USER_CODE" property="userCode" jdbcType="VARCHAR" />
+		<result column="PASSWORD" property="password" jdbcType="VARCHAR" />
+		<result column="ORG_CODE" property="orgCode" jdbcType="VARCHAR" />
+		<result column="ACTIVE" property="active" jdbcType="VARCHAR" />
+		<result column="TEL" property="tel" jdbcType="VARCHAR" />
+		<result column="EMAIL" property="email" jdbcType="VARCHAR" />
+		<result column="REMARK" property="remark" jdbcType="VARCHAR" />
 		<association property="sysOrganization" javaType="org.yffd.easy.app.system.model.SysOrganization">
 			<id column="ID" property="id" jdbcType="INTEGER" />
 			<result column="_VERSION" property="version" jdbcType="INTEGER" />
@@ -44,24 +61,24 @@
 	</resultMap>
 
 	<sql id="sys_user_table"> sys_user </sql>
-	<sql id="sys_user_columns"> ID, VERSION, DEL_FLAG, CREATER, CREATE_TIME, EDITOR, EDIT_TIME,
-	USER_NAME, USER_CODE, ACCOUNT, PASSWORD, ORG_CODE, ACTIVE, TEL, EMAIL, REMARK </sql>
-	<sql id="sys_user_limit"> limit #{startRowNum}, #{numPerPage} </sql>
+	<sql id="sys_user_columns"> u.ID, u.VERSION, u.DEL_FLAG, u.CREATER, u.CREATE_TIME, u.EDITOR, u.EDIT_TIME,
+	u.USER_NAME, u.USER_CODE, u.PASSWORD, u.ORG_CODE, u.ACTIVE, u.TEL, u.EMAIL, u.REMARK </sql>
+	<sql id="sys_user_limit"><if test="pageLimit != null and pageLimit != ''"> limit #{startRowNum}, #{numPerPage} </if></sql>
 	<!-- 动态组装复合查询条件 -->
 	<sql id="sys_user_where">
 		<!-- Equal query -->
 		<if test="userCode != null and userCode != ''"> and u.USER_CODE = #{userCode} </if>
 		<if test="orgCode != null and orgCode != ''"> and u.ORG_CODE = #{orgCode} </if>
-		<if test="account != null and account != ''"> and u.ACCOUNT = #{account} </if>
+		<if test="password != null and password != ''"> and u.PASSWORD = #{password} </if>
 		<if test="tel != null and tel != ''"> and u.TEL = #{tel} </if>
 		<!-- Like query -->
 		<if test="userName != null and userName != ''"> and u.USER_NAME like CONCAT(CONCAT('%', #{userName}), '%') </if>
 	</sql>
 	
-	<!-- 分页查询 -->
-	<select id="selectPage" parameterType="java.util.Map" resultMap="resutlId">
+	<!-- selectListBy、selectAll -->
+	<select id="selectListBy" parameterType="java.util.Map" resultMap="cascadeResutlId">
 		select u.ID, u.VERSION, u.DEL_FLAG, u.CREATER, u.CREATE_TIME, u.EDITOR, u.EDIT_TIME,
-			u.USER_NAME, u.USER_CODE, u.ACCOUNT, u.PASSWORD, u.ORG_CODE, u.ACTIVE, u.TEL, u.EMAIL, u.REMARK,
+			u.USER_NAME, u.USER_CODE, u.PASSWORD, u.ORG_CODE, u.ACTIVE, u.TEL, u.EMAIL, u.REMARK,
 			org.ID as _ID, org.VERSION as _VERSION, org.DEL_FLAG as _DEL_FLAG, org.CREATER as _CREATER, org.CREATE_TIME as _CREATE_TIME, org.EDITOR as _EDITOR, org.EDIT_TIME as _EDIT_TIME,
 			 org.ORG_NAME as _ORG_NAME, org.ORG_CODE as _ORG_CODE, org.P_CODE as _P_CODE, org.FIRST_MANAGER_CODE as _FIRST_MANAGER_CODE, org.SECOND_MANAGER_CODE as _SECOND_MANAGER_CODE, org.TEL as _TEL, org.FAX as _FAX, org.REMARK as _REMARK
 		from sys_user as u
@@ -85,32 +102,30 @@
 	
 	<select id="selectByPK" parameterType="java.lang.String" resultMap="resutlId">
 		select
-		<include refid="sys_user_columns"/>
+		<include refid="sys_user_columns"/> as u
 		from
 		<include refid="sys_user_table" />
-		where USER_CODE = #{_parameter}
+		where u.ID = #{_parameter}
 	</select>
 	
-	<!-- selectListBy、selectBy、selectAll -->
-	<select id="selectListBy" parameterType="java.util.Map" resultMap="resutlId">
+	<select id="selectOne" parameterType="java.util.Map" resultMap="resutlId">
 		select
 		<include refid="sys_user_columns"/>
 		from
-		<include refid="sys_user_table" />
+		<include refid="sys_user_table" />  as u
 		<where>
 			<include refid="sys_user_where" />
 		</where>
-		order by CREATE_TIME desc
 	</select>
 	
 	<insert id="insert" parameterType="org.yffd.easy.app.system.model.SysUser" keyProperty="id" useGeneratedKeys="true">
 		insert into
 		<include refid="sys_user_table" />
 		(VERSION, DEL_FLAG, CREATER, CREATE_TIME, EDITOR, EDIT_TIME,
-		USER_NAME, USER_CODE, ACCOUNT, PASSWORD, ORG_CODE, ACTIVE, TEL, EMAIL, REMARK)
+		USER_NAME, USER_CODE, PASSWORD, ORG_CODE, ACTIVE, TEL, EMAIL, REMARK)
 		values
 		(0, #{delFlag}, #{creater}, #{createTime}, #{editor}, #{editTime}, 
-		#{userName}, #{userCode}, #{account}, #{password}, #{orgCode}, #{active}, #{tel}, #{email}, #{remark})
+		#{userName}, #{userCode}, #{password}, #{orgCode}, #{active}, #{tel}, #{email}, #{remark})
 	</insert>
 	
 	<update id="updateByPK" parameterType="org.yffd.easy.app.system.model.SysUser">
@@ -120,7 +135,6 @@
 			editor = #{editor, jdbcType=VARCHAR},
 			edit_time = #{editTime, jdbcType=TIMESTAMP},
 			USER_NAME = #{userName, jdbcType=VARCHAR},
-			ACCOUNT = #{account, jdbcType=VARCHAR},
 			PASSWORD = #{password, jdbcType=VARCHAR},
 			ORG_CODE = #{orgCode, jdbcType=VARCHAR},
 			ACTIVE = #{active, jdbcType=VARCHAR},

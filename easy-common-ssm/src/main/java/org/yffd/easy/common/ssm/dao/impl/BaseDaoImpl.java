@@ -23,15 +23,15 @@ import org.yffd.easy.common.ssm.dao.IBaseDao;
  */
 public class BaseDaoImpl<T extends PersistModel> implements IBaseDao<T> {
 
-	/** mapper xml 中的SQL ID，即statement=selectRange */
-    public static final String SQL_SELECT_RANGE = "selectRange";
     /** mapper xml 中的SQL ID，即statement=selectPage */
-    public static final String SQL_SELECT_PAGE = "selectPage";
+//    public static final String SQL_SELECT_PAGE = "selectPage";
     /** mapper xml 中的SQL ID，即statement=selectCountBy */
     public static final String SQL_SELECT_COUNT_BY = "selectCountBy";
     
     /** mapper xml 中的SQL ID，即statement=selectByPK */
     public static final String SQL_SELECT_BY_PK = "selectByPK";
+    /** mapper xml 中的SQL ID，即statement=selectOne */
+    public static final String SQL_SELECT_ONE = "selectOne";
     /** mapper xml 中的SQL ID，即statement=selectListBy */
     public static final String SQL_SELECT_LIST_BY = "selectListBy";
     
@@ -77,7 +77,23 @@ public class BaseDaoImpl<T extends PersistModel> implements IBaseDao<T> {
 //	}
 
 	/**
-	 * sqlid : {@link org.yffd.easy.common.ssm.dao.impl.BaseDaoImpl#SQL_SELECT_RANGE}
+	 * sqlid : {@link org.yffd.easy.common.ssm.dao.impl.BaseDaoImpl#SQL_SELECT_COUNT_BY}
+	 * @Date	2017年9月14日 下午4:31:15 <br/>
+	 * @author  zhangST
+	 * @param paramMap
+	 * @return
+	 * @see org.yffd.easy.common.ssm.dao.IBaseDao#selectCountBy(java.util.Map)
+	 */
+	@Override
+	public Long selectCountBy(Map<String, Object> paramMap) {
+		if (ValidUtils.isNull(paramMap)) {
+			paramMap = new HashMap<String, Object>();
+        }
+        return sqlSession.selectOne(getStatement(SQL_SELECT_COUNT_BY), paramMap);
+	}
+	
+	/**
+	 * sqlid : {@link org.yffd.easy.common.ssm.dao.impl.BaseDaoImpl#SQL_SELECT_LIST_BY}
 	 * count sqlid : {@link org.yffd.easy.common.ssm.dao.impl.BaseDaoImpl#SQL_SELECT_COUNT_BY}
 	 * @Date	2017年9月14日 下午4:29:52 <br/>
 	 * @author  zhangST
@@ -106,42 +122,14 @@ public class BaseDaoImpl<T extends PersistModel> implements IBaseDao<T> {
         pageParam.setStartRowNum(PageParam.countStartRowNum(pageParam.getCurrentPage(), pageParam.getNumPerPage()));
         pageParam.setEndRowNum(PageParam.countEndRowNum(pageParam.getCurrentPage(), pageParam.getNumPerPage()));
         // 根据页面传来的分页参数构造SQL分页参数
+        paramMap.put("pageLimit", "pageLimit");
         paramMap.put("numPerPage", pageParam.getNumPerPage());
         paramMap.put("startRowNum", pageParam.getStartRowNum());
 
         // 获取分页数据集
-        List<T> recordList = sqlSession.selectList(getStatement(SQL_SELECT_PAGE), paramMap);
+        List<T> recordList = sqlSession.selectList(getStatement(SQL_SELECT_LIST_BY), paramMap);
 
         return new PageResult<T>(pageParam, recordList);
-	}
-
-	/**
-	 * sqlid : {@link org.yffd.easy.common.ssm.dao.impl.BaseDaoImpl#SQL_SELECT_COUNT_BY}
-	 * @Date	2017年9月14日 下午4:31:15 <br/>
-	 * @author  zhangST
-	 * @param paramMap
-	 * @return
-	 * @see org.yffd.easy.common.ssm.dao.IBaseDao#selectCountBy(java.util.Map)
-	 */
-	@Override
-	public Long selectCountBy(Map<String, Object> paramMap) {
-		if (ValidUtils.isNull(paramMap)) {
-			paramMap = new HashMap<String, Object>();
-        }
-        return sqlSession.selectOne(getStatement(SQL_SELECT_COUNT_BY), paramMap);
-	}
-
-	/**
-	 * sqlid : {@link org.yffd.easy.common.ssm.dao.impl.BaseDaoImpl#SQL_SELECT_BY_PK}
-	 * @Date	2017年9月14日 下午4:34:37 <br/>
-	 * @author  zhangST
-	 * @param primaryKey
-	 * @return
-	 * @see org.yffd.easy.common.ssm.dao.IBaseDao#selectByPK(java.lang.String)
-	 */
-	@Override
-	public T selectByPK(String primaryKey) {
-		return sqlSession.selectOne(getStatement(SQL_SELECT_BY_PK), primaryKey);
 	}
 	
 	/**
@@ -161,20 +149,32 @@ public class BaseDaoImpl<T extends PersistModel> implements IBaseDao<T> {
 	}
 
 	/**
-	 * sqlid : {@link org.yffd.easy.common.ssm.dao.impl.BaseDaoImpl#SQL_SELECT_LIST_BY} <br/>
-	 * 注：{@link org.yffd.easy.common.ssm.dao.impl.BaseDaoImpl#selectListBy}方法的特例
-	 * @Date	2017年9月14日 下午4:43:20 <br/>
+	 * sqlid : {@link org.yffd.easy.common.ssm.dao.impl.BaseDaoImpl#SQL_SELECT_BY_PK}
+	 * @Date	2017年9月14日 下午4:34:37 <br/>
+	 * @author  zhangST
+	 * @param primaryKey
+	 * @return
+	 * @see org.yffd.easy.common.ssm.dao.IBaseDao#selectByPK(java.lang.String)
+	 */
+	@Override
+	public T selectByPK(String primaryKey) {
+		return sqlSession.selectOne(getStatement(SQL_SELECT_BY_PK), primaryKey);
+	}
+	
+	/**
+	 * sqlid : {@link org.yffd.easy.common.ssm.dao.impl.BaseDaoImpl#SQL_SELECT_ONE}
+	 * @Date	2017年10月26日 上午10:35:29 <br/>
 	 * @author  zhangST
 	 * @param paramMap
 	 * @return
-	 * @see org.yffd.easy.common.ssm.dao.IBaseDao#selectBy(java.util.Map)
+	 * @see org.yffd.easy.common.ssm.dao.IBaseDao#selectOne(java.util.Map)
 	 */
 	@Override
-	public T selectBy(Map<String, Object> paramMap) {
+	public T selectOne(Map<String, Object> paramMap) {
 		if (ValidUtils.isNull(paramMap)) {
 			paramMap = new HashMap<String, Object>();
         }
-        return sqlSession.selectOne(getStatement(SQL_SELECT_LIST_BY), paramMap);
+		return sqlSession.selectOne(getStatement(SQL_SELECT_ONE), paramMap);
 	}
 
 	/**

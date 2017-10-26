@@ -52,7 +52,7 @@
 	</filter>
 	<filter-mapping>
 		<filter-name>CaptchaFilter</filter-name>
-		<url-pattern>/captcha-img.jpg</url-pattern>
+		<url-pattern>/Kaptcha.jpg</url-pattern>
 	</filter-mapping>
 	
 	<!-- 错误页面配置 -->

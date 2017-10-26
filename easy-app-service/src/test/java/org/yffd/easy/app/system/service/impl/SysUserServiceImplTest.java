@@ -24,6 +24,13 @@ public class SysUserServiceImplTest extends SpringBaseTestCase {
 	private SysUserService sysUserService;
 	
 	@Test
+	public void findByAccountTest() {
+		String userCode = "zhangsan";
+		String password = "zhangsan";
+		SysUser user = this.sysUserService.findByAccount(userCode, password);
+		System.out.println(user);
+	}
+	@Test
 	public void findListTest() {
 		PageParam pageParam = new PageParam(1L, 10L);
 		String name = null;

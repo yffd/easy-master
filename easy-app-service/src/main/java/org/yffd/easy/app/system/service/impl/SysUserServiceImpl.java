@@ -42,7 +42,9 @@ public class SysUserServiceImpl implements SysUserService {
 	@Override
 	public SysUser findByCode(String userCode) {
 		if(ValidUtils.isBlank(userCode)) return null;
-		return this.sysUserDao.selectByPK(userCode);
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("userCode", userCode);
+		return this.sysUserDao.selectOne(paramMap);
 	}
 
 	@Override
@@ -59,6 +61,15 @@ public class SysUserServiceImpl implements SysUserService {
 	public void delByCode(String userCode) {
 		if(ValidUtils.isBlank(userCode)) return;
 		this.sysUserDao.deleteByPK(userCode);
+	}
+
+	@Override
+	public SysUser findByAccount(String userCode, String password) {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		if(ValidUtils.isEmpty(userCode) || ValidUtils.isEmpty(password)) return null;
+		paramMap.put("userCode", userCode);
+		paramMap.put("password", password);
+		return this.sysUserDao.selectOne(paramMap);
 	}
 
 }

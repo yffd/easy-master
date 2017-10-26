@@ -22,7 +22,7 @@
 	<sql id="sys_role_table"> sys_role </sql>
 	<sql id="sys_role_columns"> ID, VERSION, DEL_FLAG, CREATER, CREATE_TIME, EDITOR, EDIT_TIME,
 	ROLE_NAME, ROLE_CODE, REMARK </sql>
-	<sql id="sys_role_limit"> limit #{startRowNum}, #{numPerPage} </sql>
+	<sql id="sys_role_limit"><if test="pageLimit != null and pageLimit != ''"> limit #{startRowNum}, #{numPerPage} </if></sql>
 	<!-- 动态组装复合查询条件 -->
 	<sql id="sys_role_where">
 		<!-- Equal query -->
@@ -31,8 +31,8 @@
 		<if test="roleName != null and roleName != ''"> and ROLE_NAME like CONCAT(CONCAT('%', #{roleName}), '%') </if>
 	</sql>
 	
-	<!-- 分页查询 -->
-	<select id="selectPage" parameterType="java.util.Map" resultMap="resutlId">
+	<!-- selectListBy、selectAll -->
+	<select id="selectListBy" parameterType="java.util.Map" resultMap="resutlId">
 		select
 		<include refid="sys_role_columns"/>
 		from
@@ -57,11 +57,10 @@
 		<include refid="sys_role_columns"/>
 		from
 		<include refid="sys_role_table" />
-		where ROLE_CODE = #{_parameter}
+		where ID = #{_parameter}
 	</select>
 	
-	<!-- selectListBy、selectBy、selectAll -->
-	<select id="selectListBy" parameterType="java.util.Map" resultMap="resutlId">
+	<select id="selectOne" parameterType="java.util.Map" resultMap="resutlId">
 		select
 		<include refid="sys_role_columns"/>
 		from
@@ -69,7 +68,6 @@
 		<where>
 			<include refid="sys_role_where" />
 		</where>
-		order by CREATE_TIME desc
 	</select>
 	
 	<insert id="insert" parameterType="org.yffd.easy.app.system.model.SysRole" keyProperty="id" useGeneratedKeys="true">

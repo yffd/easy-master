@@ -105,5 +105,16 @@ public class EncryptUtils {
         }
         return dstr.toString();
     }
+    
+    public static void main(String[] args) {
+		String str = "1";
+		String sha = EncryptUtils.encodeSHAString(str);
+		System.out.println(sha);
+		System.out.println(sha.length());
+		
+		String md5 = EncryptUtils.encodeMD5String(str);
+		System.out.println(md5);
+		System.out.println(md5.length());
+	}
 }
 

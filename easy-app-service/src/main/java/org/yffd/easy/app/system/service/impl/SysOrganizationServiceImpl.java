@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.yffd.easy.app.system.dao.SysOrganizationDao;
 import org.yffd.easy.app.system.model.SysOrganization;
 import org.yffd.easy.app.system.service.SysOrganizationService;
+import org.yffd.easy.common.core.util.ValidUtils;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -39,7 +40,10 @@ public class SysOrganizationServiceImpl implements SysOrganizationService {
 
 	@Override
 	public SysOrganization findByCode(String orgCode) {
-		return this.sysOrganizationDao.selectByPK(orgCode);
+		if(ValidUtils.isBlank(orgCode)) return null;
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("orgCode", orgCode);
+		return this.sysOrganizationDao.selectOne(paramMap);
 	}
 
 	@Override

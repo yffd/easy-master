@@ -4,6 +4,15 @@ String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
 <script type="text/javascript" charset="utf-8">
+	
+	function changeTheme(themeName) {
+		var cookiesColor = utils.cookies.get("cookiesColor");
+    	if(cookiesColor != themeName) {
+    		utils.cookies.set("cookiesColor", themeName, 30);
+    		commonui.chgSkin(themeName, cookiesColor);
+        }
+	}
+
 	function logout(b) {
 		/*$.post('systemAction!logout.action', function() {
 			if (b) {
@@ -62,13 +71,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<div class="menu-sep"></div>
 	<div>
 		<span>更换主题</span>
-		<div style="width: 120px;">
-			<div onclick="changeTheme('default');">default</div>
-			<div onclick="changeTheme('gray');">gray</div>
-			<div onclick="changeTheme('cupertino');">cupertino</div>
-			<div onclick="changeTheme('dark-hive');">dark-hive</div>
-			<div onclick="changeTheme('pepper-grinder');">pepper-grinder</div>
-			<div onclick="changeTheme('sunny');">sunny</div>
+		<div id="theme" style="width: 120px;">
+			<div data-options="iconCls:'icon-save'" onclick="changeTheme('default');">default</div>  
+		    <div data-options="iconCls:'icon-save'" onclick="changeTheme('black');">black</div> 
+		    <div data-options="iconCls:'icon-save'" onclick="changeTheme('bootstrap');">bootstrap</div>  
+		    <div data-options="iconCls:'icon-save'" onclick="changeTheme('gray');">gray</div>  
+		    <div data-options="iconCls:'icon-save'" onclick="changeTheme('metro');">metro</div>
 		</div>
 	</div>
 </div>

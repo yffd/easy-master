@@ -28,6 +28,15 @@ public interface IBaseDao<T> {
 //	PageResult<T> selectRange(PageParam pageParam, Map<String, Object> paramMap);
 	
 	/**
+	 * 统计总条数
+	 * @Date	2017年9月14日 下午4:03:39 <br/>
+	 * @author  zhangST
+	 * @param paramMap
+	 * @return
+	 */
+	Long selectCountBy(Map<String, Object> paramMap);
+	
+	/**
 	 * 分页查询，该方法会调用自己定义的统计SQL，即自定义计算总条数SQL。<br/>
 	 * @Date	2017年9月14日 下午4:01:37 <br/>
 	 * @author  zhangST
@@ -38,13 +47,13 @@ public interface IBaseDao<T> {
 	PageResult<T> selectPage(PageParam pageParam, Map<String, Object> paramMap);
 	
 	/**
-	 * 统计总条数
-	 * @Date	2017年9月14日 下午4:03:39 <br/>
-	 * @author  zhangST
-	 * @param paramMap
-	 * @return
-	 */
-	Long selectCountBy(Map<String, Object> paramMap);
+     * 根据条件查询数据集合
+     * @Date	2017年9月14日 下午4:18:00 <br/>
+     * @author  zhangST
+     * @param paramMap
+     * @return
+     */
+    List<T> selectListBy(Map<String, Object> paramMap);
 	
 	/**
 	 * 根据主键查询数据
@@ -54,25 +63,16 @@ public interface IBaseDao<T> {
 	 * @return
 	 */
 	T selectByPK(String primaryKey);
-
-	/**
-     * 根据条件查询数据集合
-     * @Date	2017年9月14日 下午4:18:00 <br/>
-     * @author  zhangST
-     * @param paramMap
-     * @return
-     */
-    List<T> selectListBy(Map<String, Object> paramMap);
-    
+	
 	/**
 	 * 根据条件查询数据
-	 * @Date	2017年9月14日 下午4:17:18 <br/>
+	 * @Date	2017年10月26日 上午10:33:30 <br/>
 	 * @author  zhangST
 	 * @param paramMap
 	 * @return
 	 */
-    T selectBy(Map<String, Object> paramMap);
-    
+	T selectOne(Map<String, Object> paramMap);
+
     /**
      * 查询所有数据集合
      * @Date	2017年9月14日 下午4:18:21 <br/>

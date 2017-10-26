@@ -90,16 +90,16 @@
 			},{
 				iconCls: 'icon-color',
                 handler: function() {
-                	$('#theme').menu({
+                	$('#theme_id').menu({
                 		onClick:function(item){
-                			var cookiesColor1 = jqueryUtil.cookies.get("cookiesColor");
-                        	if(cookiesColor1 != item.id) {
-                        		jqueryUtil.cookies.set("cookiesColor",item.id,30);
-                        		jqueryUtil.chgSkin(item.id,cookiesColor1);
+                			var cookiesColor = utils.cookies.get("cookiesColor");
+                        	if(cookiesColor != item.id) {
+                        		utils.cookies.set("cookiesColor", item.id, 30);
+                        		commonui.chgSkin(item.id, cookiesColor);
                             }
 						}   
 					});
-                    $('#theme').menu('show', {
+                    $('#theme_id').menu('show', {
                     	left: '91%',
                     	top: 97   
 					});
@@ -154,11 +154,11 @@
 	<div type="closeOther">关闭其他</div>
 	<div type="closeAll">关闭所有</div>
 </div>
-<div id="theme" class="easyui-menu" style="width:120px;display: none">  
-    <div id="default" data-options="iconCls:'icon-save'">default</div>  
-    <div id="black" data-options="iconCls:'icon-save'">black</div> 
-    <div id="bootstrap" data-options="iconCls:'icon-save'">bootstrap</div>  
-    <div id="gray" data-options="iconCls:'icon-save'">gray</div>  
-    <div id="metro" data-options="iconCls:'icon-save'">metro</div>  
+<div id="theme_id" class="easyui-menu" style="width:120px;display: none">
+    <div id="default" data-options="iconCls:'icon-save'">default</div>
+    <div id="black" data-options="iconCls:'icon-save'">black</div>
+    <div id="bootstrap" data-options="iconCls:'icon-save'">bootstrap</div>
+    <div id="gray" data-options="iconCls:'icon-save'">gray</div>
+    <div id="metro" data-options="iconCls:'icon-save'">metro</div>
 </div>
 

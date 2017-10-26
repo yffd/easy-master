@@ -6,15 +6,15 @@
 	/**
 	 * 切换皮肤
 	 */
-	commonui.chgSkin = function(selectId,cookiesColor) {
+	commonui.chgSkin = function(selectId, cookiesColor) {
 		docchgskin(document,selectId,cookiesColor);
         $("iframe").each(function () {
             var dc = this.contentWindow.document;
             docchgskin(dc,selectId,cookiesColor);
         });
         function docchgskin(dc,selectId,cookiesColor) {
-        	removejscssfile(dc,"themes/"+cookiesColor+"/easyui.css", "css");
-        	createLink(dc,"themes/"+selectId+"/easyui.css");
+        	removejscssfile(dc,"static/easyui/themes/"+cookiesColor+"/easyui.css", "css");
+        	createLink(dc,"static/easyui/themes/"+selectId+"/easyui.css");
     	}
         function createLink(dc,url) {
         	var urls = url.replace(/[,]\s*$/ig,"").split(",");
@@ -162,15 +162,6 @@
 	},{
 		value : 'icon-easy icon-easy-database',
 		text : 'icon-easy-database'
-	}];
-	
-	commonui.yesOrNoData = [{
-		value : '1',
-		text : '是',
-		selected : true
-	},{
-		value : '0',
-		text : '否'
 	}];
 	
 	/**

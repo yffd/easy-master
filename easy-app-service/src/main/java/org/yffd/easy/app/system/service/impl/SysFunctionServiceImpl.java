@@ -10,6 +10,7 @@ import org.yffd.easy.app.system.dao.SysFunctionDao;
 import org.yffd.easy.app.system.model.SysFunction;
 import org.yffd.easy.app.system.model.SysUser;
 import org.yffd.easy.app.system.service.SysFunctionService;
+import org.yffd.easy.common.core.util.ValidUtils;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -52,7 +53,10 @@ public class SysFunctionServiceImpl implements SysFunctionService {
 
 	@Override
 	public SysFunction findByCode(String funcCode) {
-		return this.sysFunctionDao.selectByPK(funcCode);
+		if(ValidUtils.isBlank(funcCode)) return null;
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("funcCode", funcCode);
+		return this.sysFunctionDao.selectOne(paramMap);
 	}
 
 	@Override

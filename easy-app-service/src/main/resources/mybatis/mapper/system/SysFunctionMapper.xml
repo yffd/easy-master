@@ -27,7 +27,7 @@
 	<sql id="sys_function_table"> sys_function </sql>
 	<sql id="sys_function_column"> ID, VERSION, DEL_FLAG, CREATER, CREATE_TIME, EDITOR, EDIT_TIME, 
 	FUNC_NAME, FUNC_CODE, P_CODE, URL, TYPE, ACTIVE, SORT, ICONCLS, REMARK </sql>
-	<sql id="sys_function_limit"> limit #{startRowNum}, #{numPerPage} </sql>
+	<sql id="sys_function_limit"><if test="pageLimit != null and pageLimit != ''"> limit #{startRowNum}, #{numPerPage} </if></sql>
 	<!-- 动态组装复合查询条件 -->
 	<sql id="sys_function_where">
 		<!-- Equal query -->
@@ -39,8 +39,8 @@
 		<if test="funcName != null and funcName != ''"> and FUNC_NAME like CONCAT(CONCAT('%', #{funcName}), '%') </if>
 	</sql>
 	
-	<!-- 分页查询 -->
-	<select id="selectPage" parameterType="java.util.Map" resultMap="resutlId">
+	<!-- selectListBy、selectAll -->
+	<select id="selectListBy" parameterType="java.util.Map" resultMap="resutlId">
 		select
 		<include refid="sys_function_column"/>
 		from
@@ -65,11 +65,10 @@
 		<include refid="sys_function_column"/>
 		from
 		<include refid="sys_function_table" />
-		where FUNC_CODE = #{_parameter}
+		where ID = #{_parameter}
 	</select>
 	
-	<!-- selectListBy、selectBy、selectAll -->
-	<select id="selectListBy" parameterType="java.util.Map" resultMap="resutlId">
+	<select id="selectOne" parameterType="java.util.Map" resultMap="resutlId">
 		select
 		<include refid="sys_function_column"/>
 		from
@@ -77,7 +76,6 @@
 		<where>
 			<include refid="sys_function_where" />
 		</where>
-		order by SORT
 	</select>
 	
 	<insert id="insert" parameterType="org.yffd.easy.app.system.model.SysFunction" keyProperty="id" useGeneratedKeys="true">

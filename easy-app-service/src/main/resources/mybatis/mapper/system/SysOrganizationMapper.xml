@@ -27,6 +27,7 @@
 	<sql id="sys_organization_table"> sys_organization </sql>
 	<sql id="sys_organization_columns"> ID, VERSION, DEL_FLAG, CREATER, CREATE_TIME, EDITOR, EDIT_TIME,
 	 ORG_NAME, ORG_CODE, P_CODE, FIRST_MANAGER_CODE, SECOND_MANAGER_CODE, TEL, FAX, REMARK  </sql>
+	 <sql id="sys_organization_limit"><if test="pageLimit != null and pageLimit != ''"> limit #{startRowNum}, #{numPerPage} </if></sql>
 	<!-- 动态组装复合查询条件 -->
 	<sql id="sys_organization_where">
 		<!-- Equal query -->
@@ -36,16 +37,27 @@
 		<if test="orgName != null and orgName != ''"> and ORG_NAME like CONCAT(CONCAT('%', #{orgName}), '%') </if>
 	</sql>
 	
+	<!-- selectListBy、selectAll -->
+	<select id="selectListBy" parameterType="java.util.Map" resultMap="resutlId">
+		select
+		<include refid="sys_organization_columns"/>
+		from
+		<include refid="sys_organization_table" />
+		<where>
+			<include refid="sys_organization_where" />
+		</where>
+		<include refid="sys_organization_limit" />
+	</select>
+	
 	<select id="selectByPK" parameterType="java.lang.String" resultMap="resutlId">
 		select
 		<include refid="sys_organization_columns"/>
 		from
 		<include refid="sys_organization_table" />
-		where ORG_CODE = #{_parameter}
+		where ID = #{_parameter}
 	</select>
 	
-	<!-- selectListBy、selectBy、selectAll -->
-	<select id="selectListBy" parameterType="java.util.Map" resultMap="resutlId">
+	<select id="selectOne" parameterType="java.util.Map" resultMap="resutlId">
 		select
 		<include refid="sys_organization_columns"/>
 		from

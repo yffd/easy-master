@@ -24,5 +24,6 @@ public interface SysUserService {
 	
 	void delByCode(String userCode);
 	
+	SysUser findByAccount(String userCode, String password);
 }
 

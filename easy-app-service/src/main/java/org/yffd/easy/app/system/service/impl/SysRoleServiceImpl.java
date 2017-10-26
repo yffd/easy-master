@@ -52,7 +52,9 @@ public class SysRoleServiceImpl implements SysRoleService {
 	@Override
 	public SysRole findByCode(String roleCode) {
 		if(ValidUtils.isBlank(roleCode)) return null;
-		return this.sysRoleDao.selectByPK(roleCode);
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("roleCode", roleCode);
+		return this.sysRoleDao.selectOne(paramMap);
 	}
 
 	@Override

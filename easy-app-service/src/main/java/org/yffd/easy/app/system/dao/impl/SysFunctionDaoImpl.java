@@ -22,6 +22,6 @@ public class SysFunctionDaoImpl extends BaseDaoImpl<SysFunction> implements SysF
 	public List<SysFunction> findByRole(String roleCode) {
 		return this.getSqlSession().selectList("findByRole", roleCode);
 	}
-	
+
 }
 

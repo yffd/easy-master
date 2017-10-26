@@ -17,5 +17,6 @@ import org.yffd.easy.common.ssm.dao.IBaseDao;
 public interface SysFunctionDao extends IBaseDao<SysFunction> {
 	
 	List<SysFunction> findByRole(String roleCode);
+	
 }
 
