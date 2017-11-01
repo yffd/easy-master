@@ -4,11 +4,11 @@
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>org.yffd.easy</groupId>
+		<groupId>com.yffd.easy</groupId>
 		<artifactId>easy-master</artifactId>
 		<version>0.0.1</version>
 	</parent>
-	<groupId>org.yffd.easy</groupId>
+	<groupId>com.yffd.easy</groupId>
 	<artifactId>easy-common-ssm</artifactId>
 	<version>0.0.1</version>
 	<name>easy-common-ssm</name>
@@ -42,7 +42,7 @@
 	</properties>
 	<dependencies>
 		<dependency>
-			<groupId>org.yffd.easy</groupId>
+			<groupId>com.yffd.easy</groupId>
 			<artifactId>easy-common-core</artifactId>
 			<version>${easy.common.core.version}</version>
 		</dependency>

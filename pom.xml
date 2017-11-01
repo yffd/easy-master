@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.yffd.easy</groupId>
+	<groupId>com.yffd.easy</groupId>
 	<artifactId>easy-master</artifactId>
 	<version>0.0.1</version>
 	<packaging>pom</packaging>
@@ -15,12 +15,15 @@
 	</distributionManagement>
 
 	<modules>
-    <module>easy-common-core</module>
-    <module>easy-common-ssm</module>
-    <module>easy-app-service</module>
-    <module>easy-app-service-facade</module>
-    <module>easy-app-web</module>
-	</modules>
+	    <module>easy-common-core</module>
+	    <module>easy-common-ssm</module>
+<!-- 	    <module>easy-app-service</module> -->
+<!-- 	    <module>easy-app-service-facade</module> -->
+<!-- 	    <module>easy-app-web</module> -->
+	    <module>easy-pmi-service</module>
+	    <module>easy-pmi-service-facade</module>
+	    <module>easy-web-pmi</module>
+  	</modules>
 
 	<!-- 定义公共变量 -->
 	<properties>
