@@ -36,6 +36,23 @@ public class AuthResourceController extends BaseController {
 	private AuthResourceService authResourceService;
 	
 	/**
+	 * 列出所有资源
+	 * @Date	2017年10月20日 下午5:30:02 <br/>
+	 * @author  zhangST
+	 * @param req
+	 * @return
+	 */
+	@RequestMapping(value="/listAll", method=RequestMethod.POST)
+	@ResponseBody
+	public RespModel listAll(HttpServletRequest req) {
+		List<AuthResource> list = this.authResourceService.findAll();
+		if(!ValidUtils.isEmpty(list)) {
+			List<AuthResourceTreeGridVO> treeList = this.authResourceSupport.toSyncTreeGridVO(list);
+			return this.successAjax(treeList);
+		}
+		return this.errorAjax("未找到有效数据");
+	}
+	/**
 	 * 列出所有菜单
 	 * @Date	2017年10月20日 下午5:30:02 <br/>
 	 * @author  zhangST

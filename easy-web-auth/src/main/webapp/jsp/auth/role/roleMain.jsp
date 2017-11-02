@@ -63,7 +63,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		/****************************************************************/
 		$dg_rs = $('#rs_dg_id');
 		$dg_rs.treegrid({
-		    url:'auth/resource/listAllMenu',
+		    url:'auth/resource/listAll',
 		    width: 'auto',
 			height: $(this).height()-120,
 			rownumbers: true,
