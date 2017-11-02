@@ -20,9 +20,9 @@
 <!-- 	    <module>easy-app-service</module> -->
 <!-- 	    <module>easy-app-service-facade</module> -->
 <!-- 	    <module>easy-app-web</module> -->
-	    <module>easy-pmi-service</module>
-	    <module>easy-pmi-service-facade</module>
-	    <module>easy-web-pmi</module>
+	    <module>easy-auth-service</module>
+	    <module>easy-auth-service-facade</module>
+	    <module>easy-web-auth</module>
   	</modules>
 
 	<!-- 定义公共变量 -->

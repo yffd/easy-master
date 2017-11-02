@@ -1,21 +1,21 @@
-drop table if exists pmi_account;
+drop table if exists auth_account;
 
-drop table if exists pmi_organization;
+drop table if exists auth_organization;
 
-drop table if exists pmi_resource;
+drop table if exists auth_resource;
 
-drop table if exists pmi_role;
+drop table if exists auth_role;
 
-drop table if exists pmi_role_resource;
+drop table if exists auth_role_resource;
 
-drop table if exists pmi_role_user;
+drop table if exists auth_role_user;
 
-drop table if exists pmi_user;
+drop table if exists auth_user;
 
 /*==============================================================*/
-/* Table: pmi_account                                           */
+/* Table: auth_account                                          */
 /*==============================================================*/
-create table pmi_account
+create table auth_account
 (
    ID                   bigint not null auto_increment comment '主键',
    DEL_FLAG             char(1) default '0' comment '1：删除、0：未删除',
@@ -24,18 +24,19 @@ create table pmi_account
    CREATE_TIME          datetime default NULL comment '创建时间',
    EDITOR               varchar(50) default NULL comment '修改人',
    EDIT_TIME            datetime default NULL comment '修改时间',
-   ACCOUNT              varchar(50) default NULL comment '账户',
-   PASSWORD             varchar(50) default NULL comment '密码',
-   SHORT_NAME           varchar(50) default NULL comment '简称',
+   ACCOUNT_CODE         varchar(50) default NULL comment '账户编码（唯一）',
+   ACCOUNT_PWD          varchar(50) default NULL comment '密码',
+   ACCOUNT_NAME         varchar(50) default NULL comment '简称',
+   ACCOUNT_STATE        char(1) default 'A' comment 'A:ACTIVE,I:INACTIVE',
    primary key (ID)
 );
 
-alter table pmi_account comment '权限管理系统》账户';
+alter table auth_account comment '权限管理系统》账户';
 
 /*==============================================================*/
-/* Table: pmi_organization                                      */
+/* Table: auth_organization                                     */
 /*==============================================================*/
-create table pmi_organization
+create table auth_organization
 (
    ID                   bigint not null auto_increment comment '主键',
    DEL_FLAG             char(1) default '0' comment '1：删除、0：未删除',
@@ -53,12 +54,12 @@ create table pmi_organization
    primary key (ID)
 );
 
-alter table pmi_organization comment '权限管理系统》机构';
+alter table auth_organization comment '权限管理系统》机构';
 
 /*==============================================================*/
-/* Table: pmi_resource                                          */
+/* Table: auth_resource                                         */
 /*==============================================================*/
-create table pmi_resource
+create table auth_resource
 (
    ID                   bigint not null auto_increment comment '主键',
    DEL_FLAG             char(1) default '0' comment '1：删除、0：未删除',
@@ -71,19 +72,19 @@ create table pmi_resource
    RS_NAME              varchar(50) default NULL comment '资源名称',
    PARENT_CODE          varchar(50) default NULL comment '父资源编号',
    IN_URL               varchar(255) default NULL comment '内部链接',
-   RS_TYPE              char(1) default NULL comment '资源类型',
+   RS_TYPE              char(1) default NULL comment 'A:APP,M:MENU,O:OPERATION',
    RS_NUM               int default NULL comment '顺序编号',
    RS_STATE             char(1) default NULL comment 'A:active、I:inactive',
    REMARK               varchar(255) default NULL comment '备注',
    primary key (ID)
 );
 
-alter table pmi_resource comment '权限管理系统》资源';
+alter table auth_resource comment '权限管理系统》资源';
 
 /*==============================================================*/
-/* Table: pmi_role                                              */
+/* Table: auth_role                                             */
 /*==============================================================*/
-create table pmi_role
+create table auth_role
 (
    ID                   bigint not null auto_increment comment '主键',
    DEL_FLAG             char(1) default '0' comment '1：删除、0：未删除',
@@ -98,12 +99,12 @@ create table pmi_role
    primary key (ID)
 );
 
-alter table pmi_role comment '权限管理系统》角色';
+alter table auth_role comment '权限管理系统》角色';
 
 /*==============================================================*/
-/* Table: pmi_role_resource                                     */
+/* Table: auth_role_resource                                    */
 /*==============================================================*/
-create table pmi_role_resource
+create table auth_role_resource
 (
    ID                   bigint not null auto_increment comment '主键',
    DEL_FLAG             char(1) default '0' comment '1：删除、0：未删除',
@@ -117,12 +118,12 @@ create table pmi_role_resource
    primary key (ID)
 );
 
-alter table pmi_role_resource comment '角色-资源关系';
+alter table auth_role_resource comment '角色-资源关系';
 
 /*==============================================================*/
-/* Table: pmi_role_user                                         */
+/* Table: auth_role_user                                        */
 /*==============================================================*/
-create table pmi_role_user
+create table auth_role_user
 (
    ID                   bigint not null auto_increment comment '主键',
    DEL_FLAG             char(1) default '0' comment '1：删除、0：未删除',
@@ -136,12 +137,12 @@ create table pmi_role_user
    primary key (ID)
 );
 
-alter table pmi_role_user comment '角色-用户关系';
+alter table auth_role_user comment '角色-用户关系';
 
 /*==============================================================*/
-/* Table: pmi_user                                              */
+/* Table: auth_user                                             */
 /*==============================================================*/
-create table pmi_user
+create table auth_user
 (
    ID                   bigint not null auto_increment comment '主键',
    DEL_FLAG             char(1) default '0' comment '1：删除、0：未删除',
@@ -160,4 +161,4 @@ create table pmi_user
    primary key (ID)
 );
 
-alter table pmi_user comment '权限管理系统》用户';
+alter table auth_user comment '权限管理系统》用户';

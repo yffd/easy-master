@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yffd.easy.auth.dao.impl.AuthRoleDaoImpl">
+
+	<!-- ##############################   基础sql开始   ############################## -->
+	
+	<resultMap id="resutlId" type="com.yffd.easy.auth.model.AuthRole">
+		<id column="ID" property="id" jdbcType="INTEGER" />
+		<result column="VERSION" property="version" jdbcType="INTEGER" />
+		<result column="DEL_FLAG" property="delFlag" jdbcType="CHAR" />
+		<result column="CREATER" property="creater" jdbcType="VARCHAR" />
+		<result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="EDITOR" property="editor" jdbcType="VARCHAR" />
+		<result column="EDIT_TIME" property="editTime" jdbcType="TIMESTAMP" />
+  
+		<result column="ROLE_NAME" property="roleName" jdbcType="VARCHAR" />
+		<result column="ROLE_CODE" property="roleCode" jdbcType="VARCHAR" />
+		<result column="REMARK" property="remark" jdbcType="VARCHAR" />
+		
+	</resultMap>
+
+	<sql id="auth_role_table"> auth_role </sql>
+	<sql id="auth_role_columns"> ID, VERSION, DEL_FLAG, CREATER, CREATE_TIME, EDITOR, EDIT_TIME,
+	ROLE_NAME, ROLE_CODE, REMARK </sql>
+	<sql id="auth_role_limit"><if test="pageLimit != null and pageLimit != ''"> limit #{startRowNum}, #{numPerPage} </if></sql>
+	<!-- 动态组装复合查询条件 -->
+	<sql id="auth_role_where">
+		<!-- Equal query -->
+		<if test="roleCode != null and roleCode != ''"> and ROLE_CODE = #{roleCode} </if>
+		<!-- Like query -->
+		<if test="roleName != null and roleName != ''"> and ROLE_NAME like CONCAT(CONCAT('%', #{roleName}), '%') </if>
+	</sql>
+	
+	<!-- selectListBy、selectAll -->
+	<select id="selectListBy" parameterType="java.util.Map" resultMap="resutlId">
+		select
+		<include refid="auth_role_columns"/>
+		from
+		<include refid="auth_role_table" />
+		<where>
+			<include refid="auth_role_where" />
+		</where>
+		order by CREATE_TIME desc
+		<include refid="auth_role_limit" />
+	</select>
+	
+	<select id="selectCountBy" parameterType="java.util.Map" resultType="long">
+		select count(1) from
+		<include refid="auth_role_table" />
+		<where>
+			<include refid="auth_role_where" />
+		</where>
+	</select>
+	
+	<select id="selectByPK" parameterType="java.lang.String" resultMap="resutlId">
+		select
+		<include refid="auth_role_columns"/>
+		from
+		<include refid="auth_role_table" />
+		where ID = #{_parameter}
+	</select>
+	
+	<select id="selectOne" parameterType="java.util.Map" resultMap="resutlId">
+		select
+		<include refid="auth_role_columns"/>
+		from
+		<include refid="auth_role_table" />
+		<where>
+			<include refid="auth_role_where" />
+		</where>
+	</select>
+	
+	<insert id="insert" parameterType="com.yffd.easy.auth.model.AuthRole" keyProperty="id" useGeneratedKeys="true">
+		insert into
+		<include refid="auth_role_table" />
+		(VERSION, DEL_FLAG, CREATER, CREATE_TIME, EDITOR, EDIT_TIME,
+		ROLE_NAME, ROLE_CODE, REMARK)
+		values
+		(0, #{delFlag}, #{creater}, #{createTime}, #{editor}, #{editTime}, 
+		#{roleName}, #{roleCode}, #{remark})
+	</insert>
+	
+	<update id="updateByPK" parameterType="com.yffd.easy.auth.model.AuthRole">
+		update <include refid="auth_role_table" />
+		<set>
+			VERSION = VERSION + 1,
+			EDITOR = #{editor, jdbcType=VARCHAR},
+			EDIT_TIME = #{editTime, jdbcType=TIMESTAMP},
+			ROLE_NAME = #{roleName, jdbcType=VARCHAR},
+			REMARK = #{remark, jdbcType=VARCHAR},
+		</set>
+		where ROLE_CODE = #{roleCode}
+	</update>
+	
+	<delete id="deleteByPK" parameterType="java.lang.String">
+		delete from
+		<include refid="auth_role_table" />
+		where ROLE_CODE = #{_parameter}
+	</delete>
+	
+	<delete id="deleteBy" parameterType="java.util.Map">
+		delete from
+		<include refid="auth_role_table" />
+		<where>
+			<include refid="auth_role_where" />
+		</where>
+	</delete>
+	
+	<delete id="deleteBatch" parameterType="java.util.List">
+		delete from
+		<include refid="auth_role_table" />
+		where ROLE_CODE in 
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">#{item.roleCode}</foreach>
+	</delete>
+	
+	<!-- ##############################   基础sql结束    ############################## -->
+	
+	<sql id="auth_role_resource_table"> auth_role_resource </sql>
+	<sql id="auth_role_user_table"> auth_role_user </sql>
+	
+	<delete id="deleteRoleResource" parameterType="java.lang.String">
+		delete from
+		<include refid="auth_role_resource_table" />
+		where ROLE_CODE = #{_parameter}
+	</delete>
+	
+	<insert id="saveRoleResource" parameterType="java.util.Map">
+		insert into 
+		<include refid="auth_role_resource_table" />
+		(VERSION, DEL_FLAG, CREATER, CREATE_TIME, ROLE_CODE, RS_CODE)
+		values
+		<foreach collection="rsCodes" item="item" index="index" separator="," >  
+		(0, 0, 'admin', #{createTime}, #{roleCode}, #{item})
+    	</foreach>
+	</insert>
+	
+	<delete id="deleteRoleUser" parameterType="java.lang.String">
+		delete from
+		<include refid="auth_role_user_table" />
+		where ROLE_CODE = #{_parameter}
+	</delete>
+	
+	<insert id="saveRoleUser" parameterType="java.util.Map">
+		insert into
+		<include refid="auth_role_user_table" />
+		(VERSION, DEL_FLAG, CREATER, CREATE_TIME, ROLE_CODE, USER_CODE)
+		values
+		<foreach collection="roleCodes" item="item" index="index" separator="," >  
+		(0, 0, 'admin', #{createTime}, #{item}, #{userCode})
+    	</foreach>
+	</insert>
+	
+	<select id="findByUser" parameterType="java.lang.String" resultMap="resutlId">
+		select t.* from (
+			select n.*
+			from
+			<include refid="auth_role_user_table" /> as m
+			left join
+			<include refid="auth_role_table" /> as n 
+			on m.ROLE_CODE=n.ROLE_CODE
+			where m.USER_CODE = #{_parameter}
+			ORDER BY n.CREATE_TIME desc
+		) t where t.ID is not null
+	</select>
+	
+</mapper>
