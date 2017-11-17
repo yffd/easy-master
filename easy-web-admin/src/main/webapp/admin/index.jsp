@@ -13,6 +13,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 <meta http-equiv="description" content="This is my page">
 <title>欢迎</title>
+<link rel="shortcut icon" href="/favicon.ico" />
 <base href="<%=basePath%>">
 <jsp:include page="layout/script.jsp"></jsp:include>
 

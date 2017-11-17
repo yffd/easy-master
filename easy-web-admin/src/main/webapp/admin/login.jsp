@@ -12,6 +12,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>欢迎登陆</title>
+<link rel="shortcut icon" href="/favicon.ico" />
 <base href="<%=basePath%>">
 <link rel="stylesheet" type="text/css" href="static/css/login.css">
 <script type="text/javascript" src="static/js/jquery-1.8.0.min.js"></script>

@@ -30,6 +30,7 @@
 		<property name="filterChainDefinitions">
 			<value>
 				/static/** = anon
+				/favicon.ico = anon
 				/Kaptcha.jpg = anon
 				/admin/noLogin.jsp = anon
 				/admin/unauthorized.jsp = anon
