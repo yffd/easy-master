@@ -17,9 +17,6 @@
 	<modules>
 	    <module>easy-common-core</module>
 	    <module>easy-common-ssm</module>
-<!-- 	    <module>easy-app-service</module> -->
-<!-- 	    <module>easy-app-service-facade</module> -->
-<!-- 	    <module>easy-app-web</module> -->
 	    <module>easy-admin-service</module>
 	    <module>easy-admin-service-facade</module>
 	    <module>easy-web-admin</module>
