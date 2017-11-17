@@ -97,12 +97,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								return row.organization.orgName; 
 							}
 						},
-						{field: 'userState', title: '是否启用', width: parseInt($(this).width()*0.1), align: 'left',
+						{field: 'userStatus', title: '状态', width: parseInt($(this).width()*0.1), align: 'left',
 							formatter: function(value, row) {
-								if("A"==row.userState)
-									return "<font color=green>是<font>";
+								if("A"==row.userStatus)
+									return "<font color=green>激活<font>";
 			            		else
-			            			return "<font color=red>否<font>";
+			            			return "<font color=red>冻结<font>";
 							}
 						},
 // 						{field: 'tel', title: '电话', width: parseInt($(this).width()*0.1), align: 'left'},
