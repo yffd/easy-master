@@ -21,7 +21,7 @@ import org.yffd.easy.common.ssm.dao.IBaseDao;
  * @since		 JDK 1.7+
  * @see 	 
  */
-public class BaseDaoImpl<T extends PersistModel> implements IBaseDao<T> {
+public class BaseDaoImpl<T> implements IBaseDao<T> {
 
     /** mapper xml 中的SQL ID，即statement=selectPage */
 //    public static final String SQL_SELECT_PAGE = "selectPage";

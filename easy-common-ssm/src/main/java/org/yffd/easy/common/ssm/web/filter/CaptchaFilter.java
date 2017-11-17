@@ -26,6 +26,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
  */
 public class CaptchaFilter extends OncePerRequestFilter {
 
+	public static final String CAPTCHA_SESSION_KEY = "CAPTCHA_SESSION_KEY";
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
@@ -74,7 +75,7 @@ public class CaptchaFilter extends OncePerRequestFilter {
 		// 释放图形上下文环境
 		gc.dispose();
 
-		request.getSession().setAttribute("rcCaptcha", rs);
+		request.getSession().setAttribute(CAPTCHA_SESSION_KEY, rs);
 		ImageIO.write(bimg, "jpeg", out);
 		try {
 			out.flush();

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context" 
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+	    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+	    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+	    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
+	    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
+	    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
+	    default-lazy-init="true">
+	
+	<!-- 缓存管理器 使用Ehcache实现 -->
+<!--     <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager"> -->
+<!--         <property name="cacheManagerConfigFile" value="classpath:ehcache.xml"/> -->
+<!--     </bean> -->
+	<bean id="cacheManager" class="com.yffd.easy.common.shiro.cache.SpringCacheManager"/>
+    
+	<!-- 凭证匹配器 -->
+    <bean id="credentialsMatcher" class="com.yffd.easy.common.shiro.credentials.RetryLimitHashedCredentialsMatcher">
+        <property name="hashAlgorithmName" value="md5"/>
+        <property name="hashIterations" value="2"/>
+        <property name="storedCredentialsHexEncoded" value="true"/>
+    </bean>
+    <!-- Realm实现 -->
+    <bean id="accountRealm" class="com.yffd.easy.common.shiro.realm.AccountRealm">
+        <property name="credentialsMatcher" ref="credentialsMatcher"/>
+        <property name="accountService" ref="accountService"/>
+<!--         <property name="cachingEnabled" value="true"/> -->
+<!--         <property name="authenticationCachingEnabled" value="true"/> -->
+<!--         <property name="authenticationCacheName" value="authenticationCache"/> -->
+<!--         <property name="authorizationCachingEnabled" value="true"/> -->
+<!--         <property name="authorizationCacheName" value="authorizationCache"/> -->
+    </bean>
+    <!-- 安全管理器 -->
+    <bean id="securityManager" class="org.apache.shiro.mgt.DefaultSecurityManager">
+        <property name="realms">
+            <list>
+                <ref bean="accountRealm"/>
+            </list>
+        </property>
+<!--         <property name="cacheManager" ref="cacheManager"/> -->
+    </bean>
+    <!-- Shiro生命周期处理器-->
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+    
+    <!-- 相当于调用SecurityUtils.setSecurityManager(securityManager) -->
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="staticMethod" value="org.apache.shiro.SecurityUtils.setSecurityManager"/>
+        <property name="arguments" ref="securityManager"/>
+    </bean>
+    
+    <bean id="passwordSupport" class="com.yffd.easy.common.shiro.support.PasswordSupport"/>
+</beans>

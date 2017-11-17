@@ -111,7 +111,7 @@ public class PersistModel implements Serializable {
      * @param user
      * @param time
      */
-    public void setDefaultAdd(String user, Date time) {
+    private void setDefaultAdd(String user, Date time) {
     	this.setVersion(0);
     	this.setDelFlag("0");
     	this.setCreater(user);
@@ -129,7 +129,7 @@ public class PersistModel implements Serializable {
      * @param user
      * @param time
      */
-    public void setDefaultUpdate(String user, Date time) {
+    private void setDefaultUpdate(String user, Date time) {
     	this.setEditor(user);
     	this.setEditTime(time);
     }

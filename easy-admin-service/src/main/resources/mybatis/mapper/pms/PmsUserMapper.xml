@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yffd.easy.admin.pms.dao.impl.PmsUserDaoImpl">
+
+	<!-- ##############################   基础sql开始   ############################## -->
+	
+	<resultMap id="resutlId" type="com.yffd.easy.admin.pms.model.PmsUser">
+		<id column="ID" property="id" jdbcType="INTEGER" />
+		<result column="VERSION" property="version" jdbcType="INTEGER" />
+		<result column="DEL_FLAG" property="delFlag" jdbcType="CHAR" />
+		<result column="CREATER" property="creater" jdbcType="VARCHAR" />
+		<result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="EDITOR" property="editor" jdbcType="VARCHAR" />
+		<result column="EDIT_TIME" property="editTime" jdbcType="TIMESTAMP" />
+  
+		<result column="USER_NAME" property="userName" jdbcType="VARCHAR" />
+		<result column="USER_CODE" property="userCode" jdbcType="VARCHAR" />
+		<result column="ORG_CODE" property="orgCode" jdbcType="VARCHAR" />
+		<result column="USER_STATUS" property="userStatus" jdbcType="VARCHAR" />
+		<result column="TEL" property="tel" jdbcType="VARCHAR" />
+		<result column="EMAIL" property="email" jdbcType="VARCHAR" />
+		<result column="REMARK" property="remark" jdbcType="VARCHAR" />
+		<result column="PASSWORD" property="password" jdbcType="VARCHAR" />
+		<result column="SALT" property="salt" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<resultMap id="cascadeResutlId" type="com.yffd.easy.admin.pms.model.PmsUser">
+		<id column="ID" property="id" jdbcType="INTEGER" />
+		<result column="VERSION" property="version" jdbcType="INTEGER" />
+		<result column="DEL_FLAG" property="delFlag" jdbcType="CHAR" />
+		<result column="CREATER" property="creater" jdbcType="VARCHAR" />
+		<result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="EDITOR" property="editor" jdbcType="VARCHAR" />
+		<result column="EDIT_TIME" property="editTime" jdbcType="TIMESTAMP" />
+  
+		<result column="USER_NAME" property="userName" jdbcType="VARCHAR" />
+		<result column="USER_CODE" property="userCode" jdbcType="VARCHAR" />
+		<result column="ORG_CODE" property="orgCode" jdbcType="VARCHAR" />
+		<result column="USER_STATUS" property="userStatus" jdbcType="VARCHAR" />
+		<result column="TEL" property="tel" jdbcType="VARCHAR" />
+		<result column="EMAIL" property="email" jdbcType="VARCHAR" />
+		<result column="REMARK" property="remark" jdbcType="VARCHAR" />
+		<association property="organization" javaType="com.yffd.easy.admin.pms.model.PmsOrganization">
+			<id column="ID" property="id" jdbcType="INTEGER" />
+			<result column="_VERSION" property="version" jdbcType="INTEGER" />
+			<result column="_DEL_FLAG" property="delFlag" jdbcType="CHAR" />
+			<result column="_CREATER" property="creater" jdbcType="VARCHAR" />
+			<result column="_CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+			<result column="_EDITOR" property="editor" jdbcType="VARCHAR" />
+			<result column="_EDIT_TIME" property="editTime" jdbcType="TIMESTAMP" />
+			
+			<result column="_ORG_NAME" property="orgName" jdbcType="VARCHAR" />
+			<result column="_ORG_CODE" property="orgCode" jdbcType="VARCHAR" />
+			<result column="_PARENT_CODE" property="parentCode" jdbcType="VARCHAR" />
+			<result column="_FIRST_MANAGER_CODE" property="firstManagerCode" jdbcType="VARCHAR" />
+			<result column="_SECOND_MANAGER_CODE" property="secondManagerCode" jdbcType="VARCHAR" />
+			<result column="_REMARK" property="remark" jdbcType="VARCHAR" />
+		</association>
+	</resultMap>
+
+	<sql id="pms_user_table"> pms_user </sql>
+	<sql id="pms_user_columns"> u.ID, u.VERSION, u.DEL_FLAG, u.CREATER, u.CREATE_TIME, u.EDITOR, u.EDIT_TIME,
+	u.USER_CODE, u.USER_NAME, u.ORG_CODE, u.USER_STATUS, u.TEL, u.EMAIL, u.REMARK, u.PASSWORD, u.SALT </sql>
+	<sql id="pms_user_limit"><if test="pageLimit != null and pageLimit != ''"> limit #{startRowNum}, #{numPerPage} </if></sql>
+	<!-- 动态组装复合查询条件 -->
+	<sql id="pms_user_where">
+		<!-- Equal query -->
+		<if test="userCode != null and userCode != ''"> and u.USER_CODE = #{userCode} </if>
+		<if test="orgCode != null and orgCode != ''"> and u.ORG_CODE = #{orgCode} </if>
+		<if test="userStatus != null and userStatus != ''"> and u.USER_STATUS = #{userStatus} </if>
+		<if test="tel != null and tel != ''"> and u.TEL = #{tel} </if>
+		<if test="email != null and email != ''"> and u.EMAIL = #{email} </if>
+		<!-- Like query -->
+		<if test="userName != null and userName != ''"> and u.USER_NAME like CONCAT(CONCAT('%', #{userName}), '%') </if>
+		<if test="orgName != null and orgName != ''"> and u.ORG_NAME like CONCAT(CONCAT('%', #{orgName}), '%') </if>
+	</sql>
+	
+	<!-- selectListBy、selectAll -->
+	<select id="selectListBy" parameterType="java.util.Map" resultMap="cascadeResutlId">
+		select u.ID, u.VERSION, u.DEL_FLAG, u.CREATER, u.CREATE_TIME, u.EDITOR, u.EDIT_TIME,
+			u.USER_CODE, u.USER_NAME, u.ORG_CODE, u.USER_STATUS, u.TEL, u.EMAIL, u.REMARK,
+			org.ID as _ID, org.VERSION as _VERSION, org.DEL_FLAG as _DEL_FLAG, org.CREATER as _CREATER, org.CREATE_TIME as _CREATE_TIME, org.EDITOR as _EDITOR, org.EDIT_TIME as _EDIT_TIME,
+			org.ORG_CODE as _ORG_CODE, org.ORG_NAME as _ORG_NAME, org.PARENT_CODE as _PARENT_CODE, org.FIRST_MANAGER_CODE as _FIRST_MANAGER_CODE, org.SECOND_MANAGER_CODE as _SECOND_MANAGER_CODE, org.REMARK as _REMARK
+		from pms_user as u
+		LEFT JOIN
+		pms_organization as org
+		ON u.ORG_CODE=org.ORG_CODE
+		<where>
+			<include refid="pms_user_where" />
+		</where>
+		order by u.CREATE_TIME desc
+		<include refid="pms_user_limit" />
+	</select>
+	
+	<select id="selectCountBy" parameterType="java.util.Map" resultType="long">
+		select count(1) from
+		<include refid="pms_user_table" /> as u
+		<where>
+			<include refid="pms_user_where" />
+		</where>
+	</select>
+	
+	<select id="selectByPK" parameterType="java.lang.String" resultMap="resutlId">
+		select
+		<include refid="pms_user_columns"/> as u
+		from
+		<include refid="pms_user_table" />
+		where u.ID = #{_parameter}
+	</select>
+	
+	<select id="selectOne" parameterType="java.util.Map" resultMap="resutlId">
+		select
+		<include refid="pms_user_columns"/>
+		from
+		<include refid="pms_user_table" />  as u
+		<where>
+			<include refid="pms_user_where" />
+		</where>
+	</select>
+	
+	<insert id="insert" parameterType="com.yffd.easy.admin.pms.model.PmsUser" keyProperty="id" useGeneratedKeys="true">
+		insert into
+		<include refid="pms_user_table" />
+		(VERSION, DEL_FLAG, CREATER, CREATE_TIME, EDITOR, EDIT_TIME,
+		USER_CODE, USER_NAME, ORG_CODE, USER_STATUS, TEL, EMAIL, REMARK, PASSWORD, SALT)
+		values
+		(0, #{delFlag}, #{creater}, #{createTime}, #{editor}, #{editTime}, 
+		#{userCode}, #{userName}, #{orgCode}, #{userStatus}, #{tel}, #{email}, #{remark}, #{password}, #{salt})
+	</insert>
+	
+	<update id="updateByPK" parameterType="com.yffd.easy.admin.pms.model.PmsUser">
+		update <include refid="pms_user_table" />
+		<set>
+			version = version + 1,
+			editor = #{editor, jdbcType=VARCHAR},
+			edit_time = #{editTime, jdbcType=TIMESTAMP},
+			<if test="userName != null and userName != ''"> USER_NAME = #{userName, jdbcType=VARCHAR}, </if>
+			<if test="orgCode != null and orgCode != ''"> ORG_CODE = #{orgCode, jdbcType=VARCHAR}, </if>
+			<if test="userStatus != null and userStatus != ''"> USER_STATUS = #{userStatus, jdbcType=VARCHAR}, </if>
+			<if test="tel != null and tel != ''"> TEL = #{tel, jdbcType=VARCHAR}, </if>
+			<if test="email != null and email != ''"> EMAIL = #{email, jdbcType=VARCHAR}, </if>
+			<if test="remark != null and remark != ''"> REMARK = #{remark, jdbcType=VARCHAR}, </if>
+			<if test="password != null and password != ''"> PASSWORD = #{password, jdbcType=VARCHAR}, </if>
+			<if test="salt != null and salt != ''"> SALT = #{salt, jdbcType=VARCHAR}, </if>
+		</set>
+		where USER_CODE = #{userCode}
+	</update>
+	
+	<delete id="deleteByPK" parameterType="java.lang.String">
+		delete from
+		<include refid="pms_user_table" />
+		where USER_CODE = #{_parameter}
+	</delete>
+	
+	<delete id="deleteBy" parameterType="java.util.Map">
+		delete from
+		<include refid="pms_user_table" />
+		<where>
+			<include refid="pms_user_where" />
+		</where>
+	</delete>
+	
+	<delete id="deleteBatch" parameterType="java.util.List">
+		delete from
+		<include refid="pms_user_table" />
+		where USER_CODE in 
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">#{item.userCode}</foreach>
+	</delete>
+	
+	<!-- ##############################   基础sql结束    ############################## -->
+	
+	<select id="findRoles" parameterType="java.lang.String" resultMap="resutlId">
+		select ROLE_CODE from pms_role_user where USER_CODE = #{_parameter}
+	</select>
+	
+	<select id="findResources" parameterType="java.lang.String" resultType="java.lang.String">
+		select RS_CODE from pms_role_user t1
+		left join 
+		pms_role_resource t2
+		on t1.ROLE_CODE = t2.ROLE_CODE
+		where USER_CODE = #{_parameter}
+	</select>
+	
+</mapper>

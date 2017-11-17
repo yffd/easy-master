@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yffd.easy.admin.pms.dao.impl.PmsAccountDaoImpl">
+
+	<!-- ##############################   基础sql开始   ############################## -->
+
+	<resultMap id="resutlId" type="com.yffd.easy.admin.pms.model.PmsAccount">
+		<id column="ID" property="id" jdbcType="INTEGER" />
+		<result column="VERSION" property="version" jdbcType="INTEGER" />
+		<result column="DEL_FLAG" property="delFlag" jdbcType="CHAR" />
+		<result column="CREATER" property="creater" jdbcType="VARCHAR" />
+		<result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="EDITOR" property="editor" jdbcType="VARCHAR" />
+		<result column="EDIT_TIME" property="editTime" jdbcType="TIMESTAMP" />
+		
+		<result column="ACCOUNT_NAME" property="accountName" jdbcType="VARCHAR" />
+		<result column="ACCOUNT_PWD" property="accountPwd" jdbcType="VARCHAR" />
+		<result column="NICK_NAME" property="nickName" jdbcType="VARCHAR" />
+		<result column="SALT" property="salt" jdbcType="VARCHAR" />
+		<result column="STATUS" property="status" jdbcType="CHAR" />
+		<result column="TYPE" property="type" jdbcType="CHAR" />
+		<result column="IS_ONLINE" property="isOnline" jdbcType="CHAR" />
+		<result column="VISIT_IP" property="visitIp" jdbcType="VARCHAR" />
+		<result column="VISIT_COUNT" property="visitCount" jdbcType="INTEGER" />
+		<result column="VISIT_FIRST" property="visitFirst" jdbcType="TIMESTAMP" />
+		<result column="VISIT_PREVIOUS" property="visitPrevious" jdbcType="TIMESTAMP" />
+		<result column="VISIT_LAST" property="visitLast" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<sql id="pms_account_table"> pms_account </sql>
+	<sql id="pms_account_columns"> ID, VERSION, DEL_FLAG, CREATER, CREATE_TIME, EDITOR, EDIT_TIME,
+	 ACCOUNT_NAME, ACCOUNT_PWD, NICK_NAME, SALT, STATUS, TYPE, IS_ONLINE, VISIT_IP, VISIT_COUNT, VISIT_FIRST, VISIT_PREVIOUS, VISIT_LAST </sql>
+	 <sql id="pms_account_limit"><if test="pageLimit != null and pageLimit != ''"> limit #{startRowNum}, #{numPerPage} </if></sql>
+	<!-- 动态组装复合查询条件 -->
+	<sql id="pms_account_where">
+		<!-- Equal query -->
+		<if test="accountName != null and accountName != ''"> and ACCOUNT_NAME= #{accountName} </if>
+		<if test="accountPwd != null and accountPwd != ''"> and ACCOUNT_PWD= #{accountPwd} </if>
+		<if test="status != null and status != ''"> and STATUS= #{status} </if>
+		<if test="type != null and type != ''"> and TYPE= #{type} </if>
+		<!-- Like query -->
+	</sql>
+	
+	<!-- selectListBy、selectAll -->
+	<select id="selectListBy" parameterType="java.util.Map" resultMap="resutlId">
+		select
+		<include refid="pms_account_columns"/>
+		from
+		<include refid="pms_account_table" />
+		<where>
+			<include refid="pms_account_where" />
+		</where>
+		<include refid="pms_account_limit" />
+	</select>
+	
+	<select id="selectCountBy" parameterType="java.util.Map" resultType="long">
+		select count(1) from
+		<include refid="pms_account_table" />
+		<where>
+			<include refid="pms_account_where" />
+		</where>
+	</select>
+	
+	<select id="selectByPK" parameterType="java.lang.String" resultMap="resutlId">
+		select
+		<include refid="pms_account_columns"/>
+		from
+		<include refid="pms_account_table" />
+		where ID = #{_parameter}
+	</select>
+	
+	<select id="selectOne" parameterType="java.util.Map" resultMap="resutlId">
+		select
+		<include refid="pms_account_columns"/>
+		from
+		<include refid="pms_account_table" />
+		<where>
+			<include refid="pms_account_where" />
+		</where>
+	</select>
+	
+	<insert id="insert" parameterType="com.yffd.easy.admin.pms.model.PmsAccount" keyProperty="id" useGeneratedKeys="true">
+		insert into
+		<include refid="pms_account_table" />
+		(VERSION, DEL_FLAG, CREATER, CREATE_TIME, EDITOR, EDIT_TIME,
+		ACCOUNT_NAME, ACCOUNT_PWD, NICK_NAME, SALT, STATUS, TYPE, IS_ONLINE, VISIT_IP, VISIT_COUNT, VISIT_FIRST, VISIT_PREVIOUS, VISIT_LAST)
+		values
+		(0, #{delFlag}, #{creater}, #{createTime}, #{editor}, #{editTime}, 
+		#{accountName}, #{accountPwd}, #{nickName}, #{salt}, #{status}, #{type}, #{isOnline}, #{visitIp}, #{visitCount}, #{visitFirst}, #{visitPrevious}, #{visitLast})
+	</insert>
+	
+	<update id="updateByPK" parameterType="com.yffd.easy.admin.pms.model.PmsAccount">
+		update <include refid="pms_account_table" />
+		<set>
+			VERSION = version + 1,
+			EDITOR = #{editor, jdbcType=VARCHAR},
+			EDIT_TIME = #{editTime, jdbcType=TIMESTAMP},
+			ACCOUNT_NAME = #{accountName, jdbcType=VARCHAR},
+			ACCOUNT_PWD = #{accountPwd, jdbcType=VARCHAR},
+			NICK_NAME = #{nickName, jdbcType=VARCHAR},
+			SALT = #{salt, jdbcType=VARCHAR},
+			STATUS = #{status, jdbcType=CHAR},
+			TYPE = #{type, jdbcType=CHAR},
+			IS_ONLINE = #{isOnline, jdbcType=CHAR},
+			VISIT_IP = #{visitIp, jdbcType=VARCHAR},
+			VISIT_COUNT = #{visitCount, jdbcType=CHAR},
+			VISIT_FIRST = #{visitFirst, jdbcType=TIMESTAMP},
+			VISIT_PREVIOUS = #{visitPrevious, jdbcType=TIMESTAMP},
+			VISIT_LAST = #{visitLast, jdbcType=TIMESTAMP},
+		</set>
+		where ACCOUNT_NAME = #{accountName}
+	</update>
+	
+	<delete id="deleteByPK" parameterType="java.lang.String">
+		delete from
+		<include refid="pms_account_table" />
+		where ACCOUNT_NAME = #{_parameter}
+	</delete>
+	
+	<delete id="deleteBy" parameterType="java.util.Map">
+		delete from
+		<include refid="pms_account_table" />
+		<where>
+			<include refid="pms_account_where" />
+		</where>
+	</delete>
+	
+	<delete id="deleteBatch" parameterType="java.util.List">
+		delete from
+		<include refid="pms_account_table" />
+		where ACCOUNT_NAME in
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">#{item.id}</foreach>
+	</delete>
+	
+	<!-- ##############################   基础sql结束    ############################## -->
+	
+</mapper>

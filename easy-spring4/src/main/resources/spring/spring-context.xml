@@ -1,19 +1,58 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context" xmlns:aop="http://www.springframework.org/schema/aop" xsi:schemaLocation="
-		http://www.springframework.org/schema/beans
-		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
-		http://www.springframework.org/schema/context
-		http://www.springframework.org/schema/context/spring-context-3.2.xsd
-		http://www.springframework.org/schema/aop
-		http://www.springframework.org/schema/aop/spring-aop-3.2.xsd" default-autowire="byName" default-lazy-init="false">
-
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context" 
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+	    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+	    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+	    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
+	    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
+	    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
+	    default-lazy-init="true">
+	    
 	<!-- 采用注释的方式配置bean -->
 	<context:annotation-config />
 
-	<import resource="classpath:spring/spring-shiro.xml" />
+	<import resource="classpath:spring/spring-shiro-web.xml" />
 	
-	<!-- 缓存管理器 -->
-	<bean id="cacheManager" class="com.roncoo.pay.permission.shiro.spring.SpringCacheManagerWrapper">
-		<property name="cacheManager" ref="springCacheManager" />
+	<!-- shiro redis start 可选 -->
+	<import resource="classpath:spring/spring-shiro-cache-redis.xml" />
+	<bean id="accountService" class="com.yffd.easy.common.shiro.service.impl.DefaultAccountServiceImpl">
+		<property name="redisTemplate" ref="redisTemplate" />
 	</bean>
+	<!-- shiro redis end -->
+	
+	<!-- Shiro的Web过滤器 -->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"/>
+        <property name="loginUrl" value="/jsp/login.jsp"/>
+        <property name="unauthorizedUrl" value="/jsp/unauthorized.jsp"/>
+        <property name="filters">
+            <util:map>
+                <entry key="authc" value-ref="formAuthenticationFilter"/>
+            </util:map>
+        </property>
+        <property name="filterChainDefinitions">
+            <ref bean="shiroFilterChainDefinitions"/>
+        </property>
+    </bean>
+    
+	<!-- Shiro权限过滤过滤器定义 -->
+    <bean name="shiroFilterChainDefinitions" class="java.lang.String">
+        <constructor-arg>
+            <value>
+                /index2.jsp = anon
+                /unauthorized.jsp = anon
+                /login.jsp = authc
+                /logout = logout
+                /authenticated.jsp = authc
+                /** = user
+            </value>
+        </constructor-arg>
+    </bean>
+    
 </beans>

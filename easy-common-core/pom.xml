@@ -13,10 +13,11 @@
   <name>easy-common-core</name>
   <url>http://maven.apache.org</url>
   <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    
   </properties>
   
   <dependencies>
+
   	<!-- Logging start -->
 	<dependency>
 		<groupId>org.slf4j</groupId>
@@ -31,7 +32,7 @@
 	<!-- Servlet start -->
 	<dependency>
 		<groupId>javax.servlet</groupId>
-		<artifactId>servlet-api</artifactId>
+		<artifactId>javax.servlet-api</artifactId>
 		<scope>provided</scope>
 	</dependency>
 	<!-- Servlet end -->

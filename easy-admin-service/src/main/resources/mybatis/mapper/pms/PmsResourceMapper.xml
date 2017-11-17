@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yffd.easy.admin.pms.dao.impl.PmsResourceDaoImpl">
+
+	<!-- ##############################   基础sql开始   ############################## -->
+	
+	<resultMap id="resutlId" type="com.yffd.easy.admin.pms.model.PmsResource">
+		<id column="ID" property="id" jdbcType="INTEGER" />
+		<result column="VERSION" property="version" jdbcType="INTEGER" />
+		<result column="DEL_FLAG" property="delFlag" jdbcType="CHAR" />
+		<result column="CREATER" property="creater" jdbcType="VARCHAR" />
+		<result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="EDITOR" property="editor" jdbcType="VARCHAR" />
+		<result column="EDIT_TIME" property="editTime" jdbcType="TIMESTAMP" />
+		
+		<result column="RS_NAME" property="rsName" jdbcType="VARCHAR" />
+		<result column="RS_CODE" property="rsCode" jdbcType="VARCHAR" />
+		<result column="PARENT_CODE" property="parentCode" jdbcType="VARCHAR" />
+		<result column="IN_URL" property="inUrl" jdbcType="VARCHAR" />
+		<result column="RS_Type" property="rsType" jdbcType="CHAR" />
+		<result column="RS_NUM" property="rsNum" jdbcType="INTEGER" />
+		<result column="RS_STATE" property="rsState" jdbcType="CHAR" />
+		<result column="REMARK" property="remark" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="pms_resource_table"> pms_resource </sql>
+	<sql id="pms_resource_column"> ID, VERSION, DEL_FLAG, CREATER, CREATE_TIME, EDITOR, EDIT_TIME, 
+	RS_NAME, RS_CODE, PARENT_CODE, IN_URL, RS_TYPE, RS_NUM, RS_STATE, REMARK </sql>
+	<sql id="pms_resource_limit"><if test="pageLimit != null and pageLimit != ''"> limit #{startRowNum}, #{numPerPage} </if></sql>
+	<!-- 动态组装复合查询条件 -->
+	<sql id="pms_resource_where">
+		<!-- Equal query -->
+		<if test="rsCode != null and rsCode != ''"> and RS_CODE = #{rsCode} </if>
+		<if test="parentCode != null and parentCode != ''"> and PARENT_CODE = #{parentCode} </if>
+		<if test="rsType != null and rsType != ''"> and RS_TYPE = #{rsType} </if>
+		<if test="rsState != null and rsState != ''"> and RS_STATE = #{rsState} </if>
+		<!-- Like query -->
+		<if test="rsName != null and rsName != ''"> and RS_NAME like CONCAT(CONCAT('%', #{rsName}), '%') </if>
+	</sql>
+	
+	<!-- selectListBy、selectAll -->
+	<select id="selectListBy" parameterType="java.util.Map" resultMap="resutlId">
+		select
+		<include refid="pms_resource_column"/>
+		from
+		<include refid="pms_resource_table" />
+		<where>
+			<include refid="pms_resource_where" />
+		</where>
+		order by RS_NUM
+		<include refid="pms_resource_limit" />
+	</select>
+	
+	<select id="selectCountBy" parameterType="java.util.Map" resultType="long">
+		select count(1) from
+		<include refid="pms_resource_table" />
+		<where>
+			<include refid="pms_resource_where" />
+		</where>
+	</select>
+	
+	<select id="selectByPK" parameterType="java.lang.String" resultMap="resutlId">
+		select
+		<include refid="pms_resource_column"/>
+		from
+		<include refid="pms_resource_table" />
+		where ID = #{_parameter}
+	</select>
+	
+	<select id="selectOne" parameterType="java.util.Map" resultMap="resutlId">
+		select
+		<include refid="pms_resource_column"/>
+		from
+		<include refid="pms_resource_table" />
+		<where>
+			<include refid="pms_resource_where" />
+		</where>
+	</select>
+	
+	<insert id="insert" parameterType="com.yffd.easy.admin.pms.model.PmsResource" keyProperty="id" useGeneratedKeys="true">
+		insert into
+		<include refid="pms_resource_table" />
+		(VERSION, DEL_FLAG, CREATER, CREATE_TIME, EDITOR, EDIT_TIME, 
+		RS_NAME, RS_CODE, PARENT_CODE, IN_URL, RS_TYPE, RS_NUM, RS_STATE, REMARK)
+		values
+		(0, #{delFlag}, #{creater}, #{createTime}, #{editor}, #{editTime},
+		#{rsName}, #{rsCode}, #{parentCode}, #{inUrl}, #{rsType}, #{rsNum}, #{rsState}, #{remark})
+	</insert>
+
+	<update id="updateByPK" parameterType="com.yffd.easy.admin.pms.model.PmsResource">
+		update <include refid="pms_resource_table" />
+		<set>
+			VERSION = VERSION + 1,
+			EDITOR = #{editor, jdbcType=VARCHAR},
+			EDIT_TIME = #{editTime, jdbcType=TIMESTAMP},
+			RS_NAME = #{rsName, jdbcType=VARCHAR},
+			PARENT_CODE = #{parentCode, jdbcType=VARCHAR},
+			IN_URL = #{inUrl, jdbcType=VARCHAR},
+			RS_TYPE = #{rsType, jdbcType=CHAR},
+			RS_NUM = #{rsNum, jdbcType=FLOAT},
+			RS_STATE = #{rsState, jdbcType=CHAR},
+			REMARK = #{remark, jdbcType=VARCHAR},
+		</set>
+		where RS_CODE = #{rsCode}
+	</update>
+	
+	<delete id="deleteByPK" parameterType="java.lang.String">
+		delete from
+		<include refid="pms_resource_table" />
+		where RS_CODE = #{_parameter}
+	</delete>
+	
+	<delete id="deleteBy" parameterType="java.util.Map">
+		delete from
+		<include refid="pms_resource_table" />
+		<where>
+			<include refid="pms_resource_where" />
+		</where>
+	</delete>
+	
+	<delete id="deleteBatch" parameterType="java.util.List">
+		delete from
+		<include refid="pms_resource_table" />
+		where RS_CODE in 
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">#{item.rsCode}</foreach>
+	</delete>
+	
+	<!-- ##############################   基础sql结束    ############################## -->
+	
+	<select id="findByRole" parameterType="java.lang.String" resultMap="resutlId">
+		select t.* from (
+			select n.*
+			from
+			pms_role_resource as m
+			left join
+			<include refid="pms_resource_table" /> as n
+			on m.RS_CODE=n.RS_CODE
+			where m.ROLE_CODE = #{_parameter}
+		) t where t.ID is not null
+	</select>
+	
+	<select id="findByUser" parameterType="java.lang.String" resultMap="resutlId">
+		select t.* from (
+			select n.*
+			from
+			pms_role_user as u
+			left join pms_role_resource as m on u.ROLE_CODE=m.ROLE_CODE
+			left join pms_resource as n on m.RS_CODE=n.RS_CODE
+			where u.USER_CODE=#{_parameter}
+		) t where t.ID is not null
+	</select>
+	
+</mapper>

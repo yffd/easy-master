@@ -68,5 +68,11 @@ public class SerializeUtils {
         }
         return obj;
     }
+    
+    public static void main(String[] args) {
+    	byte[] key = SerializeUtils.serialize("admin");
+    	String value = (String) SerializeUtils.deserialize(key);
+    	System.out.println(value);
+	}
 }
 
