@@ -22,7 +22,7 @@
 	<sql id="pms_role_table"> pms_role </sql>
 	<sql id="pms_role_columns"> ID, VERSION, DEL_FLAG, CREATER, CREATE_TIME, EDITOR, EDIT_TIME,
 	ROLE_NAME, ROLE_CODE, REMARK </sql>
-	<sql id="pms_role_limit"><if test="pageLimit != null and pageLimit != ''"> limit #{startRowNum}, #{numPerPage} </if></sql>
+	<sql id="pms_role_limit"><if test="pageLimit != null and pageLimit != ''"> limit #{pageStartRow}, #{pageLimit} </if></sql>
 	<!-- 动态组装复合查询条件 -->
 	<sql id="pms_role_where">
 		<!-- Equal query -->

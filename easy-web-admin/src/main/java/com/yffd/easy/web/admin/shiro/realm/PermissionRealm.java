@@ -19,11 +19,11 @@ import org.apache.shiro.util.ByteSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.yffd.easy.common.core.util.ValidUtils;
 
 import com.yffd.easy.admin.login.model.LoginInfo;
 import com.yffd.easy.admin.login.model.UsernamePasswordInfo;
 import com.yffd.easy.admin.login.service.LoginService;
+import com.yffd.easy.common.core.util.ValidUtils;
 
 /**
  * @Description  简单描述该类的功能（可选）.

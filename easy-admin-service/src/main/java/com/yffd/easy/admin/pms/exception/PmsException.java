@@ -1,6 +1,6 @@
 package com.yffd.easy.admin.pms.exception;
 
-import org.yffd.easy.common.core.exception.SysException;
+import com.yffd.easy.common.core.exception.SysException;
 
 /**
  * @Description  简单描述该类的功能（可选）.

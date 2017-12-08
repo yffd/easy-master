@@ -1,11 +1,11 @@
-package org.yffd.easy.common.core.view.support;
+package com.yffd.easy.common.core.view.support;
 
 import java.util.List;
 
-import org.yffd.easy.common.core.page.PageParam;
-import org.yffd.easy.common.core.page.PageResult;
-import org.yffd.easy.common.core.view.vo.DataGridVO;
-import org.yffd.easy.common.core.view.vo.SearchBoxVO;
+import com.yffd.easy.common.core.page.PageParam;
+import com.yffd.easy.common.core.page.PageResult;
+import com.yffd.easy.common.core.view.vo.DataGridVO;
+import com.yffd.easy.common.core.view.vo.SearchBoxVO;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -27,7 +27,7 @@ public class ViewModelSupport {
 	public DataGridVO toDataGrid(PageResult<?> pageResult) {
 		DataGridVO vo = new DataGridVO();
 		vo.setRows(pageResult.getRecordList());
-		Long total = (long) pageResult.getPageInfo().getTotalRecord();
+		Long total = (long) pageResult.getPageParam().getTotalRecord();
 		vo.setTotal(total);
 		return vo;
 	}

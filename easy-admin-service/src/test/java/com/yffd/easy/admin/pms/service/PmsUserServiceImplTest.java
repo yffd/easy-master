@@ -4,12 +4,12 @@ import java.util.Date;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.yffd.easy.common.core.page.PageParam;
-import org.yffd.easy.common.core.page.PageResult;
 
 import com.yffd.easy.admin.pms.SpringBaseTestCase;
 import com.yffd.easy.admin.pms.model.PmsUser;
 import com.yffd.easy.admin.pms.service.PmsUserService;
+import com.yffd.easy.common.core.page.PageParam;
+import com.yffd.easy.common.core.page.PageResult;
 
 /**
  * @Description  简单描述该类的功能（可选）.

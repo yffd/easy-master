@@ -61,7 +61,7 @@
 	<sql id="pms_user_table"> pms_user </sql>
 	<sql id="pms_user_columns"> u.ID, u.VERSION, u.DEL_FLAG, u.CREATER, u.CREATE_TIME, u.EDITOR, u.EDIT_TIME,
 	u.USER_CODE, u.USER_NAME, u.ORG_CODE, u.USER_STATUS, u.TEL, u.EMAIL, u.REMARK, u.PASSWORD, u.SALT </sql>
-	<sql id="pms_user_limit"><if test="pageLimit != null and pageLimit != ''"> limit #{startRowNum}, #{numPerPage} </if></sql>
+	<sql id="pms_user_limit"><if test="pageLimit != null and pageLimit != ''"> limit #{pageStartRow}, #{pageLimit} </if></sql>
 	<!-- 动态组装复合查询条件 -->
 	<sql id="pms_user_where">
 		<!-- Equal query -->

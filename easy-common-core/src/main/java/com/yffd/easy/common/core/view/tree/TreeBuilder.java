@@ -1,4 +1,4 @@
-package org.yffd.easy.common.core.view.tree;
+package com.yffd.easy.common.core.view.tree;
 
 import java.util.ArrayList;
 import java.util.List;

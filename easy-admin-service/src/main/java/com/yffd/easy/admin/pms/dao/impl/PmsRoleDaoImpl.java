@@ -6,12 +6,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Repository;
-import org.yffd.easy.common.core.exception.DaoException;
-import org.yffd.easy.common.core.util.ValidUtils;
-import org.yffd.easy.common.ssm.dao.impl.BaseDaoImpl;
 
 import com.yffd.easy.admin.pms.dao.PmsRoleDao;
 import com.yffd.easy.admin.pms.model.PmsRole;
+import com.yffd.easy.common.core.exception.DaoException;
+import com.yffd.easy.common.core.util.ValidUtils;
+import com.yffd.easy.common.support.dao.impl.BaseDaoImpl;
 
 /**
  * @Description  系统模块：角色管理.

@@ -1,4 +1,4 @@
-package org.yffd.easy.common.core.util;
+package com.yffd.easy.common.core.util;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

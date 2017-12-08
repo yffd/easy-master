@@ -6,12 +6,12 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.yffd.easy.common.core.util.ValidUtils;
 
 import com.yffd.easy.admin.pms.dao.PmsResourceDao;
 import com.yffd.easy.admin.pms.model.PmsResource;
 import com.yffd.easy.admin.pms.model.PmsUser;
 import com.yffd.easy.admin.pms.service.PmsResourceService;
+import com.yffd.easy.common.core.util.ValidUtils;
 
 /**
  * @Description  简单描述该类的功能（可选）.

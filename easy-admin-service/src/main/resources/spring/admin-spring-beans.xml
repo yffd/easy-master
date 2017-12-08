@@ -21,7 +21,9 @@
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/> 
     </context:component-scan>
     
-	<import resource="classpath:spring/spring-dao.xml" />
-	<import resource="classpath:spring/spring-datasource.xml" />
+    <context:property-placeholder ignore-unresolvable="true" local-override="true"
+                                  location="classpath*:admin.jdbc.properties"/>
+                                  
+	<import resource="classpath:spring/admin-spring-orm.xml" />
     
 </beans>

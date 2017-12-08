@@ -1,6 +1,6 @@
-package org.yffd.easy.common.core.view.vo;
+package com.yffd.easy.common.core.view.vo;
 
-import org.yffd.easy.common.core.view.tree.TreeNode;
+import com.yffd.easy.common.core.view.tree.TreeNode;
 
 /**
  * @Description  简单描述该类的功能（可选）.

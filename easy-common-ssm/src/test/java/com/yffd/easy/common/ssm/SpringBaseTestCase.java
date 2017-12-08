@@ -1,4 +1,4 @@
-package org.yffd.easy.common.ssm;
+package com.yffd.easy.common.ssm;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 @ContextConfiguration({
     "classpath:syscfg/spring-core-cfg.xml"
 })
-@TransactionConfiguration(transactionManager="default_txManager") //可选，默认为transactionManager
+@TransactionConfiguration(transactionManager="txManager") //可选，默认为transactionManager
 @Transactional
 public class SpringBaseTestCase {
 

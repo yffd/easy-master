@@ -30,7 +30,7 @@
 	<sql id="pms_account_table"> pms_account </sql>
 	<sql id="pms_account_columns"> ID, VERSION, DEL_FLAG, CREATER, CREATE_TIME, EDITOR, EDIT_TIME,
 	 ACCOUNT_NAME, ACCOUNT_PWD, NICK_NAME, SALT, STATUS, TYPE, IS_ONLINE, VISIT_IP, VISIT_COUNT, VISIT_FIRST, VISIT_PREVIOUS, VISIT_LAST </sql>
-	 <sql id="pms_account_limit"><if test="pageLimit != null and pageLimit != ''"> limit #{startRowNum}, #{numPerPage} </if></sql>
+	 <sql id="pms_account_limit"><if test="pageLimit != null and pageLimit != ''"> limit #{pageStartRow}, #{pageLimit} </if></sql>
 	<!-- 动态组装复合查询条件 -->
 	<sql id="pms_account_where">
 		<!-- Equal query -->

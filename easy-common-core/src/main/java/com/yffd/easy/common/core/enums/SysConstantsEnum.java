@@ -1,4 +1,4 @@
-package org.yffd.easy.common.core.enums;
+package com.yffd.easy.common.core.enums;
 
 /**
  * @Description  系统常量枚举类.

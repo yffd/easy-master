@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>  
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.yffd.easy.common.ssm.dao.impl.BaseDaoImpl">
-	<resultMap id="resultId" type="org.yffd.easy.common.ssm.model.TestModel">
+<mapper namespace="com.yffd.easy.common.support.dao.impl.BaseDaoImpl">
+	<resultMap id="resultId" type="com.yffd.easy.common.ssm.model.TestModel">
 		<result property="id" column="id"/>
 		<result property="userCode" column="user_code"/>
 		<result property="userName" column="user_name"/>
@@ -108,7 +108,7 @@
 		</where>
 	</update>
 	
-	<update id="batchUpdateByIds" parameterType="org.yffd.easy.common.ssm.model.TestModel">
+	<update id="batchUpdateByIds" parameterType="com.yffd.easy.common.ssm.model.TestModel">
 		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
 			update t_test
             <set>
@@ -120,7 +120,7 @@
         </foreach>
 	</update>
 	
-	<update id="updateByPrimaryKey" parameterType="org.yffd.easy.common.ssm.model.TestModel">
+	<update id="updateByPrimaryKey" parameterType="com.yffd.easy.common.ssm.model.TestModel">
 		update t_test
 		<set>
 			<if test="userName != null and userName !='' ">user_name=#{userName},</if>
@@ -130,7 +130,7 @@
 		where id=#{id}
 	</update>
 	
-	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="org.yffd.easy.common.ssm.model.TestModel">
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.yffd.easy.common.ssm.model.TestModel">
 		insert into t_test(user_code, user_name, create_time) 
 			values(#{userCode}, #{userName}, current_timestamp)
 	</insert>

@@ -1,4 +1,4 @@
-package org.yffd.easy.common.core.model;
+package com.yffd.easy.common.core.model;
 
 import java.io.Serializable;
 

@@ -1,21 +1,12 @@
-package org.yffd.easy.common.ssm.dao.impl;
+package com.yffd.easy.common.ssm.dao.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.yffd.easy.common.core.page.PageParam;
-import org.yffd.easy.common.core.page.PageResult;
-import org.yffd.easy.common.core.util.ValidUtils;
-import org.yffd.easy.common.ssm.dao.IBaseDao;
-import org.yffd.easy.common.ssm.model.TestModel;
+
+import com.yffd.easy.common.ssm.model.TestModel;
+import com.yffd.easy.common.support.dao.IBaseDao;
 
 /**
  * @Description  简单描述该类的功能（可选）.

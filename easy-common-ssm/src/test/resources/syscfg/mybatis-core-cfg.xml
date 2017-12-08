@@ -21,8 +21,8 @@
     
      <plugins>
 		<!--分页拦截器 -->
-     	<plugin interceptor="org.yffd.easy.common.core.mybatis.PaginationExecutorQueryInterceptor" />
-     	<plugin interceptor="org.yffd.easy.common.core.mybatis.PaginationResultSetInterceptor" />
+     	<plugin interceptor="com.yffd.easy.common.core.mybatis.PaginationExecutorQueryInterceptor" />
+     	<plugin interceptor="com.yffd.easy.common.core.mybatis.PaginationResultSetInterceptor" />
      </plugins>
     
 </configuration>

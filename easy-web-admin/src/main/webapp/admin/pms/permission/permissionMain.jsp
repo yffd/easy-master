@@ -74,7 +74,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		$dg_user.datagrid({
 			url:'pms/user/findPage',
 		    width: 'auto',
-			height: $(this).height()-90,
+			height: $(this).height()-120,
 			pagination: true,
 			pageSize: commonui.pageSize,
 			rownumbers: true,

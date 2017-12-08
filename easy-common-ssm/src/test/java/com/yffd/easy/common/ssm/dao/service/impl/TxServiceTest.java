@@ -1,4 +1,4 @@
-package org.yffd.easy.common.ssm.dao.service.impl;
+package com.yffd.easy.common.ssm.dao.service.impl;
 
 import java.util.Date;
 
@@ -7,7 +7,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.yffd.easy.common.ssm.model.TestModel;
+
+import com.yffd.easy.common.ssm.model.TestModel;
 
 /**
  * @Description  简单描述该类的功能（可选）.

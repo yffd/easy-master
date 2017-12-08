@@ -1,4 +1,4 @@
-package org.yffd.easy.common.core.db.dialect;
+package com.yffd.easy.common.core.db.dialect;
 /**
  * @Description  数据库方言接口.
  * @Date		 2017年5月19日 下午3:25:23 <br/>

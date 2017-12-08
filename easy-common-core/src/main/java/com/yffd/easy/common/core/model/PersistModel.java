@@ -1,10 +1,10 @@
-package org.yffd.easy.common.core.model;
+package com.yffd.easy.common.core.model;
 
 import java.io.Serializable;
 import java.util.Date;
 
-import org.yffd.easy.common.core.enums.SysConstantsEnum;
-import org.yffd.easy.common.core.util.RandomUtils;
+import com.yffd.easy.common.core.enums.SysConstantsEnum;
+import com.yffd.easy.common.core.util.RandomUtils;
 
 /**
  * @Description  简单描述该类的功能（可选）.

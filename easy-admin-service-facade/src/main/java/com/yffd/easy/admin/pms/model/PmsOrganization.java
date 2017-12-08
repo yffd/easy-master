@@ -1,6 +1,6 @@
 package com.yffd.easy.admin.pms.model;
 
-import org.yffd.easy.common.core.model.PersistModel;
+import com.yffd.easy.common.core.model.PersistModel;
 
 /**
  * @Description  系统模块：组织机构.

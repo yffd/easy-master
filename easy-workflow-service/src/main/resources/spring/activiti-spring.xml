@@ -5,10 +5,10 @@
 	xmlns:p="http://www.springframework.org/schema/p"
 	xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="
-    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
-    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
-    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
-    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
+    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
     ">
 
   <bean id="processEngineConfiguration" class="org.activiti.spring.SpringProcessEngineConfiguration">
@@ -27,7 +27,19 @@
 	full: 这个是最高级别的历史信息存档，同样也是最慢的。 这个级别存储发生在审核以及所有其它细节的信息，主要是更新流程变量。
 	 -->
 	<property name="history" value="full" />
-		
+	
+	<!-- 执行自定义SQL -->
+	<property name="customMybatisMappers">
+	  <set>
+	    <value>com.yffd.easy.workflow.mapper.ProcessDefinitionMapper</value>
+	  </set>
+	</property>
+	<property name="customMybatisXMLMappers">
+	  <set>
+	    <value>mybatis/mapper/workflow/ProcessDefinitionMapper.xml</value>
+	  </set>
+	</property>
+
   </bean>
 
   <bean id="processEngine" class="org.activiti.spring.ProcessEngineFactoryBean">

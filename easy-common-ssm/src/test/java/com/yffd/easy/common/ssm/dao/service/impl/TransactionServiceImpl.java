@@ -1,11 +1,12 @@
-package org.yffd.easy.common.ssm.dao.service.impl;
+package com.yffd.easy.common.ssm.dao.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.yffd.easy.common.core.exception.SysException;
-import org.yffd.easy.common.ssm.dao.IBaseDao;
-import org.yffd.easy.common.ssm.model.TestModel;
+
+import com.yffd.easy.common.core.exception.SysException;
+import com.yffd.easy.common.ssm.model.TestModel;
+import com.yffd.easy.common.support.dao.IBaseDao;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -21,7 +22,7 @@ public class TransactionServiceImpl {
     private IBaseDao<TestModel> baseDao;
     
     @Transactional(rollbackFor = SysException.class)
-//    @Transactional(value = "default_txManager", rollbackFor = BizException.class, readOnly = false, propagation = Propagation.REQUIRED)
+//    @Transactional(value = "txManager", rollbackFor = BizException.class, readOnly = false, propagation = Propagation.REQUIRED)
     public void txInsertAndUpdate(TestModel insert, TestModel update) {
         int restult1 = this.baseDao.insert(insert);
         System.out.println(">>>result1="+restult1);

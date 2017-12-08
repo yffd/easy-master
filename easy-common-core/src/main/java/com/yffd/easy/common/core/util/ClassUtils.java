@@ -1,4 +1,4 @@
-package org.yffd.easy.common.core.util;
+package com.yffd.easy.common.core.util;
 
 /**
  * @Description  函数工具类：类.

@@ -1,4 +1,4 @@
-package org.yffd.easy.common.core.exception;
+package com.yffd.easy.common.core.exception;
 
 /**
  * @Description  DAO异常封装.

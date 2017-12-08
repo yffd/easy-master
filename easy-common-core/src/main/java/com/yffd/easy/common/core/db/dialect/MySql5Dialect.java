@@ -1,4 +1,4 @@
-package org.yffd.easy.common.core.db.dialect;
+package com.yffd.easy.common.core.db.dialect;
 /**
  * @Description  简单描述该类的功能（可选）.
  * @Date		 2017年5月19日 下午3:25:59 <br/>

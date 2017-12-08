@@ -15,13 +15,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.yffd.easy.common.core.model.RespModel;
 
 import com.yffd.easy.admin.login.model.LoginInfo;
 import com.yffd.easy.admin.pms.model.PmsOrganization;
 import com.yffd.easy.admin.pms.model.PmsUser;
 import com.yffd.easy.admin.pms.service.PmsOrganizationService;
 import com.yffd.easy.admin.pms.service.PmsUserService;
+import com.yffd.easy.common.core.model.RespModel;
 import com.yffd.easy.web.admin.AdminBaseController;
 
 /**

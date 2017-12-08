@@ -1,6 +1,6 @@
 package com.yffd.easy.admin.pms.model;
 
-import org.yffd.easy.common.core.model.PersistModel;
+import com.yffd.easy.common.core.model.PersistModel;
 
 /**
  * @Description  简单描述该类的功能（可选）.

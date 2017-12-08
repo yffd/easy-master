@@ -24,7 +24,7 @@
 	<sql id="pms_organization_table"> pms_organization </sql>
 	<sql id="pms_organization_columns"> ID, VERSION, DEL_FLAG, CREATER, CREATE_TIME, EDITOR, EDIT_TIME,
 	 ORG_NAME, ORG_CODE, PARENT_CODE, FIRST_MANAGER_CODE, SECOND_MANAGER_CODE, REMARK  </sql>
-	 <sql id="pms_organization_limit"><if test="pageLimit != null and pageLimit != ''"> limit #{startRowNum}, #{numPerPage} </if></sql>
+	 <sql id="pms_organization_limit"><if test="pageLimit != null and pageLimit != ''"> limit #{pageStartRow}, #{pageLimit} </if></sql>
 	<!-- 动态组装复合查询条件 -->
 	<sql id="pms_organization_where">
 		<!-- Equal query -->

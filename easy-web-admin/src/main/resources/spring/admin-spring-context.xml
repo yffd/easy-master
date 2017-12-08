@@ -11,8 +11,8 @@
 	<!-- 采用注释的方式配置bean -->
 	<context:annotation-config />
 
-	<import resource="classpath:spring/spring-context-service.xml" />
+	<import resource="classpath:spring/admin-spring-beans.xml" />
 	<import resource="classpath:spring/spring-shiro-web.xml" />
-	<import resource="classpath:spring/spring-shiro-cache-redis.xml" />
+<!-- 	<import resource="classpath:spring/spring-shiro-cache-redis.xml" /> -->
 
 </beans>

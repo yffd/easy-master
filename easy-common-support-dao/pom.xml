@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.yffd.easy</groupId>
+    <artifactId>easy-master</artifactId>
+    <version>0.0.1</version>
+  </parent>
+  <groupId>com.yffd.easy</groupId>
+  <artifactId>easy-common-support-dao</artifactId>
+  <version>0.0.1</version>
+  <name>easy-common-support-dao</name>
+  <url>http://maven.apache.org</url>
+  <properties>
+  	<easy.common.core.version>0.0.1</easy.common.core.version>
+  	<!-- spring -->
+	<spring.version>4.2.6.RELEASE</spring.version>
+    <!-- mybatis -->
+	<mybatis.version>3.4.0</mybatis.version>
+	
+  </properties>
+  <dependencies>
+  	<dependency>
+		<groupId>com.yffd.easy</groupId>
+		<artifactId>easy-common-core</artifactId>
+		<version>${easy.common.core.version}</version>
+		<scope>provided</scope>
+	</dependency>
+	
+	<!-- spring -->
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-beans</artifactId>
+		<version>${spring.version}</version>
+		<scope>provided</scope>
+	</dependency>
+		
+  	<!-- mybatis begin -->
+	<dependency>
+		<groupId>org.mybatis</groupId>
+		<artifactId>mybatis</artifactId>
+		<version>${mybatis.version}</version>
+		<scope>provided</scope>
+	</dependency>
+	<!-- mybatis end -->
+		
+  </dependencies>
+</project>

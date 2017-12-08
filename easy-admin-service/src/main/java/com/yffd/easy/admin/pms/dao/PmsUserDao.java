@@ -2,9 +2,8 @@ package com.yffd.easy.admin.pms.dao;
 
 import java.util.List;
 
-import org.yffd.easy.common.ssm.dao.IBaseDao;
-
 import com.yffd.easy.admin.pms.model.PmsUser;
+import com.yffd.easy.common.support.dao.IBaseDao;
 
 /**
  * @Description  系统模块：用户管理.

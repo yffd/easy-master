@@ -6,7 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.web.filter.AccessControlFilter;
 import org.apache.shiro.web.util.WebUtils;
-import org.yffd.easy.common.ssm.web.filter.CaptchaFilter;
+
+import com.yffd.easy.common.support.web.filter.CaptchaFilter;
 
 /**
  * @Description  简单描述该类的功能（可选）.

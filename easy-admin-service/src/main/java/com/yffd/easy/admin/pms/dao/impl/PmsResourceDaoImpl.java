@@ -3,10 +3,10 @@ package com.yffd.easy.admin.pms.dao.impl;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
-import org.yffd.easy.common.ssm.dao.impl.BaseDaoImpl;
 
 import com.yffd.easy.admin.pms.dao.PmsResourceDao;
 import com.yffd.easy.admin.pms.model.PmsResource;
+import com.yffd.easy.common.support.dao.impl.BaseDaoImpl;
 
 /**
  * @Description  系统模块：功能管理.

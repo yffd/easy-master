@@ -1,4 +1,4 @@
-package org.yffd.easy.common.core.view.vo;
+package com.yffd.easy.common.core.view.vo;
 
 /**
  * @Description  简单描述该类的功能（可选）.

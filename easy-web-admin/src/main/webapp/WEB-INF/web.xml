@@ -3,7 +3,7 @@
   <context-param>
     <param-name>contextConfigLocation</param-name>
     <param-value>
-            classpath:spring/spring-context.xml
+            classpath:spring/admin-spring-context.xml
         </param-value>
   </context-param>
   <listener>
@@ -52,7 +52,7 @@
   </servlet-mapping>
   <filter>
     <filter-name>CaptchaFilter</filter-name>
-    <filter-class>org.yffd.easy.common.ssm.web.filter.CaptchaFilter</filter-class>
+    <filter-class>com.yffd.easy.common.support.web.filter.CaptchaFilter</filter-class>
     <async-supported>true</async-supported>
   </filter>
   <filter-mapping>

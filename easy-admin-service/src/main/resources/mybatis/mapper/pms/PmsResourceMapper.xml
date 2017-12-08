@@ -26,7 +26,7 @@
 	<sql id="pms_resource_table"> pms_resource </sql>
 	<sql id="pms_resource_column"> ID, VERSION, DEL_FLAG, CREATER, CREATE_TIME, EDITOR, EDIT_TIME, 
 	RS_NAME, RS_CODE, PARENT_CODE, IN_URL, RS_TYPE, RS_NUM, RS_STATE, REMARK </sql>
-	<sql id="pms_resource_limit"><if test="pageLimit != null and pageLimit != ''"> limit #{startRowNum}, #{numPerPage} </if></sql>
+	<sql id="pms_resource_limit"><if test="pageLimit != null and pageLimit != ''"> limit #{pageStartRow}, #{pageLimit} </if></sql>
 	<!-- 动态组装复合查询条件 -->
 	<sql id="pms_resource_where">
 		<!-- Equal query -->

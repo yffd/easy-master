@@ -7,7 +7,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-import org.yffd.easy.common.core.model.PersistModel;
+
+import com.yffd.easy.common.core.model.PersistModel;
 
 /**
  * @Description  简单描述该类的功能（可选）.

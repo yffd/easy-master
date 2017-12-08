@@ -10,19 +10,19 @@
   <groupId>com.yffd.easy</groupId>
   <artifactId>easy-web-workflow</artifactId>
   <version>0.0.1</version>
+  <packaging>war</packaging>
   <name>easy-web-workflow</name>
   <url>http://maven.apache.org</url>
   <properties>
-    <easy.admin.service.version>0.0.1</easy.admin.service.version>
+    <easy.workflow.service.version>0.0.1</easy.workflow.service.version>
     <fastjson.version>1.1.39</fastjson.version>
-    <shiro.version>1.2.5</shiro.version>
   </properties>
   <dependencies>
   
   	<dependency>
   		<groupId>com.yffd.easy</groupId>
-  		<artifactId>easy-admin-service</artifactId>
-  		<version>${easy.admin.service.version}</version>
+  		<artifactId>easy-workflow-service</artifactId>
+  		<version>${easy.workflow.service.version}</version>
   	</dependency>
   	<dependency>
   		<groupId>com.alibaba</groupId>
@@ -30,29 +30,6 @@
 		<version>${fastjson.version}</version>
   	</dependency>
   	
-  	<!-- shiro start -->
-  	<dependency>
-		<groupId>org.apache.shiro</groupId>
-		<artifactId>shiro-core</artifactId>
-		<version>${shiro.version}</version>
-	</dependency>
-	<dependency>
-		<groupId>org.apache.shiro</groupId>
-		<artifactId>shiro-ehcache</artifactId>
-		<version>${shiro.version}</version>
-	</dependency>
-	<dependency>
-		<groupId>org.apache.shiro</groupId>
-		<artifactId>shiro-web</artifactId>
-		<version>${shiro.version}</version>
-	</dependency>
-	<dependency>
-		<groupId>org.apache.shiro</groupId>
-		<artifactId>shiro-spring</artifactId>
-		<version>${shiro.version}</version>
-	</dependency>
-	<!-- shiro end -->
-	
   	<!-- Servlet start -->
 	<dependency>
 		<groupId>javax.servlet</groupId>
@@ -105,11 +82,11 @@
                 </scanTargetPatterns>
                 <webAppConfig>
                	    <tempDirectory>${project.build.directory}/work</tempDirectory>
-                    <contextPath>/</contextPath>	<!-- http://host:port/demo/ -->  
+                    <contextPath>/workflow/</contextPath>	<!-- http://host:port/demo/ -->  
                 </webAppConfig>
 				<connectors>
 					<connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
-						<port>8888</port>
+						<port>8887</port>
 						<maxIdleTime>60000</maxIdleTime>
 					</connector>
 				</connectors>
@@ -126,4 +103,5 @@
   	</plugins>
   	
   </build>
+  
 </project>

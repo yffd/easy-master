@@ -1,4 +1,4 @@
-package org.yffd.easy.common.core.log;
+package com.yffd.easy.common.core.log;
 
 import org.slf4j.Logger;
 

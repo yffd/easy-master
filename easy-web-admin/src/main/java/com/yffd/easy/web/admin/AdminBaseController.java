@@ -5,11 +5,11 @@ import java.util.Date;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
-import org.yffd.easy.common.core.model.PersistModel;
-import org.yffd.easy.common.ssm.web.BaseController;
 
 import com.yffd.easy.admin.login.model.LoginInfo;
 import com.yffd.easy.admin.login.service.LoginService;
+import com.yffd.easy.common.core.model.PersistModel;
+import com.yffd.easy.common.support.web.mvc.BaseController;
 
 /**
  * @Description  简单描述该类的功能（可选）.

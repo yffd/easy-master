@@ -1,4 +1,4 @@
-package org.yffd.easy.common.core.exception;
+package com.yffd.easy.common.core.exception;
 
 /**
  * @Description  系统异常基类.

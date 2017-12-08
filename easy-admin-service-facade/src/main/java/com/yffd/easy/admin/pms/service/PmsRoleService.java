@@ -2,10 +2,9 @@ package com.yffd.easy.admin.pms.service;
 
 import java.util.List;
 
-import org.yffd.easy.common.core.page.PageParam;
-import org.yffd.easy.common.core.page.PageResult;
-
 import com.yffd.easy.admin.pms.model.PmsRole;
+import com.yffd.easy.common.core.page.PageParam;
+import com.yffd.easy.common.core.page.PageResult;
 
 /**
  * @Description  简单描述该类的功能（可选）.

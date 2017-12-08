@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
-import org.yffd.easy.common.core.util.ValidUtils;
-import org.yffd.easy.common.core.view.tree.TreeBuilder;
 
 import com.yffd.easy.admin.pms.model.PmsOrganization;
+import com.yffd.easy.common.core.util.ValidUtils;
+import com.yffd.easy.common.core.view.tree.TreeBuilder;
 import com.yffd.easy.web.admin.pms.vo.PmsOrganizationTreeGridVO;
 
 /**

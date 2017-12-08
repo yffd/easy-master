@@ -3,7 +3,6 @@ package com.yffd.easy.admin.pms.service;
 import java.util.List;
 
 import com.yffd.easy.admin.pms.model.PmsResource;
-import com.yffd.easy.admin.pms.model.PmsUser;
 
 /**
  * @Description  简单描述该类的功能（可选）.
