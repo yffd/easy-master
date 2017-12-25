@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.yffd.easy.admin.pms.dao.PmsRoleDao;
 import com.yffd.easy.admin.pms.model.PmsRole;
-import com.yffd.easy.common.core.exception.DaoException;
+import com.yffd.easy.common.core.exception.EasyDaoException;
 import com.yffd.easy.common.core.util.ValidUtils;
 import com.yffd.easy.common.support.dao.impl.BaseDaoImpl;
 
@@ -44,7 +44,7 @@ public class PmsRoleDaoImpl extends BaseDaoImpl<PmsRole> implements PmsRoleDao {
 		paramMap.put("createTime", new Date());
 		int result = this.getSqlSession().insert(getStatement(STMT_SAVE_ROLE_RESOURCE), paramMap);
 	    if (result <= 0) {
-	        throw DaoException.DB_INSERT_RESULT_0(getStatement(SQL_INSERT));
+	        throw EasyDaoException.DB_INSERT_RESULT_0(getStatement(SQL_INSERT));
 	    }
 	}
 
@@ -62,7 +62,7 @@ public class PmsRoleDaoImpl extends BaseDaoImpl<PmsRole> implements PmsRoleDao {
 		paramMap.put("createTime", new Date());
 		int result = this.getSqlSession().insert(getStatement(STMT_SAVE_ROLE_USER), paramMap);
 	    if (result <= 0) {
-	        throw DaoException.DB_INSERT_RESULT_0(getStatement(SQL_INSERT));
+	        throw EasyDaoException.DB_INSERT_RESULT_0(getStatement(SQL_INSERT));
 	    }
 	}
 

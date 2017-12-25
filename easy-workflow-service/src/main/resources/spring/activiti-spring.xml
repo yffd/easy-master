@@ -31,12 +31,16 @@
 	<!-- 执行自定义SQL -->
 	<property name="customMybatisMappers">
 	  <set>
-	    <value>com.yffd.easy.workflow.mapper.ProcessDefinitionMapper</value>
+	    <value>com.yffd.easy.workflow.mapper.WorkFlowDefinitionMapper</value>
+	    <value>com.yffd.easy.workflow.mapper.WorkFlowInstanceMapper</value>
+	    <value>com.yffd.easy.workflow.app.mapper.OaLeaveMapper</value>
 	  </set>
 	</property>
 	<property name="customMybatisXMLMappers">
 	  <set>
-	    <value>mybatis/mapper/workflow/ProcessDefinitionMapper.xml</value>
+	    <value>mybatis/mapper/workflow/WorkFlowDefinitionMapper.xml</value>
+	    <value>mybatis/mapper/workflow/WorkFlowInstanceMapper.xml</value>
+	    <value>mybatis/mapper/app/oa/Leave.xml</value>
 	  </set>
 	</property>
 

@@ -17,7 +17,7 @@ import com.yffd.easy.common.core.page.PageParam;
 import com.yffd.easy.common.core.page.PageResult;
 import com.yffd.easy.common.core.util.ValidUtils;
 import com.yffd.easy.common.core.view.vo.DataGridVO;
-import com.yffd.easy.common.core.view.vo.SearchBoxVO;
+import com.yffd.easy.common.core.view.vo.SearchVO;
 import com.yffd.easy.web.admin.AdminBaseController;
 import com.yffd.easy.web.admin.shiro.utils.PasswordHelper;
 
@@ -38,8 +38,8 @@ public class PmsUserController extends AdminBaseController {
 	
 	@RequestMapping(value="/findPage", method=RequestMethod.POST)
 	@ResponseBody
-	public RespModel listPage(PmsUser user, SearchBoxVO searchBoxVO) {
-		PageParam pageParam = this.getPageParam(searchBoxVO);
+	public RespModel listPage(PmsUser user, SearchVO searchVO) {
+		PageParam pageParam = this.getPageParam(searchVO);
 		PageResult<PmsUser> pageResult = this.pmsUserService.findList(user, pageParam );
 		DataGridVO dataGridVO = this.toDataGrid(pageResult);
 		return this.successAjax(dataGridVO);

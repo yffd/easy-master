@@ -21,7 +21,7 @@ import com.yffd.easy.common.core.page.PageParam;
 import com.yffd.easy.common.core.page.PageResult;
 import com.yffd.easy.common.core.util.ValidUtils;
 import com.yffd.easy.common.core.view.vo.DataGridVO;
-import com.yffd.easy.common.core.view.vo.SearchBoxVO;
+import com.yffd.easy.common.core.view.vo.SearchVO;
 import com.yffd.easy.web.admin.AdminBaseController;
 
 /**
@@ -43,8 +43,8 @@ public class PmsRoleController extends AdminBaseController {
 	
 	@RequestMapping(value="/findPage", method=RequestMethod.POST)
 	@ResponseBody
-	public RespModel findPage(PmsRole role, SearchBoxVO searchBoxVO) {
-		PageParam pageParam = this.getPageParam(searchBoxVO);
+	public RespModel findPage(PmsRole role, SearchVO searchVO) {
+		PageParam pageParam = this.getPageParam(searchVO);
 		PageResult<PmsRole> pageResult = this.pmsRoleService.findPage(role, pageParam);
 		DataGridVO dataGridVO = this.toDataGrid(pageResult);
 		return this.successAjax(dataGridVO);

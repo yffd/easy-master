@@ -3,6 +3,12 @@
 	 * 全局系统对象
 	 */
     window['commonui'] = {};
+    
+    //默认每页记录数
+	commonui.pageSize = 20;
+	//消息框超时时间
+	commonui.messager_timeout = 1000 * 4;
+	
 	/**
 	 * 切换皮肤
 	 */
@@ -163,11 +169,6 @@
 		value : 'icon-easy icon-easy-database',
 		text : 'icon-easy-database'
 	}];
-	
-	/**
-	 * 默认每页记录数
-	 */
-	commonui.pageSize = 20;
 	
 	/***************** easyui默认实现的覆盖 BEGIN *****************/
 	

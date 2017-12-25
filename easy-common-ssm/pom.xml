@@ -16,7 +16,7 @@
 
 	<properties>
 		<easy.common.core.version>0.0.1</easy.common.core.version>
-		<easy.common.support.dao.version>0.0.1</easy.common.support.dao.version>
+		<easy.common.support.version>0.0.1</easy.common.support.version>
 		<easy.common.support.web.version>0.0.1</easy.common.support.web.version>
 		<!-- spring -->
 		<spring.version>4.2.6.RELEASE</spring.version>
@@ -51,8 +51,8 @@
 		</dependency>
 		<dependency>
 			<groupId>com.yffd.easy</groupId>
-  			<artifactId>easy-common-support-dao</artifactId>
-  			<version>${easy.common.support.dao.version}</version>
+  			<artifactId>easy-common-support</artifactId>
+  			<version>${easy.common.support.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.yffd.easy</groupId>

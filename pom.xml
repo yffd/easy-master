@@ -16,7 +16,7 @@
 
 	<modules>
 	    <module>easy-common-core</module>
-    	<module>easy-common-support-dao</module>
+    	<module>easy-common-support</module>
 	    <module>easy-common-support-web</module>
 	    <module>easy-common-ssm</module>
 	    <module>easy-admin-service</module>
@@ -25,7 +25,7 @@
     	<module>easy-workflow-service</module>
     	<module>easy-workflow-service-facade</module>
     	<module>easy-web-workflow</module>
-  </modules>
+	</modules>
 
 	<!-- 定义公共变量 -->
 	<properties>

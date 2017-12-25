@@ -37,7 +37,7 @@
     }
     
     //初始化左侧
-    var initLeft = function(menuJson) {console.info("sssss");
+    var initLeft = function(menuJson) {
     	var $ma=$("#menuAccordion");
     	$ma.accordion({animate:false});
         $.each(menuJson, function(i, n) {

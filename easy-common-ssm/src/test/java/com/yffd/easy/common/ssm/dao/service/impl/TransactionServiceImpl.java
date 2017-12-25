@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.yffd.easy.common.core.exception.SysException;
+import com.yffd.easy.common.core.exception.EasySysException;
 import com.yffd.easy.common.ssm.model.TestModel;
 import com.yffd.easy.common.support.dao.IBaseDao;
 
@@ -21,7 +21,7 @@ public class TransactionServiceImpl {
     @Autowired
     private IBaseDao<TestModel> baseDao;
     
-    @Transactional(rollbackFor = SysException.class)
+    @Transactional(rollbackFor = EasySysException.class)
 //    @Transactional(value = "txManager", rollbackFor = BizException.class, readOnly = false, propagation = Propagation.REQUIRED)
     public void txInsertAndUpdate(TestModel insert, TestModel update) {
         int restult1 = this.baseDao.insert(insert);

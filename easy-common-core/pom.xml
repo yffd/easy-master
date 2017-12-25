@@ -13,11 +13,16 @@
   <name>easy-common-core</name>
   <url>http://maven.apache.org</url>
   <properties>
-    
+    <commons.beanutils.version>1.9.3</commons.beanutils.version>
   </properties>
   
   <dependencies>
 
+	<dependency>
+		<groupId>commons-beanutils</groupId>
+		<artifactId>commons-beanutils</artifactId>
+		<version>${commons.beanutils.version}</version>
+	</dependency>
   	<!-- Logging start -->
 	<dependency>
 		<groupId>org.slf4j</groupId>

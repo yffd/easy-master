@@ -1,11 +1,14 @@
 package com.yffd.easy.common.core.view.support;
 
 import java.util.List;
+import java.util.Map;
 
+import com.yffd.easy.common.core.model.support.EasyModelConverter;
 import com.yffd.easy.common.core.page.PageParam;
 import com.yffd.easy.common.core.page.PageResult;
+import com.yffd.easy.common.core.util.ValidUtils;
 import com.yffd.easy.common.core.view.vo.DataGridVO;
-import com.yffd.easy.common.core.view.vo.SearchBoxVO;
+import com.yffd.easy.common.core.view.vo.SearchVO;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -15,7 +18,7 @@ import com.yffd.easy.common.core.view.vo.SearchBoxVO;
  * @since		 JDK 1.7+
  * @see 	 
  */
-public class ViewModelSupport {
+public class ViewModelSupport extends EasyModelConverter {
 
 	/**
 	 * 将后台分页结果转换成EasyUI分页数据格式
@@ -26,7 +29,8 @@ public class ViewModelSupport {
 	 */
 	public DataGridVO toDataGrid(PageResult<?> pageResult) {
 		DataGridVO vo = new DataGridVO();
-		vo.setRows(pageResult.getRecordList());
+		if(null!=pageResult.getRecordList())
+			vo.setRows(pageResult.getRecordList());
 		Long total = (long) pageResult.getPageParam().getTotalRecord();
 		vo.setTotal(total);
 		return vo;
@@ -48,29 +52,59 @@ public class ViewModelSupport {
 	}
 	
 	/**
-	 * 前端分页对象转换成后台分页对象
+	 * 前端分页对象转换成后端分页对象
 	 * @Date	2017年10月13日 上午10:06:32 <br/>
 	 * @author  zhangST
-	 * @param paginationVO
+	 * @param searchBoxVO
 	 * @return
 	 */
-	public PageParam getPageParam(SearchBoxVO searchBoxVO) {
-		Long currentPage = 1L;
-		Long numPerPage = PageParam.DEFAULT_NUM_PER_PAGE;
+	public PageParam getPageParam(SearchVO searchBoxVO) {
+		Long pageNum = 1L;
+		Long pageLimit = PageParam.DEFAULT_NUM_PER_PAGE;
 		if(null==searchBoxVO) {
-			return new PageParam(currentPage, numPerPage);
+			return new PageParam(pageNum, pageLimit);
 		}
 		
-		Long _currentPage = searchBoxVO.getPage();
-		Long _numPerPage = searchBoxVO.getRows();
+		Long _pageNum = searchBoxVO.getPage();
+		Long _pageLimit = searchBoxVO.getRows();
 		
-		if(null!=_currentPage && _currentPage>0) {
-			currentPage = _currentPage;
+		if(null!=_pageNum && _pageNum>0) {
+			pageNum = _pageNum;
 		}
-		if(null!=_numPerPage && _numPerPage>0) {
-			numPerPage = _numPerPage;
+		if(null!=_pageLimit && _pageLimit>0) {
+			pageLimit = _pageLimit;
 		}
-		return new PageParam(currentPage, numPerPage);
+		return new PageParam(pageNum, pageLimit);
 	}
+	
+	/**
+	 * 前端分页对象转换成后端分页对象
+	 * @Date	2017年12月12日 下午5:21:41 <br/>
+	 * @author  zhangST
+	 * @param paramMap
+	 * @return
+	 */
+	public PageParam getPageParam(Map<String, Object> paramMap) {
+		Long pageNum = 1L;
+		Long pageLimit = PageParam.DEFAULT_NUM_PER_PAGE;
+		if(null==paramMap) {
+			return new PageParam(pageNum, pageLimit);
+		}
+		
+		String pageNumStr = (String) paramMap.get("page");
+		String pageLimitStr = (String) paramMap.get("rows");
+		
+		Long _pageNum = ValidUtils.isBlank(pageNumStr)?pageNum:Long.parseLong(pageNumStr);
+		Long _pageLimit = ValidUtils.isBlank(pageLimitStr)?pageLimit:Long.parseLong(pageLimitStr);
+		
+		if(null!=_pageNum && _pageNum>0) {
+			pageNum = _pageNum;
+		}
+		if(null!=_pageLimit && _pageLimit>0) {
+			pageLimit = _pageLimit;
+		}
+		return new PageParam(pageNum, pageLimit);
+	}
+	
 }
 

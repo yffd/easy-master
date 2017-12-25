@@ -55,3 +55,35 @@
   		padding: 8px 35px 8px 14px;
   		text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 }
+
+.tableForm {
+  background-color: #f5f5f5;
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 20px;
+}
+.tableForm > thead > tr,
+.tableForm > tbody > tr,
+.tableForm > tfoot > tr {
+	height: 30px;
+}
+.tableForm > thead > tr > th,
+.tableForm > tbody > tr > th,
+.tableForm > tfoot > tr > th,
+.tableForm > thead > tr > td,
+.tableForm > tbody > tr > td,
+.tableForm > tfoot > tr > td {
+  padding: 2px;
+  line-height: 1.42857143;
+  vertical-align: center;
+  border-top: 1px solid #ddd;
+}
+.tableForm th {
+	text-align: right;
+	border: 0px solid #ccc;
+}
+
+.tableForm td {
+	text-align: left;
+	border: 0px solid #ccc;
+}

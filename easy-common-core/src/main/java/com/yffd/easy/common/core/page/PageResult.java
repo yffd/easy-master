@@ -31,7 +31,6 @@ public class PageResult<T> implements Serializable {
 		this.recordList = recordList;
 	}
 
-
 	public PageParam getPageParam() {
 		return pageParam;
 	}
@@ -47,6 +46,6 @@ public class PageResult<T> implements Serializable {
 	public void setRecordList(List<T> recordList) {
 		this.recordList = recordList;
 	}
-	
+
 }
 

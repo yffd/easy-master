@@ -11,14 +11,14 @@
   <artifactId>easy-web-workflow</artifactId>
   <version>0.0.1</version>
   <packaging>war</packaging>
-  <name>easy-web-workflow</name>
+  <name>easy-web-workflow Maven Webapp</name>
   <url>http://maven.apache.org</url>
+  
   <properties>
-    <easy.workflow.service.version>0.0.1</easy.workflow.service.version>
-    <fastjson.version>1.1.39</fastjson.version>
+  	<easy.workflow.service.version>0.0.1</easy.workflow.service.version>
+  	<fastjson.version>1.1.39</fastjson.version>
   </properties>
   <dependencies>
-  
   	<dependency>
   		<groupId>com.yffd.easy</groupId>
   		<artifactId>easy-workflow-service</artifactId>
@@ -29,7 +29,6 @@
 		<artifactId>fastjson</artifactId>
 		<version>${fastjson.version}</version>
   	</dependency>
-  	
   	<!-- Servlet start -->
 	<dependency>
 		<groupId>javax.servlet</groupId>
@@ -47,16 +46,10 @@
 		<scope>provided</scope>
 	</dependency>
 	<!-- Servlet end -->
-			
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
-  
   <build>
-  	<resources>
+    <finalName>easy-web-workflow</finalName>
+    <resources>
   		<resource>
   			<targetPath>${project.build.directory}/classes</targetPath>
     		<directory>src/main/resources</directory>
@@ -82,7 +75,7 @@
                 </scanTargetPatterns>
                 <webAppConfig>
                	    <tempDirectory>${project.build.directory}/work</tempDirectory>
-                    <contextPath>/workflow/</contextPath>	<!-- http://host:port/demo/ -->  
+                    <contextPath>/</contextPath>	<!-- http://host:port/demo/ -->  
                 </webAppConfig>
 				<connectors>
 					<connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
@@ -101,7 +94,5 @@
 			</configuration>
 		</plugin>
   	</plugins>
-  	
   </build>
-  
 </project>

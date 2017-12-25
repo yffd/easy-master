@@ -83,8 +83,8 @@ public class MyTest extends AbstractActivitiTest {
 	public void claimTest() {
 		TaskService taskService = this.taskService;
 		// 签收任务
-		String taskId = "27506";
-		String userId = "leaderUser";
+		String taskId = "2506";
+		String userId = "leaderuser";
 		taskService.claim(taskId, userId);
 	}
 	
