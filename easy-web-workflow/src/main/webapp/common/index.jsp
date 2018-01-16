@@ -58,7 +58,7 @@ function initMenu(){
 	$.post("pms/resource/listLeftMenu", {userCode:"1"}, function(data) {
 		if(data.respData && data.respData.length>0) {
 			$.each(data.respData, function(i, n) {
-				var menulist ="<div class=\"well well-small\">";
+				var menulist ="<div class=\"badge-div\">";
 	            if(n.children && n.children.length>0) {
 	                $.each(n.children, function(ci, cn) {
 	                	var effort=cn.text+"||"+cn.iconCls+"||"+cn.inUrl;
@@ -102,7 +102,7 @@ function initMenuLocal() {
         },{
         	"id": "sys-112",
             "pid": "sys",
-            "text": "流程实例管理",
+            "text": "跟踪流程实例",
             "state": "open",
             "iconCls": "icon-sys",
             "inUrl": "workflow/instance/instanceMain.jsp",
@@ -110,24 +110,110 @@ function initMenuLocal() {
         },{
         	"id": "sys-113",
             "pid": "sys",
-            "text": "流程任务管理",
+            "text": "跟踪流程任务",
             "state": "open",
-            "iconCls": "icon-sys"
+            "iconCls": "icon-sys",
+            "inUrl": "workflow/task/taskMain.jsp",
+            "rsType": "M"
+        },{
+        	"id": "sys-117",
+            "pid": "sys",
+            "text": "待办流程任务",
+            "state": "open",
+            "iconCls": "icon-sys",
+            "inUrl": "workflow/task/todoTaskMain.jsp",
+            "rsType": "M"
         },{
         	"id": "sys-114",
             "pid": "sys",
-            "text": "流程历史管理",
+            "text": "历史流程实例",
             "state": "open",
-            "iconCls": "icon-sys"
+            "iconCls": "icon-sys",
+            "inUrl": "workflow/historyInstance/historyInstanceMain.jsp",
+            "rsType": "M"
+        },{
+        	"id": "sys-115",
+            "pid": "sys",
+            "text": "历史流程任务",
+            "state": "open",
+            "iconCls": "icon-sys",
+            "inUrl": "workflow/historyTask/historyTaskMain.jsp",
+            "rsType": "M"
+        }]
+	},{
+		"id": "14",
+        "pid": "-1",
+        "text": "流程管理",
+        "children": [{
+        	"id": "14-119",
+            "pid": "sys",
+            "text": "流程定义编辑器",
+            "state": "open",
+            "iconCls": "icon-sys",
+            "inUrl": "workflow/modeler/newModel",
+            "rsType": "M"
+        },{
+        	"id": "14-111",
+            "pid": "sys",
+            "text": "流程定义设计",
+            "state": "open",
+            "iconCls": "icon-sys",
+            "inUrl": "workflow/modeler/newModel",
+            "rsType": "M"
+        },{
+        	"id": "14-112",
+            "pid": "sys",
+            "text": "业务流程方案",
+            "state": "open",
+            "iconCls": "icon-sys",
+            "inUrl": "workflow/app/leave/leaveMain.jsp",
+            "rsType": "M"
+        },{
+        	"id": "14-113",
+            "pid": "sys",
+            "text": "流程授权",
+            "state": "open",
+            "iconCls": "icon-sys",
+            "inUrl": "workflow/app/leave/leaveMain.jsp",
+            "rsType": "M"
+        },{
+        	"id": "14-114",
+            "pid": "sys",
+            "text": "表单模板",
+            "state": "open",
+            "iconCls": "icon-sys",
+            "inUrl": "workflow/app/leave/leaveMain.jsp",
+            "rsType": "M"
+        }]
+	},{
+		"id": "13",
+        "pid": "-1",
+        "text": "流程监控",
+        "children": [{
+        	"id": "13-111",
+            "pid": "sys",
+            "text": "流程实例",
+            "state": "open",
+            "iconCls": "icon-sys",
+            "inUrl": "workflow/app/leave/leaveMain.jsp",
+            "rsType": "M"
+        },{
+        	"id": "13-112",
+            "pid": "sys",
+            "text": "待办任务",
+            "state": "open",
+            "iconCls": "icon-sys",
+            "inUrl": "workflow/app/leave/leaveMain.jsp",
+            "rsType": "M"
         }]
 	},{
 		"id": "11",
         "pid": "-1",
-        "text": "我的流程",
+        "text": "任务跟踪",
         "children": [{
         	"id": "11-111",
             "pid": "sys",
-            "text": "请假管理",
+            "text": "我的申请",
             "state": "open",
             "iconCls": "icon-sys",
             "inUrl": "workflow/app/leave/leaveMain.jsp",
@@ -135,15 +221,23 @@ function initMenuLocal() {
         },{
         	"id": "11-112",
             "pid": "sys",
-            "text": "待办管理",
+            "text": "我的处理",
             "state": "open",
             "iconCls": "icon-sys",
             "inUrl": "workflow/app/leave/leaveMain.jsp",
             "rsType": "M"
         },{
-        	"id": "11-112",
+        	"id": "11-113",
             "pid": "sys",
-            "text": "历史管理",
+            "text": "我的已阅",
+            "state": "open",
+            "iconCls": "icon-sys",
+            "inUrl": "workflow/app/leave/leaveMain.jsp",
+            "rsType": "M"
+        },{
+        	"id": "11-114",
+            "pid": "sys",
+            "text": "我的委托",
             "state": "open",
             "iconCls": "icon-sys",
             "inUrl": "workflow/app/leave/leaveMain.jsp",
@@ -153,7 +247,7 @@ function initMenuLocal() {
 	var $ma = $("#menuAccordion");
 	$ma.accordion({animate:true,fit:true,border:false});
 	$.each(menuJson, function(i, n) {
-		var menulist ="<div class=\"well well-small\">";
+		var menulist ="<div class=\"badge-div\">";
         if(n.children && n.children.length>0) {
             $.each(n.children, function(ci, cn) {
             	var effort=cn.text+"||"+cn.iconCls+"||"+cn.inUrl;
@@ -194,7 +288,7 @@ function initMenuLocal() {
 		</div>
     </div>
     
-    <div data-options="region:'south',border:false" style="height:25px;padding:5px;" href="common/layout/south.jsp">
+    <div data-options="region:'south',split:true" style="height:30px;padding:2px;" href="common/layout/south.jsp">
     </div>
     
     

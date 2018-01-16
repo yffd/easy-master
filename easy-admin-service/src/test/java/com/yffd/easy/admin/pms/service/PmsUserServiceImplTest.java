@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.yffd.easy.admin.pms.SpringBaseTestCase;
 import com.yffd.easy.admin.pms.model.PmsUser;
-import com.yffd.easy.admin.pms.service.PmsUserService;
 import com.yffd.easy.common.core.page.PageParam;
 import com.yffd.easy.common.core.page.PageResult;
 

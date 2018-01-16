@@ -11,6 +11,7 @@ import com.yffd.easy.common.core.page.PageParam;
 import com.yffd.easy.common.core.page.PageResult;
 import com.yffd.easy.workflow.activiti.service.ActivitiBaseService;
 import com.yffd.easy.workflow.mapper.WorkFlowDefinitionMapper;
+import com.yffd.easy.workflow.model.dto.WorkFlowDefinitionDTO;
 
 /**
  * @Description  流程定义管理器.
@@ -23,31 +24,31 @@ import com.yffd.easy.workflow.mapper.WorkFlowDefinitionMapper;
 @Repository
 public class WorkFlowDefinitionDao extends ActivitiBaseService {
 
-	public PageResult<Map<String, Object>> selectPageBy(final Map<String, Object> paramMap, final PageParam pageParam) {
+	public PageResult<WorkFlowDefinitionDTO> selectPageBy(final Map<String, Object> paramMap, final PageParam pageParam) {
 		Long totalRecord = this.selectCountBy(paramMap, pageParam);
 		pageParam.setTotalRecord(totalRecord);
 		
-		List<Map<String, Object>> list = null;
+		List<WorkFlowDefinitionDTO> list = null;
 		if(totalRecord>0) {
 			list = this.selectListBy(paramMap, pageParam);
 		}
-		PageResult<Map<String, Object>> paginationResult = new PageResult<Map<String, Object>>(pageParam, list);
+		PageResult<WorkFlowDefinitionDTO> paginationResult = new PageResult<WorkFlowDefinitionDTO>(pageParam, list);
 		return paginationResult;
 	}
 	
-	public List<Map<String, Object>> selectListBy(final Map<String, Object> paramMap, final PageParam pageParam) {
+	public List<WorkFlowDefinitionDTO> selectListBy(final Map<String, Object> paramMap, final PageParam pageParam) {
 		
-		CustomSqlExecution<WorkFlowDefinitionMapper, List<Map<String, Object>>> customSqlExecution = 
-				new AbstractCustomSqlExecution<WorkFlowDefinitionMapper, List<Map<String, Object>>>(WorkFlowDefinitionMapper.class) {
+		CustomSqlExecution<WorkFlowDefinitionMapper, List<WorkFlowDefinitionDTO>> customSqlExecution = 
+				new AbstractCustomSqlExecution<WorkFlowDefinitionMapper, List<WorkFlowDefinitionDTO>>(WorkFlowDefinitionMapper.class) {
 					@Override
-					public List<Map<String, Object>> execute(WorkFlowDefinitionMapper mapper) {
+					public List<WorkFlowDefinitionDTO> execute(WorkFlowDefinitionMapper mapper) {
 						if(null!=pageParam) paramMap.put("pageParam", pageParam);
 						return mapper.selectListBy(paramMap);
 					}
 			
 				};
 		
-		List<Map<String, Object>> list = this.getManagementService().executeCustomSql(customSqlExecution);
+		List<WorkFlowDefinitionDTO> list = this.getManagementService().executeCustomSql(customSqlExecution);
 		return list;
 	}
 	
@@ -67,19 +68,19 @@ public class WorkFlowDefinitionDao extends ActivitiBaseService {
 		return count;
 	}
 	
-	public Map<String, Object> selectByPK(final String id) {
+	public WorkFlowDefinitionDTO selectByPK(final String id) {
 		if(null==id || "".equals(id)) return null; 
-		CustomSqlExecution<WorkFlowDefinitionMapper, Map<String, Object>> customSqlExecution = 
-				new AbstractCustomSqlExecution<WorkFlowDefinitionMapper, Map<String, Object>>(WorkFlowDefinitionMapper.class) {
+		CustomSqlExecution<WorkFlowDefinitionMapper, WorkFlowDefinitionDTO> customSqlExecution = 
+				new AbstractCustomSqlExecution<WorkFlowDefinitionMapper, WorkFlowDefinitionDTO>(WorkFlowDefinitionMapper.class) {
 					@Override
-					public Map<String, Object> execute(WorkFlowDefinitionMapper mapper) {
+					public WorkFlowDefinitionDTO execute(WorkFlowDefinitionMapper mapper) {
 						return mapper.selectByPK(id);
 					}
 			
 				};
 		
-		Map<String, Object> map = this.getManagementService().executeCustomSql(customSqlExecution);
-		return map;
+		WorkFlowDefinitionDTO dto = this.getManagementService().executeCustomSql(customSqlExecution);
+		return dto;
 	}
 }
 

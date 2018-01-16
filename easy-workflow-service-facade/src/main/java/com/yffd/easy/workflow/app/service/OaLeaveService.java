@@ -5,6 +5,7 @@ import java.util.Map;
 import com.yffd.easy.common.core.page.PageParam;
 import com.yffd.easy.common.core.page.PageResult;
 import com.yffd.easy.workflow.app.model.OaLeave;
+import com.yffd.easy.workflow.model.dto.WorkFlowInstanceDTO;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -25,5 +26,13 @@ public interface OaLeaveService {
 	void delete(String id);
 	
 	void apply(OaLeave model);
+	
+	WorkFlowInstanceDTO startTask(String userId, String definitionKey, Map<String, Object> variables);
+	
+	void completeTask(String taskId, Map<String, Object> variables);
+	
+	void claimTask(String userId, String taskId);
+	
+	void claimAndCompleteTask(String userId, String taskId, Map<String, Object> variables);
 }
 

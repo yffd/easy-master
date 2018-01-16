@@ -1,12 +1,15 @@
 package com.yffd.easy.workflow.service.impl;
 
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.yffd.easy.common.core.page.PageParam;
 import com.yffd.easy.common.core.page.PageResult;
-import com.yffd.easy.workflow.activiti.dao.WorkFlowBaseTestCase;
+import com.yffd.easy.workflow.WorkFlowBaseTestCase;
+import com.yffd.easy.workflow.model.dto.WorkFlowActivityNodeDTO;
 import com.yffd.easy.workflow.model.dto.WorkFlowDefinitionDTO;
 import com.yffd.easy.workflow.service.WorkFlowDefinitionService;
 
@@ -35,9 +38,6 @@ public class WorkFlowDefinitionServiceImplTest extends WorkFlowBaseTestCase {
 		for(WorkFlowDefinitionDTO dto : pageResult.getRecordList()) {
 			System.out.println(dto.getId());
 			System.out.println(dto.getDeploymentId());
-			System.out.println(dto.getName());
-			System.out.println(dto.getKey());
-			System.out.println(dto.getVersion());
 			System.out.println(dto.getResourceName());
 			System.out.println(dto.getDgrmResourceName());
 			System.out.println(">>>>>>>>>>>>>>>>>>");
@@ -52,6 +52,14 @@ public class WorkFlowDefinitionServiceImplTest extends WorkFlowBaseTestCase {
 		System.out.println(dto.getId());
 	}
 	
-	
+	@Test
+	public void getActivityNodeTest() {
+		String id = "leave:1:4";
+		List<WorkFlowActivityNodeDTO> nodeList = this.workFlowDefinitionService.getActivityNode(id);
+		System.out.println(nodeList.size());
+		for(WorkFlowActivityNodeDTO node : nodeList) {
+			System.out.println(node);
+		}
+	}
 }
 

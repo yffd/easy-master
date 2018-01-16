@@ -50,6 +50,17 @@ public class WorkflowDefinitionController extends WorkflowBaseController {
 	public RespModel listPage(@RequestParam Map<String, Object> paramMap) {
 		PageParam pageParam = this.getPageParam(paramMap);
 		WorkFlowDefinitionDTO dto = this.map2model(paramMap, WorkFlowDefinitionDTO.class, null);
+		String lastVersion = (String) paramMap.get("versionState");
+		if(null==lastVersion || "".equals(lastVersion)) { // 默认
+			if(null==dto) dto = new WorkFlowDefinitionDTO();
+			dto.setLastVersion(true);
+		} else if(null!=lastVersion && "last".equals(lastVersion)) {
+			if(null==dto) dto = new WorkFlowDefinitionDTO();
+			dto.setLastVersion(true);
+		} else if(null!=lastVersion && "all".equals(lastVersion)) {
+			if(null==dto) dto = new WorkFlowDefinitionDTO();
+			dto.setLastVersion(false);
+		}
 		PageResult<WorkFlowDefinitionDTO> pageResult = this.workFlowDefinitionService.findListPage(dto, pageParam);
 		DataGridVO dataGridVO = this.toDataGrid(pageResult);
 		return this.successAjax(dataGridVO);

@@ -17,13 +17,15 @@
 	<mvc:annotation-driven />
 
 	<!-- JSP视图解析器，对模型视图名称的解析，在请求时模型视图名称添加前后缀 -->
-	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	<bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
 		<!-- 自动给后面action的方法return的字符串加上前缀和后缀，变成一个 可用的url地址 -->
 		<property name="prefix" value="/" />
 		<property name="suffix" value=".jsp" />
 		<property name="order" value="0"/>
 	</bean>
 
+    
 	<!-- 处理在类级别上的@RequestMapping注解 -->
 	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
 	<!-- 处理在方法级别上的@RequestMapping注解 -->
@@ -53,6 +55,9 @@
 		</property>
 	</bean>
 
+	<!-- jackson xml -->
+	<bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper"/>
+	
 	<!-- SpringMVC上传文件时，需要配置MultipartResolver处理器 -->  
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">  
         <property name="defaultEncoding" value="UTF-8"/>  
@@ -66,6 +71,8 @@
 	<!-- 静态资源问题，不需要进行拦截过滤，主要是针对css，js，image等资源 -->
 	<mvc:resources mapping="/static/**" location="/static/" cache-period="31536000"/>
 	<mvc:resources mapping="/favicon.ico" location="/favicon.ico" />
-	<mvc:resources mapping="/html/**/*.html" location="/html/" />
+	
+	<!-- 工作流编辑器静态资源 -->
+	<mvc:resources mapping="/views/workflow/modeler/**" location="/views/workflow/modeler/" />
 
 </beans>

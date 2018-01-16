@@ -1,10 +1,12 @@
 package com.yffd.easy.workflow.service;
 
 import java.io.InputStream;
+import java.util.List;
 import java.util.zip.ZipInputStream;
 
 import com.yffd.easy.common.core.page.PageParam;
 import com.yffd.easy.common.core.page.PageResult;
+import com.yffd.easy.workflow.model.dto.WorkFlowActivityNodeDTO;
 import com.yffd.easy.workflow.model.dto.WorkFlowDefinitionDTO;
 
 /**
@@ -92,6 +94,15 @@ public interface WorkFlowDefinitionService {
 	 * @return			流程发布ID
 	 */
 	String deployDefinitionByZipInputStream(ZipInputStream ziInputStream);
+	
+	/**
+	 * 流程定义：获取流程节点，包括活动节点和流程线
+	 * @Date	2018年1月2日 下午5:41:30 <br/>
+	 * @author  zhangST
+	 * @param definitionId
+	 * @return
+	 */
+	List<WorkFlowActivityNodeDTO> getActivityNode(String definitionId);
 	
 }
 

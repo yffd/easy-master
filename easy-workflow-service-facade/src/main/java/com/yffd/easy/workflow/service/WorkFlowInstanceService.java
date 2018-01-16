@@ -64,6 +64,5 @@ public interface WorkFlowInstanceService {
 	 */
 	int suspendInstance(String instanceId);
 	
-	Map<String, Object> findInstanceParams(String instanceId);
 }
 

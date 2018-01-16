@@ -20,14 +20,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		$dg.datagrid({
 		    url:'workflow/definition/listPage',
 		    width: 'auto',
-			height: $(this).height()-120,
+		    height: $(this).height()-commonui.remainHeight-$('.search-form-div').height(),
 			pagination: true,
 			pageSize: commonui.pageSize,
 			rownumbers: true,
 			animate: true,
 			collapsible: true,
 			fitColumns: true,
-			border: true,
+			border: false,
 			striped: true,
 			singleSelect: true,
 			toolbar: '#tb_id',
@@ -38,52 +38,84 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		    		$.messager.show({
 						title :"系统提示",
 						msg : result.statusDesc,
-						timeout : 1000 * 4
+						timeout : commonui.messager_timeout
 					});
 		    		return [];
 	    		}
 	    	},
+	    	frozenColumns: [[
+	    	                 {field: 'workFlowCategoryCode', title: '类别编号', width: 100, align: 'left'},
+	    	                 {field: 'workFlowCategoryName', title: '类别名称', width: 100, align: 'left'},
+	    	                 {field: 'workFlowKey', title: '类别关键字', width: 100, align: 'left'},
+	    	                 {field: 'workFlowVersion', title: '版本号', width: 50, align: 'left'}
+// 	    	                 {field: 'workFlowDesc', title: '流程描述', width: 200, align: 'left'}  
+	    	                 ]],
 	        columns: [[
-						{field: 'id', title: '流程定义ID', width: parseInt($(this).width()*0.1), align: 'left'},
-						{field: 'category', title: '流程定义类别', width: parseInt($(this).width()*0.1), align: 'left'},
-						{field: 'name', title: '流程定义名称', width: parseInt($(this).width()*0.15), align: 'left'},
-						{field: 'key', title: '流程定义关键字', width: parseInt($(this).width()*0.1), align: 'left'},
-						{field: 'version', title: '版本号', width: parseInt($(this).width()*0.05), align: 'left'},
-						{field: 'resourceName', title: 'XML名称', width: parseInt($(this).width()*0.15), align: 'left',
+						{field: 'id', title: '流程定义ID', width: 80, align: 'left'},
+						{field: 'resourceName', title: 'XML名称', width: 200, align: 'left',
 							formatter: function(value, row) {
 								return '<a href="javascript:void(0);" onClick="loadResource(\''+row.id+'\',\'xml\');" width="950" style="color: blue">'+value+'</a>';
 							}	
 						},
-						{field: 'dgrmResourceName', title: 'PNG名称', width: parseInt($(this).width()*0.15), align: 'left',
+						{field: 'dgrmResourceName', title: 'PNG名称', width: 200, align: 'left',
 							formatter: function(value, row) {
 								return '<a href="javascript:void(0);" onClick="loadResource(\''+row.id+'\',\'image\');" width="950" style="color: blue">'+value+'</a>';
 							}	
 						},
-						{field: 'suspensionState', title: '状态', width: parseInt($(this).width()*0.05), align: 'left',
+						{field: 'definitionState', title: '状态', width: 100, align: 'left',
 							formatter: function(value, row) {
-								if(1==row.suspensionState)
+								if(1==row.definitionState)
 									return "<font color=green>已激活<font>";
 			            		else
 			            			return "<font color=red>已挂起<font>";
 							}
 						},
-						{field: 'deploymentId', title: '流程发布ID', width: parseInt($(this).width()*0.05), align: 'left'},
-						{field: 'deployTime', title: '流程发布时间', width: parseInt($(this).width()*0.1), align: 'left',
+						{field: 'deploymentId', title: '流程发布ID', width: 100, align: 'left'},
+						{field: 'deployTime', title: '流程发布时间', width: 150, align: 'left',
 							formatter: function(value, row) {
 								return new Date(value).format("yyyy-MM-dd HH:mm:ss");
 							}	
 						},
-						{field: 'operate', title: '操作', width: parseInt($(this).width()*0.1), align: 'center',
+						{field: 'operate', title: '操作', width: 200, align: 'center',
 							formatter: function(value, row) {
 								var text = "激活";
-								if(1==row.suspensionState) text = "挂起";
+								if(1==row.definitionState) text = "挂起";
 								var accountCode = row.userCode;
-								var a1 = '[<a href="javascript:void(0);" onClick="updateState(\''+row.id+'\',\''+row.suspensionState+'\');" width="950" style="color: blue">'+text+'</a>]';
-								var a2 = '[<a href="javascript:void(0);" onclick="changeStatus(\''+accountCode+'\',\'A\');" width="950" style="color: blue">转化为Model</a>]';
+								var a1 = '[<a href="javascript:void(0);" onClick="updateState(\''+row.id+'\',\''+row.definitionState+'\');" width="100" style="color: blue">'+text+'</a>]';
+								var a2 = '[<a href="javascript:void(0);" onclick="changeStatus(\''+accountCode+'\',\'A\');" width="100" style="color: blue">转化为Model</a>]';
 								return a1 + '&nbsp;' + a2 + '&nbsp;';
 							}	
 						}
 	                   ]]
+		});
+		
+		$('#versionState_id').combobox({
+			panelHeight: 80,
+		    textField:'label',
+		    valueField:'value',
+		    data: [{
+				label: '所有版本',
+				value: 'all'
+			},{
+				label: '最新版本',
+				value: 'last',
+				"selected": true
+			}]
+		});
+		$('#definitionState_id').combobox({
+			panelHeight: 80,
+		    textField:'label',
+		    valueField:'value',
+		    data: [{
+				label: '全部',
+				value: ''
+			},{
+				label: '已激活',
+				value: '1'
+			},{
+				label: '已挂起',
+				value: '2'
+			}]
 		});
 		
 	});
@@ -129,83 +161,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		});
 	}
 	
-	// 打开修改对话框
-	function openEditDlg() {
-		var row = $dg.datagrid('getSelected');
-		if(row) {
-			parent.$.modalDialog({
-				title: "编辑",
-				width: 600,
-				height: 400,
-				href: 'admin/pms/user/userEditDlg.jsp',
-				onLoad:function(){
-					var editForm = parent.$.modalDialog.handler.find("#form_id");
-					if("-1"==row.orgCode) row.orgCode = "";
-					editForm.form("load", row);
-					editForm.find("#userCode_id").attr('readonly',true);
-				},
-				buttons: [{
-					text: '确定',
-					iconCls: 'icon-ok',
-					handler: function() {
-						parent.$.modalDialog.openWindow = $openWindow;//定义打开对话框的窗口
-						parent.$.modalDialog.openner = $dg;//定义对话框关闭要刷新的grid
-						var editForm = parent.$.modalDialog.handler.find("#form_id");
-						editForm.attr("action", "pms/user/edit");
-						editForm.submit();
-					}
-				},{
-					text: '取消',
-					iconCls: 'icon-cancel',
-					handler: function() {
-						parent.$.modalDialog.handler.dialog('destroy');
-						parent.$.modalDialog.handler = undefined;
-					}
-				}]
-			});
-		} else {
-			$.messager.show({
-				title :"系统提示",
-				msg :"请选择一行记录!",
-				timeout : 1000 * 2
-			});
-		}
-	}
-	
-	// 删除
-	function removeFunc() {
-		var row = $dg.datagrid('getSelected');
-		if(row) {
-			parent.$.messager.confirm("提示","确定要删除记录吗?",function(r){  
-			    if(r) {
-			    	$.post("pms/user/del", {userCode:row.userCode}, function(result) {
-						if(result.statusCode=='OK') {
-							var rowIndex = $dg.datagrid('getRowIndex', row);
-							$dg.datagrid('deleteRow', rowIndex);
-						}
-						$.messager.show({
-							title : "系统提示",
-							msg : result.statusDesc,
-							timeout : 1000 * 2
-						});
-					}, "JSON").error(function() {
-						$.messager.show({
-							title : "系统提示",
-							msg : result.statusDesc,
-							timeout : 1000 * 2
-						});
-					});
-			    }  
-			});
-		} else {
-			$.messager.show({
-				title :"系统提示",
-				msg :"请选择一行记录!",
-				timeout : 1000 * 2
-			});
-		}
-	}
-
 	// 高级查询
 	function _search() {
 		var params = {};
@@ -221,71 +176,61 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	// 清除搜索条件
 	function cleanSearch() {
 		$('#searchForm_id input').val('');
+		$('#versionState_id').combobox('select','last');
+		$('#definitionState_id').combobox('select','');
 	}
 	
-	// 激活账户
-	function changeStatus(accountCode, status) {
-		$.post("pms/user/changeStatus", {userCode:accountCode, userStatus:status}, function(result) {
-			if(result.statusCode=='OK') {
-				$dg.datagrid('reload');
-			}
-			$.messager.show({
-				title : "系统提示",
-				msg : result.statusDesc,
-				timeout : 1000 * 2
-			});
-		}, "JSON").error(function() {
-			$.messager.show({
-				title : "系统提示",
-				msg : result.statusDesc,
-				timeout : 1000 * 2
-			});
-		});
-	}
-	// 重置密码
-	function resetPassword(accountCode) {
-		parent.$.messager.confirm("提示","确定要重置密码吗?",function(r){  
-		    if(r) {
-		    	$.post("pms/user/resetPassword", {userCode:accountCode}, function(result) {
-					$.messager.show({
-						title : "系统提示",
-						msg : result.statusDesc,
-						timeout : 1000 * 2
-					});
-				}, "JSON").error(function() {
-					$.messager.show({
-						title : "系统提示",
-						msg : result.statusDesc,
-						timeout : 1000 * 2
-					});
-				});
-		    }  
-		});
-	}
 </script>
 </head>
 <body class="easyui-layout,fit:true">
-	<div data-options="region:'north',border:false,title:'高级查询',iconCls:'icon-search',collapsible:true" style="height:120px;overflow:hidden; align:left">
-		<form id="searchForm_id" style="width:100%;height:100%;">
-			<table cellpadding="0" cellspacing="0" style="width:100%;height:100%;padding:0px;margin:0px,auto;" class="tableForm">
+	<div class="search-form-div" data-options="region:'north',border:false,title:'高级查询',iconCls:'icon-search',collapsible:true">
+		<div class="badge-div">
+			<span class="badge-title">提示</span>
+			<p style="margin:0px;padding:2px;">
+				类别编号为<span class="badge-info"><strong>流程图中的Namespace</strong></span>，
+				类别名称为<span class="badge-info"><strong>流程图中的Name</strong></span>，
+				类别关键字为<span class="badge-info"><strong>流程图中的id</strong></span>！
+			</p>
+		</div>
+		<form id="searchForm_id">
+			<table class="search-form-table">
 				<tr>
-					<th>名称：</th>
+					<th>类别编号：</th>
 					<td>
-						<input name="name" type="text" />
+						<input name="workFlowCategoryCode" type="text" />
 					</td>
-					<th>关键字：</th>
+					<th>类别名称：</th>
 					<td>
-						<input name="key" type="text" />
+						<input name="workFlowCategoryName" type="text" />
 					</td>
-					<th>发布日期：</th>
+					<th>类别关键字：</th>
 					<td>
-						<input type="text" name="startDate" id="startDate" class="Wdate" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:'#F{$dp.$D(\'endDate\',{d:0});}'})"/>&nbsp;&nbsp;~&nbsp;&nbsp;
-						<input type="text" name="endDate" id="endDate" class="Wdate" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'startDate\',{d:0});}'})"/>
+						<input name="workFlowKey" type="text" />
 					</td>
 				</tr>
 				<tr>
-					<td colspan="5">
+					<th>版本：</th>
+					<td>
+						<input id="versionState_id" name="versionState" type="text" />
 					</td>
+					<th>状态：</th>
+					<td>
+						<input id="definitionState_id" name="definitionState" type="text" />
+					</td>
+					<th></th><td></td>
+				</tr>
+				<tr>
+					<th>开始时间：</th>
+					<td>
+						<input type="text" name="searchStartTime" id="startTime" class="Wdate" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:'#F{$dp.$D(\'endTime\',{d:0});}'})"/>
+					</td>
+					<th>结束时间：</th><td>
+						<input type="text" name="searchEndTime" id="endTime" class="Wdate" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'startTime\',{d:0});}'})"/>
+					</td>
+					<th></th><td></td>
+				</tr>
+				<tr>
+					<td colspan="5"></td>
 					<td style="text-align:right;padding-right:20px;">
 						<a href="javascript:void(0);" class="easyui-linkbutton" onclick="_search();">查询</a> 
 						<a href="javascript:void(0);" class="easyui-linkbutton" onclick="cleanSearch();">重置</a>
@@ -297,7 +242,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	</div>
 	
 	<div data-options="region:'center',border:false" style="overflow:hidden;">
-		<table id="dg_id" title="流程定义列表"></table>
+		<table id="dg_id" title="查询列表"></table>
 	</div>
 	
 	<div id="tb_id" style="display:none;padding:10px;height:auto">
@@ -306,9 +251,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<td style="padding-left:2px;padding-bottom:2px;">
 					<shiro:hasPermission name="user-add">
 					<a class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:'true'" onclick="openAddDlg();" href="javascript:void(0);">添加</a>
-					</shiro:hasPermission>
-					<shiro:hasPermission name="user-del">
-					<a class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:'true'" onclick="removeFunc();" href="javascript:void(0);">删除</a>
+					<a class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:'true'" onclick="openAddDlg();" href="javascript:void(0);">复制新建</a>
 					</shiro:hasPermission>
 				</td>
 			</tr>

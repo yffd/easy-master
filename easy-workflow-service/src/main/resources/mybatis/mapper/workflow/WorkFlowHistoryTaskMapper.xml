@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yffd.easy.workflow.mapper.WorkFlowHistoryTaskMapper">
+	
+	<resultMap id="resutlId" type="com.yffd.easy.workflow.model.dto.WorkFlowHistoryTaskDTO">
+		<id column="ID_" property="id" jdbcType="INTEGER" />
+		<result column="EXECUTION_ID_" property="executionId" jdbcType="VARCHAR" />
+		<result column="PROC_INST_ID_" property="instanceId" jdbcType="VARCHAR" />
+		<result column="PROC_DEF_ID_" property="definitionId" jdbcType="VARCHAR" />
+		<result column="NAME_" property="activityNodeName" jdbcType="VARCHAR" />
+		<result column="TASK_DEF_KEY_" property="activityNodeId" jdbcType="VARCHAR" />
+		<result column="ASSIGNEE_" property="assignee" jdbcType="VARCHAR" />
+		<result column="CLAIM_TIME_" property="claimTime" jdbcType="TIMESTAMP" />
+		<result column="START_TIME_" property="startTime" jdbcType="TIMESTAMP" />
+		<result column="END_TIME_" property="endTime" jdbcType="TIMESTAMP" />
+		
+		<result column="workFlowCategoryCode" property="workFlowCategoryCode" jdbcType="VARCHAR" />
+		<result column="workFlowCategoryName" property="workFlowCategoryName" jdbcType="VARCHAR" />
+		<result column="workFlowKey" property="workFlowKey" jdbcType="VARCHAR" />
+		<result column="workFlowVersion" property="workFlowVersion" jdbcType="INTEGER" />
+		<result column="workFlowDesc" property="workFlowDesc" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<!-- 动态组装复合查询条件 -->
+	<sql id="conditions_where">
+		<!-- Equal query -->
+		<if test="workFlowCategoryCode != null and workFlowCategoryCode != ''"> and def.CATEGORY_ = #{workFlowCategoryCode} </if>
+		<if test="workFlowKey != null and workFlowKey != ''"> and def.KEY_ = #{workFlowKey} </if>
+		<if test="activityNodeId != null and activityNodeId != ''"> and t1.TASK_DEF_KEY_ = #{activityNodeId} </if>
+		<if test="assignee != null and assignee != ''"> and t1.ASSIGNEE_ = #{assignee} </if>
+		<if test="searchStartTime != null"><![CDATA[ and t1.CLAIM_TIME_ >= #{searchStartTime} ]]></if>
+		<if test="searchEndTime != null"><![CDATA[ and t1.CLAIM_TIME_ <= #{searchEndTime} ]]></if>
+		<!-- Like query -->
+		<if test="activityNodeName != null and activityNodeName != ''"> and t1.NAME_ like CONCAT(CONCAT('%', #{activityNodeName}), '%') </if>
+		<if test="workFlowCategoryName != null and workFlowCategoryName != ''"> and def.NAME_ like CONCAT(CONCAT('%', #{workFlowCategoryName}), '%') </if>
+	</sql>
+	<sql id="conditions_limit"><if test="pageParam != null"> limit #{pageParam.pageStartRow}, #{pageParam.pageLimit} </if></sql>
+	
+	<select id="selectListBy" parameterType="java.util.Map" resultMap="resutlId">
+		SELECT t1.ID_, t1.PROC_DEF_ID_, t1.PROC_INST_ID_, t1.EXECUTION_ID_, t1.TASK_DEF_KEY_, t1.NAME_, t1.ASSIGNEE_, t1.START_TIME_, t1.END_TIME_, t1.CLAIM_TIME_
+		, def.CATEGORY_ workFlowCategoryCode, def.NAME_ workFlowCategoryName, def.KEY_ workFlowKey, def.VERSION_ workFlowVersion, def.DESCRIPTION_ workFlowDesc
+		FROM act_hi_taskinst t1
+		LEFT JOIN act_re_procdef def
+		ON t1.PROC_DEF_ID_ = def.ID_
+		<where>
+			t1.END_TIME_ is not null
+			<include refid="conditions_where"/>
+		</where>
+		order by t1.PROC_INST_ID_ desc, t1.START_TIME_ desc
+		<include refid="conditions_limit" />
+	</select>
+	
+	<select id="selectCountBy" parameterType="java.util.Map" resultType="long">
+		select count(1) from act_hi_taskinst t1 where t1.END_TIME_ is not null
+	</select>
+	
+</mapper>

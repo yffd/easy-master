@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.yffd.easy.common.core.page.PageParam;
 import com.yffd.easy.common.core.page.PageResult;
-import com.yffd.easy.workflow.activiti.dao.WorkFlowBaseTestCase;
+import com.yffd.easy.workflow.WorkFlowBaseTestCase;
 import com.yffd.easy.workflow.app.model.OaLeave;
 
 /**

@@ -17,6 +17,8 @@
   <properties>
     <easy.admin.service.facade.version>0.0.1</easy.admin.service.facade.version>
     <easy.common.ssm.version>0.0.1</easy.common.ssm.version>
+    <easy.common.dubbo.version>0.0.1</easy.common.dubbo.version>
+    <easy.workflow.service.facade.version>0.0.1</easy.workflow.service.facade.version>
   </properties>
   
   <dependencies>
@@ -29,6 +31,17 @@
   		<groupId>com.yffd.easy</groupId>
 		<artifactId>easy-common-ssm</artifactId>
 		<version>${easy.common.ssm.version}</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>com.yffd.easy</groupId>
+	  	<artifactId>easy-common-dubbo</artifactId>
+	  	<type>pom</type>
+	  	<version>${easy.common.dubbo.version}</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>com.yffd.easy</groupId>
+  		<artifactId>easy-workflow-service-facade</artifactId>
+  		<version>${easy.workflow.service.facade.version}</version>
   	</dependency>
     <dependency>
       <groupId>junit</groupId>

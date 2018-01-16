@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans        http://www.springframework.org/schema/beans/spring-beans.xsd        http://code.alibabatech.com/schema/dubbo        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <!-- 消费方应用名，用于计算依赖关系，不是匹配条件，不要与提供方一样 -->
+    <dubbo:application name="soa-consumer" logger="log4j"/>
+
+    <!-- 使用multicast广播注册中心暴露发现服务地址 -->
+    <dubbo:registry address="zookeeper://127.0.0.1:2181" client="zkclient" />
+
+	<dubbo:protocol name="dubbo" port="20880" threads="100" accesslog="D:\java\yffd\data\logs\consumer.log"/>
+
+	<!-- 关闭所有服务的启动时检查 ，否则没有提供者时报错，将阻止 Spring 初始化完成 -->
+<!-- 	<dubbo:consumer check="false" /> -->
+
+    <!-- 生成远程服务代理，可以和本地bean一样使用demoService -->
+    <dubbo:reference id="demoService" interface="com.yffd.easy.demo.soa.api.DemoService" loadbalance="roundrobin" cluster="failover" retries="2" mock="return null" check="false"/>
+    
+<!--     <dubbo:reference id="callbackService" interface="com.yffd.easy.demo.soa.api.CallbackService" /> -->
+    
+    <dubbo:reference id="barService" interface="com.yffd.easy.demo.soa.api.BarService" />
+    
+</beans>

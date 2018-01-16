@@ -20,7 +20,7 @@ import com.yffd.easy.common.core.model.PersistModel;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({
-    "classpath:spring/spring-context-service.xml"
+    "classpath:spring/admin-spring-beans.xml"
 })
 //@TransactionConfiguration(transactionManager="default_txManager") //可选，默认为transactionManager
 //@Transactional

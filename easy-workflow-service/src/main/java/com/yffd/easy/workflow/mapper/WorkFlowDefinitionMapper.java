@@ -3,6 +3,8 @@ package com.yffd.easy.workflow.mapper;
 import java.util.List;
 import java.util.Map;
 
+import com.yffd.easy.workflow.model.dto.WorkFlowDefinitionDTO;
+
 /**
  * @Description  简单描述该类的功能（可选）.
  * @Date		 2017年12月6日 下午5:09:41 <br/>
@@ -13,10 +15,10 @@ import java.util.Map;
  */
 public interface WorkFlowDefinitionMapper {
 
-	List<Map<String, Object>> selectListBy(Map<String, Object> paramMap);
+	List<WorkFlowDefinitionDTO> selectListBy(Map<String, Object> paramMap);
 	
 	Long selectCountBy(Map<String, Object> paramMap);
 	
-	Map<String, Object> selectByPK(String id);
+	WorkFlowDefinitionDTO selectByPK(String id);
 }
 

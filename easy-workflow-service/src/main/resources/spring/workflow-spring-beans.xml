@@ -25,5 +25,6 @@
   
     <import resource="classpath:spring/activiti-spring.xml"/>
     <import resource="classpath:spring/activiti-spring-orm.xml"/>
+<!--     <import resource="classpath:dubbo/workflow-spring-provider.xml"/> -->
     
 </beans>

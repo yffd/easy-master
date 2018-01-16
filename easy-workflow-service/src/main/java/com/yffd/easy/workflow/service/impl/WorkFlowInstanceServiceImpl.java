@@ -5,7 +5,6 @@ import java.util.Map;
 import org.activiti.engine.ActivitiException;
 import org.activiti.engine.ActivitiObjectNotFoundException;
 import org.activiti.engine.runtime.ProcessInstance;
-import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -76,14 +75,6 @@ public class WorkFlowInstanceServiceImpl extends ActivitiBaseService implements 
 		} catch (ActivitiException e) {
 			return 2;
 		}
-	}
-
-	@Override
-	public Map<String, Object> findInstanceParams(String instanceId) {
-		Task task = this.getTaskService().createTaskQuery().taskAssignee("xiaobai").processInstanceId(instanceId).singleResult();
-//				this.getRuntimeService().createProcessInstanceQuery().processInstanceId(instanceId).singleResult();
-		if(null!=task) return task.getProcessVariables();
-		return null;
 	}
 
 }

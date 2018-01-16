@@ -16,7 +16,7 @@
     http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
     ">
 	
-	<context:component-scan base-package="com.yffd.easy.admin" use-default-filters="false">
+	<context:component-scan base-package="com.yffd.easy" use-default-filters="false">
     	<context:include-filter type="annotation" expression="org.springframework.stereotype.Repository"/> 
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/> 
     </context:component-scan>
@@ -25,5 +25,7 @@
                                   location="classpath*:admin.jdbc.properties"/>
                                   
 	<import resource="classpath:spring/admin-spring-orm.xml" />
+	<import resource="classpath:dubbo/admin-spring-provider.xml" />
+	<import resource="classpath:dubbo/admin-spring-consumer.xml" />
     
 </beans>

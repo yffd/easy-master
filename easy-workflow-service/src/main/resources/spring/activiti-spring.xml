@@ -33,6 +33,9 @@
 	  <set>
 	    <value>com.yffd.easy.workflow.mapper.WorkFlowDefinitionMapper</value>
 	    <value>com.yffd.easy.workflow.mapper.WorkFlowInstanceMapper</value>
+	    <value>com.yffd.easy.workflow.mapper.WorkFlowTaskMapper</value>
+	    <value>com.yffd.easy.workflow.mapper.WorkFlowHistoryInstanceMapper</value>
+	    <value>com.yffd.easy.workflow.mapper.WorkFlowHistoryTaskMapper</value>
 	    <value>com.yffd.easy.workflow.app.mapper.OaLeaveMapper</value>
 	  </set>
 	</property>
@@ -40,6 +43,9 @@
 	  <set>
 	    <value>mybatis/mapper/workflow/WorkFlowDefinitionMapper.xml</value>
 	    <value>mybatis/mapper/workflow/WorkFlowInstanceMapper.xml</value>
+	    <value>mybatis/mapper/workflow/WorkFlowTaskMapper.xml</value>
+	    <value>mybatis/mapper/workflow/WorkFlowHistoryInstanceMapper.xml</value>
+	    <value>mybatis/mapper/workflow/WorkFlowHistoryTaskMapper.xml</value>
 	    <value>mybatis/mapper/app/oa/Leave.xml</value>
 	  </set>
 	</property>

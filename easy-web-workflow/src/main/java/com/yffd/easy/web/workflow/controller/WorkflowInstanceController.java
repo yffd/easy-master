@@ -6,8 +6,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,7 +34,6 @@ import com.yffd.easy.workflow.service.WorkFlowTraceService;
 @Controller
 @RequestMapping("/workflow/instance")
 public class WorkflowInstanceController extends WorkflowBaseController {
-	private static final Logger LOG = LoggerFactory.getLogger(WorkflowInstanceController.class);
 	
 	@Autowired
 	private WorkFlowInstanceService workFlowInstanceService;
@@ -88,7 +85,7 @@ public class WorkflowInstanceController extends WorkflowBaseController {
 		if(ValidUtils.isEmpty(instanceId)) {
 			return this.errorAjax("参数无效");
 		}
-		InputStream inputStream = this.workFlowTraceService.tarceWorkFlowByDiagram(instanceId);
+		InputStream inputStream = this.workFlowTraceService.traceWorkFlowByDiagram(instanceId);
 		if(null!=inputStream) {
 			byte[] b = new byte[4096];
 	        int len = -1;
@@ -97,7 +94,7 @@ public class WorkflowInstanceController extends WorkflowBaseController {
 	        }
 	        return null;
 		}
-		return this.successAjax();
+		return this.errorAjax();
 	}
 }
 

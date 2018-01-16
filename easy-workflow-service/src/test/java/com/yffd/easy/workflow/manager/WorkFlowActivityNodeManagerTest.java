@@ -3,7 +3,7 @@ package com.yffd.easy.workflow.manager;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.yffd.easy.workflow.activiti.dao.WorkFlowBaseTestCase;
+import com.yffd.easy.workflow.WorkFlowBaseTestCase;
 
 /**
  * @Description  简单描述该类的功能（可选）.

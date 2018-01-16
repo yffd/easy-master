@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.activiti.bpmn.model.BpmnModel;
-import org.activiti.engine.ProcessEngineConfiguration;
 import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
@@ -15,6 +14,7 @@ import org.activiti.image.ProcessDiagramGenerator;
 import org.springframework.stereotype.Service;
 
 import com.yffd.easy.workflow.activiti.service.ActivitiBaseService;
+import com.yffd.easy.workflow.model.dto.WorkFlowActivityNodeDTO;
 import com.yffd.easy.workflow.service.WorkFlowTraceService;
 
 /**
@@ -29,7 +29,7 @@ import com.yffd.easy.workflow.service.WorkFlowTraceService;
 public class WorkFlowTraceServiceImpl extends ActivitiBaseService implements WorkFlowTraceService {
 
 	@Override
-	public InputStream tarceWorkFlowByDiagram(String instanceId) {
+	public InputStream traceWorkFlowByDiagram(String instanceId) {
 		// 获取历史流程实例
 		HistoricProcessInstance historicProcessInstance = this.getHistoryService().createHistoricProcessInstanceQuery()
 				.processInstanceId(instanceId).singleResult();
@@ -69,25 +69,26 @@ public class WorkFlowTraceServiceImpl extends ActivitiBaseService implements Wor
 	 */
 	private List<String> getHighLightedFlows(ProcessDefinitionEntity processDefinitionEntity, List<HistoricActivityInstance> historicActivityInstances) {
 		List<String> highFlows = new ArrayList<String>();	// 用以保存高亮的线flowId
-		for(int i=0;i<historicActivityInstances.size()-1;i++) {	// 对历史流程节点进行遍历
-			List<ActivityImpl> historyActivityList = new ArrayList<ActivityImpl>();	// 用以保存后续开始时间相同的节点
-			ActivityImpl sameActivityImpl = processDefinitionEntity.findActivity(historicActivityInstances.get(i + 1)
+		List<ActivityImpl> historyActivityList = new ArrayList<ActivityImpl>();
+		for(int i=0;i<historicActivityInstances.size();i++) {	// 对历史流程节点进行遍历
+			ActivityImpl activityImpl = processDefinitionEntity.findActivity(historicActivityInstances.get(i)
                             .getActivityId());
-			historyActivityList.add(sameActivityImpl);
-			
-            ActivityImpl activityImpl = processDefinitionEntity.findActivity(historicActivityInstances.get(i)
-            		.getActivityId());	// 得到节点定义的详细信息
-            List<PvmTransition> pvmTransitions = activityImpl.getOutgoingTransitions();	// 取出节点的所有出去的线
-            for(PvmTransition pvmTransition : pvmTransitions) {
-                // 对所有的线进行遍历
-                ActivityImpl pvmActivityImpl = (ActivityImpl) pvmTransition.getDestination();
-                // 如果取出的线的目标节点存在时间相同的节点里，保存该线的id，进行高亮显示
-                if(historyActivityList.contains(pvmActivityImpl)) {
-                    highFlows.add(pvmTransition.getId());
-                }
-            }
+			historyActivityList.add(activityImpl);
         }
-        return highFlows;
+		for(ActivityImpl activityImpl : historyActivityList) {
+			List<PvmTransition> pvmTransitions = activityImpl.getOutgoingTransitions();	// 取出节点的所有出去的线
+	        for(PvmTransition pvmTransition : pvmTransitions) {
+	            // 对所有的线进行遍历
+	            ActivityImpl pvmActivityImpl = (ActivityImpl) pvmTransition.getDestination();
+	            // 如果取出的线的目标节点存在时间相同的节点里，保存该线的id，进行高亮显示
+	            if(historyActivityList.contains(pvmActivityImpl)) {
+	                highFlows.add(pvmTransition.getId());
+	            }
+	        }
+		}
+
+		return highFlows;
 	}
+
 }
 

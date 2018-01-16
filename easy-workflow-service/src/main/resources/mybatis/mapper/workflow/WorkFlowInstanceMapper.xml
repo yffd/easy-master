@@ -4,33 +4,35 @@
 	
 	<resultMap id="resutlId" type="com.yffd.easy.workflow.model.dto.WorkFlowInstanceDTO">
 		<id column="ID_" property="id" jdbcType="INTEGER" />
-		<result column="DEPLOYMENT_ID_" property="deployId" jdbcType="VARCHAR" />
 		<result column="PROC_INST_ID_" property="instanceId" jdbcType="VARCHAR" />
 		<result column="ACT_ID_" property="activityNodeId" jdbcType="VARCHAR" />
 		<result column="SUSPENSION_STATE_" property="instanceState" jdbcType="VARCHAR" />
 		<result column="PROC_DEF_ID_" property="definitionId" jdbcType="VARCHAR" />
-		<result column="KEY_" property="definitionKey" jdbcType="VARCHAR" />
-		<result column="NAME_" property="definitionName" jdbcType="VARCHAR" />
-		<result column="CATEGORY_" property="definitionCategory" jdbcType="VARCHAR" />
-		<result column="VERSION_" property="definitionVersion" jdbcType="VARCHAR" />
+		
+		<result column="workFlowCategoryCode" property="workFlowCategoryCode" jdbcType="VARCHAR" />
+		<result column="workFlowCategoryName" property="workFlowCategoryName" jdbcType="VARCHAR" />
+		<result column="workFlowKey" property="workFlowKey" jdbcType="VARCHAR" />
+		<result column="workFlowVersion" property="workFlowVersion" jdbcType="INTEGER" />
+		<result column="workFlowDesc" property="workFlowDesc" jdbcType="VARCHAR" />
 	</resultMap>
 	
 	<!-- 动态组装复合查询条件 -->
 	<sql id="act_ru_execution_where">
 		<!-- Equal query -->
-		<if test="procDefId != null and procDefId != ''"> and t1.PROC_DEF_ID_ = #{procDefId} </if>
-		<if test="actId != null and actId != ''"> and t1.ACT_ID_ = #{actId} </if>
-		<if test="actId != null and actId != ''"> and t1.SUSPENSION_STATE_ = #{actId} </if>
-		<if test="actId != null and actId != ''"> and t1.CATEGORY_ = #{actId} </if>
-		<if test="actId != null and actId != ''"> and t1.KEY_ = #{actId} </if>
+		<if test="workFlowCategoryCode != null and workFlowCategoryCode != ''"> and def.CATEGORY_ = #{workFlowCategoryCode} </if>
+		<if test="workFlowKey != null and workFlowKey != ''"> and def.KEY_ = #{workFlowKey} </if>
+		<if test="activityNodeId != null and activityNodeId != ''"> and t1.TASK_DEF_KEY_ = #{activityNodeId} </if>
+		<if test="instanceState != null and instanceState != ''"> and t1.SUSPENSION_STATE_ = #{instanceState} </if>
 		<!-- Like query -->
-		<if test="name != null and name != ''"> and t1.NAME_ like CONCAT(CONCAT('%', #{name}), '%') </if>
+		<if test="workFlowCategoryName != null and workFlowCategoryName != ''"> and def.NAME_ like CONCAT(CONCAT('%', #{workFlowCategoryName}), '%') </if>
 	</sql>
 	<sql id="act_ru_execution_limit"><if test="pageParam != null"> limit #{pageParam.pageStartRow}, #{pageParam.pageLimit} </if></sql>
 	
 	<select id="selectListBy" parameterType="java.util.Map" resultMap="resutlId">
-		SELECT t1.ID_, t1.PROC_INST_ID_, t1.PROC_DEF_ID_, t1.ACT_ID_, t1.SUSPENSION_STATE_, t2.CATEGORY_, t2.NAME_, t2.KEY_, t2.VERSION_, t2.DEPLOYMENT_ID_ 
-		FROM act_ru_execution t1 LEFT JOIN act_re_procdef t2 ON t1.PROC_DEF_ID_=t2.ID_
+		SELECT t1.ID_, t1.PROC_INST_ID_, t1.PROC_DEF_ID_, t1.ACT_ID_, t1.SUSPENSION_STATE_
+		, def.CATEGORY_ workFlowCategoryCode, def.NAME_ workFlowCategoryName, def.KEY_ workFlowKey, def.VERSION_ workFlowVersion, def.DESCRIPTION_ workFlowDesc
+		FROM act_ru_execution t1 
+		LEFT JOIN act_re_procdef def ON t1.PROC_DEF_ID_ = def.ID_
 		<where>
 			<include refid="act_ru_execution_where" />
 		</where>
@@ -39,15 +41,17 @@
 	
 	<select id="selectCountBy" parameterType="java.util.Map" resultType="long">
 		SELECT count(1) FROM act_ru_execution t1
-		LEFT JOIN act_re_procdef t2 ON t1.PROC_DEF_ID_=t2.ID_
+		LEFT JOIN act_re_procdef def ON t1.PROC_DEF_ID_ = def.ID_
 		<where>
 			<include refid="act_ru_execution_where" />
 		</where>
 	</select>
 	
 	<select id="selectByPK" parameterType="java.lang.String" resultMap="resutlId">
-		SELECT t1.ID_, t1.PROC_INST_ID_, t1.PROC_DEF_ID_, t1.ACT_ID_, t1.SUSPENSION_STATE_, t2.CATEGORY_, t2.NAME_, t2.KEY_, t2.VERSION_, t2.DEPLOYMENT_ID_ 
-		FROM act_ru_execution t1 LEFT JOIN act_re_procdef t2 ON t1.PROC_DEF_ID_=t2.ID_
+		SELECT t1.ID_, t1.PROC_INST_ID_, t1.PROC_DEF_ID_, t1.ACT_ID_, t1.SUSPENSION_STATE_
+		, def.CATEGORY_ workFlowCategoryCode, def.NAME_ workFlowCategoryName, def.KEY_ workFlowKey, def.VERSION_ workFlowVersion, def.DESCRIPTION_ workFlowDesc
+		FROM act_ru_execution t1 
+		left join act_re_procdef def on t1.PROC_DEF_ID_ = def.ID_
 		where t1.ID_ = #{_parameter}
 	</select>
 	

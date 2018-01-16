@@ -1,6 +1,7 @@
 package com.yffd.easy.workflow.activiti.test;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.activiti.engine.HistoryService;
@@ -12,6 +13,7 @@ import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.repository.ProcessDefinitionQuery;
 import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.IdentityLink;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
 import org.junit.Test;
@@ -102,6 +104,7 @@ public class MyTest extends AbstractActivitiTest {
 		HistoricProcessInstanceQuery query = historyService.createHistoricProcessInstanceQuery();
 		System.out.println(query.finished().count());
 	}
+	
 	
 }
 

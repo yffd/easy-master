@@ -15,6 +15,8 @@ import com.yffd.easy.admin.pms.service.PmsUserService;
 import com.yffd.easy.common.core.page.PageParam;
 import com.yffd.easy.common.core.page.PageResult;
 import com.yffd.easy.common.core.util.ValidUtils;
+import com.yffd.easy.workflow.model.dto.WorkFlowTaskCandidatorDTO;
+import com.yffd.easy.workflow.service.WorkFlowTaskService;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -29,9 +31,22 @@ public class PmsUserServiceImpl implements PmsUserService {
 
 	@Autowired
 	private PmsUserDao pmsUserDao;
+	@Autowired
+	private WorkFlowTaskService workFlowTaskService;
 	
+	public void setWorkFlowTaskService(WorkFlowTaskService workFlowTaskService) {
+		this.workFlowTaskService = workFlowTaskService;
+	}
+
+	public WorkFlowTaskService getWorkFlowTaskService() {
+		return workFlowTaskService;
+	}
+
 	@Override
 	public PageResult<PmsUser> findList(PmsUser user, PageParam pageParam) {
+		WorkFlowTaskCandidatorDTO list = this.workFlowTaskService.findCandidators("15009");
+		System.out.println(list);
+		
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		if(!ValidUtils.isEmpty(user)) {
 			paramMap.put("userCode", user.getUserCode());

@@ -1,12 +1,19 @@
 package com.yffd.easy.workflow.service.impl;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.yffd.easy.workflow.activiti.dao.WorkFlowBaseTestCase;
+import com.yffd.easy.common.core.page.PageParam;
+import com.yffd.easy.common.core.page.PageResult;
+import com.yffd.easy.workflow.WorkFlowBaseTestCase;
+import com.yffd.easy.workflow.model.dto.WorkFlowTaskDTO;
+import com.yffd.easy.workflow.model.dto.WorkFlowVariableDTO;
 import com.yffd.easy.workflow.service.WorkFlowTaskService;
 
 /**
@@ -39,5 +46,41 @@ public class WorkFlowTaskServiceImplTest extends WorkFlowBaseTestCase {
 		int result = this.workFlowTaskService.completeTask(taskId, variables);
 		System.out.println(result);
 	}
+	
+	@Test
+	public void findTaskParamsTest() {
+		String taskId = "15009";
+		List<WorkFlowVariableDTO> list = this.workFlowTaskService.findVariables(taskId);
+		System.out.println(list);
+	}
+	
+	@Test
+	public void findTodoTaskListByTest() {
+		Set<String> userIds = new HashSet<String>();
+		userIds.add("a2");
+		userIds.add("a3");
+		Set<String> roleIds = new HashSet<String>();
+		roleIds.add("b2");
+		roleIds.add("deptLeader");
+		List<WorkFlowTaskDTO> list = this.workFlowTaskService.findTodoTaskListBy(userIds, roleIds, null, null, null, null, null);
+		System.out.println(list.size());
+	}
+	
+	@Test
+	public void findTodoTaskListPageByTest() {
+		PageParam pageParam = new PageParam(1L, 10L);
+		Set<String> userIds = new HashSet<String>();
+		userIds.add("a2");
+		userIds.add("a3");
+		Set<String> roleIds = new HashSet<String>();
+		roleIds.add("b2");
+		roleIds.add("deptLeader");
+		PageResult<WorkFlowTaskDTO> page = this.workFlowTaskService.findTodoTaskListPageBy(userIds, roleIds, null, null, null, null, null, pageParam);
+		System.out.println(page.getPageParam());
+		System.out.println(page.getRecordList().size());
+	}
+	
+	
+	
 }
 

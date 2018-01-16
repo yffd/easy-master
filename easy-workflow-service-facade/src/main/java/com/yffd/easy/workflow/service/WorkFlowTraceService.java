@@ -12,6 +12,7 @@ import java.io.InputStream;
  */
 public interface WorkFlowTraceService {
 
-	InputStream tarceWorkFlowByDiagram(String instanceId);
+	InputStream traceWorkFlowByDiagram(String instanceId);
+	
 }
 

@@ -6,8 +6,11 @@
     
     //默认每页记录数
 	commonui.pageSize = 20;
+	commonui.messager_msg = "系统错误，请与管理员联系！";
 	//消息框超时时间
 	commonui.messager_timeout = 1000 * 4;
+	//页脚的高度
+	commonui.remainHeight = 11;
 	
 	/**
 	 * 切换皮肤

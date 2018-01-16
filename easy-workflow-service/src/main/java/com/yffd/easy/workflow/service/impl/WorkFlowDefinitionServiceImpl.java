@@ -1,11 +1,23 @@
 package com.yffd.easy.workflow.service.impl;
 
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.zip.ZipInputStream;
 
 import org.activiti.engine.ActivitiException;
 import org.activiti.engine.ActivitiObjectNotFoundException;
+import org.activiti.engine.delegate.Expression;
+import org.activiti.engine.impl.bpmn.behavior.UserTaskActivityBehavior;
+import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import org.activiti.engine.impl.pvm.PvmTransition;
+import org.activiti.engine.impl.pvm.delegate.ActivityBehavior;
+import org.activiti.engine.impl.pvm.process.ActivityImpl;
+import org.activiti.engine.impl.pvm.process.TransitionImpl;
+import org.activiti.engine.impl.task.TaskDefinition;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.DeploymentBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +28,7 @@ import com.yffd.easy.common.core.page.PageParam;
 import com.yffd.easy.common.core.page.PageResult;
 import com.yffd.easy.workflow.activiti.service.ActivitiBaseService;
 import com.yffd.easy.workflow.dao.WorkFlowDefinitionDao;
+import com.yffd.easy.workflow.model.dto.WorkFlowActivityNodeDTO;
 import com.yffd.easy.workflow.model.dto.WorkFlowDefinitionDTO;
 import com.yffd.easy.workflow.service.WorkFlowDefinitionService;
 
@@ -35,14 +48,13 @@ public class WorkFlowDefinitionServiceImpl extends ActivitiBaseService implement
 	@Override
 	public PageResult<WorkFlowDefinitionDTO> findListPage(WorkFlowDefinitionDTO model, PageParam pageParam) {
 		Map<String, Object> paramMap = this.model2map(model, null);
-		PageResult<Map<String, Object>> pageResult = this.processDefinitionDao.selectPageBy(paramMap, pageParam);
-		return this.map2model(pageResult, WorkFlowDefinitionDTO.class, true);
+		PageResult<WorkFlowDefinitionDTO> pageResult = this.processDefinitionDao.selectPageBy(paramMap, pageParam);
+		return pageResult;
 	}
 
 	@Override
 	public WorkFlowDefinitionDTO findDefinitionByPK(String id) {
-		Map<String, Object> mapResult = this.processDefinitionDao.selectByPK(id);
-		return this.map2model(mapResult, WorkFlowDefinitionDTO.class, true);
+		return this.processDefinitionDao.selectByPK(id);
 	}
 
 	@Override
@@ -112,6 +124,80 @@ public class WorkFlowDefinitionServiceImpl extends ActivitiBaseService implement
 		deploymentBuilder.addZipInputStream(ziInputStream);
 		Deployment deployment = deploymentBuilder.deploy();
 		return deployment.getId();
+	}
+
+	@Override
+	public List<WorkFlowActivityNodeDTO> getActivityNode(String definitionId) {
+		List<WorkFlowActivityNodeDTO> nodeList = new ArrayList<WorkFlowActivityNodeDTO>();
+		
+		ProcessDefinitionEntity definitionEntity = (ProcessDefinitionEntity)this.getRepositoryService()
+        		.getProcessDefinition(definitionId);
+		List<ActivityImpl> activityImpls = definitionEntity.getActivities();
+		for(ActivityImpl activityImpl : activityImpls) {
+			String id = activityImpl.getId();
+			int height = activityImpl.getHeight();
+			int width = activityImpl.getWidth();
+			int x = activityImpl.getX();
+			int y = activityImpl.getY();
+			
+			Map<String, Object> properties = activityImpl.getProperties();
+			String type = (String) properties.get("type");
+			String name = (String) properties.get("name");
+			
+			String assignee = null;
+			Set<String> candidateUserIds = new HashSet<String>();
+			Set<String> candidateGroupIds = new HashSet<String>();
+	        ActivityBehavior activityBehavior = activityImpl.getActivityBehavior();
+	        if(activityBehavior instanceof UserTaskActivityBehavior) {
+	        	UserTaskActivityBehavior userTaskActivityBehavior = (UserTaskActivityBehavior) activityBehavior;
+	        	TaskDefinition taskDefinition = userTaskActivityBehavior.getTaskDefinition();
+	        	Expression assigneeExpression = taskDefinition.getAssigneeExpression();
+	        	assignee = null==assigneeExpression?null:assigneeExpression.getExpressionText();
+	        	Set<Expression> candidateUserIdExpressions = taskDefinition.getCandidateUserIdExpressions();
+	        	for(Expression expression : candidateUserIdExpressions) {
+	        		candidateUserIds.add(expression.getExpressionText());
+	        	}
+	        	Set<Expression> candidateGroupIdExpressions = taskDefinition.getCandidateGroupIdExpressions();
+	        	for(Expression expression : candidateGroupIdExpressions) {
+	        		candidateGroupIds.add(expression.getExpressionText());
+	        	}
+	        }
+	        
+	        WorkFlowActivityNodeDTO activityNode = new WorkFlowActivityNodeDTO();
+	        activityNode.setNodeId(id);
+	        activityNode.setNodeName(name);
+	        activityNode.setNodeType(type);
+	        activityNode.setWidth(width);
+	        activityNode.setHeight(height);
+	        activityNode.setX(x);
+	        activityNode.setY(y);
+	        activityNode.setAssignee(assignee);
+	        activityNode.setCandidateUserIds(candidateUserIds);
+	        activityNode.setCandidateGroupIds(candidateGroupIds);
+	        
+	        nodeList.add(activityNode);
+	        
+	        List<PvmTransition> pvmTransitions = activityImpl.getOutgoingTransitions();	// 取出节点的所有出去的线
+	        for(PvmTransition pvmTransition : pvmTransitions) {
+	            String flowId = pvmTransition.getId();
+	            String flowName = (String) pvmTransition.getProperty("name");
+				String conditionText = (String) pvmTransition.getProperty("conditionText");
+				
+				WorkFlowActivityNodeDTO flowNode = new WorkFlowActivityNodeDTO();
+				flowNode.setNodeId(flowId);
+				flowNode.setNodeName(flowName);
+				flowNode.setFlowCondition(conditionText);
+				flowNode.setFlowNode(true);
+		        
+				TransitionImpl transitionImpl = (TransitionImpl) pvmTransition;
+				List<Integer> waypoints = transitionImpl.getWaypoints();
+				flowNode.setFlowWaypoints(waypoints);
+				
+		        nodeList.add(flowNode);
+	        }
+	        
+		}
+		return nodeList;
 	}
 
 }

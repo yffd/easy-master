@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.yffd.easy.common.core.page.PageParam;
 import com.yffd.easy.common.core.page.PageResult;
-import com.yffd.easy.workflow.activiti.dao.WorkFlowBaseTestCase;
+import com.yffd.easy.workflow.WorkFlowBaseTestCase;
 import com.yffd.easy.workflow.model.dto.WorkFlowInstanceDTO;
 import com.yffd.easy.workflow.service.WorkFlowInstanceService;
 
@@ -37,11 +37,8 @@ public class WorkFlowInstanceServiceImplTest extends WorkFlowBaseTestCase {
 		for(WorkFlowInstanceDTO dto : pageResult.getRecordList()) {
 			System.out.println(dto.getActivityNodeId());
 			System.out.println(dto.getDefinitionId());
-			System.out.println(dto.getDefinitionKey());
-			System.out.println(dto.getDeployId());
 			System.out.println(dto.getId());
 			System.out.println(dto.getInstanceId());
-			System.out.println(dto.getVariables());
 			System.out.println(">>>>>>>>>>>>>>>>>>");
 		}
 	}
@@ -52,11 +49,8 @@ public class WorkFlowInstanceServiceImplTest extends WorkFlowBaseTestCase {
 		WorkFlowInstanceDTO dto = this.workFlowInstanceService.findInstanceByPK(id);
 		System.out.println(dto.getActivityNodeId());
 		System.out.println(dto.getDefinitionId());
-		System.out.println(dto.getDefinitionKey());
-		System.out.println(dto.getDeployId());
 		System.out.println(dto.getId());
 		System.out.println(dto.getInstanceId());
-		System.out.println(dto.getVariables());
 	}
 	
 	@Test
@@ -81,13 +75,6 @@ public class WorkFlowInstanceServiceImplTest extends WorkFlowBaseTestCase {
 		String instanceId = "15001";
 		int result = this.workFlowInstanceService.suspendInstance(instanceId);
 		System.out.println(result);
-	}
-	
-	@Test
-	public void findInstanceParamsTest() {
-		String instanceId = "20001";
-		Map<String, Object> params = this.workFlowInstanceService.findInstanceParams(instanceId);
-		System.out.println(params);
 	}
 	
 }

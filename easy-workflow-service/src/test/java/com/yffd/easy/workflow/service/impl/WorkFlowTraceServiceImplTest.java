@@ -8,7 +8,7 @@ import java.io.InputStream;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.yffd.easy.workflow.activiti.dao.WorkFlowBaseTestCase;
+import com.yffd.easy.workflow.WorkFlowBaseTestCase;
 import com.yffd.easy.workflow.service.WorkFlowTraceService;
 
 /**
@@ -26,8 +26,8 @@ public class WorkFlowTraceServiceImplTest extends WorkFlowBaseTestCase {
 	
 	@Test
 	public void tarceWorkFlowByDiagramTest() throws IOException {
-		String instanceId = "15001";
-		InputStream inputStream = workFlowTraceService.tarceWorkFlowByDiagram(instanceId);
+		String instanceId = "2501";
+		InputStream inputStream = workFlowTraceService.traceWorkFlowByDiagram(instanceId);
 		File file = new File("D:\\ddd\\aa.png");
 		FileOutputStream out = new FileOutputStream(file);
 		int bytesRead = 0;

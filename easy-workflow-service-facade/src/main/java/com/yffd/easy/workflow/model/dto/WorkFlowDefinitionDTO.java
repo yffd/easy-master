@@ -1,6 +1,5 @@
 package com.yffd.easy.workflow.model.dto;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -11,7 +10,7 @@ import java.util.Date;
  * @since		 JDK 1.7+
  * @see 	 
  */
-public class WorkFlowDefinitionDTO implements Serializable {
+public class WorkFlowDefinitionDTO extends WorkFlowBaseDTO {
 	
 	/**
 	 * serialVersionUID:TODO(用一句话描述这个变量表示什么).
@@ -19,42 +18,21 @@ public class WorkFlowDefinitionDTO implements Serializable {
 	 */
 	private static final long serialVersionUID = 485098751459588314L;
 	private String id;
-	private String name;
-	private String key;
-	private int version;
 	private String resourceName;
 	private String dgrmResourceName;
-	private int suspensionState;
+	private int definitionState;
 	private String deploymentId;
 	private Date deployTime;
-	private String category;	// 类别
+	private boolean lastVersion;
 	
-	private String startDate;
-	private String endDate;
+	private Date searchStartTime;
+	private Date searchEndTime;
 	
 	public String getId() {
 		return id;
 	}
 	public void setId(String id) {
 		this.id = id;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getKey() {
-		return key;
-	}
-	public void setKey(String key) {
-		this.key = key;
-	}
-	public int getVersion() {
-		return version;
-	}
-	public void setVersion(int version) {
-		this.version = version;
 	}
 	public String getResourceName() {
 		return resourceName;
@@ -68,11 +46,11 @@ public class WorkFlowDefinitionDTO implements Serializable {
 	public void setDgrmResourceName(String dgrmResourceName) {
 		this.dgrmResourceName = dgrmResourceName;
 	}
-	public int getSuspensionState() {
-		return suspensionState;
+	public int getDefinitionState() {
+		return definitionState;
 	}
-	public void setSuspensionState(int suspensionState) {
-		this.suspensionState = suspensionState;
+	public void setDefinitionState(int definitionState) {
+		this.definitionState = definitionState;
 	}
 	public String getDeploymentId() {
 		return deploymentId;
@@ -86,23 +64,23 @@ public class WorkFlowDefinitionDTO implements Serializable {
 	public void setDeployTime(Date deployTime) {
 		this.deployTime = deployTime;
 	}
-	public String getCategory() {
-		return category;
+	public boolean isLastVersion() {
+		return lastVersion;
 	}
-	public void setCategory(String category) {
-		this.category = category;
+	public void setLastVersion(boolean lastVersion) {
+		this.lastVersion = lastVersion;
 	}
-	public String getStartDate() {
-		return startDate;
+	public Date getSearchStartTime() {
+		return searchStartTime;
 	}
-	public void setStartDate(String startDate) {
-		this.startDate = startDate;
+	public void setSearchStartTime(Date searchStartTime) {
+		this.searchStartTime = searchStartTime;
 	}
-	public String getEndDate() {
-		return endDate;
+	public Date getSearchEndTime() {
+		return searchEndTime;
 	}
-	public void setEndDate(String endDate) {
-		this.endDate = endDate;
+	public void setSearchEndTime(Date searchEndTime) {
+		this.searchEndTime = searchEndTime;
 	}
 	
 }
