@@ -23,52 +23,76 @@ public class EasyDaoException extends EasySysException {
 	}
 	
 	/**
+	 * 数据库操作，插入数据为空
+	 */
+	public static final EasySysException DB_INSERT_NULL(String Statement) {
+		return new EasySysException("5D0101", "数据库操作，插入数据为空.{" + Statement + "}");
+	}
+	
+	/**
 	 * 数据库操作，插入返回结果为0
 	 */
     public static final EasySysException DB_INSERT_RESULT_0(String Statement) {
-    	return new EasySysException("5D0002", "数据库操作，插入返回结果为0.{" + Statement + "}");
+    	return new EasySysException("5D0102", "数据库操作，插入返回结果为0.{" + Statement + "}");
     }
 
+    /**
+	 * 数据库操作，更新数据为空
+	 */
+	public static final EasySysException DB_UPDATE_NULL(String Statement) {
+		return new EasySysException("5D0201", "数据库操作，更新数据为空.{" + Statement + "}");
+	}
+	
     /**
      * 数据库操作，更新返回结果为0
      */
     public static final EasySysException DB_UPDATE_RESULT_0(String Statement) {
-    	return new EasySysException("5D0003", "数据库操作，更新返回结果为0.{" + Statement + "}");
+    	return new EasySysException("5D0202", "数据库操作，更新返回结果为0.{" + Statement + "}");
     }
     
+    /**
+	 * 数据库操作，删除数据为空
+	 */
+	public static final EasySysException DB_DELETE_NULL(String Statement) {
+		return new EasySysException("5D0301", "数据库操作，删除数据为空.{" + Statement + "}");
+	}
+	
     /**
      * 数据库操作，删除返回结果为0
      */
     public static final EasySysException DB_DELETE_RESULT_0(String Statement) {
-    	return new EasySysException("5D0004", "数据库操作，删除返回结果为0.{" + Statement + "}");
+    	return new EasySysException("5D0302", "数据库操作，删除返回结果为0.{" + Statement + "}");
     }
 
     /**
-     * 数据库操作，单条查询返回结果为null
+     * 数据库操作，查询条件为空
      */
-    public static final EasySysException DB_SELECT_ONE_IS_NULL(String Statement) {
-    	return new EasySysException("5D0005", "数据库操作，单条查询返回结果为null.{" + Statement + "}");
+    public static final EasySysException DB_SELECT_BY_NULL(String Statement) {
+    	return new EasySysException("5D0401", "数据库操作，查询条件为空.{" + Statement + "}");
     }
     
     /**
      * 数据库操作，单条查询返回结果为多条
      */
     public static final EasySysException DB_SELECT_ONE_RESULT_MULTI(String Statement) {
-    	return new EasySysException("5D0006", "数据库操作，单条查询返回结果为多条.{" + Statement + "}");
+    	return new EasySysException("5D0402", "数据库操作，单条查询返回结果为多条.{" + Statement + "}");
     }
-
-    /**
-     * 数据库操作，多条查询返回结果为null
-     */
-    public static final EasySysException DB_SELECT_LIST_IS_NULL(String Statement) {
-    	return new EasySysException("5D0007", "数据库操作，多条查询返回结果为null.{" + Statement + "}");
-    }
-
+    
     /**
      * 数据库操作，序列生成超时
      */
     public static final EasySysException DB_GET_SEQ_NEXT_VALUE_ERROR(String Statement) {
-    	return new EasySysException("5D0008", "数据库操作，序列生成超时.{" + Statement + "}");
+    	return new EasySysException("5D0501", "数据库操作，序列生成超时.{" + Statement + "}");
     }
+    
+    /**
+	 * 数据库操作，查询条件为空
+	 */
+	public static final EasySysException DB_SELECT_NULL(String Statement) {
+		return new EasySysException("5D0101", "数据库操作，查询条件为空.{" + Statement + "}");
+	}
+    
+
+   
 }
 

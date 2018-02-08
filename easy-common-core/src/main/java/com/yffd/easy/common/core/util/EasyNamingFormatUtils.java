@@ -110,7 +110,7 @@ public class EasyNamingFormatUtils {
 	public static void main(String[] args) {
 		String prefix = "";
 		String suffix = "";
-//        System.out.println(camel2underline("username", false, prefix, suffix));
+        System.out.println(camel2underline("username", false, prefix, suffix));
 //        System.out.println(camel2underline("username", true, prefix, suffix));
 //        System.out.println(camel2underline("userName", true, prefix, suffix));
 //        System.out.println(camel2underline("userName", false, prefix, suffix));

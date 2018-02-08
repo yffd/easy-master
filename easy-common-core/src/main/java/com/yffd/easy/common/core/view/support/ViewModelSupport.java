@@ -3,7 +3,7 @@ package com.yffd.easy.common.core.view.support;
 import java.util.List;
 import java.util.Map;
 
-import com.yffd.easy.common.core.model.support.EasyModelConverter;
+import com.yffd.easy.common.core.converter.EasyModelConverter;
 import com.yffd.easy.common.core.page.PageParam;
 import com.yffd.easy.common.core.page.PageResult;
 import com.yffd.easy.common.core.util.ValidUtils;
@@ -28,6 +28,7 @@ public class ViewModelSupport extends EasyModelConverter {
 	 * @return
 	 */
 	public DataGridVO toDataGrid(PageResult<?> pageResult) {
+		if(null==pageResult) return null;
 		DataGridVO vo = new DataGridVO();
 		if(null!=pageResult.getRecordList())
 			vo.setRows(pageResult.getRecordList());
@@ -44,6 +45,7 @@ public class ViewModelSupport extends EasyModelConverter {
 	 * @return
 	 */
 	public DataGridVO toDataGrid(List<?> list) {
+		if(null==list) return null;
 		DataGridVO vo = new DataGridVO();
 		vo.setRows(list);
 		Long total = (long) list.size();

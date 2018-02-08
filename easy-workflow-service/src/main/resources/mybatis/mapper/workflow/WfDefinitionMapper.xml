@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yffd.easy.workflow.mapper.WfDefinitionMapper">
+	<resultMap id="resutlId" type="com.yffd.easy.workflow.model.dto.WfDefinitionDTO">
+		<id column="ID_" property="id" jdbcType="INTEGER" />
+		<result column="RESOURCE_NAME_" property="resourceName" jdbcType="VARCHAR" />
+		<result column="DGRM_RESOURCE_NAME_" property="dgrmResourceName" jdbcType="VARCHAR" />
+		<result column="SUSPENSION_STATE_" property="definitionState" jdbcType="VARCHAR" />
+		<result column="DEPLOYMENT_ID_" property="deploymentId" jdbcType="VARCHAR" />
+		<result column="DEPLOY_TIME_" property="deployTime" jdbcType="TIMESTAMP" />
+		
+		<result column="wfCategory" property="wfCategory" jdbcType="INTEGER" />
+		<result column="wfName" property="wfName" jdbcType="VARCHAR" />
+		<result column="wfKey" property="wfKey" jdbcType="VARCHAR" />
+		<result column="wfDesc" property="wfDesc" jdbcType="VARCHAR" />
+		<result column="wfVersion" property="wfVersion" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<!-- 动态组装复合查询条件 -->
+	<sql id="conditions_where">
+		<!-- Like query -->
+		<if test="wfName != null and workFlowCategoryName != ''"> and def.NAME_ like CONCAT(CONCAT('%', #{wfName}), '%') </if>
+		<!-- Equal query -->
+		<if test="wfCategory != null and wfCategory != ''"> and def.CATEGORY_ = #{wfCategory} </if>
+		<if test="wfKey != null and wfKey != ''"> and def.KEY_ = #{wfKey} </if>
+		<if test="definitionState != null and definitionState != ''"> and def.SUSPENSION_STATE_ = #{definitionState} </if>
+		<if test="searchStartTime != null"><![CDATA[ and t1.DEPLOY_TIME_ >= #{searchStartTime} ]]></if>
+		<if test="searchEndTime != null"><![CDATA[ and t1.DEPLOY_TIME_ <= #{searchEndTime} ]]></if>
+	</sql>
+	<sql id="conditions_limit"><if test="pageParam != null"> limit #{pageParam.pageStartRow}, #{pageParam.pageLimit} </if></sql>
+	<sql id="conditions_orderby"> ORDER BY t1.DEPLOY_TIME_ desc </sql>
+	
+	<select id="selectListBy" parameterType="java.util.Map" resultMap="resutlId">
+		SELECT def.CATEGORY_ wfCategory, def.NAME_ wfName, def.KEY_ wfKey, def.VERSION_ wfVersion, def.DESCRIPTION_ wfDesc, 
+		def.ID_, def.RESOURCE_NAME_, def.DGRM_RESOURCE_NAME_, def.SUSPENSION_STATE_, def.DEPLOYMENT_ID_, t1.DEPLOY_TIME_ 
+		FROM act_re_procdef def LEFT JOIN act_re_deployment t1 ON def.DEPLOYMENT_ID_=t1.ID_
+		<if test="lastVersion">
+			JOIN (SELECT KEY_, MAX(VERSION_) VERSION FROM act_re_procdef GROUP BY KEY_) t2
+			ON t2.KEY_=def.KEY_ and t2.VERSION=def.VERSION_
+		</if>
+		<where>
+			<include refid="conditions_where" />
+		</where>
+		<include refid="conditions_orderby" />
+		<include refid="conditions_limit" />
+	</select>
+	
+	<select id="selectCountBy" parameterType="java.util.Map" resultType="long">
+		SELECT count(1) FROM act_re_procdef def LEFT JOIN act_re_deployment t1 ON def.DEPLOYMENT_ID_=t1.ID_
+		<if test="lastVersion">
+			JOIN (SELECT KEY_, MAX(VERSION_) VERSION FROM act_re_procdef GROUP BY KEY_) t2
+			ON t2.KEY_=def.KEY_ and t2.VERSION=def.VERSION_
+		</if>
+		<where>
+			<include refid="conditions_where" />
+		</where>
+	</select>
+	
+	<select id="selectByPK" parameterType="java.lang.String" resultMap="resutlId">
+		SELECT def.CATEGORY_ wfCategory, def.NAME_ wfName, def.KEY_ wfKey, def.VERSION_ wfVersion, def.DESCRIPTION_ wfDesc,  
+		def.ID_, def.RESOURCE_NAME_, def.DGRM_RESOURCE_NAME_, def.SUSPENSION_STATE_, def.DEPLOYMENT_ID_, t1.DEPLOY_TIME_ 
+		FROM act_re_procdef def LEFT JOIN act_re_deployment t1 ON def.DEPLOYMENT_ID_=t1.ID_
+		where def.ID_ = #{_parameter}
+	</select>
+	
+</mapper>

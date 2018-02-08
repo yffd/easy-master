@@ -17,11 +17,18 @@ public class EasyBizException extends EasySysException {
 	private static final long serialVersionUID = -6877199237574806153L;
 
 	public static final EasySysException newInstance(String msg) {
-		return new EasySysException("5B0001", msg);
+		return new EasySysException("5B0101", msg);
 	}
 	
 	public static final EasySysException newInstance(String msg, Throwable cause) {
-		return new EasySysException("5B0001", msg, cause);
+		return new EasySysException("5B0101", msg, cause);
+	}
+	
+	/**
+	 * 业务参数为空
+	 */
+	public static final EasySysException BIZ_PARAMS_NULL() {
+		return new EasySysException("5D0201", "业务参数为空.");
 	}
 	
 }

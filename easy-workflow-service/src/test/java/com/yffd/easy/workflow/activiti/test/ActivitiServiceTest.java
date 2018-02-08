@@ -11,7 +11,7 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.yffd.easy.workflow.activiti.service.ActivitiBaseService;
+import com.yffd.easy.workflow.activiti.service.ActivitiServiceManager;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -25,7 +25,7 @@ import com.yffd.easy.workflow.activiti.service.ActivitiBaseService;
 @ContextConfiguration({
     "classpath:spring/workflow-spring-beans.xml"
 })
-public class ActivitiServiceTest extends ActivitiBaseService {
+public class ActivitiServiceTest extends ActivitiServiceManager {
 
 	@Test
 	public void test() {

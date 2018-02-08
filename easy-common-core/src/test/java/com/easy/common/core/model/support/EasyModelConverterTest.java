@@ -12,7 +12,7 @@ import org.junit.Test;
 
 import com.easy.common.core.model.DemoDTO;
 import com.easy.common.core.model.DemoPO;
-import com.yffd.easy.common.core.model.support.EasyModelConverter;
+import com.yffd.easy.common.core.converter.EasyModelConverter;
 import com.yffd.easy.common.core.page.PageParam;
 import com.yffd.easy.common.core.page.PageResult;
 

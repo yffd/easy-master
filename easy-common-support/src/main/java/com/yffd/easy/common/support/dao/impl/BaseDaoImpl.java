@@ -7,8 +7,8 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.yffd.easy.common.core.converter.EasyModelConverter;
 import com.yffd.easy.common.core.exception.EasyDaoException;
-import com.yffd.easy.common.core.model.support.EasyModelConverter;
 import com.yffd.easy.common.core.page.PageParam;
 import com.yffd.easy.common.core.page.PageResult;
 import com.yffd.easy.common.core.util.ValidUtils;

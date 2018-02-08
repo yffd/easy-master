@@ -158,7 +158,7 @@ function initMenuLocal() {
             "text": "流程定义设计",
             "state": "open",
             "iconCls": "icon-sys",
-            "inUrl": "workflow/modeler/newModel",
+            "inUrl": "views/workflow/definition/definitionMain.jsp",
             "rsType": "M"
         },{
         	"id": "14-112",

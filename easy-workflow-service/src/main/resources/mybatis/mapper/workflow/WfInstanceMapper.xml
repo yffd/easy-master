@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yffd.easy.workflow.mapper.WfInstanceMapper">
+	
+	<resultMap id="resutlId" type="com.yffd.easy.workflow.model.dto.WfInstanceDTO">
+		<id column="ID_" property="id" jdbcType="INTEGER" />
+		<result column="PROC_INST_ID_" property="instanceId" jdbcType="VARCHAR" />
+		<result column="NAME_" property="activityNodeName" jdbcType="VARCHAR" />
+		<result column="ACT_ID_" property="activityNodeId" jdbcType="VARCHAR" />
+		<result column="SUSPENSION_STATE_" property="instanceState" jdbcType="VARCHAR" />
+		<result column="PROC_DEF_ID_" property="definitionId" jdbcType="VARCHAR" />
+		
+		<result column="startUserId" property="startUserId" jdbcType="VARCHAR" />
+		<result column="wfCategory" property="wfCategory" jdbcType="INTEGER" />
+		<result column="wfName" property="wfName" jdbcType="VARCHAR" />
+		<result column="wfKey" property="wfKey" jdbcType="VARCHAR" />
+		<result column="wfDesc" property="wfDesc" jdbcType="VARCHAR" />
+		<result column="wfVersion" property="wfVersion" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<!-- 动态组装复合查询条件 -->
+	<sql id="conditions_where">
+		<!-- Like query -->
+		<if test="activityNodeName != null and activityNodeName != ''"> and t3.NAME_ like CONCAT(CONCAT('%', #{activityNodeName}), '%') </if>
+		<if test="wfName != null and wfName != ''"> and def.NAME_ like CONCAT(CONCAT('%', #{wfName}), '%') </if>
+		<!-- Equal query -->
+		<if test="wfCategory != null and wfCategory != ''"> and def.CATEGORY_ = #{wfCategory} </if>
+		<if test="wfKey != null and wfKey != ''"> and def.KEY_ = #{wfKey} </if>
+		<if test="activityNodeId != null and activityNodeId != ''"> and t1.ACT_ID_ = #{activityNodeId} </if>
+		<if test="instanceState != null and instanceState != ''"> and t1.SUSPENSION_STATE_ = #{instanceState} </if>
+		<if test="startUserId != null and startUserId != ''"> and t2.USER_ID_ = #{startUserId} </if>
+	</sql>
+	<sql id="conditions_limit"><if test="pageParam != null"> limit #{pageParam.pageStartRow}, #{pageParam.pageLimit} </if></sql>
+	<sql id="conditions_orderby"> ORDER BY t1.ID_ desc </sql>
+	
+	<select id="selectListBy" parameterType="java.util.Map" resultMap="resutlId">
+		SELECT t1.ID_, t1.PROC_INST_ID_, t1.PROC_DEF_ID_, t1.ACT_ID_, t1.SUSPENSION_STATE_
+		,t2.USER_ID_ startUserId, t3.NAME_
+		, def.CATEGORY_ wfCategory, def.NAME_ wfName, def.KEY_ wfKey, def.VERSION_ wfVersion, def.DESCRIPTION_ wfDesc
+		FROM act_ru_execution t1 
+		LEFT JOIN act_re_procdef def ON t1.PROC_DEF_ID_ = def.ID_
+		LEFT JOIN act_ru_identitylink t2 ON t2.PROC_INST_ID_ = t1.PROC_INST_ID_ AND t2.TYPE_ = 'starter'
+		LEFT JOIN act_ru_task t3 ON t3.EXECUTION_ID_ = t1.ID_
+		<where>
+			<include refid="conditions_where" />
+		</where>
+		<include refid="conditions_orderby" />
+		<include refid="conditions_limit" />
+	</select>
+	
+	<select id="selectCountBy" parameterType="java.util.Map" resultType="long">
+		SELECT count(1) FROM act_ru_execution t1
+		LEFT JOIN act_re_procdef def ON t1.PROC_DEF_ID_ = def.ID_
+		LEFT JOIN act_ru_identitylink t2 ON t2.PROC_INST_ID_ = t1.PROC_INST_ID_ AND t2.TYPE_ = 'starter'
+		LEFT JOIN act_ru_task t3 ON t3.EXECUTION_ID_ = t1.ID_
+		<where>
+			<include refid="conditions_where" />
+		</where>
+	</select>
+	
+	<select id="selectByPK" parameterType="java.lang.String" resultMap="resutlId">
+		SELECT t1.ID_, t1.PROC_INST_ID_, t1.PROC_DEF_ID_, t1.ACT_ID_, t1.SUSPENSION_STATE_
+		,t2.USER_ID_ startUserId, t3.NAME_
+		, def.CATEGORY_ wfCategory, def.NAME_ wfName, def.KEY_ wfKey, def.VERSION_ wfVersion, def.DESCRIPTION_ wfDesc
+		FROM act_ru_execution t1 
+		left join act_re_procdef def on t1.PROC_DEF_ID_ = def.ID_
+		LEFT JOIN act_ru_identitylink t2 ON t2.PROC_INST_ID_ = t1.PROC_INST_ID_ AND t2.TYPE_ = 'starter'
+		LEFT JOIN act_ru_task t3 ON t3.EXECUTION_ID_ = t1.ID_
+		where t1.ID_ = #{_parameter}
+	</select>
+	
+</mapper>

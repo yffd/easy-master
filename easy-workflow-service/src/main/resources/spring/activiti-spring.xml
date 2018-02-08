@@ -31,22 +31,22 @@
 	<!-- 执行自定义SQL -->
 	<property name="customMybatisMappers">
 	  <set>
-	    <value>com.yffd.easy.workflow.mapper.WorkFlowDefinitionMapper</value>
-	    <value>com.yffd.easy.workflow.mapper.WorkFlowInstanceMapper</value>
-	    <value>com.yffd.easy.workflow.mapper.WorkFlowTaskMapper</value>
-	    <value>com.yffd.easy.workflow.mapper.WorkFlowHistoryInstanceMapper</value>
-	    <value>com.yffd.easy.workflow.mapper.WorkFlowHistoryTaskMapper</value>
-	    <value>com.yffd.easy.workflow.app.mapper.OaLeaveMapper</value>
+	    <value>com.yffd.easy.workflow.mapper.WfDefinitionMapper</value>
+	    <value>com.yffd.easy.workflow.mapper.WfInstanceMapper</value>
+	    <value>com.yffd.easy.workflow.mapper.WfTaskMapper</value>
+	    <value>com.yffd.easy.workflow.mapper.WfTodoTaskMapper</value>
+	    <value>com.yffd.easy.workflow.mapper.WfHistoryInstanceMapper</value>
+	    <value>com.yffd.easy.workflow.mapper.WfHistoryTaskMapper</value>
 	  </set>
 	</property>
 	<property name="customMybatisXMLMappers">
 	  <set>
-	    <value>mybatis/mapper/workflow/WorkFlowDefinitionMapper.xml</value>
-	    <value>mybatis/mapper/workflow/WorkFlowInstanceMapper.xml</value>
-	    <value>mybatis/mapper/workflow/WorkFlowTaskMapper.xml</value>
-	    <value>mybatis/mapper/workflow/WorkFlowHistoryInstanceMapper.xml</value>
-	    <value>mybatis/mapper/workflow/WorkFlowHistoryTaskMapper.xml</value>
-	    <value>mybatis/mapper/app/oa/Leave.xml</value>
+	    <value>mybatis/mapper/workflow/WfDefinitionMapper.xml</value>
+	    <value>mybatis/mapper/workflow/WfInstanceMapper.xml</value>
+	    <value>mybatis/mapper/workflow/WfTaskMapper.xml</value>
+	    <value>mybatis/mapper/workflow/WfTodoTaskMapper.xml</value>
+	    <value>mybatis/mapper/workflow/WfHistoryInstanceMapper.xml</value>
+	    <value>mybatis/mapper/workflow/WfHistoryTaskMapper.xml</value>
 	  </set>
 	</property>
 

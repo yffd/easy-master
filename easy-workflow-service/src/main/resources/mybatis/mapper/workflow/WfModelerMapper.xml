@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yffd.easy.workflow.mapper.WfModelerMapper">
+	<resultMap id="resutlId" type="com.yffd.easy.workflow.model.dto.WfModelerDTO">
+		<id column="ID_" property="id" jdbcType="INTEGER" />
+		<result column="META_INFO_" property="metaInfo" jdbcType="VARCHAR" />
+		<result column="DEPLOYMENT_ID_" property="deployId" jdbcType="VARCHAR" />
+		<result column="CREATE_TIME_" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="LAST_UPDATE_TIME_" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="EDITOR_SOURCE_VALUE_ID_" property="editorSourceValueId" jdbcType="VARCHAR" />
+		<result column="EDITOR_SOURCE_EXTRA_VALUE_ID_" property="editorSourceExtraValueId" jdbcType="VARCHAR" />
+		
+		<result column="CATEGORY_" property="wfCategory" jdbcType="INTEGER" />
+		<result column="NAME_" property="wfName" jdbcType="VARCHAR" />
+		<result column="KEY_" property="wfKey" jdbcType="VARCHAR" />
+		<result column="VERSION_" property="wfVersion" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<!-- 动态组装复合查询条件 -->
+	<sql id="condition_where">
+		<!-- Like query -->
+		<if test="wfName != null and wfName != ''"> and t1.NAME_ like CONCAT(CONCAT('%', #{wfName}), '%') </if>
+		<!-- Equal query -->
+		<if test="wfCategory != null and wfCategory != ''"> and t1.CATEGORY_ = #{wfCategory} </if>
+		<if test="wfKey != null and wfKey != ''"> and t1.KEY_ = #{wfKey} </if>
+		<if test="searchStartTime != null"><![CDATA[ and t1.CREATE_TIME_ >= #{searchStartTime} ]]></if>
+		<if test="searchEndTime != null"><![CDATA[ and t1.CREATE_TIME_ <= #{searchEndTime} ]]></if>
+	</sql>
+	<sql id="condition_limit"><if test="pageParam != null"> limit #{pageParam.pageStartRow}, #{pageParam.pageLimit} </if></sql>
+	
+	<select id="selectListBy" parameterType="java.util.Map" resultMap="resutlId">
+		SELECT t1.ID_, t1.NAME_, t1.KEY_, t1.CATEGORY_, t1.CREATE_TIME_, t1.LAST_UPDATE_TIME_, t1.VERSION_, t1.META_INFO_, t1.DEPLOYMENT_ID_, t1.EDITOR_SOURCE_VALUE_ID_, t1.EDITOR_SOURCE_EXTRA_VALUE_ID_ FROM act_re_model t1
+		<where>
+			<include refid="condition_where" />
+		</where>
+		ORDER BY t1.LAST_UPDATE_TIME_ DESC
+		<include refid="condition_limit" />
+	</select>
+	
+	<select id="selectCountBy" parameterType="java.util.Map" resultType="long">
+		SELECT count(1) FROM act_re_model t1
+		<where>
+			<include refid="condition_where" />
+		</where>
+	</select>
+	
+</mapper>

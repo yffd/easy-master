@@ -1,0 +1,197 @@
+package ##service_package_name##;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import ##import_model_full_name##;
+import ##import_test_base_service_full_name##;
+
+/**
+ * @Description  简单描述该类的功能（可选）.
+ * @Date		##date## <br/>
+ * @author		##author##
+ * @version		 1.0
+ * @since		 JDK 1.7+
+ * @see 	 
+ */
+public class ##test_service_name## ##test_base_service_name##{
+
+	@Autowired
+	private ##service_name## ##service_alias_name##;
+	
+	/***********************添加********************************/
+	
+	@Test
+	public void addByModelTest() {
+		##model_simple_name## model = new ##model_simple_name##();
+		model.setId("2000");
+		this.##service_alias_name##.addByModel(model, null);
+	}
+	
+	@Test
+	public void addByMapTest() {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("id", "2001");
+		this.##service_alias_name##.addByMap(paramMap, null);
+	}
+	
+	@Test
+	public void addBatchByModelTest() {
+		List<##model_simple_name##> list = new ArrayList<##model_simple_name##>();
+		for(int i=10;i<15;i++) {
+			##model_simple_name## model = new ##model_simple_name##();
+			model.setId("20"+i);
+			list.add(model);
+		}
+		this.##service_alias_name##.addBatchByModel(list, null);
+	}
+	
+	@Test
+	public void addBatchByMapTest() {
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		for(int i=10;i<12;i++) {
+			Map<String, Object> paramMap = new HashMap<String, Object>();
+			paramMap.put("id", "21"+i);
+			list.add(paramMap);
+		}
+		this.##service_alias_name##.addBatchByMap(list, null);
+	}
+	
+	/***********************修改********************************/
+	
+	@Test
+	public void updateByModelTest() {
+		##model_simple_name## model = new ##model_simple_name##();
+		model.setId("2000");
+		this.##service_alias_name##.updateByModel(model, null);
+	}
+	
+	@Test
+	public void updateByMapTest() {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("id", "2001");
+		this.##service_alias_name##.updateByMap(paramMap, null);
+	}
+	
+	@Test
+	public void updateBatchByModelTest() {
+		List<##model_simple_name##> list = new ArrayList<##model_simple_name##>();
+		int startId = 2010;
+		for(int i=0;i<3;i++) {
+			##model_simple_name## model = new ##model_simple_name##();
+			model.setId((startId+i) + "");
+			list.add(model);
+		}
+		this.##service_alias_name##.updateBatchByModel(list, null);
+	}
+	
+	@Test
+	public void updateBatchByMapTest() {
+		int startId = 2110;
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		for(int i=0;i<4;i++) {
+			Map<String, Object> paramMap = new HashMap<String, Object>();
+			paramMap.put("id", (startId+i) + "");
+			list.add(paramMap);
+		}
+		this.##service_alias_name##.updateBatchByMap(list, null);
+	}
+	
+	/***********************逻辑删除********************************/
+	
+	@Test
+	public void delByModelTest() {
+		##model_simple_name## model = new ##model_simple_name##();
+		model.setId("2000");
+		this.##service_alias_name##.delByModel(model, null);
+	}
+	
+	@Test
+	public void delByMapTest() {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("id", "2001");
+		this.##service_alias_name##.delByMap(paramMap, null);
+	}
+	
+	@Test
+	public void delBatchByModelTest() {
+		List<##model_simple_name##> list = new ArrayList<##model_simple_name##>();
+		int startId = 2011;
+		for(int i=0;i<2;i++) {
+			##model_simple_name## model = new ##model_simple_name##();
+			model.setId((startId+i) + "");
+			list.add(model);
+		}
+		this.##service_alias_name##.delBatchByModel(list, null);
+	}
+	
+	@Test
+	public void delBatchByMapTest() {
+		int startId = 2013;
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		for(int i=0;i<2;i++) {
+			Map<String, Object> paramMap = new HashMap<String, Object>();
+			paramMap.put("id", (startId+i) + "");
+			list.add(paramMap);
+		}
+		this.##service_alias_name##.delBatchByMap(list, null);
+	}
+	
+	@Test
+	public void delByIdTest() {
+		String id = "2110";
+		this.##service_alias_name##.delById(id, null);
+	}
+	
+	/***********************物理删除********************************/
+	
+	@Test
+	public void physicalDelByModelTest() {
+		##model_simple_name## model = new ##model_simple_name##();
+		model.setId("2000");
+		this.##service_alias_name##.physicalDelByModel(model, null);
+	}
+	
+	@Test
+	public void physicalDelByMapTest() {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("id", "2001");
+		this.##service_alias_name##.physicalDelByMap(paramMap, null);
+	}
+	
+	@Test
+	public void physicalDelBatchByModelTest() {
+		List<##model_simple_name##> list = new ArrayList<##model_simple_name##>();
+		int startId = 2011;
+		for(int i=0;i<2;i++) {
+			##model_simple_name## model = new ##model_simple_name##();
+			model.setId((startId+i) + "");
+			list.add(model);
+		}
+		this.##service_alias_name##.physicalDelBatchByModel(list, null);
+	}
+	
+	@Test
+	public void physicalDelBatchByMapTest() {
+		int startId = 2013;
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		for(int i=0;i<2;i++) {
+			Map<String, Object> paramMap = new HashMap<String, Object>();
+			paramMap.put("id", (startId+i) + "");
+			list.add(paramMap);
+		}
+		this.##service_alias_name##.physicalDelBatchByMap(list, null);
+	}
+	
+	@Test
+	public void physicalDelByIdTest() {
+		String id = "2110";
+		this.##service_alias_name##.physicalDelById(id, null);
+	}
+	
+}
