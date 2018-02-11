@@ -20,6 +20,8 @@
 	<commons.fileupload.version>1.3.1</commons.fileupload.version>
 	<commons.io.version>2.4</commons.io.version>
 	<!-- fileupload end -->
+	<!-- mvc json转换  -->
+	<jackson.version>2.5.4</jackson.version>
     <!-- freemarker -->
 	<freemarker.version>2.3.16</freemarker.version>
   </properties>
@@ -55,6 +57,19 @@
 		<version>${commons.io.version}</version>
 	</dependency>
 	<!-- fileupload end -->
+	
+	<!-- mvc json转换 start -->
+	<dependency>
+		<groupId>com.fasterxml.jackson.core</groupId>
+		<artifactId>jackson-core</artifactId>
+		<version>${jackson.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>com.fasterxml.jackson.core</groupId>
+		<artifactId>jackson-databind</artifactId>
+		<version>${jackson.version}</version>
+	</dependency>
+	<!-- mvc json转换 end -->
 	
 	<!-- freemarker start -->
 	<dependency>

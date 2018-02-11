@@ -1,8 +1,7 @@
 package com.easy.common.core.model;
 
+import java.io.Serializable;
 import java.util.Date;
-
-import com.yffd.easy.common.core.model.PersistModel;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -12,7 +11,7 @@ import com.yffd.easy.common.core.model.PersistModel;
  * @since		 JDK 1.7+
  * @see 	 
  */
-public class DemoPO extends PersistModel {
+public class DemoPO implements Serializable {
 	
 	/**
 	 * serialVersionUID:TODO(用一句话描述这个变量表示什么).

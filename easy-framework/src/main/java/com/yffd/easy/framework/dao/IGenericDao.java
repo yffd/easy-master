@@ -27,8 +27,8 @@ public interface IGenericDao {
     public static final String SQL_SELECT_ONE_BY = "selectOneBy";
     /** mapper xml 中的SQL ID，即statement=selectListBy */
     public static final String SQL_SELECT_LIST_BY = "selectListBy";
-    /** mapper xml 中的SQL ID，即statement=selectListByIn */
-    public static final String SQL_SELECT_LIST_BY_IN = "selectListByIn";
+    /** mapper xml 中的SQL ID，即statement=selectListByIds */
+    public static final String SQL_SELECT_LIST_BY_IDS = "selectListByIds";
 
     /** mapper xml 中的SQL ID，即statement=updateBy */
     public static final String SQL_UPDATE_BY = "updateBy";
@@ -82,7 +82,7 @@ public interface IGenericDao {
 	 * @param parameter
 	 * @return
 	 */
-	public List<?> selectListByIn(Object parameter);
+	public List<?> selectListByIds(List<String> parameter);
 
 	/**
 	 * 单条查询。<br/>

@@ -14,7 +14,7 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
-import com.yffd.easy.common.core.enums.SysConstantsEnum;
+import com.yffd.easy.common.core.enums.CommonEnum;
 import com.yffd.easy.common.core.model.RespModel;
 
 /**
@@ -38,8 +38,8 @@ public class SpringMvcExceptionHandler implements HandlerExceptionResolver {
 //		} else { }
 		
 		RespModel entity = new RespModel();
-		entity.setRespType(SysConstantsEnum.REQUEST_SYNC.getValue());
-		entity.setStatusCode(SysConstantsEnum.ERROR.getValue());
+		entity.setRespType(CommonEnum.REQUEST_SYNC.getValue());
+		entity.setStatusCode(CommonEnum.ERROR.getValue());
 		entity.setRespData(ex.getClass().getName());
 		
 		if(ex instanceof AuthorizationException) { // 授权异常

@@ -77,13 +77,12 @@
 	</select>
 
 	<!-- in条件查询 -->
-	<select id="selectByIn" parameterType="java.util.List" resultMap="resutlId">
+	<select id="selectListByIds" parameterType="java.util.List" resultMap="resutlId">
 		select <include refid="table_columns" /> 
 		from <include refid="table_name"/>  as t 
 		<where>
 			t.ID in 
-			<foreach item="item" index="index" collection="list" open="(" separator="," close=")">#{item.id}</foreach>
-			<if test="delFlag != null and delFlag != ''"> and t.DEL_FLAG = #{delFlag} </if>
+			<foreach item="item" index="index" collection="list" open="(" separator="," close=")">#{item}</foreach>
 		</where>
 	</select>
 

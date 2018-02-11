@@ -11,7 +11,7 @@ import java.util.Date;
  * @since		 JDK 1.7+
  * @see 	 
  */
-public class GenericPO implements Serializable {
+public class GenericPO extends DomainModel implements Serializable {
 	
 	private static final long serialVersionUID = 1569029662385519388L;
 	

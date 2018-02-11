@@ -94,10 +94,10 @@ function initMenuLocal() {
         "children": [{
         	"id": "sys-111",
             "pid": "sys",
-            "text": "流程发布管理",
+            "text": "租户管理",
             "state": "open",
             "iconCls": "icon-sys",
-            "inUrl": "views/workflow/deploy/deployMain.jsp",
+            "inUrl": "views/uupm/tenant/tenantMain.jsp",
             "rsType": "M"
         },{
         	"id": "sys-111",

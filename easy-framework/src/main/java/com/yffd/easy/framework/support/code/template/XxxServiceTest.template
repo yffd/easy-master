@@ -5,9 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.yffd.easy.common.core.page.PageParam;
+import com.yffd.easy.common.core.page.PageResult;
 import ##import_model_full_name##;
 import ##import_test_base_service_full_name##;
 
@@ -23,6 +26,87 @@ public class ##test_service_name## ##test_base_service_name##{
 
 	@Autowired
 	private ##service_name## ##service_alias_name##;
+	
+	/***********************查询********************************/
+	
+	@Test
+	public void findPageTest() {
+		PageParam pageParam = new PageParam(1L, 10L);
+		##model_simple_name## model = new ##model_simple_name##();
+		model.setId("2010");
+		PageResult<##model_simple_name##> result1 = this.##service_alias_name##.findPage(model, pageParam);
+		Assert.assertNotNull(result1);
+		System.out.println(result1.getPageParam());
+		System.out.println(result1.getRecordList());
+		
+		/*******************************/
+		
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("id", "2010");
+		PageResult<##model_simple_name##> result2 = this.##service_alias_name##.findPage(paramMap, pageParam);
+		Assert.assertNotNull(result2);
+		System.out.println(result2.getPageParam());
+		System.out.println(result2.getRecordList());
+	}
+	
+	@Test
+	public void findListTest() {
+		##model_simple_name## model = new ##model_simple_name##();
+		model.setId("2010");
+		List<##model_simple_name##> result1 = this.##service_alias_name##.findList(model);
+		Assert.assertNotNull(result1);
+		System.out.println(result1.size());
+		
+		/*******************************/
+		
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("id", "2010");
+		List<##model_simple_name##> result2 = this.##service_alias_name##.findList(paramMap);
+		Assert.assertNotNull(result2);
+		System.out.println(result2.size());
+	}
+	
+	@Test
+	public void findOneTest() {
+		##model_simple_name## model = new ##model_simple_name##();
+		model.setId("2010");
+		##model_simple_name## result1 = this.##service_alias_name##.findOne(model);
+		Assert.assertNotNull(result1);
+		System.out.println(result1.getCreateTime());
+		
+		/*******************************/
+		
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("id", "2010");
+		##model_simple_name## result2 = this.##service_alias_name##.findOne(paramMap);
+		Assert.assertNotNull(result2);
+		System.out.println(result2.getCreateTime());
+	}
+	
+	@Test
+	public void findByIdTest() {
+		String id = "2010";
+		##model_simple_name## model = this.##service_alias_name##.findById(id);
+		Assert.assertNotNull(model);
+		System.out.println(model.getCreateTime());
+	}
+	
+	@Test
+	public void findByIdsTest() {
+		List<String> ids = new ArrayList<String>();
+		ids.add("2010");
+		ids.add("2111");
+		List<##model_simple_name##> result1 = this.##service_alias_name##.findByIds(ids);
+		Assert.assertNotNull(result1);
+		System.out.println(result1.size());
+		
+		/*******************************/
+		
+		String idsStr = "2010,2111";
+		List<##model_simple_name##> result2 = this.##service_alias_name##.findByIds(idsStr);
+		Assert.assertNotNull(result2);
+		System.out.println(result2.size());
+	}
 	
 	/***********************添加********************************/
 	
@@ -102,7 +186,7 @@ public class ##test_service_name## ##test_base_service_name##{
 		this.##service_alias_name##.updateBatchByMap(list, null);
 	}
 	
-	/***********************逻辑删除********************************/
+	/***********************物理删除********************************/
 	
 	@Test
 	public void delByModelTest() {
@@ -148,24 +232,24 @@ public class ##test_service_name## ##test_base_service_name##{
 		this.##service_alias_name##.delById(id, null);
 	}
 	
-	/***********************物理删除********************************/
+	/***********************逻辑删除********************************/
 	
 	@Test
-	public void physicalDelByModelTest() {
+	public void removeByModelTest() {
 		##model_simple_name## model = new ##model_simple_name##();
 		model.setId("2000");
-		this.##service_alias_name##.physicalDelByModel(model, null);
+		this.##service_alias_name##.removeByModel(model, null);
 	}
 	
 	@Test
-	public void physicalDelByMapTest() {
+	public void removeByMapTest() {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("id", "2001");
-		this.##service_alias_name##.physicalDelByMap(paramMap, null);
+		this.##service_alias_name##.removeByMap(paramMap, null);
 	}
 	
 	@Test
-	public void physicalDelBatchByModelTest() {
+	public void removeBatchByModelTest() {
 		List<##model_simple_name##> list = new ArrayList<##model_simple_name##>();
 		int startId = 2011;
 		for(int i=0;i<2;i++) {
@@ -173,11 +257,11 @@ public class ##test_service_name## ##test_base_service_name##{
 			model.setId((startId+i) + "");
 			list.add(model);
 		}
-		this.##service_alias_name##.physicalDelBatchByModel(list, null);
+		this.##service_alias_name##.removeBatchByModel(list, null);
 	}
 	
 	@Test
-	public void physicalDelBatchByMapTest() {
+	public void removeBatchByMapTest() {
 		int startId = 2013;
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		for(int i=0;i<2;i++) {
@@ -185,13 +269,13 @@ public class ##test_service_name## ##test_base_service_name##{
 			paramMap.put("id", (startId+i) + "");
 			list.add(paramMap);
 		}
-		this.##service_alias_name##.physicalDelBatchByMap(list, null);
+		this.##service_alias_name##.removeBatchByMap(list, null);
 	}
 	
 	@Test
-	public void physicalDelByIdTest() {
+	public void removeByIdTest() {
 		String id = "2110";
-		this.##service_alias_name##.physicalDelById(id, null);
+		this.##service_alias_name##.removeById(id, null);
 	}
 	
 }

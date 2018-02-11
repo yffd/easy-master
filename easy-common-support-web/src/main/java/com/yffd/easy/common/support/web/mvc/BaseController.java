@@ -1,7 +1,6 @@
 package com.yffd.easy.common.support.web.mvc;
 
-import com.yffd.easy.common.core.enums.SysConstantsEnum;
-import com.yffd.easy.common.core.model.RespModel;
+import com.yffd.easy.common.core.enums.CommonEnum;
 import com.yffd.easy.common.core.view.support.ViewModelSupport;
 
 /**
@@ -22,9 +21,9 @@ public abstract class BaseController extends ViewModelSupport {
 	 */
 	protected RespModel success() {
 		RespModel entity = new RespModel();
-		entity.setRespType(SysConstantsEnum.REQUEST_SYNC.getValue());
-		entity.setStatusCode(SysConstantsEnum.SUCCESS.getValue());
-		entity.setStatusDesc(SysConstantsEnum.SUCCESS.getDesc());
+		entity.setRespType(CommonEnum.REQUEST_SYNC.getValue());
+		entity.setStatusCode(CommonEnum.SUCCESS.getValue());
+		entity.setStatusDesc(CommonEnum.SUCCESS.getDesc());
 		return entity;
 	}
 	
@@ -38,8 +37,8 @@ public abstract class BaseController extends ViewModelSupport {
 	 */
 	protected RespModel success(String statusDesc, Object...objects) {
 		RespModel entity = new RespModel();
-		entity.setRespType(SysConstantsEnum.REQUEST_SYNC.getValue());
-		entity.setStatusCode(SysConstantsEnum.SUCCESS.getValue());
+		entity.setRespType(CommonEnum.REQUEST_SYNC.getValue());
+		entity.setStatusCode(CommonEnum.SUCCESS.getValue());
 		entity.setStatusDesc(statusDesc);
 		entity.setRespData(objects);
 		return entity;
@@ -53,9 +52,9 @@ public abstract class BaseController extends ViewModelSupport {
 	 */
 	protected RespModel successAjax() {
 		RespModel entity = new RespModel();
-		entity.setRespType(SysConstantsEnum.REQUEST_ASYNC.getValue());
-		entity.setStatusCode(SysConstantsEnum.SUCCESS.getValue());
-		entity.setStatusDesc(SysConstantsEnum.SUCCESS.getDesc());
+		entity.setRespType(CommonEnum.REQUEST_ASYNC.getValue());
+		entity.setStatusCode(CommonEnum.SUCCESS.getValue());
+		entity.setStatusDesc(CommonEnum.SUCCESS.getDesc());
 		return entity;
 	}
 	
@@ -68,9 +67,9 @@ public abstract class BaseController extends ViewModelSupport {
 	 */
 	protected RespModel successAjax(Object respData) {
 		RespModel entity = new RespModel();
-		entity.setRespType(SysConstantsEnum.REQUEST_ASYNC.getValue());
-		entity.setStatusCode(SysConstantsEnum.SUCCESS.getValue());
-		entity.setStatusDesc(SysConstantsEnum.SUCCESS.getDesc());
+		entity.setRespType(CommonEnum.REQUEST_ASYNC.getValue());
+		entity.setStatusCode(CommonEnum.SUCCESS.getValue());
+		entity.setStatusDesc(CommonEnum.SUCCESS.getDesc());
 		entity.setRespData(respData);
 		return entity;
 	}
@@ -85,8 +84,8 @@ public abstract class BaseController extends ViewModelSupport {
 	 */
 	protected RespModel successAjax(String statusDesc, Object...objects) {
 		RespModel entity = new RespModel();
-		entity.setRespType(SysConstantsEnum.REQUEST_ASYNC.getValue());
-		entity.setStatusCode(SysConstantsEnum.SUCCESS.getValue());
+		entity.setRespType(CommonEnum.REQUEST_ASYNC.getValue());
+		entity.setStatusCode(CommonEnum.SUCCESS.getValue());
 		entity.setStatusDesc(statusDesc);
 		entity.setRespData(objects);
 		return entity;
@@ -100,9 +99,9 @@ public abstract class BaseController extends ViewModelSupport {
 	 */
 	protected RespModel error() {
 		RespModel entity = new RespModel();
-		entity.setRespType(SysConstantsEnum.REQUEST_SYNC.getValue());
-		entity.setStatusCode(SysConstantsEnum.ERROR.getValue());
-		entity.setStatusDesc(SysConstantsEnum.ERROR.getDesc());
+		entity.setRespType(CommonEnum.REQUEST_SYNC.getValue());
+		entity.setStatusCode(CommonEnum.ERROR.getValue());
+		entity.setStatusDesc(CommonEnum.ERROR.getDesc());
 		return entity;
 	}
 	
@@ -116,8 +115,8 @@ public abstract class BaseController extends ViewModelSupport {
 	 */
 	protected RespModel error(String statusDesc, Object...objects) {
 		RespModel entity = new RespModel();
-		entity.setRespType(SysConstantsEnum.REQUEST_SYNC.getValue());
-		entity.setStatusCode(SysConstantsEnum.ERROR.getValue());
+		entity.setRespType(CommonEnum.REQUEST_SYNC.getValue());
+		entity.setStatusCode(CommonEnum.ERROR.getValue());
 		entity.setStatusDesc(statusDesc);
 		entity.setRespData(objects);
 		return entity;
@@ -131,9 +130,9 @@ public abstract class BaseController extends ViewModelSupport {
 	 */
 	protected RespModel errorAjax() {
 		RespModel entity = new RespModel();
-		entity.setRespType(SysConstantsEnum.REQUEST_ASYNC.getValue());
-		entity.setStatusCode(SysConstantsEnum.ERROR.getValue());
-		entity.setStatusDesc(SysConstantsEnum.ERROR.getDesc());
+		entity.setRespType(CommonEnum.REQUEST_ASYNC.getValue());
+		entity.setStatusCode(CommonEnum.ERROR.getValue());
+		entity.setStatusDesc(CommonEnum.ERROR.getDesc());
 		return entity;
 	}
 	
@@ -147,8 +146,8 @@ public abstract class BaseController extends ViewModelSupport {
 	 */
 	protected RespModel errorAjax(String statusDesc, Object...objects) {
 		RespModel entity = new RespModel();
-		entity.setRespType(SysConstantsEnum.REQUEST_ASYNC.getValue());
-		entity.setStatusCode(SysConstantsEnum.ERROR.getValue());
+		entity.setRespType(CommonEnum.REQUEST_ASYNC.getValue());
+		entity.setStatusCode(CommonEnum.ERROR.getValue());
 		entity.setStatusDesc(statusDesc);
 		entity.setRespData(objects);
 		return entity;

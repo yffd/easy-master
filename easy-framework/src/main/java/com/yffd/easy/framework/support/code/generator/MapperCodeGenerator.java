@@ -228,23 +228,21 @@ public class MapperCodeGenerator extends CodeGenerator {
 		return sb.toString();
 	}
 	
-	public String selectListByIn(String tableAliasName) {
+	public String selectListByIds(String tableAliasName) {
 		String asTableAliasName = "";
 		if(null!=tableAliasName) asTableAliasName = " as " + tableAliasName + " ";
 		StringBuilder sb = new StringBuilder();
 		sb.append("<!-- in条件查询 -->").append("\r\n");
-		sb.append("<select id=\"selectByIn\" parameterType=\"java.util.List\" resultMap=\"resutlId\">").append("\r\n");
+		sb.append("<select id=\"selectListByIds\" parameterType=\"java.util.List\" resultMap=\"resutlId\">").append("\r\n");
 		sb.append("\t").append("select <include refid=\"table_columns\" /> ").append("\r\n");
 		sb.append("\t").append("from <include refid=\"table_name\"/> ").append(asTableAliasName).append("\r\n");
 		sb.append("\t").append("<where>").append("\r\n");
 		if(null!=tableAliasName) {
 			sb.append("\t").append("\t").append("t.ID in ").append("\r\n");
-			sb.append("\t").append("\t").append("<foreach item=\"item\" index=\"index\" collection=\"list\" open=\"(\" separator=\",\" close=\")\">#{item.id}</foreach>").append("\r\n");
-			sb.append("\t").append("\t").append("<if test=\"delFlag != null and delFlag != ''\"> and t.DEL_FLAG = #{delFlag} </if>").append("\r\n");
+			sb.append("\t").append("\t").append("<foreach item=\"item\" index=\"index\" collection=\"list\" open=\"(\" separator=\",\" close=\")\">#{item}</foreach>").append("\r\n");
 		} else {
 			sb.append("\t").append("\t").append("ID in ").append("\r\n");
-			sb.append("\t").append("\t").append("<foreach item=\"item\" index=\"index\" collection=\"list\" open=\"(\" separator=\",\" close=\")\">#{item.id}</foreach>").append("\r\n");
-			sb.append("\t").append("\t").append("<if test=\"delFlag != null and delFlag != ''\"> and DEL_FLAG = #{delFlag} </if>").append("\r\n");
+			sb.append("\t").append("\t").append("<foreach item=\"item\" index=\"index\" collection=\"list\" open=\"(\" separator=\",\" close=\")\">#{item}</foreach>").append("\r\n");
 		}
 		sb.append("\t").append("</where>").append("\r\n");
 		sb.append("</select>");
@@ -387,7 +385,7 @@ public class MapperCodeGenerator extends CodeGenerator {
 		System.out.println(">>>>>>>>>>>>>>>>>>>end::selectCountBy");
 		System.out.println();
 		
-		String result14 = generator.selectListByIn(tableAliasName);
+		String result14 = generator.selectListByIds(tableAliasName);
 		System.out.println(">>>>>>>>>>>>>>>>>>>start::selectListByIn");
 		System.out.println(result14);
 		System.out.println(">>>>>>>>>>>>>>>>>>>end::selectListByIn");

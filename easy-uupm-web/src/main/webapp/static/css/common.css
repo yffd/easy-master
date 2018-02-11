@@ -8,6 +8,9 @@
     min-height: 20px;
     padding: 5px;
 }
+.badge-div-hidden {
+	display:none;
+}
 .badge-title {
 	background-color: #B94A48;
     border-radius: 9px 9px 9px 9px;

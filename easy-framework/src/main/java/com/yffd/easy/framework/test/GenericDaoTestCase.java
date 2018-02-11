@@ -7,6 +7,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 /**
  * @Description  测试用例帮助类，主要完成model的实例化、以及属性赋值.
@@ -95,8 +96,10 @@ public abstract class GenericDaoTestCase {
 							Method writeMethod = pd.getWriteMethod();
 							if(propName.contains("name") || propName.contains("Name")) {
 								writeMethod.invoke(obj, "a_a_");
-							} else {
-								
+							} else if(propName.contains("type") || propName.contains("Type") || propName.contains("status") || propName.contains("Status")) {
+								Random random = new Random();
+								int pick = random.nextInt(3) + 1;
+								writeMethod.invoke(obj, pick + "");
 							}
 							
 						} else if(char.class.getName().equals(typeClass.getName())) {
@@ -146,7 +149,13 @@ public abstract class GenericDaoTestCase {
 					if(String.class.getName().equals(typeClass.getName())) {
 						if("add".equals(flag)) {
 							Method writeMethod = pd.getWriteMethod();
-							writeMethod.invoke(obj, "a_a_" + suffix);
+							if(propName.contains("type") || propName.contains("Type") || propName.contains("status") || propName.contains("Status")) {
+								Random random = new Random();
+								int pick = random.nextInt(4);
+								writeMethod.invoke(obj, pick + "");
+							} else {
+								writeMethod.invoke(obj, "a_a_" + suffix);
+							}
 						} else if("update".equals(flag)) {
 							
 						} else {

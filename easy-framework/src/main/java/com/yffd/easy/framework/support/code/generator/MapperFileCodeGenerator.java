@@ -112,8 +112,8 @@ public class MapperFileCodeGenerator extends CodeGenerator {
 		String selectCountByStr = this.mapperGenerator.selectCountBy(tableAliasName);
 		sb.append(this.mapperGenerator.strFmt(selectCountByStr, "\t")).append("\r\n");
 		
-		String selectListByInStr = this.mapperGenerator.selectListByIn(tableAliasName);
-		sb.append(this.mapperGenerator.strFmt(selectListByInStr, "\t")).append("\r\n");
+		String selectListByIdsStr = this.mapperGenerator.selectListByIds(tableAliasName);
+		sb.append(this.mapperGenerator.strFmt(selectListByIdsStr, "\t")).append("\r\n");
 		
 		String selectOneByStr = this.mapperGenerator.selectOneBy(tableAliasName);
 		sb.append(this.mapperGenerator.strFmt(selectOneByStr, "\t")).append("\r\n");

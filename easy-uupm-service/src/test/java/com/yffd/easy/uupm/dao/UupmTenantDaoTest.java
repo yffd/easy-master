@@ -46,6 +46,11 @@ public class UupmTenantDaoTest extends UupmBaseDaoTest {
 			for(Object obj : pageResult.getRecordList()) {
 				System.out.println(obj);
 			}
+			
+			List<Object> list = (List<Object>) this.dao.selectListBy(model);
+			Assert.assertNotNull(list);
+			System.out.println(list);
+			
 		} else {
 			Assert.fail();
 		}

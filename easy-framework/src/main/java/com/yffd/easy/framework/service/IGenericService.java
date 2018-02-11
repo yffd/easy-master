@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.yffd.easy.common.core.page.PageParam;
 import com.yffd.easy.common.core.page.PageResult;
+import com.yffd.easy.framework.domain.DomainModel;
 import com.yffd.easy.framework.domain.GenericPO;
 import com.yffd.easy.framework.domain.LoginInfo;
 
@@ -20,22 +21,41 @@ public interface IGenericService {
 	
 	/**
 	 * 分页查询
-	 * @Date	2018年2月7日 上午10:58:29 <br/>
+	 * @Date	2018年2月9日 下午2:26:13 <br/>
 	 * @author  zhangST
-	 * @param parameter
+	 * @param model
 	 * @param pageParam
 	 * @return
 	 */
-	PageResult<?> findPage(Object parameter, PageParam pageParam);
+	<T> PageResult<T> findPage(DomainModel model, PageParam pageParam);
+	
+	/**
+	 * 分页查询
+	 * @Date	2018年2月9日 下午2:26:03 <br/>
+	 * @author  zhangST
+	 * @param paramMap
+	 * @param pageParam
+	 * @return
+	 */
+	<T> PageResult<T> findPage(Map<String, Object> paramMap, PageParam pageParam);
 	
 	/**
 	 * 条件查询
-	 * @Date	2018年2月7日 上午10:58:39 <br/>
+	 * @Date	2018年2月9日 下午2:25:28 <br/>
 	 * @author  zhangST
-	 * @param parameter
+	 * @param model
 	 * @return
 	 */
-	List<?> findList(Object parameter);
+	<T> List<T> findList(DomainModel model);
+	
+	/**
+	 * 条件查询
+	 * @Date	2018年2月9日 下午2:25:11 <br/>
+	 * @author  zhangST
+	 * @param paramMap
+	 * @return
+	 */
+	<T> List<T> findList(Map<String, Object> paramMap);
 	
 	/**
 	 * 查询所有
@@ -43,7 +63,25 @@ public interface IGenericService {
 	 * @author  zhangST
 	 * @return
 	 */
-	List<?> findAll();
+	<T> List<T> findAll();
+	
+	/**
+	 * 单条查询
+	 * @Date	2018年2月9日 上午11:36:35 <br/>
+	 * @author  zhangST
+	 * @param parameter
+	 * @return
+	 */
+	<T> T findOne(DomainModel model);
+	
+	/**
+	 * 单条查询
+	 * @Date	2018年2月9日 上午11:44:06 <br/>
+	 * @author  zhangST
+	 * @param parameter
+	 * @return
+	 */
+	<T> T findOne(Map<String, Object> paramMap);
 	
 	/**
 	 * 主键查询
@@ -56,12 +94,21 @@ public interface IGenericService {
 	
 	/**
 	 * 多主键查询
-	 * @Date	2018年2月7日 上午10:59:17 <br/>
+	 * @Date	2018年2月9日 上午11:08:24 <br/>
 	 * @author  zhangST
 	 * @param ids
 	 * @return
 	 */
-	List<?> findByIds(String ids);
+	<T> List<T> findByIds(String ids);
+	
+	/**
+	 * 多主键查询
+	 * @Date	2018年2月9日 上午11:08:37 <br/>
+	 * @author  zhangST
+	 * @param list
+	 * @return
+	 */
+	<T> List<T> findByIds(List<String> list);
 	
 	/**
 	 * 添加
@@ -136,13 +183,70 @@ public interface IGenericService {
 	void updateBatchByMap(List<Map<String, Object>> list, LoginInfo loginInfo);
 	
 	/**
+	 * 物理删除
+	 * @Date	2018年2月8日 下午2:57:48 <br/>
+	 * @author  zhangST
+	 * @param model
+	 */
+	<T extends GenericPO> void delByModel(T model);
+	
+	/**
+	 * 物理删除
+	 * @Date	2018年2月8日 下午2:54:19 <br/>
+	 * @author  zhangST
+	 * @param paramMap
+	 */
+	void delByMap(Map<String, Object> paramMap);
+	
+	/**
+	 * 物理删除-批量
+	 * @Date	2018年2月8日 下午2:55:27 <br/>
+	 * @author  zhangST
+	 * @param list
+	 */
+	void delBatchByModel(List<? extends GenericPO> list);
+	
+	/**
+	 * 物理删除-批量
+	 * @Date	2018年2月8日 下午2:55:32 <br/>
+	 * @author  zhangST
+	 * @param list
+	 */
+	void delBatchByMap(List<Map<String, Object>> list);
+	
+	/**
+	 * 物理删除
+	 * @Date	2018年2月7日 下午4:32:59 <br/>
+	 * @author  zhangST
+	 * @param id
+	 */
+	void delById(String id);
+	
+	/**
+	 * 物理删除-批量
+	 * @Date	2018年2月8日 下午2:58:47 <br/>
+	 * @author  zhangST
+	 * @param ids
+	 */
+	void delBatchByIds(List<String> ids);
+	
+	/**
+	 * 物理删除-批量
+	 * @Date	2018年2月7日 下午4:33:13 <br/>
+	 * @author  zhangST
+	 * @param ids
+	 */
+	void delBatchByIds(String ids);
+	
+	
+	/**
 	 * 逻辑删除
 	 * @Date	2018年2月8日 下午2:57:48 <br/>
 	 * @author  zhangST
 	 * @param model
 	 * @param loginInfo
 	 */
-	<T extends GenericPO> void delByModel(T model, LoginInfo loginInfo);
+	<T extends GenericPO> void removeByModel(T model, LoginInfo loginInfo);
 	
 	/**
 	 * 逻辑删除
@@ -151,7 +255,7 @@ public interface IGenericService {
 	 * @param paramMap
 	 * @param loginInfo
 	 */
-	void delByMap(Map<String, Object> paramMap, LoginInfo loginInfo);
+	void removeByMap(Map<String, Object> paramMap, LoginInfo loginInfo);
 	
 	/**
 	 * 逻辑删除-批量
@@ -160,7 +264,7 @@ public interface IGenericService {
 	 * @param list
 	 * @param loginInfo
 	 */
-	void delBatchByModel(List<? extends GenericPO> list, LoginInfo loginInfo);
+	void removeBatchByModel(List<? extends GenericPO> list, LoginInfo loginInfo);
 	
 	/**
 	 * 逻辑删除-批量
@@ -169,7 +273,7 @@ public interface IGenericService {
 	 * @param list
 	 * @param loginInfo
 	 */
-	void delBatchByMap(List<Map<String, Object>> list, LoginInfo loginInfo);
+	void removeBatchByMap(List<Map<String, Object>> list, LoginInfo loginInfo);
 	
 	/**
 	 * 逻辑删除
@@ -178,7 +282,7 @@ public interface IGenericService {
 	 * @param id
 	 * @param loginInfo
 	 */
-	void delById(String id, LoginInfo loginInfo);
+	void removeById(String id, LoginInfo loginInfo);
 	
 	/**
 	 * 逻辑删除-批量
@@ -187,7 +291,7 @@ public interface IGenericService {
 	 * @param ids
 	 * @param loginInfo
 	 */
-	void delBatchByIds(List<String> ids, LoginInfo loginInfo);
+	void removeBatchByIds(List<String> ids, LoginInfo loginInfo);
 	
 	/**
 	 * 逻辑删除-批量
@@ -196,72 +300,7 @@ public interface IGenericService {
 	 * @param ids
 	 * @param loginInfo
 	 */
-	void delBatchByIds(String ids, LoginInfo loginInfo);
-	
-	
-	/**
-	 * 物理删除
-	 * @Date	2018年2月8日 下午2:57:48 <br/>
-	 * @author  zhangST
-	 * @param model
-	 * @param loginInfo
-	 */
-	<T extends GenericPO> void physicalDelByModel(T model, LoginInfo loginInfo);
-	
-	/**
-	 * 物理删除
-	 * @Date	2018年2月8日 下午2:54:19 <br/>
-	 * @author  zhangST
-	 * @param paramMap
-	 * @param loginInfo
-	 */
-	void physicalDelByMap(Map<String, Object> paramMap, LoginInfo loginInfo);
-	
-	/**
-	 * 物理删除-批量
-	 * @Date	2018年2月8日 下午2:55:27 <br/>
-	 * @author  zhangST
-	 * @param list
-	 * @param loginInfo
-	 */
-	void physicalDelBatchByModel(List<? extends GenericPO> list, LoginInfo loginInfo);
-	
-	/**
-	 * 物理删除-批量
-	 * @Date	2018年2月8日 下午2:55:32 <br/>
-	 * @author  zhangST
-	 * @param list
-	 * @param loginInfo
-	 */
-	void physicalDelBatchByMap(List<Map<String, Object>> list, LoginInfo loginInfo);
-	
-	/**
-	 * 物理删除
-	 * @Date	2018年2月7日 下午4:32:59 <br/>
-	 * @author  zhangST
-	 * @param id
-	 * @param loginInfo
-	 */
-	void physicalDelById(String id, LoginInfo loginInfo);
-	
-	/**
-	 * 物理删除-批量
-	 * @Date	2018年2月8日 下午2:58:47 <br/>
-	 * @author  zhangST
-	 * @param ids
-	 * @param loginInfo
-	 */
-	void physicalDelBatchByIds(List<String> ids, LoginInfo loginInfo);
-	
-	/**
-	 * 物理删除-批量
-	 * @Date	2018年2月7日 下午4:33:13 <br/>
-	 * @author  zhangST
-	 * @param ids
-	 * @param loginInfo
-	 */
-	void physicalDelBatchByIds(String ids, LoginInfo loginInfo);
-	
+	void removeBatchByIds(String ids, LoginInfo loginInfo);
 	
 }
 

@@ -32,7 +32,9 @@ public class GenericDao extends EasyModelConverter implements IGenericDao {
 		} else {
 			paramMap = paramMap = this.model2map(parameter, null);
 		}
-		return this.selectPage(paramMap, pageParam);
+		// 获取分页数据集
+		List<Object> recordList = this.selectList(paramMap, pageParam);
+		return new PageResult<Object>(pageParam, recordList);
 	}
 	
 	public Long selectCountBy(Object parameter) {
@@ -41,13 +43,18 @@ public class GenericDao extends EasyModelConverter implements IGenericDao {
 	}
 	
 	public List<?> selectListBy(Object parameter) {
-		if (null==parameter) return this.getSqlSession().selectList(getStatement(SQL_SELECT_LIST_BY));
-        return this.getSqlSession().selectList(getStatement(SQL_SELECT_LIST_BY), parameter);
+		Map<String, Object> paramMap = null;
+		if(parameter instanceof Map) {
+			paramMap = (Map<String, Object>) parameter;
+		} else {
+			paramMap = paramMap = this.model2map(parameter, null);
+		}
+		return this.selectList(paramMap, null);
 	}
 
-	public List<?> selectListByIn(Object parameter) {
-		if (null==parameter) throw EasyDaoException.DB_SELECT_NULL(getStatement(SQL_INSERT_ONE));
-        return this.getSqlSession().selectList(getStatement(SQL_SELECT_LIST_BY_IN), parameter);
+	public List<?> selectListByIds(List<String> parameter) {
+		if (null==parameter) throw EasyDaoException.DB_SELECT_NULL(getStatement(SQL_SELECT_LIST_BY_IDS));
+        return this.getSqlSession().selectList(getStatement(SQL_SELECT_LIST_BY_IDS), parameter);
 	}
 
 	public <T> T selectOne(Object parameter) {
@@ -101,38 +108,6 @@ public class GenericDao extends EasyModelConverter implements IGenericDao {
 		return this.selectListBy(null);
 	}
 	
-	private PageResult<Object> selectPage(Map<String, Object> paramMap, PageParam pageParam) {
-		if (null==paramMap) paramMap = new HashMap<String, Object>();
-        paramMap.remove("pageParam"); // 与 listRange区分，保证越过分页拦截器
-        // 统计总记录数
-        Long totalRecord = this.getSqlSession().selectOne(getStatement(SQL_SELECT_COUNT_BY), paramMap);
-        pageParam.setTotalRecord(totalRecord);
-
-        Long pageNum = pageParam.getPageNum();
-        Long pageLimit = pageParam.getPageLimit();
-        
-        // 校验当前页码值的有效范围
-        pageNum = pageParam.countPageNum(pageNum);
-        pageNum = pageParam.countPageNum(pageNum, pageLimit, totalRecord);
-        pageParam.setPageNum(pageNum); // 重新设值
-     	
- 		// 校验每页码值的有效范围
- 		pageLimit = pageParam.countPageLimit(pageLimit);
- 		pageParam.setPageLimit(pageLimit); // 重新设值
- 		
- 		pageParam.setPageStartRow(pageParam.countPageStartRow(pageNum, pageLimit));
- 		pageParam.setPageEndRow(pageParam.countPageEndRow(pageNum, pageLimit));
-
- 		// 根据页面传来的分页参数构造SQL分页参数
-        paramMap.put("pageLimit", pageParam.getPageLimit());
-        paramMap.put("pageStartRow", pageParam.getPageStartRow());
-
-        // 获取分页数据集
-        List<Object> recordList = this.getSqlSession().selectList(getStatement(SQL_SELECT_LIST_BY), paramMap);
-
-        return new PageResult<Object>(pageParam, recordList);
-	}
-	
 	protected String getStatement(String sqlId) {
 		String name = this.getClass().getName();
         // 单线程用StringBuilder，确保速度；多线程用StringBuffer,确保安全
@@ -145,5 +120,41 @@ public class GenericDao extends EasyModelConverter implements IGenericDao {
 		return this.sqlSession;
 	}
 
+	private List<Object> selectList(Map<String, Object> paramMap, PageParam pageParam) {
+		if (null==paramMap) paramMap = new HashMap<String, Object>();
+		paramMap.remove("pageParam"); // 与 listRange区分，保证越过分页拦截器
+		
+		if(null!=pageParam) {
+			// 统计总记录数
+	        Long totalRecord = this.getSqlSession().selectOne(getStatement(SQL_SELECT_COUNT_BY), paramMap);
+	        pageParam.setTotalRecord(totalRecord);
+	        
+			Long pageNum = pageParam.getPageNum();
+			Long pageLimit = pageParam.getPageLimit();
+			
+			// 校验当前页码值的有效范围
+			pageNum = pageParam.countPageNum(pageNum);
+			pageNum = pageParam.countPageNum(pageNum, pageLimit, totalRecord);
+			pageParam.setPageNum(pageNum); // 重新设值
+			
+			// 校验每页码值的有效范围
+			pageLimit = pageParam.countPageLimit(pageLimit);
+			pageParam.setPageLimit(pageLimit); // 重新设值
+			
+			pageParam.setPageStartRow(pageParam.countPageStartRow(pageNum, pageLimit));
+			pageParam.setPageEndRow(pageParam.countPageEndRow(pageNum, pageLimit));
+			
+			// 根据页面传来的分页参数构造SQL分页参数
+			paramMap.put("pageParam", pageParam);
+		} else {
+			paramMap.put("pageParam", null);
+		}
+		
+		// 获取分页数据集
+		List<Object> recordList = this.getSqlSession().selectList(getStatement(SQL_SELECT_LIST_BY), paramMap);
+		
+		return recordList;
+	}
+	
 }
 

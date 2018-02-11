@@ -8,7 +8,8 @@
 	commonui.pageSize = 20;
 	commonui.error_msg = "系统错误，请与管理员联系！";
 	//消息框超时时间
-	commonui.messager_timeout = 1000 * 4;
+	commonui.msg_title = "系统提示";
+	commonui.msg_timeout = 1000 * 4;
 	//页脚的高度
 	commonui.remainHeight = 11;
 	

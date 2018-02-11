@@ -77,6 +77,20 @@ public class EasyDateUtils {
 		return null;
 	}
 	
+	public static String parseToFmt(String dateFmt) {
+		String tmpFmt = null;
+		for(String key : DATE_REG_FORMAT.keySet()) {
+			if(Pattern.compile(key).matcher(dateFmt).matches()) {
+				tmpFmt = DATE_REG_FORMAT.get(key);
+				break;
+			}
+		}
+		if(null==tmpFmt) {
+			throw EasyBizException.newInstance("日期格式无效：【" + dateFmt + "】");
+		}
+		return tmpFmt;
+	}
+	
 	@Deprecated
 	private static String changeFmt(String dateFmt) {
 		DateFormat tmpFmt;
@@ -148,6 +162,7 @@ public class EasyDateUtils {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
+	    System.out.println(parseToFmt("2017-11-29 17:57:52.12"));
 	  }
 }
 

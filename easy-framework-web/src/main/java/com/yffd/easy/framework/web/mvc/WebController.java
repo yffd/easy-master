@@ -1,8 +1,8 @@
 package com.yffd.easy.framework.web.mvc;
 
-import com.yffd.easy.common.core.enums.SysConstantsEnum;
-import com.yffd.easy.common.core.view.support.ViewModelSupport;
+import com.yffd.easy.common.core.enums.CommonEnum;
 import com.yffd.easy.framework.domain.RespModel;
+import com.yffd.easy.framework.web.view.ViewModelConverter;
 
 /**
  * @Description  web控制转发器基类.
@@ -12,7 +12,7 @@ import com.yffd.easy.framework.domain.RespModel;
  * @since		 JDK 1.7+
  * @see 	 
  */
-public abstract class WebController extends ViewModelSupport {
+public abstract class WebController extends ViewModelConverter {
 	
 	/**
 	 * 同步请求：成功
@@ -22,9 +22,9 @@ public abstract class WebController extends ViewModelSupport {
 	 */
 	protected RespModel success() {
 		RespModel entity = new RespModel();
-		entity.setType(SysConstantsEnum.REQUEST_SYNC.getValue());
-		entity.setStatus(SysConstantsEnum.SUCCESS.getValue());
-		entity.setMsg(SysConstantsEnum.SUCCESS.getDesc());
+		entity.setType(CommonEnum.REQUEST_SYNC.getValue());
+		entity.setStatus(CommonEnum.SUCCESS.getValue());
+		entity.setMsg(CommonEnum.SUCCESS.getDesc());
 		return entity;
 	}
 	
@@ -38,8 +38,8 @@ public abstract class WebController extends ViewModelSupport {
 	 */
 	protected RespModel success(String statusDesc, Object...objects) {
 		RespModel entity = new RespModel();
-		entity.setType(SysConstantsEnum.REQUEST_SYNC.getValue());
-		entity.setStatus(SysConstantsEnum.SUCCESS.getValue());
+		entity.setType(CommonEnum.REQUEST_SYNC.getValue());
+		entity.setStatus(CommonEnum.SUCCESS.getValue());
 		entity.setMsg(statusDesc);
 		entity.setData(objects);
 		return entity;
@@ -53,9 +53,9 @@ public abstract class WebController extends ViewModelSupport {
 	 */
 	protected RespModel successAjax() {
 		RespModel entity = new RespModel();
-		entity.setType(SysConstantsEnum.REQUEST_ASYNC.getValue());
-		entity.setStatus(SysConstantsEnum.SUCCESS.getValue());
-		entity.setMsg(SysConstantsEnum.SUCCESS.getDesc());
+		entity.setType(CommonEnum.REQUEST_ASYNC.getValue());
+		entity.setStatus(CommonEnum.SUCCESS.getValue());
+		entity.setMsg(CommonEnum.SUCCESS.getDesc());
 		return entity;
 	}
 	
@@ -68,9 +68,9 @@ public abstract class WebController extends ViewModelSupport {
 	 */
 	protected RespModel successAjax(Object respData) {
 		RespModel entity = new RespModel();
-		entity.setType(SysConstantsEnum.REQUEST_ASYNC.getValue());
-		entity.setStatus(SysConstantsEnum.SUCCESS.getValue());
-		entity.setMsg(SysConstantsEnum.SUCCESS.getDesc());
+		entity.setType(CommonEnum.REQUEST_ASYNC.getValue());
+		entity.setStatus(CommonEnum.SUCCESS.getValue());
+		entity.setMsg(CommonEnum.SUCCESS.getDesc());
 		entity.setData(respData);
 		return entity;
 	}
@@ -85,8 +85,8 @@ public abstract class WebController extends ViewModelSupport {
 	 */
 	protected RespModel successAjax(String statusDesc, Object...objects) {
 		RespModel entity = new RespModel();
-		entity.setType(SysConstantsEnum.REQUEST_ASYNC.getValue());
-		entity.setStatus(SysConstantsEnum.SUCCESS.getValue());
+		entity.setType(CommonEnum.REQUEST_ASYNC.getValue());
+		entity.setStatus(CommonEnum.SUCCESS.getValue());
 		entity.setMsg(statusDesc);
 		entity.setData(objects);
 		return entity;
@@ -100,9 +100,9 @@ public abstract class WebController extends ViewModelSupport {
 	 */
 	protected RespModel error() {
 		RespModel entity = new RespModel();
-		entity.setType(SysConstantsEnum.REQUEST_SYNC.getValue());
-		entity.setStatus(SysConstantsEnum.ERROR.getValue());
-		entity.setMsg(SysConstantsEnum.ERROR.getDesc());
+		entity.setType(CommonEnum.REQUEST_SYNC.getValue());
+		entity.setStatus(CommonEnum.ERROR.getValue());
+		entity.setMsg(CommonEnum.ERROR.getDesc());
 		return entity;
 	}
 	
@@ -116,8 +116,8 @@ public abstract class WebController extends ViewModelSupport {
 	 */
 	protected RespModel error(String statusDesc, Object...objects) {
 		RespModel entity = new RespModel();
-		entity.setType(SysConstantsEnum.REQUEST_SYNC.getValue());
-		entity.setStatus(SysConstantsEnum.ERROR.getValue());
+		entity.setType(CommonEnum.REQUEST_SYNC.getValue());
+		entity.setStatus(CommonEnum.ERROR.getValue());
 		entity.setMsg(statusDesc);
 		entity.setData(objects);
 		return entity;
@@ -131,9 +131,9 @@ public abstract class WebController extends ViewModelSupport {
 	 */
 	protected RespModel errorAjax() {
 		RespModel entity = new RespModel();
-		entity.setType(SysConstantsEnum.REQUEST_ASYNC.getValue());
-		entity.setStatus(SysConstantsEnum.ERROR.getValue());
-		entity.setMsg(SysConstantsEnum.ERROR.getDesc());
+		entity.setType(CommonEnum.REQUEST_ASYNC.getValue());
+		entity.setStatus(CommonEnum.ERROR.getValue());
+		entity.setMsg(CommonEnum.ERROR.getDesc());
 		return entity;
 	}
 	
@@ -147,8 +147,8 @@ public abstract class WebController extends ViewModelSupport {
 	 */
 	protected RespModel errorAjax(String statusDesc, Object...objects) {
 		RespModel entity = new RespModel();
-		entity.setType(SysConstantsEnum.REQUEST_ASYNC.getValue());
-		entity.setStatus(SysConstantsEnum.ERROR.getValue());
+		entity.setType(CommonEnum.REQUEST_ASYNC.getValue());
+		entity.setStatus(CommonEnum.ERROR.getValue());
 		entity.setMsg(statusDesc);
 		entity.setData(objects);
 		return entity;

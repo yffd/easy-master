@@ -11,6 +11,7 @@ import com.yffd.easy.common.core.converter.EasyModelConverter;
 import com.yffd.easy.common.core.page.PageParam;
 import com.yffd.easy.common.core.page.PageResult;
 import com.yffd.easy.framework.dao.IGenericDao;
+import com.yffd.easy.framework.domain.DomainModel;
 import com.yffd.easy.framework.domain.GenericPO;
 import com.yffd.easy.framework.domain.LoginInfo;
 
@@ -27,41 +28,73 @@ public abstract class GenericService extends EasyModelConverter implements IGene
 	public abstract IGenericDao getBindDao();
 
 	@Override
-	public PageResult<?> findPage(Object parameter, PageParam pageParam) {
-		return this.getBindDao().selectPage(parameter, pageParam);
+	public <T> PageResult<T> findPage(DomainModel model, PageParam pageParam) {
+		if(null==model) return null;
+		return (PageResult<T>) this.getBindDao().selectPage(model, pageParam);
 	}
 
 	@Override
-	public List<?> findList(Object parameter) {
-		return this.getBindDao().selectListBy(parameter);
+	public <T> PageResult<T> findPage(Map<String, Object> paramMap, PageParam pageParam) {
+		if(null==paramMap || paramMap.size()==0) return null;
+		return (PageResult<T>) this.getBindDao().selectPage(paramMap, pageParam);
 	}
 
 	@Override
-	public List<?> findAll() {
-		return this.getBindDao().selectAll();
+	public <T> List<T> findList(DomainModel model) {
+		if(null==model) return null;
+		return (List<T>) this.getBindDao().selectListBy(model);
 	}
 
+	@Override
+	public <T> List<T> findList(Map<String, Object> paramMap) {
+		if(null==paramMap) return null;
+		return (List<T>) this.getBindDao().selectListBy(paramMap);
+	}
+
+	@Override
+	public <T> List<T> findAll() {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		return this.findList(paramMap);
+	}
+
+	@Override
+	public <T> T findOne(DomainModel model) {
+		if(null==model) return null;
+		return (T) this.getBindDao().selectOne(model);
+	}
+
+	@Override
+	public <T> T findOne(Map<String, Object> paramMap) {
+		if(null==paramMap || paramMap.size()==0) return null;
+		return (T) this.getBindDao().selectOne(paramMap);
+	}
+	
 	@Override
 	public <T> T findById(String id) {
+		if(null==id || "".equals(id.trim())) return null;
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("id", id);
 		return this.getBindDao().selectOne(paramMap);
 	}
+	
+	@Override
+	public <T> List<T> findByIds(String ids) {
+		if(null==ids || "".equals(ids.trim())) return null;
+		if(ids.indexOf(",")==-1) {
+			List<T> list = new ArrayList<T>();
+			T model = this.findById(ids);
+			if(null!=model) list.add(model);
+			return list;
+		} else {
+			List<String> params = Arrays.asList(ids.split(","));
+			return this.findByIds(params);
+		}
+	}
 
 	@Override
-	public List<?> findByIds(String ids) {
-		if(null==ids || "".equals(ids)) return null;
-		if(ids.indexOf(",")!=-1) {
-			String[] idsArr = ids.split(",");
-			if(idsArr.length>1) {
-				this.getBindDao().selectListByIn(Arrays.asList(idsArr));
-			} else if(idsArr.length==1) {
-				this.findById(idsArr[0]);
-			}
-		} else {
-			this.findById(ids);
-		}
-		return null;
+	public <T> List<T> findByIds(List<String> list) {
+		if(null==list || list.size()==0) return null;
+		return (List<T>) this.getBindDao().selectListByIds(list);
 	}
 
 	@Override
@@ -97,7 +130,6 @@ public abstract class GenericService extends EasyModelConverter implements IGene
 		if(null==model) return;
 		this.setEditDefault(model, loginInfo, false);
 		this.getBindDao().updateBy(model);
-		
 	}
 
 	@Override
@@ -122,35 +154,88 @@ public abstract class GenericService extends EasyModelConverter implements IGene
 	}
 
 	@Override
-	public <T extends GenericPO> void delByModel(T model, LoginInfo loginInfo) {
+	public <T extends GenericPO> void delByModel(T model) {
+		if(null==model) return;
+		this.getBindDao().deleteBy(model);
+	}
+
+	@Override
+	public void delByMap(Map<String, Object> paramMap) {
+		if(null==paramMap || paramMap.size()==0) return;
+		this.getBindDao().deleteBy(paramMap);
+	}
+
+	@Override
+	public void delBatchByModel(List<? extends GenericPO> list) {
+		if(null==list || list.size()==0) return;
+		this.getBindDao().deleteBatch(list);
+	}
+
+	@Override
+	public void delBatchByMap(List<Map<String, Object>> list) {
+		if(null==list || list.size()==0) return;
+		this.getBindDao().deleteBatch(list);
+	}
+
+	@Override
+	public void delById(String id) {
+		if(null==id || "".equals(id.trim())) return;
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("id", id);
+		this.getBindDao().deleteBy(paramMap);
+	}
+
+	@Override
+	public void delBatchByIds(List<String> list) {
+		if(null==list || list.size()==0) return;
+		if(list.size()==1) {
+			this.delById(list.get(0));
+		} else {
+			this.getBindDao().deleteBatch(list);
+		}
+	}
+
+	@Override
+	public void delBatchByIds(String ids) {
+		if(null==ids || "".equals(ids.trim())) return;
+		if(ids.indexOf(",")==-1) {
+			this.delById(ids);
+		} else {
+			List<String> list = Arrays.asList(ids.split(","));
+			this.delBatchByIds(list);
+		}
+	}
+	
+	@Override
+	public <T extends GenericPO> void removeByModel(T model, LoginInfo loginInfo) {
 		if(null==model) return;
 		this.setEditDefault(model, loginInfo, true);
 		this.getBindDao().updateBy(model);
 	}
 
 	@Override
-	public void delByMap(Map<String, Object> paramMap, LoginInfo loginInfo) {
+	public void removeByMap(Map<String, Object> paramMap, LoginInfo loginInfo) {
 		if(null==paramMap || paramMap.size()==0) return;
 		this.setEditDefault(paramMap, loginInfo, true);
 		this.getBindDao().updateBy(paramMap);
 	}
 
 	@Override
-	public void delBatchByModel(List<? extends GenericPO> list, LoginInfo loginInfo) {
+	public void removeBatchByModel(List<? extends GenericPO> list, LoginInfo loginInfo) {
 		if(null==list || list.size()==0) return;
 		this.setEditDefault(list, loginInfo, true);
 		this.getBindDao().updateBatch(list);
 	}
 
 	@Override
-	public void delBatchByMap(List<Map<String, Object>> list, LoginInfo loginInfo) {
+	public void removeBatchByMap(List<Map<String, Object>> list, LoginInfo loginInfo) {
 		if(null==list || list.size()==0) return;
 		this.setEditDefault(list, loginInfo, true);
 		this.getBindDao().updateBatch(list);
 	}
 
 	@Override
-	public void delById(String id, LoginInfo loginInfo) {
+	public void removeById(String id, LoginInfo loginInfo) {
 		if(null==id || "".equals(id.trim())) return;
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("id", id);
@@ -160,7 +245,7 @@ public abstract class GenericService extends EasyModelConverter implements IGene
 	}
 
 	@Override
-	public void delBatchByIds(List<String> list, LoginInfo loginInfo) {
+	public void removeBatchByIds(List<String> list, LoginInfo loginInfo) {
 		if(null==list || list.size()==0) return;
 		if(list.size()==1) {
 			Map<String, Object> paramMap = new HashMap<String, Object>();
@@ -178,70 +263,18 @@ public abstract class GenericService extends EasyModelConverter implements IGene
 		}
 		this.getBindDao().updateBatch(params);
 	}
-
+	
 	@Override
-	public void delBatchByIds(String ids, LoginInfo loginInfo) {
+	public void removeBatchByIds(String ids, LoginInfo loginInfo) {
 		if(null==ids || "".equals(ids.trim())) return;
 		if(ids.indexOf(",")==-1) {
-			this.delById(ids, loginInfo);
+			this.removeById(ids, loginInfo);
 		} else {
 			List<String> list = Arrays.asList(ids.split(","));
-			this.delBatchByIds(list, loginInfo);
+			this.removeBatchByIds(list, loginInfo);
 		}
 	}
 
-	@Override
-	public <T extends GenericPO> void physicalDelByModel(T model, LoginInfo loginInfo) {
-		if(null==model) return;
-		this.getBindDao().deleteBy(model);
-	}
-
-	@Override
-	public void physicalDelByMap(Map<String, Object> paramMap, LoginInfo loginInfo) {
-		if(null==paramMap || paramMap.size()==0) return;
-		this.getBindDao().deleteBy(paramMap);
-	}
-
-	@Override
-	public void physicalDelBatchByModel(List<? extends GenericPO> list, LoginInfo loginInfo) {
-		if(null==list || list.size()==0) return;
-		this.getBindDao().deleteBatch(list);
-	}
-
-	@Override
-	public void physicalDelBatchByMap(List<Map<String, Object>> list, LoginInfo loginInfo) {
-		if(null==list || list.size()==0) return;
-		this.getBindDao().deleteBatch(list);
-	}
-
-	@Override
-	public void physicalDelById(String id, LoginInfo loginInfo) {
-		if(null==id || "".equals(id.trim())) return;
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("id", id);
-		this.getBindDao().deleteBy(paramMap);
-	}
-
-	@Override
-	public void physicalDelBatchByIds(List<String> list, LoginInfo loginInfo) {
-		if(null==list || list.size()==0) return;
-		if(list.size()==1) {
-			this.physicalDelById(list.get(0), loginInfo);
-		} else {
-			this.getBindDao().deleteBatch(list);
-		}
-	}
-
-	@Override
-	public void physicalDelBatchByIds(String ids, LoginInfo loginInfo) {
-		if(null==ids || "".equals(ids.trim())) return;
-		if(ids.indexOf(",")==-1) {
-			this.physicalDelById(ids, loginInfo);
-		} else {
-			List<String> list = Arrays.asList(ids.split(","));
-			this.physicalDelBatchByIds(list, loginInfo);
-		}
-	}
 
 	/**
 	 * 设置数据模型的默认值-新增
