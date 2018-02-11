@@ -132,7 +132,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			height: 400,
 			href: 'views/uupm/tenant/tenantEditDlg.jsp',
 			onLoad:function(){
-				console.info('sss');
 				var editForm = parent.$.modalDialog.handler.find("#form_id");
 				editForm.find("#startTime").val(new Date().format("yyyy-MM-dd HH:mm:ss"));
 				editForm.find('#tenantType_id').combobox({
@@ -195,12 +194,43 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				title: "编辑",
 				width: 600,
 				height: 400,
-				href: 'admin/pms/user/userEditDlg.jsp',
+				href: 'views/uupm/tenant/tenantEditDlg.jsp',
 				onLoad:function(){
 					var editForm = parent.$.modalDialog.handler.find("#form_id");
-					if("-1"==row.orgCode) row.orgCode = "";
+					editForm.find('#tenantType_id').combobox({
+						editable:false,
+						panelHeight: 120,
+					    valueField:'value',
+					    textField:'text',
+					    data: $.grep($json_tenantType, function(n,i){
+					    	if(i==1) n['selected']=true;
+					    	return i > 0;
+					    })
+					});
+					editForm.find('#tenantStatus_id').combobox({
+						editable:false,
+						panelHeight: 120,
+					    textField:'text',
+					    valueField:'value',
+					    data: $.grep($json_tenantStatus, function(n,i){
+					    	if(i==1) n['selected']=true;
+					    	return i > 0;
+					    })
+					});
+					editForm.find('#serveType_id').combobox({
+						editable:false,
+						panelHeight: 80,
+					    textField:'text',
+					    valueField:'value',
+					    data: $.grep($json_serveType, function(n,i){
+					    	if(i==1) n['selected']=true;
+					    	return i > 0;
+					    })
+					});
 					editForm.form("load", row);
-					editForm.find("#userCode_id").attr('readonly',true);
+					editForm.find("#tenantCode_id").attr('readonly',true);
+					if(row.startTime) editForm.find("#startTime").val(new Date(row.startTime).format("yyyy-MM-dd HH:mm:ss"));
+					if(row.endTime) editForm.find("#endTime").val(new Date(row.endTime).format("yyyy-MM-dd HH:mm:ss"));
 				},
 				buttons: [{
 					text: '确定',
@@ -209,7 +239,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						parent.$.modalDialog.openWindow = $openWindow;//定义打开对话框的窗口
 						parent.$.modalDialog.openner = $dg;//定义对话框关闭要刷新的grid
 						var editForm = parent.$.modalDialog.handler.find("#form_id");
-						editForm.attr("action", "pms/user/edit");
+						editForm.attr("action", "uupm/tenant/edit");
 						editForm.submit();
 					}
 				},{
@@ -223,9 +253,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			});
 		} else {
 			$.messager.show({
-				title :"系统提示",
-				msg :"请选择一行记录!",
-				timeout : 1000 * 2
+				title :commonui.msg_title,
+				msg : "请选择一行记录!",
+				timeout : commonui.msg_timeout
 			});
 		}
 	}
@@ -236,30 +266,30 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		if(row) {
 			parent.$.messager.confirm("提示","确定要删除记录吗?",function(r){  
 			    if(r) {
-			    	$.post("pms/user/del", {userCode:row.userCode}, function(result) {
-						if(result.statusCode=='OK') {
+			    	$.post("uupm/tenant/del", {id:row.id}, function(result) {
+						if(result.status=='OK') {
 							var rowIndex = $dg.datagrid('getRowIndex', row);
 							$dg.datagrid('deleteRow', rowIndex);
 						}
 						$.messager.show({
-							title : "系统提示",
-							msg : result.statusDesc,
-							timeout : 1000 * 2
+							title :commonui.msg_title,
+							msg : result.msg,
+							timeout : commonui.msg_timeout
 						});
 					}, "JSON").error(function() {
 						$.messager.show({
-							title : "系统提示",
-							msg : result.statusDesc,
-							timeout : 1000 * 2
+							title :commonui.msg_title,
+							msg : result.msg,
+							timeout : commonui.msg_timeout
 						});
 					});
 			    }  
 			});
 		} else {
 			$.messager.show({
-				title :"系统提示",
-				msg :"请选择一行记录!",
-				timeout : 1000 * 2
+				title :commonui.msg_title,
+				msg : "请选择一行记录!",
+				timeout : commonui.msg_timeout
 			});
 		}
 	}

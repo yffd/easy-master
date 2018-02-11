@@ -89,11 +89,12 @@ $(function() {
 <div class="easyui-layout" data-options="fit:true,border:false">
 	<div data-options="region:'center',border:false" class="edit-form-div">
 		<form id="form_id" method="post" style="width:100%;height:100%;">
+			<input name="id" value="" type="hidden"/>
 			<fieldset>
 				<table class="edit-form-table">
 					<tr>
 						<th>租户编号：</th>
-						<td><input name="tenantCode" class="easyui-textbox easyui-validatebox" required="required" placeholder="请输入编号"/></td>
+						<td><input id="tenantCode_id" name="tenantCode" class="easyui-textbox easyui-validatebox" required="required" placeholder="请输入编号"/></td>
 						<th>租户名称：</th>
 						<td><input name="tenantName" class="easyui-textbox easyui-validatebox" required="required" placeholder="请输入名称" /></td>
 					</tr>
