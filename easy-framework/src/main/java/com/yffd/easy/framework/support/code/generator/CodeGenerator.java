@@ -33,10 +33,10 @@ public class CodeGenerator extends EasyModelConverter {
 	{
 		sortedPropsList.add("version");
 		sortedPropsList.add("delFlag");
-		sortedPropsList.add("creator");
+		sortedPropsList.add("createBy");
 		sortedPropsList.add("createTime");
-		sortedPropsList.add("editor");
-		sortedPropsList.add("editTime");
+		sortedPropsList.add("updateBy");
+		sortedPropsList.add("updateTime");
 		sortedPropsList.add("id");
 		
 		skipModelNamesLike.add("EasyPersistModel");
@@ -107,6 +107,10 @@ public class CodeGenerator extends EasyModelConverter {
 		return this.fmtModelName(modelClazz, null, "ServiceTest");
 	}
 	
+	protected String fmtControllerSimpleName(Class<?> modelClazz) {
+		return this.fmtModelName(modelClazz, null, "Controller");
+	}
+	
 	/**
 	 * 格式化Service类名称，简短名称，非完整类名
 	 * @Date	2018年2月6日 上午11:05:08 <br/>
@@ -129,6 +133,19 @@ public class CodeGenerator extends EasyModelConverter {
 	protected String fmtDaoFullClassName(Class<?> modelClazz, String daoPackageName) {
 		String daoSimpleName = this.fmtModelName(modelClazz, null, "Dao");
 		return daoPackageName + "." + daoSimpleName;
+	}
+	
+	/**
+	 * 格式化Service完整类名，即包名+类名
+	 * @Date	2018年2月6日 上午10:41:11 <br/>
+	 * @author  zhangST
+	 * @param modelClazz
+	 * @param servicePackageName
+	 * @return
+	 */
+	protected String fmtServiceFullClassName(Class<?> modelClazz, String servicePackageName) {
+		String daoSimpleName = this.fmtModelName(modelClazz, null, "Service");
+		return servicePackageName + "." + daoSimpleName;
 	}
 	
 	/**

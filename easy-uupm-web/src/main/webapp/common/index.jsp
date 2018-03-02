@@ -102,10 +102,10 @@ function initMenuLocal() {
         },{
         	"id": "sys-111",
             "pid": "sys",
-            "text": "流程定义管理",
+            "text": "数据字典管理",
             "state": "open",
             "iconCls": "icon-sys",
-            "inUrl": "views/workflow/definition/definitionMain.jsp",
+            "inUrl": "views/uupm/dictionary/dictionaryMain.jsp",
             "rsType": "M"
         },{
         	"id": "sys-112",

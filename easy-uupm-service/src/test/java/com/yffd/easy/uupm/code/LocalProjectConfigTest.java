@@ -3,7 +3,7 @@ package com.yffd.easy.uupm.code;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.yffd.easy.framework.service.GenericService;
+import com.yffd.easy.framework.base.service.GenericService;
 import com.yffd.easy.framework.support.code.generator.CodeGenerator;
 import com.yffd.easy.uupm.base.UupmBaseDao;
 import com.yffd.easy.uupm.base.UupmBaseDaoTest;

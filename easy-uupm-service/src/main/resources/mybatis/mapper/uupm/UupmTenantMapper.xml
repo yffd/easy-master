@@ -9,10 +9,10 @@
 		<id column="ID" property="id" />
 		<result column="VERSION" property="version" />
 		<result column="DEL_FLAG" property="delFlag" />
-		<result column="CREATOR" property="creator" />
+		<result column="CREATE_BY" property="createBy" />
 		<result column="CREATE_TIME" property="createTime" />
-		<result column="EDITOR" property="editor" />
-		<result column="EDIT_TIME" property="editTime" />
+		<result column="UPDATE_BY" property="updateBy" />
+		<result column="UPDATE_TIME" property="updateTime" />
 		<result column="END_TIME" property="endTime" />
 		<result column="SERVE_TYPE" property="serveType" />
 		<result column="START_TIME" property="startTime" />
@@ -27,7 +27,7 @@
 
 	<!-- 列名 -->
 	<sql id="table_columns">
-		t.VERSION, t.DEL_FLAG, t.CREATOR, t.CREATE_TIME, t.EDITOR, t.EDIT_TIME, t.ID, t.END_TIME, t.SERVE_TYPE, t.START_TIME, t.TENANT_CODE, t.TENANT_NAME, t.TENANT_STATUS, t.TENANT_TYPE
+		t.VERSION, t.DEL_FLAG, t.CREATE_BY, t.CREATE_TIME, t.UPDATE_BY, t.UPDATE_TIME, t.ID, t.END_TIME, t.SERVE_TYPE, t.START_TIME, t.TENANT_CODE, t.TENANT_NAME, t.TENANT_STATUS, t.TENANT_TYPE
 	</sql>
 
 	<!-- 分页条件 -->
@@ -41,20 +41,31 @@
 		<!-- Equal query -->
 		<if test="version != null "> and t.VERSION = #{version} </if>
 		<if test="delFlag != null and delFlag != ''"> and t.DEL_FLAG = #{delFlag} </if>
-		<if test="creator != null and creator != ''"> and t.CREATOR = #{creator} </if>
-		<if test="createTime != null "> and <![CDATA[t.CREATE_TIME = #{createTime}]]> </if>
-		<if test="editor != null and editor != ''"> and t.EDITOR = #{editor} </if>
-		<if test="editTime != null "> and <![CDATA[t.EDIT_TIME = #{editTime}]]> </if>
+		<if test="createBy != null and createBy != ''"> and t.CREATE_BY = #{createBy} </if>
+		<if test="createTime != null "><![CDATA[ and t.CREATE_TIME = #{createTime}]]> </if>
+		<if test="updateBy != null and updateBy != ''"> and t.UPDATE_BY = #{updateBy} </if>
+		<if test="updateTime != null "><![CDATA[ and t.UPDATE_TIME = #{updateTime}]]> </if>
 		<if test="id != null and id != ''"> and t.ID = #{id} </if>
-		<if test="endTime != null "> and <![CDATA[t.END_TIME = #{endTime}]]> </if>
+		<if test="endTime != null "><![CDATA[ and t.END_TIME = #{endTime}]]> </if>
 		<if test="serveType != null and serveType != ''"> and t.SERVE_TYPE = #{serveType} </if>
-		<if test="startTime != null "> and <![CDATA[t.START_TIME = #{startTime}]]> </if>
+		<if test="startTime != null "><![CDATA[ and t.START_TIME = #{startTime}]]> </if>
 		<if test="tenantCode != null and tenantCode != ''"> and t.TENANT_CODE = #{tenantCode} </if>
 		<if test="tenantStatus != null and tenantStatus != ''"> and t.TENANT_STATUS = #{tenantStatus} </if>
 		<if test="tenantType != null and tenantType != ''"> and t.TENANT_TYPE = #{tenantType} </if>
 		<!-- Like query -->
 		<if test="tenantName != null and tenantName != ''"> and t.TENANT_NAME like CONCAT(CONCAT('%', #{tenantName}), '%') </if>
 	</sql>
+
+	<!-- 分页查询 -->
+	<select id="selectRangeBy" parameterType="java.util.Map" resultMap="resutlId">
+		select <include refid="table_columns" />
+		from <include refid="table_name"/>  as t 
+		<where>
+			<include refid="conditions_where" />
+		</where>
+		<include refid="conditions_orderby" />
+		<include refid="conditions_limit" />
+	</select>
 
 	<!-- 条件查询 -->
 	<select id="selectListBy" parameterType="java.util.Map" resultMap="resutlId">
@@ -64,7 +75,6 @@
 			<include refid="conditions_where" />
 		</where>
 		<include refid="conditions_orderby" />
-		<include refid="conditions_limit" />
 	</select>
 
 	<!-- 统计查询 -->
@@ -99,24 +109,23 @@
 	<insert id="insertOne" parameterType="java.util.Map" keyProperty="id" useGeneratedKeys="true">
 		insert into
 		<include refid="table_name" />
-		(VERSION, DEL_FLAG, CREATOR, CREATE_TIME, EDITOR, EDIT_TIME, ID, END_TIME, SERVE_TYPE, START_TIME, TENANT_CODE, TENANT_NAME, TENANT_STATUS, TENANT_TYPE)
+		(VERSION, DEL_FLAG, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME, END_TIME, SERVE_TYPE, START_TIME, TENANT_CODE, TENANT_NAME, TENANT_STATUS, TENANT_TYPE)
 		values
-		(#{version}, #{delFlag}, #{creator}, #{createTime}, #{editor}, #{editTime}, #{id}, #{endTime}, #{serveType}, #{startTime}, #{tenantCode}, #{tenantName}, #{tenantStatus}, #{tenantType})
+		(#{version}, #{delFlag}, #{createBy}, #{createTime}, #{updateBy}, #{updateTime}, #{endTime}, #{serveType}, #{startTime}, #{tenantCode}, #{tenantName}, #{tenantStatus}, #{tenantType})
 	</insert>
 
 	<!-- 批量插入 -->
 	<insert id="insertBatch" parameterType="java.util.Map" keyProperty="id" useGeneratedKeys="true">
 		insert into <include refid="table_name" />
-		(VERSION, DEL_FLAG, CREATOR, CREATE_TIME, EDITOR, EDIT_TIME, ID, END_TIME, SERVE_TYPE, START_TIME, TENANT_CODE, TENANT_NAME, TENANT_STATUS, TENANT_TYPE)
+		(VERSION, DEL_FLAG, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME, END_TIME, SERVE_TYPE, START_TIME, TENANT_CODE, TENANT_NAME, TENANT_STATUS, TENANT_TYPE)
 		values
 		<foreach collection="list" item="item" index="index" separator=",">
 		(#{item.version},
 		#{item.delFlag},
-		#{item.creator},
+		#{item.createBy},
 		#{item.createTime},
-		#{item.editor},
-		#{item.editTime},
-		#{item.id},
+		#{item.updateBy},
+		#{item.updateTime},
 		#{item.endTime},
 		#{item.serveType},
 		#{item.startTime},
@@ -133,8 +142,9 @@
 		<set>
 		VERSION = VERSION + 1, 
 		<if test="delFlag != null and delFlag != ''"> DEL_FLAG = #{delFlag},  </if>
-		<if test="editor != null and editor != ''"> EDITOR = #{editor},  </if>
-		<if test="editTime != null "> EDIT_TIME = #{editTime},  </if>
+		<if test="createBy != null and createBy != ''"> CREATE_BY = #{createBy},  </if>
+		<if test="updateBy != null and updateBy != ''"> UPDATE_BY = #{updateBy},  </if>
+		<if test="updateTime != null "> UPDATE_TIME = #{updateTime},  </if>
 		<if test="endTime != null "> END_TIME = #{endTime},  </if>
 		<if test="serveType != null and serveType != ''"> SERVE_TYPE = #{serveType},  </if>
 		<if test="startTime != null "> START_TIME = #{startTime},  </if>
@@ -156,9 +166,10 @@
 		<set>
 		VERSION = VERSION + 1, 
 		<if test="item.delFlag != null and item.delFlag != ''"> DEL_FLAG = #{item.delFlag},  </if>
+		<if test="item.createBy != null and item.createBy != ''"> CREATE_BY = #{item.createBy},  </if>
 		<if test="item.createTime != null "> CREATE_TIME = #{item.createTime},  </if>
-		<if test="item.editor != null and item.editor != ''"> EDITOR = #{item.editor},  </if>
-		<if test="item.editTime != null "> EDIT_TIME = #{item.editTime},  </if>
+		<if test="item.updateBy != null and item.updateBy != ''"> UPDATE_BY = #{item.updateBy},  </if>
+		<if test="item.updateTime != null "> UPDATE_TIME = #{item.updateTime},  </if>
 		<if test="item.endTime != null "> END_TIME = #{item.endTime},  </if>
 		<if test="item.serveType != null and item.serveType != ''"> SERVE_TYPE = #{item.serveType},  </if>
 		<if test="item.startTime != null "> START_TIME = #{item.startTime},  </if>
@@ -175,8 +186,15 @@
 	</update>
 
 	<!-- 主键删除 -->
-	<delete id="deleteByPK" parameterType="java.lang.String">
+	<delete id="deleteById" parameterType="java.lang.String">
 		delete from <include refid="table_name" /> where ID = #{_parameter}
+	</delete>
+
+	<!-- 主键批量删除 -->
+	<delete id="deleteByIds" parameterType="java.util.List">
+		delete from <include refid="table_name" /> 
+		where ID in 
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">#{item}</foreach>
 	</delete>
 
 	<!-- 删除 -->
@@ -185,26 +203,19 @@
 		<where>
 		<if test="version != null "> and VERSION = #{version} </if>
 		<if test="delFlag != null and delFlag != ''"> and DEL_FLAG = #{delFlag} </if>
-		<if test="creator != null and creator != ''"> and CREATOR = #{creator} </if>
-		<if test="createTime != null "> and <![CDATA[CREATE_TIME = #{createTime}]]> </if>
-		<if test="editor != null and editor != ''"> and EDITOR = #{editor} </if>
-		<if test="editTime != null "> and <![CDATA[EDIT_TIME = #{editTime}]]> </if>
+		<if test="createBy != null and createBy != ''"> and CREATE_BY = #{createBy} </if>
+		<if test="createTime != null "><![CDATA[ and CREATE_TIME = #{createTime}]]> </if>
+		<if test="updateBy != null and updateBy != ''"> and UPDATE_BY = #{updateBy} </if>
+		<if test="updateTime != null "><![CDATA[ and UPDATE_TIME = #{updateTime}]]> </if>
 		<if test="id != null and id != ''"> and ID = #{id} </if>
-		<if test="endTime != null "> and <![CDATA[END_TIME = #{endTime}]]> </if>
+		<if test="endTime != null "><![CDATA[ and END_TIME = #{endTime}]]> </if>
 		<if test="serveType != null and serveType != ''"> and SERVE_TYPE = #{serveType} </if>
-		<if test="startTime != null "> and <![CDATA[START_TIME = #{startTime}]]> </if>
+		<if test="startTime != null "><![CDATA[ and START_TIME = #{startTime}]]> </if>
 		<if test="tenantCode != null and tenantCode != ''"> and TENANT_CODE = #{tenantCode} </if>
 		<if test="tenantName != null and tenantName != ''"> and TENANT_NAME = #{tenantName} </if>
 		<if test="tenantStatus != null and tenantStatus != ''"> and TENANT_STATUS = #{tenantStatus} </if>
 		<if test="tenantType != null and tenantType != ''"> and TENANT_TYPE = #{tenantType} </if>
 		</where>
-	</delete>
-
-	<!-- 批量删除 -->
-	<delete id="deleteBatch" parameterType="java.util.List">
-		delete from <include refid="table_name" /> 
-		where ID in 
-		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">#{item.id}</foreach>
 	</delete>
 
 	<!-- ######################################################################### -->

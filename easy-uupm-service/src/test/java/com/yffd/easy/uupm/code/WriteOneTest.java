@@ -7,7 +7,7 @@ import com.yffd.easy.framework.support.code.generator.DaoTestCodeGenerator;
 import com.yffd.easy.framework.support.code.generator.MapperFileCodeGenerator;
 import com.yffd.easy.framework.support.code.generator.ServiceCodeGenerator;
 import com.yffd.easy.framework.support.code.generator.ServiceTestCodeGenerator;
-import com.yffd.easy.uupm.api.model.UupmTenantModel;
+import com.yffd.easy.uupm.api.model.UupmDictionaryModel;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -24,7 +24,21 @@ public class WriteOneTest extends LocalProjectConfigTest {
 	private ServiceCodeGenerator serviceGenerator = new ServiceCodeGenerator();
 	private ServiceTestCodeGenerator serviceTestGenerator = new ServiceTestCodeGenerator();
 	
-	private Class<?> modelClazz = UupmTenantModel.class;
+	private Class<?> modelClazz = UupmDictionaryModel.class;
+	
+	/**
+	 * 所有--文件
+	 * @Date	2018年2月8日 下午5:45:00 <br/>
+	 * @author  zhangST
+	 */
+	@Test
+	public void writeAllOfOneToFileTest() {
+		mapperGenerator.writeToFile(modelClazz, daoPackageName, outRootDirPath_mapper, covered);
+		daoGenerator.writeToFile(modelClazz, baseDaoClazz, daoPackageName, author, outRootDirPath_dao, true);
+		daoTestGenerator.writeToFile(modelClazz, baseDaoTestClazz, daoTestPackageName, author, outRootDirPath_dao_test, true);
+		serviceGenerator.writeToFile(modelClazz, baseServiceClazz, servicePackageName, daoPackageName, author, outRootDirPath_service, true);
+		serviceTestGenerator.writeToFile(modelClazz, baseServiceTestClazz, serviceTestPackageName, author, outRootDirPath_service_test, true);
+	}
 	
 	/**
 	 * service--test--文件
@@ -129,19 +143,6 @@ public class WriteOneTest extends LocalProjectConfigTest {
 		mapperGenerator.writeToConsole(modelClazz, daoPackageName);
 	}
 	
-	/**
-	 * 所有--文件
-	 * @Date	2018年2月8日 下午5:45:00 <br/>
-	 * @author  zhangST
-	 */
-	@Test
-	public void writeAllToFileTest() {
-		mapperGenerator.writeToFile(modelClazz, daoPackageName, outRootDirPath_mapper, covered);
-		daoGenerator.writeToFile(modelClazz, baseDaoClazz, daoPackageName, author, outRootDirPath_dao, true);
-		daoTestGenerator.writeToFile(modelClazz, baseDaoTestClazz, daoTestPackageName, author, outRootDirPath_dao_test, true);
-		serviceGenerator.writeToFile(modelClazz, baseServiceClazz, servicePackageName, daoPackageName, author, outRootDirPath_service, true);
-		serviceTestGenerator.writeToFile(modelClazz, baseServiceTestClazz, serviceTestPackageName, author, outRootDirPath_service_test, true);
-	}
 	
 }
 

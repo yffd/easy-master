@@ -84,7 +84,7 @@ public class ServiceCodeGenerator extends CodeGenerator {
 		sb.append("import org.springframework.beans.factory.annotation.Autowired;").append("\r\n");
 		sb.append("import org.springframework.stereotype.Service;").append("\r\n");
 		sb.append("\r\n");
-		sb.append("import com.yffd.easy.framework.dao.IGenericDao;").append("\r\n");
+		sb.append("import com.yffd.easy.framework.base.dao.GenericDao;").append("\r\n");
 		
 		// import base service
 		String baseServiceSimpleName = null;
@@ -99,6 +99,8 @@ public class ServiceCodeGenerator extends CodeGenerator {
 		// import dao
 		String daoFullClassName = this.fmtDaoFullClassName(modelClazz, daoPackageName);
 		sb.append("import ").append(daoFullClassName).append(";").append("\r\n");
+		// import model
+		sb.append("import ").append(modelClazz.getName()).append(";").append("\r\n");
 		
 		sb.append("\r\n");
 		sb.append("/**").append("\r\n");
@@ -117,7 +119,9 @@ public class ServiceCodeGenerator extends CodeGenerator {
 		if(null==baseServiceSimpleName) {
 			sb.append("public class ").append(serviceSimpleName).append(" {").append("\r\n");
 		} else {
-			sb.append("public class ").append(serviceSimpleName).append(" extends ").append(baseServiceSimpleName).append(" {").append("\r\n");
+			sb.append("public class ").append(serviceSimpleName)
+			.append(" extends ").append(baseServiceSimpleName).append("<").append(modelClazz.getSimpleName()).append(">")
+			.append(" {").append("\r\n");
 		}
 		
 		String daoSimpleName = this.fmtDaoSimpleName(modelClazz);
@@ -128,7 +132,7 @@ public class ServiceCodeGenerator extends CodeGenerator {
 		
 		sb.append("\t").append("\r\n");
 		sb.append("\t").append("@Override").append("\r\n");
-		sb.append("\t").append("public IGenericDao getBindDao() {").append("\r\n");
+		sb.append("\t").append("public GenericDao<"+modelClazz.getSimpleName()+"> getBindDao() {").append("\r\n");
 		sb.append("\t").append("\t").append("return this.").append(aliasName).append(";").append("\r\n");
 		sb.append("\t").append("}").append("\r\n");
 		

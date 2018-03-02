@@ -1,11 +1,11 @@
 package com.yffd.easy.uupm.web.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -44,8 +44,12 @@ public class UupmTenantController extends UupmBaseController {
 	
 	@RequestMapping(value="/add", method=RequestMethod.POST)
 	public RespModel add(UupmTenantModel model) {
-		if(null==model) return this.error("参数无效");
-		this.uupmTenantService.addByModel(model, null);
+		if(null==model || EasyStringCheckUtils.isEmpty(model.getTenantCode())) return this.error("参数无效");
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("tenantCode", model.getTenantCode());
+		UupmTenantModel hasModel = (UupmTenantModel) this.uupmTenantService.findOne(paramMap);
+		if(null!=hasModel) return this.errorAjax("租户编号已存在");
+		this.uupmTenantService.addOne(model, null);
 		return this.successAjax();
 	}
 	
@@ -54,7 +58,7 @@ public class UupmTenantController extends UupmBaseController {
 		if(null==model || EasyStringCheckUtils.isEmpty(model.getId())) {
 			return this.error("参数无效");
 		}
-		this.uupmTenantService.updateByModel(model, null);
+		this.uupmTenantService.updateBy(model, null);
 		return this.successAjax();
 	}
 	

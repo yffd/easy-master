@@ -21,23 +21,27 @@ public class UupmDictionaryModel extends GenericPO {
    
 	private static final long serialVersionUID = -3027407448427505570L;
 	private String tenantCode;		//租户编号
-	private String itemCode; 		//项编号
+	private String categoryCode;	//数据分类编号:CAT_DICT、CAT_OA等
 	private String itemName;		//项名称
-	private String parentCode;		//父机构编号
-	private String accessType;		//访问类型：1=公开、0=私有
-	private int seqNo;				//菜单序号
+	private String itemCode; 		//项编号
+	private String parentCode;		//父项编号
+	private String dataPath;		//数据路径，用点（.）分隔
+	private String dataLabel;		//数据标签：BRANCH（分支）、LEAF（叶子）
+	private String dataShowType;	//数据展示方式:TREE、FLAT
+	private Integer seqNo;			//序号
 	private String remark;			//备注
+	
 	public String getTenantCode() {
 		return tenantCode;
 	}
 	public void setTenantCode(String tenantCode) {
 		this.tenantCode = tenantCode;
 	}
-	public String getItemCode() {
-		return itemCode;
+	public String getCategoryCode() {
+		return categoryCode;
 	}
-	public void setItemCode(String itemCode) {
-		this.itemCode = itemCode;
+	public void setCategoryCode(String categoryCode) {
+		this.categoryCode = categoryCode;
 	}
 	public String getItemName() {
 		return itemName;
@@ -45,22 +49,40 @@ public class UupmDictionaryModel extends GenericPO {
 	public void setItemName(String itemName) {
 		this.itemName = itemName;
 	}
+	public String getItemCode() {
+		return itemCode;
+	}
+	public void setItemCode(String itemCode) {
+		this.itemCode = itemCode;
+	}
 	public String getParentCode() {
 		return parentCode;
 	}
 	public void setParentCode(String parentCode) {
 		this.parentCode = parentCode;
 	}
-	public String getAccessType() {
-		return accessType;
+	public String getDataPath() {
+		return dataPath;
 	}
-	public void setAccessType(String accessType) {
-		this.accessType = accessType;
+	public void setDataPath(String dataPath) {
+		this.dataPath = dataPath;
 	}
-	public int getSeqNo() {
+	public String getDataLabel() {
+		return dataLabel;
+	}
+	public void setDataLabel(String dataLabel) {
+		this.dataLabel = dataLabel;
+	}
+	public String getDataShowType() {
+		return dataShowType;
+	}
+	public void setDataShowType(String dataShowType) {
+		this.dataShowType = dataShowType;
+	}
+	public Integer getSeqNo() {
 		return seqNo;
 	}
-	public void setSeqNo(int seqNo) {
+	public void setSeqNo(Integer seqNo) {
 		this.seqNo = seqNo;
 	}
 	public String getRemark() {
@@ -69,5 +91,5 @@ public class UupmDictionaryModel extends GenericPO {
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
-
+	
 }

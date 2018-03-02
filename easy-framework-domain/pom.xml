@@ -13,9 +13,14 @@
   <name>easy-framework-domain</name>
   <url>http://maven.apache.org</url>
   <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <easy.common.core.version>0.0.1</easy.common.core.version>
   </properties>
   <dependencies>
+  	<dependency>
+		<groupId>com.yffd.easy</groupId>
+		<artifactId>easy-common-core</artifactId>
+		<version>${easy.common.core.version}</version>
+	</dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>

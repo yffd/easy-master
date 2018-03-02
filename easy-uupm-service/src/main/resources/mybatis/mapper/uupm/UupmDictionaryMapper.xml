@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yffd.easy.uupm.dao.UupmDictionaryDao">
+	<!-- ######################################################################### -->
+	<!-- ##############################   基础sql开始    ############################## -->
+	<!-- ######################################################################### -->
+	
+	<resultMap id="resutlId" type="com.yffd.easy.uupm.api.model.UupmDictionaryModel">
+		<id column="ID" property="id" />
+		<result column="VERSION" property="version" />
+		<result column="DEL_FLAG" property="delFlag" />
+		<result column="CREATE_BY" property="createBy" />
+		<result column="CREATE_TIME" property="createTime" />
+		<result column="UPDATE_BY" property="updateBy" />
+		<result column="UPDATE_TIME" property="updateTime" />
+		<result column="CATEGORY_CODE" property="categoryCode" />
+		<result column="DATA_LABEL" property="dataLabel" />
+		<result column="DATA_PATH" property="dataPath" />
+		<result column="DATA_SHOW_TYPE" property="dataShowType" />
+		<result column="ITEM_CODE" property="itemCode" />
+		<result column="ITEM_NAME" property="itemName" />
+		<result column="PARENT_CODE" property="parentCode" />
+		<result column="REMARK" property="remark" />
+		<result column="SEQ_NO" property="seqNo" />
+		<result column="TENANT_CODE" property="tenantCode" />
+	</resultMap>
+
+	<!-- 表名 -->
+	<sql id="table_name"> uupm_dictionary </sql>
+
+	<!-- 列名 -->
+	<sql id="table_columns">
+		t.VERSION, t.DEL_FLAG, t.CREATE_BY, t.CREATE_TIME, t.UPDATE_BY, t.UPDATE_TIME, t.ID, t.CATEGORY_CODE, t.DATA_LABEL, t.DATA_PATH, t.DATA_SHOW_TYPE, t.ITEM_CODE, t.ITEM_NAME, t.PARENT_CODE, t.REMARK, t.SEQ_NO, t.TENANT_CODE
+	</sql>
+
+	<!-- 分页条件 -->
+	<sql id="conditions_limit"><if test="pageParam != null"> limit #{pageParam.pageStartRow}, #{pageParam.pageLimit} </if></sql>
+
+	<!-- 排序条件 -->
+	<sql id="conditions_orderby"> ORDER BY t.CREATE_TIME desc </sql>
+
+	<!-- 动态组装复合查询条件 -->
+	<sql id="conditions_where">
+		<!-- Equal query -->
+		<if test="version != null "> and t.VERSION = #{version} </if>
+		<if test="delFlag != null and delFlag != ''"> and t.DEL_FLAG = #{delFlag} </if>
+		<if test="createBy != null and createBy != ''"> and t.CREATE_BY = #{createBy} </if>
+		<if test="createTime != null "><![CDATA[ and t.CREATE_TIME = #{createTime}]]> </if>
+		<if test="updateBy != null and updateBy != ''"> and t.UPDATE_BY = #{updateBy} </if>
+		<if test="updateTime != null "><![CDATA[ and t.UPDATE_TIME = #{updateTime}]]> </if>
+		<if test="id != null and id != ''"> and t.ID = #{id} </if>
+		<if test="categoryCode != null and categoryCode != ''"> and t.CATEGORY_CODE = #{categoryCode} </if>
+		<if test="dataLabel != null and dataLabel != ''"> and t.DATA_LABEL = #{dataLabel} </if>
+		<if test="dataPath != null and dataPath != ''"> and t.DATA_PATH = #{dataPath} </if>
+		<if test="dataShowType != null and dataShowType != ''"> and t.DATA_SHOW_TYPE = #{dataShowType} </if>
+		<if test="itemCode != null and itemCode != ''"> and t.ITEM_CODE = #{itemCode} </if>
+		<if test="parentCode != null and parentCode != ''"> and t.PARENT_CODE = #{parentCode} </if>
+		<if test="remark != null and remark != ''"> and t.REMARK = #{remark} </if>
+		<if test="seqNo != null "> and t.SEQ_NO = #{seqNo} </if>
+		<if test="tenantCode != null and tenantCode != ''"> and t.TENANT_CODE = #{tenantCode} </if>
+		<!-- Like query -->
+		<if test="itemName != null and itemName != ''"> and t.ITEM_NAME like CONCAT(CONCAT('%', #{itemName}), '%') </if>
+	</sql>
+
+	<!-- 分页查询 -->
+	<select id="selectRangeBy" parameterType="java.util.Map" resultMap="resutlId">
+		select <include refid="table_columns" />
+		from <include refid="table_name"/>  as t 
+		<where>
+			<include refid="conditions_where" />
+		</where>
+		<include refid="conditions_orderby" />
+		<include refid="conditions_limit" />
+	</select>
+
+	<!-- 条件查询 -->
+	<select id="selectListBy" parameterType="java.util.Map" resultMap="resutlId">
+		select <include refid="table_columns" />
+		from <include refid="table_name"/>  as t 
+		<where>
+			<include refid="conditions_where" />
+		</where>
+		<include refid="conditions_orderby" />
+	</select>
+
+	<!-- 统计查询 -->
+	<select id="selectCountBy" parameterType="java.util.Map" resultType="long">
+		select count(1) from 
+		<include refid="table_name"/>  as t 
+		<where>
+			<include refid="conditions_where" />
+		</where>
+	</select>
+
+	<!-- in条件查询 -->
+	<select id="selectListByIds" parameterType="java.util.List" resultMap="resutlId">
+		select <include refid="table_columns" /> 
+		from <include refid="table_name"/>  as t 
+		<where>
+			t.ID in 
+			<foreach item="item" index="index" collection="list" open="(" separator="," close=")">#{item}</foreach>
+		</where>
+	</select>
+
+	<!-- 单条查询 -->
+	<select id="selectOneBy" parameterType="java.util.Map" resultMap="resutlId">
+		select <include refid="table_columns" /> 
+		from <include refid="table_name"/>  as t 
+		<where>
+			<include refid="conditions_where" />
+		</where>
+	</select>
+
+	<!-- 单条插入 -->
+	<insert id="insertOne" parameterType="java.util.Map" keyProperty="id" useGeneratedKeys="true">
+		insert into
+		<include refid="table_name" />
+		(VERSION, DEL_FLAG, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME, CATEGORY_CODE, DATA_LABEL, DATA_PATH, DATA_SHOW_TYPE, ITEM_CODE, ITEM_NAME, PARENT_CODE, REMARK, SEQ_NO, TENANT_CODE)
+		values
+		(#{version}, #{delFlag}, #{createBy}, #{createTime}, #{updateBy}, #{updateTime}, #{categoryCode}, #{dataLabel}, #{dataPath}, #{dataShowType}, #{itemCode}, #{itemName}, #{parentCode}, #{remark}, #{seqNo}, #{tenantCode})
+	</insert>
+
+	<!-- 批量插入 -->
+	<insert id="insertBatch" parameterType="java.util.Map" keyProperty="id" useGeneratedKeys="true">
+		insert into <include refid="table_name" />
+		(VERSION, DEL_FLAG, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME, CATEGORY_CODE, DATA_LABEL, DATA_PATH, DATA_SHOW_TYPE, ITEM_CODE, ITEM_NAME, PARENT_CODE, REMARK, SEQ_NO, TENANT_CODE)
+		values
+		<foreach collection="list" item="item" index="index" separator=",">
+		(#{item.version},
+		#{item.delFlag},
+		#{item.createBy},
+		#{item.createTime},
+		#{item.updateBy},
+		#{item.updateTime},
+		#{item.categoryCode},
+		#{item.dataLabel},
+		#{item.dataPath},
+		#{item.dataShowType},
+		#{item.itemCode},
+		#{item.itemName},
+		#{item.parentCode},
+		#{item.remark},
+		#{item.seqNo},
+		#{item.tenantCode})
+		</foreach>
+	</insert>
+
+	<!-- 更新 -->
+	<update id="updateBy" parameterType="java.util.Map">
+		update <include refid="table_name" />
+		<set>
+		VERSION = VERSION + 1, 
+		<if test="delFlag != null and delFlag != ''"> DEL_FLAG = #{delFlag},  </if>
+		<if test="createBy != null and createBy != ''"> CREATE_BY = #{createBy},  </if>
+		<if test="updateBy != null and updateBy != ''"> UPDATE_BY = #{updateBy},  </if>
+		<if test="updateTime != null "> UPDATE_TIME = #{updateTime},  </if>
+		<if test="categoryCode != null and categoryCode != ''"> CATEGORY_CODE = #{categoryCode},  </if>
+		<if test="dataLabel != null and dataLabel != ''"> DATA_LABEL = #{dataLabel},  </if>
+		<if test="dataPath != null and dataPath != ''"> DATA_PATH = #{dataPath},  </if>
+		<if test="dataShowType != null and dataShowType != ''"> DATA_SHOW_TYPE = #{dataShowType},  </if>
+		<if test="itemCode != null and itemCode != ''"> ITEM_CODE = #{itemCode},  </if>
+		<if test="itemName != null and itemName != ''"> ITEM_NAME = #{itemName},  </if>
+		<if test="parentCode != null and parentCode != ''"> PARENT_CODE = #{parentCode},  </if>
+		<if test="remark != null and remark != ''"> REMARK = #{remark},  </if>
+		<if test="seqNo != null "> SEQ_NO = #{seqNo},  </if>
+		<if test="tenantCode != null and tenantCode != ''"> TENANT_CODE = #{tenantCode},  </if>
+		</set>
+		<where>
+			ID = #{id}
+			<if test="version != null "> and VERSION = #{version} </if>
+		</where>
+	</update>
+
+	<!-- 批量更新 -->
+	<update id="updateBatch" parameterType="java.util.List">
+		<foreach collection="list" item="item" index="index" separator=";">
+		update <include refid="table_name" />
+		<set>
+		VERSION = VERSION + 1, 
+		<if test="item.delFlag != null and item.delFlag != ''"> DEL_FLAG = #{item.delFlag},  </if>
+		<if test="item.createBy != null and item.createBy != ''"> CREATE_BY = #{item.createBy},  </if>
+		<if test="item.createTime != null "> CREATE_TIME = #{item.createTime},  </if>
+		<if test="item.updateBy != null and item.updateBy != ''"> UPDATE_BY = #{item.updateBy},  </if>
+		<if test="item.updateTime != null "> UPDATE_TIME = #{item.updateTime},  </if>
+		<if test="item.categoryCode != null and item.categoryCode != ''"> CATEGORY_CODE = #{item.categoryCode},  </if>
+		<if test="item.dataLabel != null and item.dataLabel != ''"> DATA_LABEL = #{item.dataLabel},  </if>
+		<if test="item.dataPath != null and item.dataPath != ''"> DATA_PATH = #{item.dataPath},  </if>
+		<if test="item.dataShowType != null and item.dataShowType != ''"> DATA_SHOW_TYPE = #{item.dataShowType},  </if>
+		<if test="item.itemCode != null and item.itemCode != ''"> ITEM_CODE = #{item.itemCode},  </if>
+		<if test="item.itemName != null and item.itemName != ''"> ITEM_NAME = #{item.itemName},  </if>
+		<if test="item.parentCode != null and item.parentCode != ''"> PARENT_CODE = #{item.parentCode},  </if>
+		<if test="item.remark != null and item.remark != ''"> REMARK = #{item.remark},  </if>
+		<if test="item.seqNo != null "> SEQ_NO = #{item.seqNo},  </if>
+		<if test="item.tenantCode != null and item.tenantCode != ''"> TENANT_CODE = #{item.tenantCode},  </if>
+		</set>
+		<where>
+			ID = #{item.id}
+			<if test="item.version != null "> and VERSION = #{item.version} </if>
+		</where>
+		</foreach>
+	</update>
+
+	<!-- 主键删除 -->
+	<delete id="deleteById" parameterType="java.lang.String">
+		delete from <include refid="table_name" /> where ID = #{_parameter}
+	</delete>
+
+	<!-- 主键批量删除 -->
+	<delete id="deleteByIds" parameterType="java.util.List">
+		delete from <include refid="table_name" /> 
+		where ID in 
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">#{item}</foreach>
+	</delete>
+
+	<!-- 删除 -->
+	<delete id="deleteBy" parameterType="java.util.Map">
+		delete from <include refid="table_name" />
+		<where>
+		<if test="version != null "> and VERSION = #{version} </if>
+		<if test="delFlag != null and delFlag != ''"> and DEL_FLAG = #{delFlag} </if>
+		<if test="createBy != null and createBy != ''"> and CREATE_BY = #{createBy} </if>
+		<if test="createTime != null "><![CDATA[ and CREATE_TIME = #{createTime}]]> </if>
+		<if test="updateBy != null and updateBy != ''"> and UPDATE_BY = #{updateBy} </if>
+		<if test="updateTime != null "><![CDATA[ and UPDATE_TIME = #{updateTime}]]> </if>
+		<if test="id != null and id != ''"> and ID = #{id} </if>
+		<if test="categoryCode != null and categoryCode != ''"> and CATEGORY_CODE = #{categoryCode} </if>
+		<if test="dataLabel != null and dataLabel != ''"> and DATA_LABEL = #{dataLabel} </if>
+		<if test="dataPath != null and dataPath != ''"> and DATA_PATH = #{dataPath} </if>
+		<if test="dataShowType != null and dataShowType != ''"> and DATA_SHOW_TYPE = #{dataShowType} </if>
+		<if test="itemCode != null and itemCode != ''"> and ITEM_CODE = #{itemCode} </if>
+		<if test="itemName != null and itemName != ''"> and ITEM_NAME = #{itemName} </if>
+		<if test="parentCode != null and parentCode != ''"> and PARENT_CODE = #{parentCode} </if>
+		<if test="remark != null and remark != ''"> and REMARK = #{remark} </if>
+		<if test="seqNo != null "> and SEQ_NO = #{seqNo} </if>
+		<if test="tenantCode != null and tenantCode != ''"> and TENANT_CODE = #{tenantCode} </if>
+		</where>
+	</delete>
+
+	<!-- ######################################################################### -->
+	<!-- ##############################   基础sql结束    ############################## -->
+	<!-- ######################################################################### -->
+
+</mapper>

@@ -11,12 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.yffd.easy.common.core.page.PageParam;
 import com.yffd.easy.common.core.page.PageResult;
+import com.yffd.easy.framework.domain.LoginInfo;
 import com.yffd.easy.uupm.api.model.UupmTenantModel;
 import com.yffd.easy.uupm.base.UupmBaseServiceTest;
 
 /**
  * @Description  简单描述该类的功能（可选）.
- * @Date		2018年02月09日 14时56分01秒 <br/>
+ * @Date		2018年03月02日 16时46分04秒 <br/>
  * @author		ZhangST
  * @version		 1.0
  * @since		 JDK 1.7+
@@ -26,6 +27,14 @@ public class UupmTenantServiceTest extends UupmBaseServiceTest {
 
 	@Autowired
 	private UupmTenantService uupmTenantService;
+	
+	private LoginInfo loginInfo = null;
+	
+	{
+		loginInfo = new LoginInfo();
+		loginInfo.setUserCode("tester");
+		loginInfo.setUserName("测试");
+	}
 	
 	/***********************查询********************************/
 	
@@ -108,62 +117,66 @@ public class UupmTenantServiceTest extends UupmBaseServiceTest {
 		System.out.println(result2.size());
 	}
 	
+	@Test
+	public void findAllTest() {
+		List<UupmTenantModel> result1 = this.uupmTenantService.findAll();
+		Assert.assertNotNull(result1);
+		System.out.println(result1.size());
+	}
+	
 	/***********************添加********************************/
 	
 	@Test
-	public void addByModelTest() {
+	public void addOneTest() {
 		UupmTenantModel model = new UupmTenantModel();
 		model.setId("2000");
-		this.uupmTenantService.addByModel(model, null);
+		this.uupmTenantService.addOne(model, loginInfo);
+		
+		/*******************************/
+		
+//		Map<String, Object> paramMap = new HashMap<String, Object>();
+//		paramMap.put("id", "2001");
+//		this.uupmTenantService.addOne(paramMap, loginInfo);
 	}
 	
 	@Test
-	public void addByMapTest() {
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("id", "2001");
-		this.uupmTenantService.addByMap(paramMap, null);
-	}
-	
-	@Test
-	public void addBatchByModelTest() {
+	public void addBatchTest() {
 		List<UupmTenantModel> list = new ArrayList<UupmTenantModel>();
 		for(int i=10;i<15;i++) {
 			UupmTenantModel model = new UupmTenantModel();
 			model.setId("20"+i);
 			list.add(model);
 		}
-		this.uupmTenantService.addBatchByModel(list, null);
+		this.uupmTenantService.addBatch(list, loginInfo);
+		
+		/*******************************/
+		
+//		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+//		for(int i=10;i<12;i++) {
+//			Map<String, Object> paramMap = new HashMap<String, Object>();
+//			paramMap.put("id", "21"+i);
+//			list.add(paramMap);
+//		}
+//		this.uupmTenantService.addBatch(list, loginInfo);
 	}
-	
-	@Test
-	public void addBatchByMapTest() {
-		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		for(int i=10;i<12;i++) {
-			Map<String, Object> paramMap = new HashMap<String, Object>();
-			paramMap.put("id", "21"+i);
-			list.add(paramMap);
-		}
-		this.uupmTenantService.addBatchByMap(list, null);
-	}
-	
+
 	/***********************修改********************************/
 	
 	@Test
-	public void updateByModelTest() {
+	public void updateByTest() {
 		UupmTenantModel model = new UupmTenantModel();
 		model.setId("2000");
-		this.uupmTenantService.updateByModel(model, null);
+		this.uupmTenantService.updateBy(model, loginInfo);
+		
+		/*******************************/
+		
+//		Map<String, Object> paramMap = new HashMap<String, Object>();
+//		paramMap.put("id", "2001");
+//		this.uupmTenantService.updateBy(paramMap, loginInfo);
 	}
 	
 	@Test
-	public void updateByMapTest() {
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("id", "2001");
-		this.uupmTenantService.updateByMap(paramMap, null);
-	}
-	
-	@Test
-	public void updateBatchByModelTest() {
+	public void updateBatchByTest() {
 		List<UupmTenantModel> list = new ArrayList<UupmTenantModel>();
 		int startId = 2010;
 		for(int i=0;i<3;i++) {
@@ -171,111 +184,82 @@ public class UupmTenantServiceTest extends UupmBaseServiceTest {
 			model.setId((startId+i) + "");
 			list.add(model);
 		}
-		this.uupmTenantService.updateBatchByModel(list, null);
+		this.uupmTenantService.updateBatchBy(list, loginInfo);
+		
+		/*******************************/
+		
+//		int startId = 2110;
+//		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+//		for(int i=0;i<4;i++) {
+//			Map<String, Object> paramMap = new HashMap<String, Object>();
+//			paramMap.put("id", (startId+i) + "");
+//			list.add(paramMap);
+//		}
+//		this.uupmTenantService.updateBatchBy(list, loginInfo);
 	}
-	
-	@Test
-	public void updateBatchByMapTest() {
-		int startId = 2110;
-		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		for(int i=0;i<4;i++) {
-			Map<String, Object> paramMap = new HashMap<String, Object>();
-			paramMap.put("id", (startId+i) + "");
-			list.add(paramMap);
-		}
-		this.uupmTenantService.updateBatchByMap(list, null);
-	}
-	
+
 	/***********************物理删除********************************/
-	
+
 	@Test
-	public void delByModelTest() {
+	public void delByTest() {
 		UupmTenantModel model = new UupmTenantModel();
 		model.setId("2000");
-		this.uupmTenantService.delByModel(model, null);
-	}
-	
-	@Test
-	public void delByMapTest() {
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("id", "2001");
-		this.uupmTenantService.delByMap(paramMap, null);
-	}
-	
-	@Test
-	public void delBatchByModelTest() {
-		List<UupmTenantModel> list = new ArrayList<UupmTenantModel>();
-		int startId = 2011;
-		for(int i=0;i<2;i++) {
-			UupmTenantModel model = new UupmTenantModel();
-			model.setId((startId+i) + "");
-			list.add(model);
-		}
-		this.uupmTenantService.delBatchByModel(list, null);
-	}
-	
-	@Test
-	public void delBatchByMapTest() {
-		int startId = 2013;
-		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		for(int i=0;i<2;i++) {
-			Map<String, Object> paramMap = new HashMap<String, Object>();
-			paramMap.put("id", (startId+i) + "");
-			list.add(paramMap);
-		}
-		this.uupmTenantService.delBatchByMap(list, null);
+		this.uupmTenantService.delBy(model);
+
+		/*******************************/
+		
+//		Map<String, Object> paramMap = new HashMap<String, Object>();
+//		paramMap.put("id", "2001");
+//		this.uupmTenantService.delBy(paramMap);
 	}
 	
 	@Test
 	public void delByIdTest() {
 		String id = "2110";
-		this.uupmTenantService.delById(id, null);
+		this.uupmTenantService.delById(id);
+	}
+	
+	@Test
+	public void delByIdsTest() {
+		List<String> list = new ArrayList<String>();
+		int startId = 2011;
+		for(int i=0;i<2;i++) {
+			list.add((startId+i) + "");
+		}
+		this.uupmTenantService.delByIds(list);
+		
+		/*******************************/
+		
+//		String ids = "2011,2012";
+//		this.uupmTenantService.delByIds(ids);
+		
 	}
 	
 	/***********************逻辑删除********************************/
 	
 	@Test
-	public void removeByModelTest() {
+	public void removeByTest() {
 		UupmTenantModel model = new UupmTenantModel();
 		model.setId("2000");
-		this.uupmTenantService.removeByModel(model, null);
-	}
-	
-	@Test
-	public void removeByMapTest() {
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("id", "2001");
-		this.uupmTenantService.removeByMap(paramMap, null);
-	}
-	
-	@Test
-	public void removeBatchByModelTest() {
-		List<UupmTenantModel> list = new ArrayList<UupmTenantModel>();
-		int startId = 2011;
-		for(int i=0;i<2;i++) {
-			UupmTenantModel model = new UupmTenantModel();
-			model.setId((startId+i) + "");
-			list.add(model);
-		}
-		this.uupmTenantService.removeBatchByModel(list, null);
-	}
-	
-	@Test
-	public void removeBatchByMapTest() {
-		int startId = 2013;
-		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		for(int i=0;i<2;i++) {
-			Map<String, Object> paramMap = new HashMap<String, Object>();
-			paramMap.put("id", (startId+i) + "");
-			list.add(paramMap);
-		}
-		this.uupmTenantService.removeBatchByMap(list, null);
+		this.uupmTenantService.removeBy(model, null);
+		
+		/*******************************/
+		
+//		Map<String, Object> paramMap = new HashMap<String, Object>();
+//		paramMap.put("id", "2001");
+//		this.uupmTenantService.removeBy(paramMap, null);
 	}
 	
 	@Test
 	public void removeByIdTest() {
 		String id = "2110";
 		this.uupmTenantService.removeById(id, null);
+	}
+	
+	@Test
+	public void removeByIdsTest() {
+		String ids = "2110,2111";
+		this.uupmTenantService.removeByIds(ids, null);
 	}
 	
 }

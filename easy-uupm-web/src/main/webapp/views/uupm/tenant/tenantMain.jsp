@@ -332,9 +332,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<input id="serveType_id" name="serveType" type="text" />
 					</td>
 					<th>服务开始时间：</th><td>
-						<input type="text" name="searchStartTime" id="startTime" class="Wdate" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:'#F{$dp.$D(\'endTime\',{d:0});}'})"/>
+						<input type="text" name="sStartTime" id="sStartTime" class="Wdate" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:'#F{$dp.$D(\'eStartTime\',{d:0});}'})"/>
 						~
-						<input type="text" name="searchEndTime" id="endTime" class="Wdate" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'startTime\',{d:0});}'})"/>
+						<input type="text" name="eStartTime" id="eStartTime" class="Wdate" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'sStartTime\',{d:0});}'})"/>
 					</td>
 				</tr>
 				<tr>

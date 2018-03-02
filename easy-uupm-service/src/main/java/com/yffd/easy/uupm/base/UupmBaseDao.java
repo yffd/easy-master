@@ -1,8 +1,8 @@
 package com.yffd.easy.uupm.base;
 
 import org.springframework.stereotype.Repository;
+import com.yffd.easy.framework.base.dao.GenericDao;
 
-import com.yffd.easy.framework.dao.GenericDao;
 
 /**
  * @Description  持久化常用操作类.
@@ -13,7 +13,7 @@ import com.yffd.easy.framework.dao.GenericDao;
  * @see 	 
  */
 @Repository
-public class UupmBaseDao extends GenericDao {
+public class UupmBaseDao<PO> extends GenericDao<PO> {
 
 }
 

@@ -100,6 +100,8 @@ public class DaoTestCodeGenerator extends CodeGenerator {
 		content = content.replace("##dao_name##", this.fmtDaoSimpleName(modelClazz));
 		content = content.replace("##model_class_name##", modelClazz.getSimpleName() + ".class");
 		
+		content = content.replace("##model_simple_name##", modelClazz.getSimpleName());
+		
 		return content;
 	}
 	

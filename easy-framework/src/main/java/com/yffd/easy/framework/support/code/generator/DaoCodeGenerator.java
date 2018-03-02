@@ -81,6 +81,9 @@ public class DaoCodeGenerator extends CodeGenerator {
 		sb.append("\r\n");
 		sb.append("import org.springframework.stereotype.Repository;").append("\r\n");
 		
+		// import model
+		sb.append("import ").append(modelClazz.getName()).append(";").append("\r\n");
+				
 		// import
 		String baseDaoSimpleName = null;
 		if(null!=baseDaoClazz) {
@@ -109,7 +112,9 @@ public class DaoCodeGenerator extends CodeGenerator {
 		if(null==baseDaoSimpleName) {
 			sb.append("public class ").append(daoSimpleName).append(" {").append("\r\n");
 		} else {
-			sb.append("public class ").append(daoSimpleName).append(" extends ").append(baseDaoSimpleName).append(" {").append("\r\n");
+			sb.append("public class ").append(daoSimpleName)
+			.append(" extends ").append(baseDaoSimpleName).append("<").append(modelClazz.getSimpleName()).append(">")
+			.append(" {").append("\r\n");
 		}
 		
 		sb.append("\r\n");

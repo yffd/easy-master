@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.yffd.easy.common.core.page.PageParam;
 import com.yffd.easy.common.core.page.PageResult;
+import com.yffd.easy.framework.domain.LoginInfo;
 import ##import_model_full_name##;
 import ##import_test_base_service_full_name##;
 
@@ -26,6 +27,14 @@ public class ##test_service_name## ##test_base_service_name##{
 
 	@Autowired
 	private ##service_name## ##service_alias_name##;
+	
+	private LoginInfo loginInfo = null;
+	
+	{
+		loginInfo = new LoginInfo();
+		loginInfo.setUserCode("tester");
+		loginInfo.setUserName("测试");
+	}
 	
 	/***********************查询********************************/
 	
@@ -108,62 +117,66 @@ public class ##test_service_name## ##test_base_service_name##{
 		System.out.println(result2.size());
 	}
 	
+	@Test
+	public void findAllTest() {
+		List<##model_simple_name##> result1 = this.##service_alias_name##.findAll();
+		Assert.assertNotNull(result1);
+		System.out.println(result1.size());
+	}
+	
 	/***********************添加********************************/
 	
 	@Test
-	public void addByModelTest() {
+	public void addOneTest() {
 		##model_simple_name## model = new ##model_simple_name##();
 		model.setId("2000");
-		this.##service_alias_name##.addByModel(model, null);
+		this.##service_alias_name##.addOne(model, loginInfo);
+		
+		/*******************************/
+		
+//		Map<String, Object> paramMap = new HashMap<String, Object>();
+//		paramMap.put("id", "2001");
+//		this.##service_alias_name##.addOne(paramMap, loginInfo);
 	}
 	
 	@Test
-	public void addByMapTest() {
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("id", "2001");
-		this.##service_alias_name##.addByMap(paramMap, null);
-	}
-	
-	@Test
-	public void addBatchByModelTest() {
+	public void addBatchTest() {
 		List<##model_simple_name##> list = new ArrayList<##model_simple_name##>();
 		for(int i=10;i<15;i++) {
 			##model_simple_name## model = new ##model_simple_name##();
 			model.setId("20"+i);
 			list.add(model);
 		}
-		this.##service_alias_name##.addBatchByModel(list, null);
+		this.##service_alias_name##.addBatch(list, loginInfo);
+		
+		/*******************************/
+		
+//		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+//		for(int i=10;i<12;i++) {
+//			Map<String, Object> paramMap = new HashMap<String, Object>();
+//			paramMap.put("id", "21"+i);
+//			list.add(paramMap);
+//		}
+//		this.##service_alias_name##.addBatch(list, loginInfo);
 	}
-	
-	@Test
-	public void addBatchByMapTest() {
-		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		for(int i=10;i<12;i++) {
-			Map<String, Object> paramMap = new HashMap<String, Object>();
-			paramMap.put("id", "21"+i);
-			list.add(paramMap);
-		}
-		this.##service_alias_name##.addBatchByMap(list, null);
-	}
-	
+
 	/***********************修改********************************/
 	
 	@Test
-	public void updateByModelTest() {
+	public void updateByTest() {
 		##model_simple_name## model = new ##model_simple_name##();
 		model.setId("2000");
-		this.##service_alias_name##.updateByModel(model, null);
+		this.##service_alias_name##.updateBy(model, loginInfo);
+		
+		/*******************************/
+		
+//		Map<String, Object> paramMap = new HashMap<String, Object>();
+//		paramMap.put("id", "2001");
+//		this.##service_alias_name##.updateBy(paramMap, loginInfo);
 	}
 	
 	@Test
-	public void updateByMapTest() {
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("id", "2001");
-		this.##service_alias_name##.updateByMap(paramMap, null);
-	}
-	
-	@Test
-	public void updateBatchByModelTest() {
+	public void updateBatchByTest() {
 		List<##model_simple_name##> list = new ArrayList<##model_simple_name##>();
 		int startId = 2010;
 		for(int i=0;i<3;i++) {
@@ -171,111 +184,82 @@ public class ##test_service_name## ##test_base_service_name##{
 			model.setId((startId+i) + "");
 			list.add(model);
 		}
-		this.##service_alias_name##.updateBatchByModel(list, null);
+		this.##service_alias_name##.updateBatchBy(list, loginInfo);
+		
+		/*******************************/
+		
+//		int startId = 2110;
+//		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+//		for(int i=0;i<4;i++) {
+//			Map<String, Object> paramMap = new HashMap<String, Object>();
+//			paramMap.put("id", (startId+i) + "");
+//			list.add(paramMap);
+//		}
+//		this.##service_alias_name##.updateBatchBy(list, loginInfo);
 	}
-	
-	@Test
-	public void updateBatchByMapTest() {
-		int startId = 2110;
-		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		for(int i=0;i<4;i++) {
-			Map<String, Object> paramMap = new HashMap<String, Object>();
-			paramMap.put("id", (startId+i) + "");
-			list.add(paramMap);
-		}
-		this.##service_alias_name##.updateBatchByMap(list, null);
-	}
-	
+
 	/***********************物理删除********************************/
-	
+
 	@Test
-	public void delByModelTest() {
+	public void delByTest() {
 		##model_simple_name## model = new ##model_simple_name##();
 		model.setId("2000");
-		this.##service_alias_name##.delByModel(model, null);
-	}
-	
-	@Test
-	public void delByMapTest() {
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("id", "2001");
-		this.##service_alias_name##.delByMap(paramMap, null);
-	}
-	
-	@Test
-	public void delBatchByModelTest() {
-		List<##model_simple_name##> list = new ArrayList<##model_simple_name##>();
-		int startId = 2011;
-		for(int i=0;i<2;i++) {
-			##model_simple_name## model = new ##model_simple_name##();
-			model.setId((startId+i) + "");
-			list.add(model);
-		}
-		this.##service_alias_name##.delBatchByModel(list, null);
-	}
-	
-	@Test
-	public void delBatchByMapTest() {
-		int startId = 2013;
-		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		for(int i=0;i<2;i++) {
-			Map<String, Object> paramMap = new HashMap<String, Object>();
-			paramMap.put("id", (startId+i) + "");
-			list.add(paramMap);
-		}
-		this.##service_alias_name##.delBatchByMap(list, null);
+		this.##service_alias_name##.delBy(model);
+
+		/*******************************/
+		
+//		Map<String, Object> paramMap = new HashMap<String, Object>();
+//		paramMap.put("id", "2001");
+//		this.##service_alias_name##.delBy(paramMap);
 	}
 	
 	@Test
 	public void delByIdTest() {
 		String id = "2110";
-		this.##service_alias_name##.delById(id, null);
+		this.##service_alias_name##.delById(id);
+	}
+	
+	@Test
+	public void delByIdsTest() {
+		List<String> list = new ArrayList<String>();
+		int startId = 2011;
+		for(int i=0;i<2;i++) {
+			list.add((startId+i) + "");
+		}
+		this.##service_alias_name##.delByIds(list);
+		
+		/*******************************/
+		
+//		String ids = "2011,2012";
+//		this.##service_alias_name##.delByIds(ids);
+		
 	}
 	
 	/***********************逻辑删除********************************/
 	
 	@Test
-	public void removeByModelTest() {
+	public void removeByTest() {
 		##model_simple_name## model = new ##model_simple_name##();
 		model.setId("2000");
-		this.##service_alias_name##.removeByModel(model, null);
-	}
-	
-	@Test
-	public void removeByMapTest() {
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("id", "2001");
-		this.##service_alias_name##.removeByMap(paramMap, null);
-	}
-	
-	@Test
-	public void removeBatchByModelTest() {
-		List<##model_simple_name##> list = new ArrayList<##model_simple_name##>();
-		int startId = 2011;
-		for(int i=0;i<2;i++) {
-			##model_simple_name## model = new ##model_simple_name##();
-			model.setId((startId+i) + "");
-			list.add(model);
-		}
-		this.##service_alias_name##.removeBatchByModel(list, null);
-	}
-	
-	@Test
-	public void removeBatchByMapTest() {
-		int startId = 2013;
-		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		for(int i=0;i<2;i++) {
-			Map<String, Object> paramMap = new HashMap<String, Object>();
-			paramMap.put("id", (startId+i) + "");
-			list.add(paramMap);
-		}
-		this.##service_alias_name##.removeBatchByMap(list, null);
+		this.##service_alias_name##.removeBy(model, null);
+		
+		/*******************************/
+		
+//		Map<String, Object> paramMap = new HashMap<String, Object>();
+//		paramMap.put("id", "2001");
+//		this.##service_alias_name##.removeBy(paramMap, null);
 	}
 	
 	@Test
 	public void removeByIdTest() {
 		String id = "2110";
 		this.##service_alias_name##.removeById(id, null);
+	}
+	
+	@Test
+	public void removeByIdsTest() {
+		String ids = "2110,2111";
+		this.##service_alias_name##.removeByIds(ids, null);
 	}
 	
 }

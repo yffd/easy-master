@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2018/2/1 11:38:12                            */
+/* Created on:     2018/2/26 15:19:42                           */
 /*==============================================================*/
 
 
@@ -47,7 +47,7 @@ create table uupm_application
    REMARK               varchar(100) comment '备注',
    primary key (ID)
 )
-auto_increment = 1000;
+auto_increment = 2000;
 
 alter table uupm_application comment '应用系统信息';
 
@@ -67,14 +67,14 @@ create table uupm_dictionary
    ITEM_CODE            varchar(30) comment '项编号',
    ITEM_NAME            varchar(30) comment '项名称',
    PARENT_CODE          varchar(30) comment '父机构编号',
-   ACCESS_TYPE          char(10) comment '访问类型：1=公开、0=私有',
-   SEQ_NO               int comment '菜单序号',
+   ACCESS_TYPE          varchar(30) comment '访问类型：1=公开、0=私有',
+   SEQ_NO               int comment '序号',
    REMARK               varchar(100) comment '备注',
    primary key (ID)
 )
-auto_increment = 1000;
+auto_increment = 2000;
 
-alter table uupm_dictionary comment '字典信息';
+alter table uupm_dictionary comment '租户信息';
 
 /*==============================================================*/
 /* Table: uupm_function                                         */
@@ -97,7 +97,7 @@ create table uupm_function
    REMARK               varchar(100) comment '备注',
    primary key (ID)
 )
-auto_increment = 1000;
+auto_increment = 2000;
 
 alter table uupm_function comment '应用系统功能信息';
 
@@ -123,7 +123,7 @@ create table uupm_menu
    REMARK               varchar(100) comment '备注',
    primary key (ID)
 )
-auto_increment = 1000;
+auto_increment = 2000;
 
 alter table uupm_menu comment '菜单信息';
 
@@ -146,7 +146,7 @@ create table uupm_organization
    SEQ_NO               int comment '菜单序号',
    primary key (ID)
 )
-auto_increment = 1000;
+auto_increment = 2000;
 
 alter table uupm_organization comment '组织机构信息';
 
@@ -168,7 +168,7 @@ create table uupm_re_role_function
    ROLE_CODE            varchar(30) comment '角色编号',
    primary key (ID)
 )
-auto_increment = 1000;
+auto_increment = 2000;
 
 alter table uupm_re_role_function comment '角色-功能关系信息';
 
@@ -189,7 +189,7 @@ create table uupm_re_tenant_function
    FUNCTION_CODE        varchar(30) comment '功能编号',
    primary key (ID)
 )
-auto_increment = 1000;
+auto_increment = 2000;
 
 alter table uupm_re_tenant_function comment '租户-功能关系信息';
 
@@ -210,7 +210,7 @@ create table uupm_re_user_org
    ORG_CODE             varchar(30) comment '机构编号',
    primary key (ID)
 )
-auto_increment = 1000;
+auto_increment = 2000;
 
 alter table uupm_re_user_org comment '用户-机构关系信息';
 
@@ -231,7 +231,7 @@ create table uupm_re_user_role
    ROLE_CODE            varchar(30) comment '角色编号',
    primary key (ID)
 )
-auto_increment = 1000;
+auto_increment = 2000;
 
 alter table uupm_re_user_role comment '用户-角色关系信息';
 
@@ -254,7 +254,7 @@ create table uupm_role
    REMARK               varchar(100) comment '备注',
    primary key (ID)
 )
-auto_increment = 1000;
+auto_increment = 2000;
 
 alter table uupm_role comment '角色信息';
 
@@ -279,7 +279,7 @@ create table uupm_tenant
    END_TIME             datetime comment '租赁服务结束时间',
    primary key (ID)
 )
-auto_increment = 1000;
+auto_increment = 2000;
 
 alter table uupm_tenant comment '租户信息';
 
@@ -304,7 +304,7 @@ create table uupm_user
    LOGIN_STATUS         char(10) comment '账户状态：1=激活、0=冻结',
    primary key (ID)
 )
-auto_increment = 1000;
+auto_increment = 2000;
 
 alter table uupm_user comment '用户信息';
 

@@ -196,6 +196,23 @@ public class MapperCodeGenerator extends CodeGenerator {
 		return sb.toString();
 	}
 	
+	public String selectRangeBy(String tableAliasName) {
+		String asTableAliasName = "";
+		if(null!=tableAliasName) asTableAliasName = " as " + tableAliasName + " ";
+		StringBuilder sb = new StringBuilder();
+		sb.append("<!-- 分页查询 -->").append("\r\n");
+		sb.append("<select id=\"selectRangeBy\" parameterType=\"java.util.Map\" resultMap=\"resutlId\">").append("\r\n");
+		sb.append("\t").append("select <include refid=\"table_columns\" />").append("\r\n");
+		sb.append("\t").append("from <include refid=\"table_name\"/> ").append(asTableAliasName).append("\r\n");
+		sb.append("\t").append("<where>").append("\r\n");
+		sb.append("\t").append("\t").append("<include refid=\"conditions_where\" />").append("\r\n");
+		sb.append("\t").append("</where>").append("\r\n");
+		sb.append("\t").append("<include refid=\"conditions_orderby\" />").append("\r\n");
+		sb.append("\t").append("<include refid=\"conditions_limit\" />").append("\r\n");
+		sb.append("</select>");
+		return sb.toString();
+	}
+	
 	public String selectListBy(String tableAliasName) {
 		String asTableAliasName = "";
 		if(null!=tableAliasName) asTableAliasName = " as " + tableAliasName + " ";
@@ -208,7 +225,6 @@ public class MapperCodeGenerator extends CodeGenerator {
 		sb.append("\t").append("\t").append("<include refid=\"conditions_where\" />").append("\r\n");
 		sb.append("\t").append("</where>").append("\r\n");
 		sb.append("\t").append("<include refid=\"conditions_orderby\" />").append("\r\n");
-		sb.append("\t").append("<include refid=\"conditions_limit\" />").append("\r\n");
 		sb.append("</select>");
 		return sb.toString();
 	}
@@ -264,22 +280,22 @@ public class MapperCodeGenerator extends CodeGenerator {
 		return sb.toString();
 	}
 	
-	public String deleteByPK() {
+	public String deleteById() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("<!-- 主键删除 -->").append("\r\n");
-		sb.append("<delete id=\"deleteByPK\" parameterType=\"java.lang.String\">").append("\r\n");
+		sb.append("<delete id=\"deleteById\" parameterType=\"java.lang.String\">").append("\r\n");
 		sb.append("\t").append("delete from <include refid=\"table_name\" /> where ID = #{_parameter}").append("\r\n");
 		sb.append("</delete>");
 		return sb.toString();
 	}
 	
-	public String deleteBatch() {
+	public String deleteByIds() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("<!-- 批量删除 -->").append("\r\n");
-		sb.append("<delete id=\"deleteBatch\" parameterType=\"java.util.List\">").append("\r\n");
+		sb.append("<!-- 主键批量删除 -->").append("\r\n");
+		sb.append("<delete id=\"deleteByIds\" parameterType=\"java.util.List\">").append("\r\n");
 		sb.append("\t").append("delete from <include refid=\"table_name\" /> ").append("\r\n");
 		sb.append("\t").append("where ID in ").append("\r\n");
-		sb.append("\t").append("<foreach item=\"item\" index=\"index\" collection=\"list\" open=\"(\" separator=\",\" close=\")\">#{item.id}</foreach>").append("\r\n");
+		sb.append("\t").append("<foreach item=\"item\" index=\"index\" collection=\"list\" open=\"(\" separator=\",\" close=\")\">#{item}</foreach>").append("\r\n");
 		sb.append("</delete>");
 		return sb.toString();
 	}
@@ -397,10 +413,16 @@ public class MapperCodeGenerator extends CodeGenerator {
 		System.out.println(">>>>>>>>>>>>>>>>>>>end::selectOneBy");
 		System.out.println();
 		
-		String result16 = generator.deleteByPK();
-		System.out.println(">>>>>>>>>>>>>>>>>>>start::deleteByPK");
+		String result16 = generator.deleteById();
+		System.out.println(">>>>>>>>>>>>>>>>>>>start::deleteById");
 		System.out.println(result16);
-		System.out.println(">>>>>>>>>>>>>>>>>>>end::deleteByPK");
+		System.out.println(">>>>>>>>>>>>>>>>>>>end::deleteById");
+		System.out.println();
+		
+		String result17 = generator.deleteByIds();
+		System.out.println(">>>>>>>>>>>>>>>>>>>start::deleteByIds");
+		System.out.println(result17);
+		System.out.println(">>>>>>>>>>>>>>>>>>>end::deleteByIds");
 		System.out.println();
 		
 	}

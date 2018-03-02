@@ -1,6 +1,9 @@
 package com.yffd.easy.framework.domain;
 
 import java.io.Serializable;
+import java.util.Date;
+
+import com.yffd.easy.common.core.page.PageParam;
 
 /**
  * @Description  领域标识模型.

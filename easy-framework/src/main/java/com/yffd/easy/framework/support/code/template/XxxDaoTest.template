@@ -1,6 +1,8 @@
 package ##dao_package_name##;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -29,17 +31,27 @@ public class ##test_dao_name## ##test_base_dao_name##{
 		return ##model_class_name##;
 	}
 
-	@Override
-	public String getRangeId() {
-		return "1000:1015";
+	@Test
+	public void selectCountByTest() {
+		##model_simple_name## model = new ##model_simple_name##();
+		long result = this.dao.selectCountBy(model);
+		System.out.println(result);
+		
+//		Map<String, Object> paramMap = this.dao.model2map(model, null);
+//		long result = this.dao.selectCountBy(paramMap);
+//		System.out.println(result);
 	}
-
+	
 	@Test
 	public void selectPageTest() {
 		PageParam pageParam = new PageParam(1L, 10L);
-		Object model = this.getModelInstanceForSelect();
+		##model_simple_name## model = new ##model_simple_name##();
 		if(null!=model) {
-			PageResult<Object> pageResult = this.dao.selectPage(model, pageParam);
+			PageResult<##model_simple_name##> pageResult = (PageResult<##model_simple_name##>) this.dao.selectPage(model, pageParam);
+			
+//			Map<String, Object> paramMap = this.dao.model2map(model, null);
+//			PageResult<##model_simple_name##> pageResult = (PageResult<##model_simple_name##>) this.dao.selectPage(paramMap, pageParam);
+			
 			Assert.assertNotNull(pageResult);
 			Assert.assertNotNull(pageResult.getRecordList());
 			System.out.println(pageResult.getRecordList().size());
@@ -50,45 +62,137 @@ public class ##test_dao_name## ##test_base_dao_name##{
 			Assert.fail();
 		}
 	}
-
+	
 	@Test
-	public void insertOneTest() {
-		Object model = this.getModelInstanceForInsertOne();
-		if(null!=model) {
-			Object obj = this.dao.insertOne(model);
-			Assert.assertNotNull(obj);
-		} else {
-			Assert.fail();
+	public void selectListByTest() {
+		##model_simple_name## model = new ##model_simple_name##();
+		List<##model_simple_name##> resultList = (List<##model_simple_name##>) this.dao.selectListBy(model);
+		
+//		Map<String, Object> paramMap = this.dao.model2map(model, null);
+//		List<##model_simple_name##> resultList = (List<##model_simple_name##>) this.dao.selectListBy(paramMap);
+		
+		Assert.assertNotNull(resultList);
+		System.out.println(resultList.size());
+		for(##model_simple_name## tmp : resultList) {
+			System.out.println(tmp.getId());
 		}
 	}
-
+	
+	@Test
+	public void selectOneTest() {
+		##model_simple_name## model = new ##model_simple_name##();
+		model.setId(2000+"");
+		##model_simple_name## result = this.dao.selectOne(model);
+		
+//		Map<String, Object> paramMap = this.dao.model2map(model, null);
+//		##model_simple_name## result = this.dao.selectOne(paramMap);
+		
+		Assert.assertNotNull(result);
+		System.out.println(result);
+	}
+	
+	@Test
+	public void insertOneTest() {
+		##model_simple_name## model = (##model_simple_name##) this.getRandomModel();
+		int result = this.dao.insertOne(model);
+		
+//		Map<String, Object> paramMap = this.dao.model2map(model, null);
+//		int result = this.dao.insertOne(paramMap);
+		
+		System.out.println(result);
+	}
+	
+	@Test
+	public void updateByTest() {
+		##model_simple_name## model = new ##model_simple_name##();
+		model.setId(2000+"");
+		int result = this.dao.updateBy(model);
+		
+//		Map<String, Object> paramMap = this.dao.model2map(model, null);
+//		int result = this.dao.updateBy(paramMap);
+		
+		System.out.println(result);
+	}
+	
+	@Test
+	public void deleteByTest() {
+		##model_simple_name## model = new ##model_simple_name##();
+		model.setId(2000+"");
+		int result = this.dao.deleteBy(model);
+		
+//		Map<String, Object> paramMap = this.dao.model2map(model, null);
+//		int result = this.dao.deleteBy(paramMap);
+		
+		System.out.println(result);
+	}
+	
+	/**********************************************************************/
+	
 	@Test
 	public void insertBatchTest() {
-		List<Object> models = this.getModelInstanceForInsertBatch();
+		List<##model_simple_name##> models = (List<##model_simple_name##>) this.getRandomModelList();
 		this.dao.insertBatch(models);
 	}
 
 	@Test
-	public void updateByTest() {
-		Object model = this.getModelInstanceForUpdate();
-		this.dao.updateBy(model);
-	}
-
-	@Test
 	public void updateBatchTest() {
-		List<Object> models = this.getModelInstanceForUpdateBatch();
+		int i = 2001;
+		List<##model_simple_name##> models = (List<##model_simple_name##>) this.getRandomModelList();
+		for(##model_simple_name## model : models) {
+			model.setId(""+i);
+			i++;
+		}
 		this.dao.updateBatch(models);
 	}
-
+	
 	@Test
-	public void deleteByTest() {
-		Object model = this.getModelInstanceForDelete();
-		this.dao.deleteBy(model);
+	public void selectByIdTest() {
+		String id = "2001";
+		##model_simple_name## result = this.dao.selectById(id);
+		Assert.assertNotNull(result);
+		System.out.println(result);
+	}
+	
+	@Test
+	public void selectListByIdsTest() {
+		List<String> list = new ArrayList<String>();
+		for(int i=2001;i<2005;i++) {
+			list.add("" + i);
+		}
+		List<##model_simple_name##> result = (List<##model_simple_name##>) this.dao.selectListByIds(list);
+		Assert.assertNotNull(result);
+		System.out.println(result.size());
+		for(##model_simple_name## tmp : result) {
+			System.out.println(tmp);
+		}
+	}
+	
+	@Test
+	public void selectAllTest() {
+		List<##model_simple_name##> result = (List<##model_simple_name##>) this.dao.selectAll();
+		Assert.assertNotNull(result);
+		System.out.println(result.size());
+		for(##model_simple_name## tmp : result) {
+			System.out.println(tmp);
+		}
+	}
+	
+	@Test
+	public void deleteByIdTest() {
+		String id = "2001";
+		int result = this.dao.deleteById(id);
+		System.out.println(result);
 	}
 
 	@Test
-	public void deleteBatchTest() {
-		List<Object> models = this.getModelInstanceForDeleteBatch();
-		this.dao.deleteBatch(models);
+	public void deleteByIdsTest() {
+		List<String> list = new ArrayList<String>();
+		for(int i=2002;i<20016;i++) {
+			list.add("" + i);
+		}
+		int result = this.dao.deleteByIds(list);
+		System.out.println(result);
 	}
+	
+	
 }

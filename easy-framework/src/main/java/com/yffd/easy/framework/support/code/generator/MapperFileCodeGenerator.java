@@ -106,6 +106,9 @@ public class MapperFileCodeGenerator extends CodeGenerator {
 		String conditionsWhereStr = this.mapperGenerator.conditionsWhere(modelClazz, tableAliasName);
 		sb.append(this.mapperGenerator.strFmt(conditionsWhereStr, "\t")).append("\r\n");
 		
+		String selectRangeByStr = this.mapperGenerator.selectRangeBy(tableAliasName);
+		sb.append(this.mapperGenerator.strFmt(selectRangeByStr, "\t")).append("\r\n");
+		
 		String selectListByStr = this.mapperGenerator.selectListBy(tableAliasName);
 		sb.append(this.mapperGenerator.strFmt(selectListByStr, "\t")).append("\r\n");
 		
@@ -130,14 +133,14 @@ public class MapperFileCodeGenerator extends CodeGenerator {
 		String updateBatchStr = this.mapperGenerator.updateBatch(modelClazz);
 		sb.append(this.mapperGenerator.strFmt(updateBatchStr, "\t")).append("\r\n");
 		
-		String deleteByPKStr = this.mapperGenerator.deleteByPK();
-		sb.append(this.mapperGenerator.strFmt(deleteByPKStr, "\t")).append("\r\n");
+		String deleteByIdStr = this.mapperGenerator.deleteById();
+		sb.append(this.mapperGenerator.strFmt(deleteByIdStr, "\t")).append("\r\n");
+		
+		String deleteByIdsStr = this.mapperGenerator.deleteByIds();
+		sb.append(this.mapperGenerator.strFmt(deleteByIdsStr, "\t")).append("\r\n");
 		
 		String deleteByStr = this.mapperGenerator.deleteBy(modelClazz);
 		sb.append(this.mapperGenerator.strFmt(deleteByStr, "\t")).append("\r\n");
-		
-		String deleteBatchStr = this.mapperGenerator.deleteBatch();
-		sb.append(this.mapperGenerator.strFmt(deleteBatchStr, "\t")).append("\r\n");
 		
 		sb.append("\t").append("<!-- ######################################################################### -->").append("\r\n");
 		sb.append("\t").append("<!-- ##############################   基础sql结束    ############################## -->").append("\r\n");

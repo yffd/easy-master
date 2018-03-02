@@ -124,6 +124,7 @@ public class SqlCodeGenerator extends CodeGenerator {
 		for(Iterator<Entry<String, Class<?>>> it = propsMap.entrySet().iterator();it.hasNext();) {
 			Entry<String, Class<?>> entry = (Entry<String, Class<?>>)it.next();
 			String propName = entry.getKey();
+			if("id".equals(propName)) continue;
 			String columnName = this.name2column(propName);
 			if(null==columnName || "".equals(columnName)) continue;
 			columns.append(columnName).append(", ");
@@ -225,6 +226,7 @@ public class SqlCodeGenerator extends CodeGenerator {
 		for(Iterator<Entry<String, Class<?>>> it = propsMap.entrySet().iterator();it.hasNext();) {
 			Entry<String, Class<?>> entry = (Entry<String, Class<?>>)it.next();
 			String propName = entry.getKey();
+			if("id".equals(propName)) continue;
 			String columnName = this.name2column(propName);
 			if(null==columnName || "".equals(columnName)) continue;
 			columns.append(columnName).append(", ");
@@ -347,7 +349,7 @@ public class SqlCodeGenerator extends CodeGenerator {
 					equalsList.add(tmp);
 				}
 			} else if(Date.class.getName().equals(typeName)) {
-				String tmp = "<if test=\""+parameterName+" != null \"> and <![CDATA[" + columnName + " = #{"+parameterName+"}]]> </if>";
+				String tmp = "<if test=\""+parameterName+" != null \"><![CDATA[ and " + columnName + " = #{"+parameterName+"}]]> </if>";
 				equalsList.add(tmp);
 			} else {
 				String tmp = "<if test=\""+parameterName+" != null \"> and " + columnName + " = #{"+parameterName+"} </if>";

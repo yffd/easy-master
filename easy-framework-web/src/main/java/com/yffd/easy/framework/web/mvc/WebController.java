@@ -32,15 +32,15 @@ public abstract class WebController extends ViewModelConverter {
 	 * 同步请求：成功
 	 * @Date	2017年9月22日 下午2:49:14 <br/>
 	 * @author  zhangST
-	 * @param statusDesc		提示信息
+	 * @param msg		提示信息
 	 * @param objects
 	 * @return
 	 */
-	protected RespModel success(String statusDesc, Object...objects) {
+	protected RespModel success(String msg, Object...objects) {
 		RespModel entity = new RespModel();
 		entity.setType(CommonEnum.REQUEST_SYNC.getValue());
 		entity.setStatus(CommonEnum.SUCCESS.getValue());
-		entity.setMsg(statusDesc);
+		entity.setMsg(msg);
 		entity.setData(objects);
 		return entity;
 	}
@@ -79,15 +79,15 @@ public abstract class WebController extends ViewModelConverter {
 	 * 异步请求：成功
 	 * @Date	2017年9月22日 下午2:50:28 <br/>
 	 * @author  zhangST
-	 * @param statusDesc		提示信息
+	 * @param msg		提示信息
 	 * @param objects
 	 * @return
 	 */
-	protected RespModel successAjax(String statusDesc, Object...objects) {
+	protected RespModel successAjax(String msg, Object...objects) {
 		RespModel entity = new RespModel();
 		entity.setType(CommonEnum.REQUEST_ASYNC.getValue());
 		entity.setStatus(CommonEnum.SUCCESS.getValue());
-		entity.setMsg(statusDesc);
+		entity.setMsg(msg);
 		entity.setData(objects);
 		return entity;
 	}
@@ -110,15 +110,15 @@ public abstract class WebController extends ViewModelConverter {
 	 * 同步请求：失败
 	 * @Date	2017年9月22日 下午2:49:43 <br/>
 	 * @author  zhangST
-	 * @param statusDesc		提示信息
+	 * @param msg		提示信息
 	 * @param objects
 	 * @return
 	 */
-	protected RespModel error(String statusDesc, Object...objects) {
+	protected RespModel error(String msg, Object...objects) {
 		RespModel entity = new RespModel();
 		entity.setType(CommonEnum.REQUEST_SYNC.getValue());
 		entity.setStatus(CommonEnum.ERROR.getValue());
-		entity.setMsg(statusDesc);
+		entity.setMsg(msg);
 		entity.setData(objects);
 		return entity;
 	}
@@ -141,15 +141,15 @@ public abstract class WebController extends ViewModelConverter {
 	 * 异步请求：失败
 	 * @Date	2017年9月22日 下午2:50:41 <br/>
 	 * @author  zhangST
-	 * @param statusDesc		提示信息
+	 * @param msg		提示信息
 	 * @param objects
 	 * @return
 	 */
-	protected RespModel errorAjax(String statusDesc, Object...objects) {
+	protected RespModel errorAjax(String msg, Object...objects) {
 		RespModel entity = new RespModel();
 		entity.setType(CommonEnum.REQUEST_ASYNC.getValue());
 		entity.setStatus(CommonEnum.ERROR.getValue());
-		entity.setMsg(statusDesc);
+		entity.setMsg(msg);
 		entity.setData(objects);
 		return entity;
 	}

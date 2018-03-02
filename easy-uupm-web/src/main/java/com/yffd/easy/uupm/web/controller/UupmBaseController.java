@@ -18,10 +18,10 @@ import com.yffd.easy.framework.web.mvc.WebController;
  * @see 	 
  */
 public class UupmBaseController extends WebController {
+	protected static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
 	@InitBinder
     public void intDate(WebDataBinder dataBinder) {
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
 		dateFormat.setLenient(false);  
 		dataBinder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));   //true:允许输入空值，false:不能为空值
     }

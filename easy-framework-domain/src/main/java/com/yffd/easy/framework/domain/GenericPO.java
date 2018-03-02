@@ -17,10 +17,10 @@ public class GenericPO extends DomainModel implements Serializable {
 	
 	private String id;
 	private Integer version;	// 版本号
-	private String creator;		// 创建人
+	private String createBy;	// 创建人
 	private Date createTime;	// 创建时间
-	private String editor;		// 最后编辑人
-	private Date editTime;		// 最后编辑时间
+	private String updateBy;	// 最后修改人
+	private Date updateTime;	// 最后修改时间
 	private String delFlag;		//逻辑删除标识：0=未删除、1=已删除
 	
 	public String getId() {
@@ -35,11 +35,11 @@ public class GenericPO extends DomainModel implements Serializable {
 	public void setVersion(Integer version) {
 		this.version = version;
 	}
-	public String getCreator() {
-		return creator;
+	public String getCreateBy() {
+		return createBy;
 	}
-	public void setCreator(String creator) {
-		this.creator = creator;
+	public void setCreateBy(String createBy) {
+		this.createBy = createBy;
 	}
 	public Date getCreateTime() {
 		return createTime;
@@ -47,17 +47,17 @@ public class GenericPO extends DomainModel implements Serializable {
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
-	public String getEditor() {
-		return editor;
+	public String getUpdateBy() {
+		return updateBy;
 	}
-	public void setEditor(String editor) {
-		this.editor = editor;
+	public void setUpdateBy(String updateBy) {
+		this.updateBy = updateBy;
 	}
-	public Date getEditTime() {
-		return editTime;
+	public Date getUpdateTime() {
+		return updateTime;
 	}
-	public void setEditTime(Date editTime) {
-		this.editTime = editTime;
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
 	}
 	public String getDelFlag() {
 		return delFlag;
