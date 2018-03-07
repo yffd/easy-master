@@ -37,10 +37,10 @@ $(function() {
 			<fieldset>
 				<table class="edit-form-table">
 					<tr>
-						<th>租户编号：</th>
-						<td><input id="tenantCode_id" name="tenantCode" class="easyui-textbox easyui-validatebox" required="required" placeholder="请输入编号"/></td>
 						<th>租户名称：</th>
 						<td><input name="tenantName" class="easyui-textbox easyui-validatebox" required="required" placeholder="请输入名称" /></td>
+						<th>租户编号：</th>
+						<td><input id="tenantCode_id" name="tenantCode" class="easyui-textbox easyui-validatebox" required="required" placeholder="请输入编号"/></td>
 					</tr>
 					<tr>
 						<th>类型：</th>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.yffd.easy.uupm.dao.UupmDataCategoryDao">
+<mapper namespace="com.yffd.easy.uupm.dao.UupmUserDao">
 	<!-- ######################################################################### -->
 	<!-- ##############################   基础sql开始    ############################## -->
 	<!-- ######################################################################### -->
 	
-	<resultMap id="resutlId" type="com.yffd.easy.uupm.api.model.UupmDataCategoryModel">
+	<resultMap id="resutlId" type="com.yffd.easy.uupm.api.model.UupmUserModel">
 		<id column="ID" property="id" />
 		<result column="VERSION" property="version" />
 		<result column="DEL_FLAG" property="delFlag" />
@@ -13,30 +13,28 @@
 		<result column="CREATE_TIME" property="createTime" />
 		<result column="UPDATE_BY" property="updateBy" />
 		<result column="UPDATE_TIME" property="updateTime" />
-		<result column="CATEGORY_CODE" property="categoryCode" />
-		<result column="CATEGORY_NAME" property="categoryName" />
-		<result column="DATA_LABEL" property="dataLabel" />
-		<result column="DATA_PATH" property="dataPath" />
-		<result column="DATA_SHOW_TYPE" property="dataShowType" />
-		<result column="PARENT_CODE" property="parentCode" />
-		<result column="REMARK" property="remark" />
-		<result column="SEQ_NO" property="seqNo" />
+		<result column="LOGIN_ID" property="loginId" />
+		<result column="LOGIN_PWD" property="loginPwd" />
+		<result column="LOGIN_STATUS" property="loginStatus" />
 		<result column="TENANT_CODE" property="tenantCode" />
+		<result column="USER_CODE" property="userCode" />
+		<result column="USER_NAME" property="userName" />
+		<result column="USER_TYPE" property="userType" />
 	</resultMap>
 
 	<!-- 表名 -->
-	<sql id="table_name"> uupm_data_category </sql>
+	<sql id="table_name"> uupm_user </sql>
 
 	<!-- 列名 -->
 	<sql id="table_columns">
-		t.VERSION, t.DEL_FLAG, t.CREATE_BY, t.CREATE_TIME, t.UPDATE_BY, t.UPDATE_TIME, t.ID, t.CATEGORY_CODE, t.CATEGORY_NAME, t.DATA_LABEL, t.DATA_PATH, t.DATA_SHOW_TYPE, t.PARENT_CODE, t.REMARK, t.SEQ_NO, t.TENANT_CODE
+		t.VERSION, t.DEL_FLAG, t.CREATE_BY, t.CREATE_TIME, t.UPDATE_BY, t.UPDATE_TIME, t.ID, t.LOGIN_ID, t.LOGIN_PWD, t.LOGIN_STATUS, t.TENANT_CODE, t.USER_CODE, t.USER_NAME, t.USER_TYPE
 	</sql>
 
 	<!-- 分页条件 -->
 	<sql id="conditions_limit"><if test="pageParam != null"> limit #{pageParam.pageStartRow}, #{pageParam.pageLimit} </if></sql>
 
 	<!-- 排序条件 -->
-	<sql id="conditions_orderby"> ORDER BY t.SEQ_NO asc </sql>
+	<sql id="conditions_orderby"> ORDER BY t.CREATE_TIME desc </sql>
 
 	<!-- 动态组装复合查询条件 -->
 	<sql id="conditions_where">
@@ -44,20 +42,19 @@
 		<if test="version != null "> and t.VERSION = #{version} </if>
 		<if test="delFlag != null and delFlag != ''"> and t.DEL_FLAG = #{delFlag} </if>
 		<if test="createBy != null and createBy != ''"> and t.CREATE_BY = #{createBy} </if>
-		<if test="createTime != null "><![CDATA[ and t.CREATE_TIME = #{createTime}]]> </if>
+		<if test="sCreateTime != null and sCreateTime != ''"><![CDATA[ and t.CREATE_TIME >= #{sCreateTime}]]> </if>
+		<if test="eCreateTime != null and eCreateTime != ''"><![CDATA[ and t.CREATE_TIME <= #{eCreateTime}]]> </if>
 		<if test="updateBy != null and updateBy != ''"> and t.UPDATE_BY = #{updateBy} </if>
 		<if test="updateTime != null "><![CDATA[ and t.UPDATE_TIME = #{updateTime}]]> </if>
 		<if test="id != null and id != ''"> and t.ID = #{id} </if>
-		<if test="categoryCode != null and categoryCode != ''"> and t.CATEGORY_CODE = #{categoryCode} </if>
-		<if test="dataLabel != null and dataLabel != ''"> and t.DATA_LABEL = #{dataLabel} </if>
-		<if test="dataPath != null and dataPath != ''"> and t.DATA_PATH = #{dataPath} </if>
-		<if test="dataShowType != null and dataShowType != ''"> and t.DATA_SHOW_TYPE = #{dataShowType} </if>
-		<if test="parentCode != null and parentCode != ''"> and t.PARENT_CODE = #{parentCode} </if>
-		<if test="remark != null and remark != ''"> and t.REMARK = #{remark} </if>
-		<if test="seqNo != null "> and t.SEQ_NO = #{seqNo} </if>
+		<if test="loginId != null and loginId != ''"> and t.LOGIN_ID = #{loginId} </if>
+		<if test="loginPwd != null and loginPwd != ''"> and t.LOGIN_PWD = #{loginPwd} </if>
+		<if test="loginStatus != null and loginStatus != ''"> and t.LOGIN_STATUS = #{loginStatus} </if>
 		<if test="tenantCode != null and tenantCode != ''"> and t.TENANT_CODE = #{tenantCode} </if>
+		<if test="userCode != null and userCode != ''"> and t.USER_CODE = #{userCode} </if>
+		<if test="userType != null and userType != ''"> and t.USER_TYPE = #{userType} </if>
 		<!-- Like query -->
-		<if test="categoryName != null and categoryName != ''"> and t.CATEGORY_NAME like CONCAT(CONCAT('%', #{categoryName}), '%') </if>
+		<if test="userName != null and userName != ''"> and t.USER_NAME like CONCAT(CONCAT('%', #{userName}), '%') </if>
 	</sql>
 
 	<!-- 分页查询 -->
@@ -70,7 +67,7 @@
 		<include refid="conditions_orderby" />
 		<include refid="conditions_limit" />
 	</select>
-	
+
 	<!-- 条件查询 -->
 	<select id="selectListBy" parameterType="java.util.Map" resultMap="resutlId">
 		select <include refid="table_columns" />
@@ -113,15 +110,15 @@
 	<insert id="insertOne" parameterType="java.util.Map" keyProperty="id" useGeneratedKeys="true">
 		insert into
 		<include refid="table_name" />
-		(VERSION, DEL_FLAG, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME, CATEGORY_CODE, CATEGORY_NAME, DATA_LABEL, DATA_PATH, DATA_SHOW_TYPE, PARENT_CODE, REMARK, SEQ_NO, TENANT_CODE)
+		(VERSION, DEL_FLAG, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME, LOGIN_ID, LOGIN_PWD, LOGIN_STATUS, TENANT_CODE, USER_CODE, USER_NAME, USER_TYPE)
 		values
-		(#{version}, #{delFlag}, #{createBy}, #{createTime}, #{updateBy}, #{updateTime}, #{categoryCode}, #{categoryName}, #{dataLabel}, #{dataPath}, #{dataShowType}, #{parentCode}, #{remark}, #{seqNo}, #{tenantCode})
+		(#{version}, #{delFlag}, #{createBy}, #{createTime}, #{updateBy}, #{updateTime}, #{loginId}, #{loginPwd}, #{loginStatus}, #{tenantCode}, #{userCode}, #{userName}, #{userType})
 	</insert>
 
 	<!-- 批量插入 -->
 	<insert id="insertBatch" parameterType="java.util.Map" keyProperty="id" useGeneratedKeys="true">
 		insert into <include refid="table_name" />
-		(VERSION, DEL_FLAG, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME, CATEGORY_CODE, CATEGORY_NAME, DATA_LABEL, DATA_PATH, DATA_SHOW_TYPE, PARENT_CODE, REMARK, SEQ_NO, TENANT_CODE)
+		(VERSION, DEL_FLAG, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME, LOGIN_ID, LOGIN_PWD, LOGIN_STATUS, TENANT_CODE, USER_CODE, USER_NAME, USER_TYPE)
 		values
 		<foreach collection="list" item="item" index="index" separator=",">
 		(#{item.version},
@@ -130,15 +127,13 @@
 		#{item.createTime},
 		#{item.updateBy},
 		#{item.updateTime},
-		#{item.categoryCode},
-		#{item.categoryName},
-		#{item.dataLabel},
-		#{item.dataPath},
-		#{item.dataShowType},
-		#{item.parentCode},
-		#{item.remark},
-		#{item.seqNo},
-		#{item.tenantCode})
+		#{item.loginId},
+		#{item.loginPwd},
+		#{item.loginStatus},
+		#{item.tenantCode},
+		#{item.userCode},
+		#{item.userName},
+		#{item.userType})
 		</foreach>
 	</insert>
 
@@ -151,15 +146,13 @@
 		<if test="createBy != null and createBy != ''"> CREATE_BY = #{createBy},  </if>
 		<if test="updateBy != null and updateBy != ''"> UPDATE_BY = #{updateBy},  </if>
 		<if test="updateTime != null "> UPDATE_TIME = #{updateTime},  </if>
-		<if test="categoryCode != null and categoryCode != ''"> CATEGORY_CODE = #{categoryCode},  </if>
-		<if test="categoryName != null and categoryName != ''"> CATEGORY_NAME = #{categoryName},  </if>
-		<if test="dataLabel != null and dataLabel != ''"> DATA_LABEL = #{dataLabel},  </if>
-		<if test="dataPath != null and dataPath != ''"> DATA_PATH = #{dataPath},  </if>
-		<if test="dataShowType != null and dataShowType != ''"> DATA_SHOW_TYPE = #{dataShowType},  </if>
-		<if test="parentCode != null and parentCode != ''"> PARENT_CODE = #{parentCode},  </if>
-		<if test="remark != null and remark != ''"> REMARK = #{remark},  </if>
-		<if test="seqNo != null "> SEQ_NO = #{seqNo},  </if>
+		<if test="loginId != null and loginId != ''"> LOGIN_ID = #{loginId},  </if>
+		<if test="loginPwd != null and loginPwd != ''"> LOGIN_PWD = #{loginPwd},  </if>
+		<if test="loginStatus != null and loginStatus != ''"> LOGIN_STATUS = #{loginStatus},  </if>
 		<if test="tenantCode != null and tenantCode != ''"> TENANT_CODE = #{tenantCode},  </if>
+		<if test="userCode != null and userCode != ''"> USER_CODE = #{userCode},  </if>
+		<if test="userName != null and userName != ''"> USER_NAME = #{userName},  </if>
+		<if test="userType != null and userType != ''"> USER_TYPE = #{userType},  </if>
 		</set>
 		<where>
 			ID = #{id}
@@ -178,15 +171,13 @@
 		<if test="item.createTime != null "> CREATE_TIME = #{item.createTime},  </if>
 		<if test="item.updateBy != null and item.updateBy != ''"> UPDATE_BY = #{item.updateBy},  </if>
 		<if test="item.updateTime != null "> UPDATE_TIME = #{item.updateTime},  </if>
-		<if test="item.categoryCode != null and item.categoryCode != ''"> CATEGORY_CODE = #{item.categoryCode},  </if>
-		<if test="item.categoryName != null and item.categoryName != ''"> CATEGORY_NAME = #{item.categoryName},  </if>
-		<if test="item.dataLabel != null and item.dataLabel != ''"> DATA_LABEL = #{item.dataLabel},  </if>
-		<if test="item.dataPath != null and item.dataPath != ''"> DATA_PATH = #{item.dataPath},  </if>
-		<if test="item.dataShowType != null and item.dataShowType != ''"> DATA_SHOW_TYPE = #{item.dataShowType},  </if>
-		<if test="item.parentCode != null and item.parentCode != ''"> PARENT_CODE = #{item.parentCode},  </if>
-		<if test="item.remark != null and item.remark != ''"> REMARK = #{item.remark},  </if>
-		<if test="item.seqNo != null "> SEQ_NO = #{item.seqNo},  </if>
+		<if test="item.loginId != null and item.loginId != ''"> LOGIN_ID = #{item.loginId},  </if>
+		<if test="item.loginPwd != null and item.loginPwd != ''"> LOGIN_PWD = #{item.loginPwd},  </if>
+		<if test="item.loginStatus != null and item.loginStatus != ''"> LOGIN_STATUS = #{item.loginStatus},  </if>
 		<if test="item.tenantCode != null and item.tenantCode != ''"> TENANT_CODE = #{item.tenantCode},  </if>
+		<if test="item.userCode != null and item.userCode != ''"> USER_CODE = #{item.userCode},  </if>
+		<if test="item.userName != null and item.userName != ''"> USER_NAME = #{item.userName},  </if>
+		<if test="item.userType != null and item.userType != ''"> USER_TYPE = #{item.userType},  </if>
 		</set>
 		<where>
 			ID = #{item.id}
@@ -202,10 +193,11 @@
 
 	<!-- 主键批量删除 -->
 	<delete id="deleteByIds" parameterType="java.util.List">
-		delete from <include refid="table_name" /> where ID in 
+		delete from <include refid="table_name" /> 
+		where ID in 
 		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">#{item}</foreach>
 	</delete>
-	
+
 	<!-- 删除 -->
 	<delete id="deleteBy" parameterType="java.util.Map">
 		delete from <include refid="table_name" />
@@ -217,19 +209,13 @@
 		<if test="updateBy != null and updateBy != ''"> and UPDATE_BY = #{updateBy} </if>
 		<if test="updateTime != null "><![CDATA[ and UPDATE_TIME = #{updateTime}]]> </if>
 		<if test="id != null and id != ''"> and ID = #{id} </if>
-		<if test="categoryCode != null and categoryCode != ''"> and CATEGORY_CODE = #{categoryCode} </if>
-		<if test="categoryName != null and categoryName != ''"> and CATEGORY_NAME = #{categoryName} </if>
-		<if test="dataLabel != null and dataLabel != ''"> and DATA_LABEL = #{dataLabel} </if>
-		<if test="dataPath != null and dataPath != ''"> and DATA_PATH = #{dataPath} </if>
-		<if test="dataShowType != null and dataShowType != ''"> and DATA_SHOW_TYPE = #{dataShowType} </if>
-		<if test="parentCode != null and parentCode != ''"> and PARENT_CODE = #{parentCode} </if>
-		<if test="remark != null and remark != ''"> and REMARK = #{remark} </if>
-		<if test="seqNo != null "> and SEQ_NO = #{seqNo} </if>
+		<if test="loginId != null and loginId != ''"> and LOGIN_ID = #{loginId} </if>
+		<if test="loginPwd != null and loginPwd != ''"> and LOGIN_PWD = #{loginPwd} </if>
+		<if test="loginStatus != null and loginStatus != ''"> and LOGIN_STATUS = #{loginStatus} </if>
 		<if test="tenantCode != null and tenantCode != ''"> and TENANT_CODE = #{tenantCode} </if>
-		
-		<if test="modelList != null"> 
-		and CATEGORY_CODE in <foreach item="item" index="index" collection="modelList" open="(" separator="," close=")">#{item.categoryCode}</foreach>
-		</if>
+		<if test="userCode != null and userCode != ''"> and USER_CODE = #{userCode} </if>
+		<if test="userName != null and userName != ''"> and USER_NAME = #{userName} </if>
+		<if test="userType != null and userType != ''"> and USER_TYPE = #{userType} </if>
 		</where>
 	</delete>
 

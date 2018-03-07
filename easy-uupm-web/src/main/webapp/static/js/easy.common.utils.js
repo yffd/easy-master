@@ -170,7 +170,7 @@
 	utils.fmtDict = function(jsonData, val) {
 		var ret = "";
 		$.each(jsonData, function(index, obj) {
-			if(obj['value']==val) {
+			if(obj['id']==val) {
 				ret = obj['text'];
 				return false;
 			}

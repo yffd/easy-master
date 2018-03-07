@@ -12,9 +12,23 @@ import com.yffd.easy.common.core.tree.TreeNode;
  */
 public class ComboTreeVO extends TreeNode {
 
+	private String id;
+	private String text;
 	private String state;
     private boolean checked;
     
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public String getText() {
+		return text;
+	}
+	public void setText(String text) {
+		this.text = text;
+	}
 	public String getState() {
 		return state;
 	}

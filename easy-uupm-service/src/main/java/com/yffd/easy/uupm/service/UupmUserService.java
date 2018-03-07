@@ -5,12 +5,12 @@ import org.springframework.stereotype.Service;
 
 import com.yffd.easy.framework.base.dao.GenericDao;
 import com.yffd.easy.framework.base.service.GenericService;
-import com.yffd.easy.uupm.api.model.UupmTenantModel;
-import com.yffd.easy.uupm.dao.UupmTenantDao;
+import com.yffd.easy.uupm.dao.UupmUserDao;
+import com.yffd.easy.uupm.api.model.UupmUserModel;
 
 /**
  * @Description	简单描述该类的功能（可选）.
- * @Date		2018年02月27日 13时51分08秒 <br/>
+ * @Date		2018年03月07日 16时15分23秒 <br/>
  * @author		ZhangST
  * @version		1.0
  * @since		JDK 1.7+
@@ -18,14 +18,14 @@ import com.yffd.easy.uupm.dao.UupmTenantDao;
  */
 
 @Service
-public class UupmTenantService2 extends GenericService<UupmTenantModel> {
+public class UupmUserService extends GenericService<UupmUserModel> {
 
 	@Autowired
-	private UupmTenantDao uupmTenantDao;
+	private UupmUserDao uupmUserDao;
 	
 	@Override
-	public GenericDao<UupmTenantModel> getBindDao() {
-		return this.uupmTenantDao;
+	public GenericDao<UupmUserModel> getBindDao() {
+		return this.uupmUserDao;
 	}
 
 }

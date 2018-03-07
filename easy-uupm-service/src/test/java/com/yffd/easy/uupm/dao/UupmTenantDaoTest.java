@@ -2,6 +2,7 @@ package com.yffd.easy.uupm.dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -14,7 +15,7 @@ import com.yffd.easy.uupm.base.UupmBaseDaoTest;
 
 /**
  * @Description	简单描述该类的功能（可选）.
- * @Date		2018年03月02日 15时59分36秒 <br/>
+ * @Date		2018年03月07日 15时30分32秒 <br/>
  * @author		ZhangST
  * @version		1.0
  * @since		JDK 1.7+
@@ -80,7 +81,7 @@ public class UupmTenantDaoTest extends UupmBaseDaoTest {
 	@Test
 	public void selectOneTest() {
 		UupmTenantModel model = new UupmTenantModel();
-		model.setId(1+"");
+		model.setId(2000+"");
 		UupmTenantModel result = this.dao.selectOne(model);
 		
 //		Map<String, Object> paramMap = this.dao.model2map(model, null);
@@ -104,7 +105,7 @@ public class UupmTenantDaoTest extends UupmBaseDaoTest {
 	@Test
 	public void updateByTest() {
 		UupmTenantModel model = new UupmTenantModel();
-		model.setId(20+"");
+		model.setId(2000+"");
 		int result = this.dao.updateBy(model);
 		
 //		Map<String, Object> paramMap = this.dao.model2map(model, null);
@@ -116,7 +117,7 @@ public class UupmTenantDaoTest extends UupmBaseDaoTest {
 	@Test
 	public void deleteByTest() {
 		UupmTenantModel model = new UupmTenantModel();
-		model.setId(20+"");
+		model.setId(2000+"");
 		int result = this.dao.deleteBy(model);
 		
 //		Map<String, Object> paramMap = this.dao.model2map(model, null);
@@ -135,7 +136,7 @@ public class UupmTenantDaoTest extends UupmBaseDaoTest {
 
 	@Test
 	public void updateBatchTest() {
-		int i = 5;
+		int i = 2001;
 		List<UupmTenantModel> models = (List<UupmTenantModel>) this.getRandomModelList();
 		for(UupmTenantModel model : models) {
 			model.setId(""+i);
@@ -146,7 +147,7 @@ public class UupmTenantDaoTest extends UupmBaseDaoTest {
 	
 	@Test
 	public void selectByIdTest() {
-		String id = "5";
+		String id = "2001";
 		UupmTenantModel result = this.dao.selectById(id);
 		Assert.assertNotNull(result);
 		System.out.println(result);
@@ -155,7 +156,7 @@ public class UupmTenantDaoTest extends UupmBaseDaoTest {
 	@Test
 	public void selectListByIdsTest() {
 		List<String> list = new ArrayList<String>();
-		for(int i=10;i<15;i++) {
+		for(int i=2001;i<2005;i++) {
 			list.add("" + i);
 		}
 		List<UupmTenantModel> result = (List<UupmTenantModel>) this.dao.selectListByIds(list);
@@ -178,7 +179,7 @@ public class UupmTenantDaoTest extends UupmBaseDaoTest {
 	
 	@Test
 	public void deleteByIdTest() {
-		String id = "19";
+		String id = "2001";
 		int result = this.dao.deleteById(id);
 		System.out.println(result);
 	}
@@ -186,7 +187,7 @@ public class UupmTenantDaoTest extends UupmBaseDaoTest {
 	@Test
 	public void deleteByIdsTest() {
 		List<String> list = new ArrayList<String>();
-		for(int i=5;i<10;i++) {
+		for(int i=2002;i<20016;i++) {
 			list.add("" + i);
 		}
 		int result = this.dao.deleteByIds(list);

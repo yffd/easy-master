@@ -12,22 +12,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.yffd.easy.common.core.page.PageParam;
 import com.yffd.easy.common.core.page.PageResult;
 import com.yffd.easy.framework.domain.LoginInfo;
-import com.yffd.easy.uupm.api.model.UupmDataCategoryModel;
-import com.yffd.easy.uupm.api.model.UupmTenantModel;
+import com.yffd.easy.uupm.api.model.UupmUserModel;
 import com.yffd.easy.uupm.base.UupmBaseServiceTest;
 
 /**
  * @Description  简单描述该类的功能（可选）.
- * @Date		2018年03月02日 16时16分38秒 <br/>
+ * @Date		2018年03月07日 16时15分23秒 <br/>
  * @author		ZhangST
  * @version		 1.0
  * @since		 JDK 1.7+
  * @see 	 
  */
-public class UupmTenantServiceTest2 extends UupmBaseServiceTest {
+public class UupmUserServiceTest extends UupmBaseServiceTest {
 
 	@Autowired
-	private UupmTenantService uupmTenantService;
+	private UupmUserService uupmUserService;
 	
 	private LoginInfo loginInfo = null;
 	
@@ -42,9 +41,9 @@ public class UupmTenantServiceTest2 extends UupmBaseServiceTest {
 	@Test
 	public void findPageTest() {
 		PageParam pageParam = new PageParam(1L, 10L);
-		UupmTenantModel model = new UupmTenantModel();
+		UupmUserModel model = new UupmUserModel();
 		model.setId("2010");
-		PageResult<UupmTenantModel> result1 = this.uupmTenantService.findPage(model, pageParam);
+		PageResult<UupmUserModel> result1 = this.uupmUserService.findPage(model, pageParam);
 		Assert.assertNotNull(result1);
 		System.out.println(result1.getPageParam());
 		System.out.println(result1.getRecordList());
@@ -53,7 +52,7 @@ public class UupmTenantServiceTest2 extends UupmBaseServiceTest {
 		
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("id", "2010");
-		PageResult<UupmTenantModel> result2 = this.uupmTenantService.findPage(paramMap, pageParam);
+		PageResult<UupmUserModel> result2 = this.uupmUserService.findPage(paramMap, pageParam);
 		Assert.assertNotNull(result2);
 		System.out.println(result2.getPageParam());
 		System.out.println(result2.getRecordList());
@@ -61,9 +60,9 @@ public class UupmTenantServiceTest2 extends UupmBaseServiceTest {
 	
 	@Test
 	public void findListTest() {
-		UupmTenantModel model = new UupmTenantModel();
+		UupmUserModel model = new UupmUserModel();
 		model.setId("2010");
-		List<UupmTenantModel> result1 = this.uupmTenantService.findList(model);
+		List<UupmUserModel> result1 = this.uupmUserService.findList(model);
 		Assert.assertNotNull(result1);
 		System.out.println(result1.size());
 		
@@ -71,16 +70,16 @@ public class UupmTenantServiceTest2 extends UupmBaseServiceTest {
 		
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("id", "2010");
-		List<UupmTenantModel> result2 = this.uupmTenantService.findList(paramMap);
+		List<UupmUserModel> result2 = this.uupmUserService.findList(paramMap);
 		Assert.assertNotNull(result2);
 		System.out.println(result2.size());
 	}
 	
 	@Test
 	public void findOneTest() {
-		UupmTenantModel model = new UupmTenantModel();
+		UupmUserModel model = new UupmUserModel();
 		model.setId("2010");
-		UupmTenantModel result1 = this.uupmTenantService.findOne(model);
+		UupmUserModel result1 = this.uupmUserService.findOne(model);
 		Assert.assertNotNull(result1);
 		System.out.println(result1.getCreateTime());
 		
@@ -88,7 +87,7 @@ public class UupmTenantServiceTest2 extends UupmBaseServiceTest {
 		
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("id", "2010");
-		UupmTenantModel result2 = this.uupmTenantService.findOne(paramMap);
+		UupmUserModel result2 = this.uupmUserService.findOne(paramMap);
 		Assert.assertNotNull(result2);
 		System.out.println(result2.getCreateTime());
 	}
@@ -96,7 +95,7 @@ public class UupmTenantServiceTest2 extends UupmBaseServiceTest {
 	@Test
 	public void findByIdTest() {
 		String id = "2010";
-		UupmTenantModel model = this.uupmTenantService.findById(id);
+		UupmUserModel model = this.uupmUserService.findById(id);
 		Assert.assertNotNull(model);
 		System.out.println(model.getCreateTime());
 	}
@@ -106,21 +105,21 @@ public class UupmTenantServiceTest2 extends UupmBaseServiceTest {
 		List<String> ids = new ArrayList<String>();
 		ids.add("2010");
 		ids.add("2111");
-		List<UupmTenantModel> result1 = this.uupmTenantService.findByIds(ids);
+		List<UupmUserModel> result1 = this.uupmUserService.findByIds(ids);
 		Assert.assertNotNull(result1);
 		System.out.println(result1.size());
 		
 		/*******************************/
 		
 		String idsStr = "2010,2111";
-		List<UupmTenantModel> result2 = this.uupmTenantService.findByIds(idsStr);
+		List<UupmUserModel> result2 = this.uupmUserService.findByIds(idsStr);
 		Assert.assertNotNull(result2);
 		System.out.println(result2.size());
 	}
 	
 	@Test
 	public void findAllTest() {
-		List<UupmDataCategoryModel> result1 = this.uupmTenantService.findAll();
+		List<UupmUserModel> result1 = this.uupmUserService.findAll();
 		Assert.assertNotNull(result1);
 		System.out.println(result1.size());
 	}
@@ -129,26 +128,26 @@ public class UupmTenantServiceTest2 extends UupmBaseServiceTest {
 	
 	@Test
 	public void addOneTest() {
-		UupmTenantModel model = new UupmTenantModel();
+		UupmUserModel model = new UupmUserModel();
 		model.setId("2000");
-		this.uupmTenantService.addOne(model, loginInfo);
+		this.uupmUserService.addOne(model, loginInfo);
 		
 		/*******************************/
 		
 //		Map<String, Object> paramMap = new HashMap<String, Object>();
 //		paramMap.put("id", "2001");
-//		this.uupmTenantService.addOne(paramMap, loginInfo);
+//		this.uupmUserService.addOne(paramMap, loginInfo);
 	}
 	
 	@Test
 	public void addBatchTest() {
-		List<UupmTenantModel> list = new ArrayList<UupmTenantModel>();
+		List<UupmUserModel> list = new ArrayList<UupmUserModel>();
 		for(int i=10;i<15;i++) {
-			UupmTenantModel model = new UupmTenantModel();
+			UupmUserModel model = new UupmUserModel();
 			model.setId("20"+i);
 			list.add(model);
 		}
-		this.uupmTenantService.addBatch(list, loginInfo);
+		this.uupmUserService.addBatch(list, loginInfo);
 		
 		/*******************************/
 		
@@ -158,34 +157,34 @@ public class UupmTenantServiceTest2 extends UupmBaseServiceTest {
 //			paramMap.put("id", "21"+i);
 //			list.add(paramMap);
 //		}
-//		this.uupmTenantService.addBatch(list, loginInfo);
+//		this.uupmUserService.addBatch(list, loginInfo);
 	}
 
 	/***********************修改********************************/
 	
 	@Test
 	public void updateByTest() {
-		UupmTenantModel model = new UupmTenantModel();
+		UupmUserModel model = new UupmUserModel();
 		model.setId("2000");
-		this.uupmTenantService.updateBy(model, loginInfo);
+		this.uupmUserService.updateBy(model, loginInfo);
 		
 		/*******************************/
 		
 //		Map<String, Object> paramMap = new HashMap<String, Object>();
 //		paramMap.put("id", "2001");
-//		this.uupmTenantService.updateBy(paramMap, loginInfo);
+//		this.uupmUserService.updateBy(paramMap, loginInfo);
 	}
 	
 	@Test
 	public void updateBatchByTest() {
-		List<UupmTenantModel> list = new ArrayList<UupmTenantModel>();
+		List<UupmUserModel> list = new ArrayList<UupmUserModel>();
 		int startId = 2010;
 		for(int i=0;i<3;i++) {
-			UupmTenantModel model = new UupmTenantModel();
+			UupmUserModel model = new UupmUserModel();
 			model.setId((startId+i) + "");
 			list.add(model);
 		}
-		this.uupmTenantService.updateBatchBy(list, loginInfo);
+		this.uupmUserService.updateBatchBy(list, loginInfo);
 		
 		/*******************************/
 		
@@ -196,28 +195,28 @@ public class UupmTenantServiceTest2 extends UupmBaseServiceTest {
 //			paramMap.put("id", (startId+i) + "");
 //			list.add(paramMap);
 //		}
-//		this.uupmTenantService.updateBatchBy(list, loginInfo);
+//		this.uupmUserService.updateBatchBy(list, loginInfo);
 	}
 
 	/***********************物理删除********************************/
 
 	@Test
 	public void delByTest() {
-		UupmTenantModel model = new UupmTenantModel();
+		UupmUserModel model = new UupmUserModel();
 		model.setId("2000");
-		this.uupmTenantService.delBy(model);
+		this.uupmUserService.delBy(model);
 
 		/*******************************/
 		
 //		Map<String, Object> paramMap = new HashMap<String, Object>();
 //		paramMap.put("id", "2001");
-//		this.uupmTenantService.delBy(paramMap);
+//		this.uupmUserService.delBy(paramMap);
 	}
 	
 	@Test
 	public void delByIdTest() {
 		String id = "2110";
-		this.uupmTenantService.delById(id);
+		this.uupmUserService.delById(id);
 	}
 	
 	@Test
@@ -227,12 +226,12 @@ public class UupmTenantServiceTest2 extends UupmBaseServiceTest {
 		for(int i=0;i<2;i++) {
 			list.add((startId+i) + "");
 		}
-		this.uupmTenantService.delByIds(list);
+		this.uupmUserService.delByIds(list);
 		
 		/*******************************/
 		
 //		String ids = "2011,2012";
-//		this.uupmTenantService.delByIds(ids);
+//		this.uupmUserService.delByIds(ids);
 		
 	}
 	
@@ -240,27 +239,27 @@ public class UupmTenantServiceTest2 extends UupmBaseServiceTest {
 	
 	@Test
 	public void removeByTest() {
-		UupmTenantModel model = new UupmTenantModel();
+		UupmUserModel model = new UupmUserModel();
 		model.setId("2000");
-		this.uupmTenantService.removeBy(model, null);
+		this.uupmUserService.removeBy(model, null);
 		
 		/*******************************/
 		
 //		Map<String, Object> paramMap = new HashMap<String, Object>();
 //		paramMap.put("id", "2001");
-//		this.uupmTenantService.removeBy(paramMap, null);
+//		this.uupmUserService.removeBy(paramMap, null);
 	}
 	
 	@Test
 	public void removeByIdTest() {
 		String id = "2110";
-		this.uupmTenantService.removeById(id, null);
+		this.uupmUserService.removeById(id, null);
 	}
 	
 	@Test
 	public void removeByIdsTest() {
 		String ids = "2110,2111";
-		this.uupmTenantService.removeByIds(ids, null);
+		this.uupmUserService.removeByIds(ids, null);
 	}
 	
 }

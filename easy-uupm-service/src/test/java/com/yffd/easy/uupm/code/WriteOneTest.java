@@ -7,7 +7,7 @@ import com.yffd.easy.framework.support.code.generator.DaoTestCodeGenerator;
 import com.yffd.easy.framework.support.code.generator.MapperFileCodeGenerator;
 import com.yffd.easy.framework.support.code.generator.ServiceCodeGenerator;
 import com.yffd.easy.framework.support.code.generator.ServiceTestCodeGenerator;
-import com.yffd.easy.uupm.api.model.UupmDictionaryModel;
+import com.yffd.easy.uupm.api.model.UupmUserModel;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -24,7 +24,7 @@ public class WriteOneTest extends LocalProjectConfigTest {
 	private ServiceCodeGenerator serviceGenerator = new ServiceCodeGenerator();
 	private ServiceTestCodeGenerator serviceTestGenerator = new ServiceTestCodeGenerator();
 	
-	private Class<?> modelClazz = UupmDictionaryModel.class;
+	private Class<?> modelClazz = UupmUserModel.class;
 	
 	/**
 	 * 所有--文件

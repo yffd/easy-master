@@ -114,8 +114,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						{field: 'itemCode', title: '编号', width: 100, align: 'left'},
 						{field: 'parentCode', title: '父编号', width: 100, align: 'left'},
 						{field: 'seqNo', title: '序号', width: 100, align: 'left'},
-						{field: 'dataLabel', title: '标签', width: 100, align: 'left'},
-						{field: 'dataScope', title: '范围', width: 100, align: 'left'},
+// 						{field: 'dataLabel', title: '标签', width: 100, align: 'left'},
+// 						{field: 'dataScope', title: '范围', width: 100, align: 'left'},
 						{field: 'remark', title: '描述', width: 100, align: 'left'}
 	                   ]]
 		});

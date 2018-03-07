@@ -5,20 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.yffd.easy.common.core.page.PageParam;
-import com.yffd.easy.common.core.page.PageResult;
 import com.yffd.easy.common.core.util.EasyStringCheckUtils;
 import com.yffd.easy.framework.domain.RespModel;
-import com.yffd.easy.framework.web.view.vo.DataGridVO;
-import com.yffd.easy.uupm.api.model.UupmDataCategoryModel;
 import com.yffd.easy.uupm.api.model.UupmDictionaryModel;
 import com.yffd.easy.uupm.service.UupmDictionaryService;
 import com.yffd.easy.uupm.web.support.UupmDictionarySupport;
@@ -36,7 +30,6 @@ import com.yffd.easy.uupm.web.vo.UupmDictionaryTreeVO;
 @RestController
 @RequestMapping("/uupm/dictionary")
 public class UupmDictionaryController extends UupmBaseController {
-
 	@Autowired
 	private UupmDictionaryService uupmDictionaryService;
 	@Autowired

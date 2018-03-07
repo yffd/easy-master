@@ -13,9 +13,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <jsp:include page="/common/layout/script.jsp"></jsp:include>
 
 <script type="text/javascript">
-	var $json_tenantType = [ {id:"", text:"全部", "selected": true} ];
-	var $json_tenantStatus = [ {id:"", text:"全部", "selected": true} ];
-	var $json_serveType = [ {id:"", text:"全部", "selected": true} ];
+	var $json_loginStatus = [];
 
 	var $openWindow = this;// 当前窗口
 	var $dg;
@@ -23,36 +21,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		$dg = $('#dg_id');
 		// 初始化控件数据
 		$.post('/uupm/combox/findSearchCombo', 
-				{'comboxKeys':'tenant-type,tenant-status,serve-type'}, 
+				{'comboxKeys':'func-status,'}, 
 				function(result) {
 					if("OK"==result.status) {
 						var jsonData = result.data;
-						$json_tenantType = $json_tenantType.concat(jsonData['tenant-type']);
-						$json_tenantStatus = $json_tenantStatus.concat(jsonData['tenant-status']);
-						$json_serveType = $json_serveType.concat(jsonData['serve-type']);
+						$json_loginStatus = $json_loginStatus.concat(jsonData['func-status']);
 						
 						initDatagrid();	// 初始化datagrid组件
-						
-						$('#tenantType_id').combobox({
+						$json_loginStatus[0]['selected']=true;
+						$('#loginStatus_id').combobox({
 							editable:false,
 							panelHeight: 120,
 						    valueField:'id',
 						    textField:'text',
-						    data: $json_tenantType
-						});
-						$('#tenantStatus_id').combobox({
-							editable:false,
-							panelHeight: 120,
-							valueField:'id',
-						    textField:'text',
-						    data: $json_tenantStatus
-						});
-						$('#serveType_id').combobox({
-							editable:false,
-							panelHeight: 80,
-							valueField:'id',
-						    textField:'text',
-						    data: $json_serveType
+						    data: $json_loginStatus
 						});
 						
 					}
@@ -62,7 +44,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	// 初始化datagrid组件
 	function initDatagrid() {
 		$dg.datagrid({
-		    url:'uupm/tenant/findPage',
+		    url:'uupm/user/findPage',
 		    width: 'auto',
 		    height: $(this).height()-commonui.remainHeight-$('.search-form-div').height(),
 			pagination: true,
@@ -88,35 +70,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    		}
 	    	},
 	    	frozenColumns: [[
-	    	                 {field: 'tenantName', title: '租户名称', width: 200, align: 'left'}
+	    	                 {field: 'userName', title: '名称', width: 200, align: 'left'}
 	    	                 ]],
 	        columns: [[
-						{field: 'tenantCode', title: '租户编号', width: 100, align: 'left'},
-						{field: 'tenantType', title: '类型', width: 100, align: 'left',
+						{field: 'userCode', title: '编号', width: 100, align: 'left'},
+						{field: 'loginId', title: '账户ID', width: 100, align: 'left'},
+						{field: 'loginStatus', title: '账户状态', width: 100, align: 'left',
 							formatter: function(value, row) {
-								return utils.fmtDict($json_tenantType, value);
-							}	
-						},
-						{field: 'tenantStatus', title: '状态', width: 100, align: 'left',
-							formatter: function(value, row) {
-								return utils.fmtDict($json_tenantStatus, value);
-							}	
-						},
-						{field: 'serveType', title: '服务方式', width: 100, align: 'left',
-							formatter: function(value, row) {
-								return utils.fmtDict($json_serveType, value);
+								return utils.fmtDict($json_loginStatus, value);
 							}
 						},
-						{field: 'startTime', title: '服务开始时间', width: 100, align: 'center',
+						{field: 'createTime', title: '创建时间', width: 100, align: 'center',
 							formatter: function(value, row) {
 								return value?new Date(value).format("yyyy-MM-dd HH:mm:ss"):"";
 							}	
 						},
-						{field: 'endTime', title: '服务结束时间', width: 100, align: 'center',
-							formatter: function(value, row) {
-								return value?new Date(value).format("yyyy-MM-dd HH:mm:ss"):"";
-							}	
-						}
 	                   ]]
 		});
 	}
@@ -135,9 +103,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	// 清除搜索条件
 	function cleanSearch() {
 		$('#searchForm_id input').val('');
-		$('#tenantType_id').combobox('select','');
-		$('#tenantStatus_id').combobox('select','');
-		$('#serveType_id').combobox('select','');
+		
+		var val = $('#loginStatus_id').combobox('getData');
+		$('#loginStatus_id').combobox('select',val[0]['id']);
 	}
 	
 	// 打开添加对话框
@@ -146,10 +114,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			title: "添加",
 			width: 800,
 			height: 400,
-			href: 'views/uupm/tenant/tenantEditDlg.jsp',
+			href: 'views/uupm/user/userEditDlg.jsp',
 			onLoad:function(){
 				var editForm = parent.$.modalDialog.handler.find("#form_id");
-				editForm.find("#startTime").val(new Date().format("yyyy-MM-dd HH:mm:ss"));
 				setComboForSelected(editForm);
 			},
 			buttons: [{
@@ -159,7 +126,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					parent.$.modalDialog.openWindow = $openWindow;//定义打开对话框的窗口
 					parent.$.modalDialog.openner = $dg;//定义对话框关闭要刷新的grid
 					var editForm = parent.$.modalDialog.handler.find("#form_id");
-					editForm.attr("action", "uupm/tenant/add");
+					editForm.attr("action", "uupm/user/add");
 					editForm.submit();
 				}
 			},{
@@ -181,14 +148,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				title: "编辑",
 				width: 600,
 				height: 400,
-				href: 'views/uupm/tenant/tenantEditDlg.jsp',
+				href: 'views/uupm/user/userEditDlg.jsp',
 				onLoad:function(){
 					var editForm = parent.$.modalDialog.handler.find("#form_id");
 					setComboForSelected(editForm);
 					editForm.form("load", row);
-					editForm.find("#tenantCode_id").attr('readonly',true);
-					if(row.startTime) editForm.find("#startTime").val(new Date(row.startTime).format("yyyy-MM-dd HH:mm:ss"));
-					if(row.endTime) editForm.find("#endTime").val(new Date(row.endTime).format("yyyy-MM-dd HH:mm:ss"));
+					editForm.find("#userCode_id").attr('readonly',true);
 				},
 				buttons: [{
 					text: '确定',
@@ -197,7 +162,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						parent.$.modalDialog.openWindow = $openWindow;//定义打开对话框的窗口
 						parent.$.modalDialog.openner = $dg;//定义对话框关闭要刷新的grid
 						var editForm = parent.$.modalDialog.handler.find("#form_id");
-						editForm.attr("action", "uupm/tenant/edit");
+						editForm.attr("action", "uupm/user/edit");
 						editForm.submit();
 					}
 				},{
@@ -224,7 +189,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		if(row) {
 			parent.$.messager.confirm("提示","确定要删除记录吗?",function(r){  
 			    if(r) {
-			    	$.post("uupm/tenant/del", {id:row.id}, function(result) {
+			    	$.post("uupm/user/del", {id:row.id}, function(result) {
 						if(result.status=='OK') {
 							var rowIndex = $dg.datagrid('getRowIndex', row);
 							$dg.datagrid('deleteRow', rowIndex);
@@ -253,34 +218,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	}
 	// 设置控件选中
 	function setComboForSelected(selectForm) {
-		selectForm.find('#tenantType_id').combobox({
+		selectForm.find('#loginStatus_id').combobox({
 			editable:false,
 			panelHeight: 120,
 			valueField:'id',
 		    textField:'text',
-		    data: $.grep($json_tenantType, function(n,i){
-		    	if(i==1) n['selected']=true;
-		    	return i > 0;
-		    })
-		});
-		selectForm.find('#tenantStatus_id').combobox({
-			editable:false,
-			panelHeight: 120,
-			valueField:'id',
-		    textField:'text',
-		    data: $.grep($json_tenantStatus, function(n,i){
-		    	if(i==1) n['selected']=true;
-		    	return i > 0;
-		    })
-		});
-		selectForm.find('#serveType_id').combobox({
-			editable:false,
-			panelHeight: 80,
-			valueField:'id',
-		    textField:'text',
-		    data: $.grep($json_serveType, function(n,i){
-		    	if(i==1) n['selected']=true;
-		    	return i > 0;
+		    data: $.grep($json_loginStatus, function(n,i){
+		    	if(i==0) n['selected']=true;
+		    	return i == 0;
 		    })
 		});
 	}	
@@ -297,34 +242,24 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<form id="searchForm_id">
 			<table class="search-form-table">
 				<tr>
-					<th>租户名称：</th>
+					<th>名称：</th>
 					<td>
-						<input name="tenantName" type="text" />
+						<input name="userName" type="text" />
 					</td>
-					<th>租户编号：</th>
+					<th>编号：</th>
 					<td>
-						<input name="tenantCode" type="text" />
-					</td>
-				</tr>
-				<tr>
-					<th>类型：</th>
-					<td>
-						<input id="tenantType_id" name="tenantType" type="text" />
-					</td>
-					<th>状态：</th>
-					<td>
-						<input id="tenantStatus_id" name="tenantStatus" type="text" />
+						<input name="userCode" type="text" />
 					</td>
 				</tr>
 				<tr>
-					<th>服务方式：</th>
+					<th>账户状态：</th>
 					<td>
-						<input id="serveType_id" name="serveType" type="text" />
+						<input id="loginStatus_id" name="loginStatus" type="text" />
 					</td>
-					<th>服务开始时间：</th><td>
-						<input type="text" name="sStartTime" id="sStartTime" class="Wdate" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:'#F{$dp.$D(\'eStartTime\',{d:0});}'})"/>
+					<th>创建时间：</th><td>
+						<input type="text" name="sCreateTime" id="sStartTime_id" class="Wdate" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:'#F{$dp.$D(\'eStartTime_id\',{d:0});}'})"/>
 						~
-						<input type="text" name="eStartTime" id="eStartTime" class="Wdate" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'sStartTime\',{d:0});}'})"/>
+						<input type="text" name="eCreateTime" id="eStartTime_id" class="Wdate" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'sStartTime_id\',{d:0});}'})"/>
 					</td>
 				</tr>
 				<tr>

@@ -90,25 +90,46 @@ function initMenuLocal() {
 	var menuJson = [{
 		"id": "sys",
         "pid": "-1",
-        "text": "工作流管理",
+        "text": "租赁信息管理",
         "children": [{
         	"id": "sys-111",
             "pid": "sys",
-            "text": "租户管理",
+            "text": "租户信息管理",
             "state": "open",
             "iconCls": "icon-sys",
             "inUrl": "views/uupm/tenant/tenantMain.jsp",
             "rsType": "M"
         },{
-        	"id": "sys-111",
+        	"id": "sys-112",
             "pid": "sys",
-            "text": "数据分类管理",
+            "text": "租户费用管理",
             "state": "open",
             "iconCls": "icon-sys",
-            "inUrl": "views/uupm/dataCategory/categoryMain.jsp",
+            "inUrl": "views/uupm/tenant/tenantMain.jsp",
             "rsType": "M"
         },{
-        	"id": "sys-112",
+        	"id": "sys-113",
+            "pid": "sys",
+            "text": "租户功能授权管理",
+            "state": "open",
+            "iconCls": "icon-sys",
+            "inUrl": "views/uupm/tenant/tenantMain.jsp",
+            "rsType": "M"
+        }]
+	},{
+		"id": "17",
+        "pid": "-1",
+        "text": "基础信息管理",
+        "children": [{
+        	"id": "sys-121",
+            "pid": "sys",
+            "text": "菜单管理",
+            "state": "open",
+            "iconCls": "icon-sys",
+            "inUrl": "views/uupm/dictionary/dictionaryMain.jsp",
+            "rsType": "M"
+        }, {
+        	"id": "sys-122",
             "pid": "sys",
             "text": "数据字典管理",
             "state": "open",
@@ -116,160 +137,49 @@ function initMenuLocal() {
             "inUrl": "views/uupm/dictionary/dictionaryMain.jsp",
             "rsType": "M"
         },{
-        	"id": "sys-113",
+        	"id": "sys-123",
             "pid": "sys",
-            "text": "流程任务跟踪",
+            "text": "系统参数管理",
             "state": "open",
             "iconCls": "icon-sys",
-            "inUrl": "views/workflow/task/taskMain.jsp",
+            "inUrl": "views/uupm/dictionary/dictionaryMain.jsp",
             "rsType": "M"
         },{
-        	"id": "sys-117",
+        	"id": "sys-124",
             "pid": "sys",
-            "text": "待办流程任务",
+            "text": "登录日志信息",
             "state": "open",
             "iconCls": "icon-sys",
-            "inUrl": "views/workflow/todoTask/todoTaskMain.jsp",
-            "rsType": "M"
-        },{
-        	"id": "sys-114",
-            "pid": "sys",
-            "text": "历史流程实例",
-            "state": "open",
-            "iconCls": "icon-sys",
-            "inUrl": "views/workflow/historyInstance/historyInstanceMain.jsp",
-            "rsType": "M"
-        },{
-        	"id": "sys-115",
-            "pid": "sys",
-            "text": "历史流程任务",
-            "state": "open",
-            "iconCls": "icon-sys",
-            "inUrl": "views/workflow/historyTask/historyTaskMain.jsp",
+            "inUrl": "views/uupm/dictionary/dictionaryMain.jsp",
             "rsType": "M"
         }]
 	},{
-		"id": "17",
+		"id": "18",
         "pid": "-1",
-        "text": "业务流程管理",
+        "text": "用户信息管理",
         "children": [{
-        	"id": "14-112",
+        	"id": "sys-181",
             "pid": "sys",
-            "text": "业务流程方案",
+            "text": "用户管理",
             "state": "open",
             "iconCls": "icon-sys",
-            "inUrl": "workflow/app/leave/leaveMain.jsp",
+            "inUrl": "views/uupm/user/userMain.jsp",
             "rsType": "M"
         },{
-        	"id": "14-113",
+        	"id": "sys-183",
             "pid": "sys",
-            "text": "业务流程授权",
+            "text": "账号管理",
             "state": "open",
             "iconCls": "icon-sys",
-            "inUrl": "workflow/app/leave/leaveMain.jsp",
+            "inUrl": "views/uupm/dictionary/dictionaryMain.jsp",
             "rsType": "M"
         },{
-        	"id": "14-114",
+        	"id": "sys-182",
             "pid": "sys",
-            "text": "业务流程表单模板",
+            "text": "用户授权管理",
             "state": "open",
             "iconCls": "icon-sys",
-            "inUrl": "workflow/app/leave/leaveMain.jsp",
-            "rsType": "M"
-        }]
-	},{
-		"id": "14",
-        "pid": "-1",
-        "text": "流程管理",
-        "children": [{
-        	"id": "14-111",
-            "pid": "sys",
-            "text": "流程发布管理",
-            "state": "open",
-            "iconCls": "icon-sys",
-            "inUrl": "views/workflow/deploy/deployMain.jsp",
-            "rsType": "M"
-        },{
-        	"id": "14-112",
-            "pid": "sys",
-            "text": "业务流程方案",
-            "state": "open",
-            "iconCls": "icon-sys",
-            "inUrl": "workflow/app/leave/leaveMain.jsp",
-            "rsType": "M"
-        },{
-        	"id": "14-113",
-            "pid": "sys",
-            "text": "流程授权",
-            "state": "open",
-            "iconCls": "icon-sys",
-            "inUrl": "workflow/app/leave/leaveMain.jsp",
-            "rsType": "M"
-        },{
-        	"id": "14-114",
-            "pid": "sys",
-            "text": "表单模板",
-            "state": "open",
-            "iconCls": "icon-sys",
-            "inUrl": "workflow/app/leave/leaveMain.jsp",
-            "rsType": "M"
-        }]
-	},{
-		"id": "13",
-        "pid": "-1",
-        "text": "流程监控",
-        "children": [{
-        	"id": "13-111",
-            "pid": "sys",
-            "text": "流程实例",
-            "state": "open",
-            "iconCls": "icon-sys",
-            "inUrl": "workflow/app/leave/leaveMain.jsp",
-            "rsType": "M"
-        },{
-        	"id": "13-112",
-            "pid": "sys",
-            "text": "待办任务",
-            "state": "open",
-            "iconCls": "icon-sys",
-            "inUrl": "workflow/app/leave/leaveMain.jsp",
-            "rsType": "M"
-        }]
-	},{
-		"id": "11",
-        "pid": "-1",
-        "text": "任务跟踪",
-        "children": [{
-        	"id": "11-111",
-            "pid": "sys",
-            "text": "我的申请",
-            "state": "open",
-            "iconCls": "icon-sys",
-            "inUrl": "workflow/app/leave/leaveMain.jsp",
-            "rsType": "M"
-        },{
-        	"id": "11-112",
-            "pid": "sys",
-            "text": "我的处理",
-            "state": "open",
-            "iconCls": "icon-sys",
-            "inUrl": "workflow/app/leave/leaveMain.jsp",
-            "rsType": "M"
-        },{
-        	"id": "11-113",
-            "pid": "sys",
-            "text": "我的已阅",
-            "state": "open",
-            "iconCls": "icon-sys",
-            "inUrl": "workflow/app/leave/leaveMain.jsp",
-            "rsType": "M"
-        },{
-        	"id": "11-114",
-            "pid": "sys",
-            "text": "我的委托",
-            "state": "open",
-            "iconCls": "icon-sys",
-            "inUrl": "workflow/app/leave/leaveMain.jsp",
+            "inUrl": "views/uupm/dictionary/dictionaryMain.jsp",
             "rsType": "M"
         }]
 	}];

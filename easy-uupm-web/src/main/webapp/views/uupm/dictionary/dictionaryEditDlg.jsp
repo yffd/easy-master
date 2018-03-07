@@ -24,7 +24,6 @@ $(function() {
 				parent.$.modalDialog.openner_dictionary_pcode=undefined;
 				if(dictionary_parentCode) {
 					$.post('uupm/dictionary/listDictTree', {'parentCode':dictionary_parentCode}, function(result) {
-						console.info("vvvvvvv");
 						parent.$.modalDialog.openner_dictionary.treegrid('loadData', result);//打开此窗口时预定义的对象
 					}, 'json');
 				} else {

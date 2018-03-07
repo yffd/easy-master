@@ -25,5 +25,6 @@ public class UupmBaseController extends WebController {
 		dateFormat.setLenient(false);  
 		dataBinder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));   //true:允许输入空值，false:不能为空值
     }
+	
 }
 
