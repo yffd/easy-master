@@ -102,18 +102,18 @@ function initMenuLocal() {
         },{
         	"id": "sys-111",
             "pid": "sys",
-            "text": "数据字典管理",
+            "text": "数据分类管理",
             "state": "open",
             "iconCls": "icon-sys",
-            "inUrl": "views/uupm/dictionary/dictionaryMain.jsp",
+            "inUrl": "views/uupm/dataCategory/categoryMain.jsp",
             "rsType": "M"
         },{
         	"id": "sys-112",
             "pid": "sys",
-            "text": "流程实例管理",
+            "text": "数据字典管理",
             "state": "open",
             "iconCls": "icon-sys",
-            "inUrl": "views/workflow/instance/instanceMain.jsp",
+            "inUrl": "views/uupm/dictionary/dictionaryMain.jsp",
             "rsType": "M"
         },{
         	"id": "sys-113",

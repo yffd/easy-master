@@ -29,7 +29,7 @@ public class UupmDataCategoryModel extends GenericPO {
 	private String categoryCode; 	//编号
 	private String parentCode;		//父编号
 	private String dataPath;		//数据路径，用点（.）分隔
-	private String dataLabel;		//数据标签：BRANCH（分支）、LEAF（叶子）
+	private String dataLabel;		//数据标签：CATEGORY（分类）、DICT（字典）
 	private String dataShowType;	//数据展示方式:TREE、FLAT
 	private Integer seqNo;			//序号
 	private String remark;			//备注

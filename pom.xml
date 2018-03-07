@@ -16,17 +16,17 @@
 
 	<modules>
 	    <module>easy-common-core</module>
-    	<module>easy-common-support</module>
-	    <module>easy-common-support-web</module>
-	    <module>easy-common-ssm</module>
-    	<module>easy-common-dubbo</module>
-    	<module>easy-demo</module>
-	    <module>easy-admin-service</module>
-	    <module>easy-admin-service-facade</module>
-	    <module>easy-web-admin</module>
-    	<module>easy-workflow-web</module>
-    	<module>easy-workflow-service</module>
-    	<module>easy-workflow-api</module>
+<!--     	<module>easy-common-support</module> -->
+<!-- 	    <module>easy-common-support-web</module> -->
+<!-- 	    <module>easy-common-ssm</module> -->
+<!--     	<module>easy-common-dubbo</module> -->
+<!--     	<module>easy-demo</module> -->
+<!-- 	    <module>easy-admin-service</module> -->
+<!-- 	    <module>easy-admin-service-facade</module> -->
+<!-- 	    <module>easy-web-admin</module> -->
+<!--     	<module>easy-workflow-web</module> -->
+<!--     	<module>easy-workflow-service</module> -->
+<!--     	<module>easy-workflow-api</module> -->
     <module>easy-uupm-api</module>
     <module>easy-uupm-service</module>
     <module>easy-uupm-web</module>

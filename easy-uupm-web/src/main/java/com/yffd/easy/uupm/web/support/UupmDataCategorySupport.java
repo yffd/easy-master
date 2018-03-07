@@ -22,6 +22,37 @@ public class UupmDataCategorySupport {
 	private TreeBuilder treeBuilder = new TreeBuilder();
 	
 	/**
+	 * 同步treegrid数据转换
+	 * @Date	2018年2月28日 下午5:12:45 <br/>
+	 * @author  zhangST
+	 * @param list
+	 * @return
+	 */
+	public List<UupmDataCategoryTreeVO> toSyncTreeGridVO(List<UupmDataCategoryModel> list) {
+		if(null==list || list.isEmpty()) return null;
+		List<UupmDataCategoryTreeVO> voList = new ArrayList<UupmDataCategoryTreeVO>();
+		for(UupmDataCategoryModel model : list) {
+			UupmDataCategoryTreeVO vo = new UupmDataCategoryTreeVO();
+			vo.setId_(model.getCategoryCode());			// treeNode:设置父子关系
+			vo.setPid_(model.getParentCode());			// treeNode:设置父子关系
+			vo.setText(model.getCategoryName());		// treeNode:设置文本
+			if("LEAF".equals(model.getDataLabel())) {
+				vo.setState("open");
+			} else {
+				vo.setState("closed");
+			}
+			vo.setOrigData(model);
+			voList.add(vo);
+		}
+		List<UupmDataCategoryTreeVO> treeList = (List<UupmDataCategoryTreeVO>) treeBuilder.buildByRecursive(voList);
+		if(null!=treeList && treeList.size()>0) {
+			UupmDataCategoryTreeVO first = treeList.get(0);
+			first.setState("open");
+		}
+		return treeList;
+	}
+	
+	/**
 	 * 同步tree数据转换
 	 * @Date	2018年2月28日 下午5:12:45 <br/>
 	 * @author  zhangST
@@ -33,10 +64,14 @@ public class UupmDataCategorySupport {
 		List<UupmDataCategoryTreeVO> voList = new ArrayList<UupmDataCategoryTreeVO>();
 		for(UupmDataCategoryModel model : list) {
 			UupmDataCategoryTreeVO vo = new UupmDataCategoryTreeVO();
-			vo.setId(model.getCategoryCode());			// treeNode:设置父子关系
-			vo.setPid(model.getParentCode());			// treeNode:设置父子关系
+			vo.setId_(model.getCategoryCode());			// treeNode:设置父子关系
+			vo.setPid_(model.getParentCode());			// treeNode:设置父子关系
 			vo.setText(model.getCategoryName());		// treeNode:设置文本
-			vo.setState("closed");
+			if("LEAF".equals(model.getDataLabel())) {
+				vo.setState("open");
+			} else {
+				vo.setState("closed");
+			}
 			voList.add(vo);
 		}
 		List<UupmDataCategoryTreeVO> treeList = (List<UupmDataCategoryTreeVO>) treeBuilder.buildByRecursive(voList);
@@ -59,8 +94,8 @@ public class UupmDataCategorySupport {
 		List<UupmDataCategoryTreeVO> voList = new ArrayList<UupmDataCategoryTreeVO>();
 		for(UupmDataCategoryModel model : list) {
 			UupmDataCategoryTreeVO vo = new UupmDataCategoryTreeVO();
-			vo.setId(model.getCategoryCode());			// treeNode:设置父子关系
-			vo.setPid(model.getParentCode());			// treeNode:设置父子关系
+			vo.setId_(model.getCategoryCode());			// treeNode:设置父子关系
+			vo.setPid_(model.getParentCode());			// treeNode:设置父子关系
 			vo.setText(model.getCategoryName());		// treeNode:设置文本
 			vo.setState("closed");						
 			voList.add(vo);

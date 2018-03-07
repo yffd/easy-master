@@ -16,6 +16,7 @@ public class UupmDataCategoryTreeVO extends TreeNode {
 	private String iconCls = "icon-save";
 	private String state = "closed";
 	private boolean checked = false;
+	private UupmDataCategoryModel origData;
 	
 	public String getText() {
 		return text;
@@ -40,6 +41,12 @@ public class UupmDataCategoryTreeVO extends TreeNode {
 	}
 	public void setChecked(boolean checked) {
 		this.checked = checked;
+	}
+	public UupmDataCategoryModel getOrigData() {
+		return origData;
+	}
+	public void setOrigData(UupmDataCategoryModel origData) {
+		this.origData = origData;
 	}
 	
 }

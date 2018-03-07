@@ -21,14 +21,14 @@ public class TreeBuilder {
 	 * @param treeNodes
 	 * @return
 	 */
-	public <T extends TreeNode> List<T> bulid(List<T> treeNodes) {
+	public <T extends TreeNode> List<T> build(List<T> treeNodes) {
         List<TreeNode> trees = new ArrayList<TreeNode>();
         for (TreeNode treeNode : treeNodes) {
-            if (null==treeNode.getPid() || "".equals(treeNode.getPid()) || "-1".equals(treeNode.getPid())) {
+            if (null==treeNode.getPid_() || "".equals(treeNode.getPid_()) || "-1".equals(treeNode.getPid_())) {
                 trees.add(treeNode);
             }
             for (TreeNode it : treeNodes) {
-                if (it.getPid() == treeNode.getId()) {
+                if (it.getPid_() == treeNode.getId_()) {
                     if (treeNode.getChildren() == null) {
                         treeNode.setChildren(new ArrayList<TreeNode>());
                     }
@@ -50,12 +50,31 @@ public class TreeBuilder {
 	public <T extends TreeNode> List<T> buildByRecursive(List<T> treeNodes) {
         List<TreeNode> trees = new ArrayList<TreeNode>();  
         for (TreeNode treeNode : treeNodes) {
-            if (null==treeNode.getPid() || "".equals(treeNode.getPid()) || "-1".equals(treeNode.getPid())) {
+            if (null==treeNode.getPid_() || "".equals(treeNode.getPid_()) || "-1".equals(treeNode.getPid_())) {
                 trees.add(findChildren(treeNode, treeNodes));
             }
         }
         return (List<T>) trees;
     }
+	
+	/**
+	 * 构建多层结构的树，使用递归方法
+	 * 第一层树的父ID为：-1 或 null 或  空字符串
+	 * @Date	2017年9月25日 下午2:17:55 <br/>
+	 * @author  zhangST
+	 * @param treeNodes		传入的树节点列表
+	 * @param rootPid		根节点的父ID
+	 * @return				返回递归树节点列表
+	 */
+	public <T extends TreeNode> List<T> buildByRecursive(List<T> treeNodes, String rootPid) {
+		List<TreeNode> trees = new ArrayList<TreeNode>();  
+		for (TreeNode treeNode : treeNodes) {
+			if (treeNode.getPid_().equals(rootPid)) {
+				trees.add(findChildren(treeNode, treeNodes));
+			}
+		}
+		return (List<T>) trees;
+	}
 	
 	/**
 	 * 递归查找子节点
@@ -67,7 +86,7 @@ public class TreeBuilder {
 	 */
 	public TreeNode findChildren(TreeNode treeNode, List<? extends TreeNode> treeNodes) {
         for (TreeNode tn : treeNodes) {
-            if(treeNode.getId().equals(tn.getPid())) {
+            if(treeNode.getId_().equals(tn.getPid_())) {
                 if (treeNode.getChildren() == null) {
                     treeNode.setChildren(new ArrayList<TreeNode>());
                 }
@@ -103,7 +122,7 @@ public class TreeBuilder {
         list.add(treeNode8);  
   
         TreeBuilder builder = new TreeBuilder();
-        List<TreeNode> trees = builder.bulid(list);
+        List<TreeNode> trees = builder.build(list);
         System.out.println(trees);
         
         System.out.println("*********************");

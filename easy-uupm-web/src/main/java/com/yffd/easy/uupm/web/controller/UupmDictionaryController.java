@@ -1,5 +1,8 @@
 package com.yffd.easy.uupm.web.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,8 +18,11 @@ import com.yffd.easy.common.core.page.PageResult;
 import com.yffd.easy.common.core.util.EasyStringCheckUtils;
 import com.yffd.easy.framework.domain.RespModel;
 import com.yffd.easy.framework.web.view.vo.DataGridVO;
+import com.yffd.easy.uupm.api.model.UupmDataCategoryModel;
 import com.yffd.easy.uupm.api.model.UupmDictionaryModel;
 import com.yffd.easy.uupm.service.UupmDictionaryService;
+import com.yffd.easy.uupm.web.support.UupmDictionarySupport;
+import com.yffd.easy.uupm.web.vo.UupmDictionaryTreeVO;
 
 
 /**
@@ -33,13 +39,29 @@ public class UupmDictionaryController extends UupmBaseController {
 
 	@Autowired
 	private UupmDictionaryService uupmDictionaryService;
+	@Autowired
+	private UupmDictionarySupport uupmDictionarySupport;
 	
-	@RequestMapping(value="/findPage", method=RequestMethod.POST)
-	public RespModel findPage(@RequestParam Map<String, Object> paramMap) {
-		PageParam pageParam = this.getPageParam(paramMap);
-		PageResult<UupmDictionaryModel> pageResult = this.uupmDictionaryService.findPage(paramMap, pageParam);
-		DataGridVO dataGridVO = this.toDataGrid(pageResult);
-		return this.successAjax(dataGridVO);
+	@RequestMapping(value="/listCategory", method=RequestMethod.POST)
+	public RespModel listCategory(@RequestParam Map<String, Object> paramMap) {
+		List<UupmDictionaryModel> result = this.uupmDictionaryService.findChildrenListForCategory("CATEGORY");
+		if(null!=result && !result.isEmpty()) {
+			List<UupmDictionaryTreeVO> treeList = this.uupmDictionarySupport.toSyncTreeVO(result, null);
+			return this.successAjax(treeList);
+		}
+		return this.successAjax();
+	}
+	
+	@RequestMapping(value="/listDictTree", method=RequestMethod.POST)
+	public RespModel listDictTree(@RequestParam Map<String, Object> paramMap) {
+		String parentCode = (String) paramMap.get("parentCode");
+		if(null==parentCode || EasyStringCheckUtils.isEmpty(parentCode)) return this.error("参数无效");
+		List<UupmDictionaryModel> result = this.uupmDictionaryService.findChildrenListForDict(parentCode);
+		if(null!=result && !result.isEmpty()) {
+			List<UupmDictionaryTreeVO> treeList = this.uupmDictionarySupport.toSyncTreeVO(result, parentCode);
+			return this.successAjax(treeList);
+		}
+		return this.successAjax();
 	}
 	
 	@RequestMapping(value="/findOne", method=RequestMethod.POST)
@@ -49,10 +71,36 @@ public class UupmDictionaryController extends UupmBaseController {
 		return this.successAjax(result);
 	}
 	
-	@RequestMapping(value="/add", method=RequestMethod.POST)
-	public RespModel add(UupmDictionaryModel model) {
-		if(null==model) return this.error("参数无效");
-		this.uupmDictionaryService.addOne(model, null);
+	@RequestMapping(value="/addCategory", method=RequestMethod.POST)
+	public RespModel addCategory(UupmDictionaryModel model) {
+		if(null==model || EasyStringCheckUtils.isEmpty(model.getItemCode())) return this.error("参数无效");
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("itemCode", model.getItemCode());
+		UupmDictionaryModel result = this.uupmDictionaryService.findOne(paramMap);
+		if(null!=result) return this.error("编号已存在");
+		this.uupmDictionaryService.addCategory(model, null);
+		return this.successAjax();
+	}
+	
+	@RequestMapping(value="/addDict", method=RequestMethod.POST)
+	public RespModel addDict(UupmDictionaryModel model) {
+		if(null==model || EasyStringCheckUtils.isEmpty(model.getItemCode())) return this.error("参数无效");
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("itemCode", model.getItemCode());
+		UupmDictionaryModel result = this.uupmDictionaryService.findOne(paramMap);
+		if(null!=result) return this.error("编号已存在");
+		this.uupmDictionaryService.addDict(model, null);
+		return this.successAjax();
+	}
+	
+	@RequestMapping(value="/addChildDict", method=RequestMethod.POST)
+	public RespModel addChildDict(UupmDictionaryModel model) {
+		if(null==model || EasyStringCheckUtils.isEmpty(model.getItemCode())) return this.error("参数无效");
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("itemCode", model.getItemCode());
+		UupmDictionaryModel result = this.uupmDictionaryService.findOne(paramMap);
+		if(null!=result) return this.error("编号已存在");
+		this.uupmDictionaryService.addChildDict(model, null);
 		return this.successAjax();
 	}
 	
@@ -66,10 +114,24 @@ public class UupmDictionaryController extends UupmBaseController {
 	}
 	
 	@RequestMapping(value="/del", method=RequestMethod.POST)
-	public RespModel del(HttpServletRequest req) {
-		String id = req.getParameter("id");
-		if(EasyStringCheckUtils.isEmpty(id)) return this.errorAjax("参数无效");
-		this.uupmDictionaryService.delById(id);
+	public RespModel del(String itemCodes) {
+		if(EasyStringCheckUtils.isEmpty(itemCodes)) return this.error("参数无效");
+		if(itemCodes.indexOf(",")!=-1) {
+			List<UupmDictionaryModel> list = new ArrayList<UupmDictionaryModel>();
+			String[] arr = itemCodes.split(",");
+			for(String code : arr) {
+				UupmDictionaryModel model = new UupmDictionaryModel();
+				model.setItemCode(code);
+				list.add(model);
+			}
+			Map<String, Object> paramMap = new HashMap<String, Object>();
+			paramMap.put("modelList", list);
+			this.uupmDictionaryService.delBy(paramMap);
+		} else {
+			Map<String, Object> paramMap = new HashMap<String, Object>();
+			paramMap.put("itemCode", itemCodes);
+			this.uupmDictionaryService.delBy(paramMap);
+		}
 		return this.successAjax();
 	}
 }

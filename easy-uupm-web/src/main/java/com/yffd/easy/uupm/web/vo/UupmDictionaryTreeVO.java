@@ -1,40 +1,59 @@
-/**
- * @Copyright: Copyright (c) 2018
- * @Author:  ZhangST
- * @version 1.0
-*/
+package com.yffd.easy.uupm.web.vo;
 
-package com.yffd.easy.uupm.api.model;
-
-import com.yffd.easy.framework.domain.GenericPO;
+import com.yffd.easy.common.core.tree.TreeNode;
 
 /**
- * 
- * @Description  字典信息.
- * @Date		 2018年2月1日 上午9:33:03 <br/>
+ * @Description  简单描述该类的功能（可选）.
+ * @Date		 2018年2月28日 下午4:57:37 <br/>
  * @author       zhangST
  * @version		 1.0
  * @since		 JDK 1.7+
- * @see
+ * @see 	 
  */
-public class UupmDictionaryModel extends GenericPO {
-   
-	private static final long serialVersionUID = -3027407448427505570L;
-	private String tenantCode;		//租户编号
+public class UupmDictionaryTreeVO extends TreeNode {
+	private String text;
+	private String iconCls = "icon-save";
+	private String state = "closed";	//closed、open
+	private boolean checked = false;
+
+	private String id;
 	private String itemName;		//项名称
 	private String itemCode; 		//项编号
 	private String parentCode;		//父项编号
-	private String dataPath;		//数据路径，用点（.）分隔
 	private String dataLabel;		//数据标签：主要用于查询tree（包括其下的所有子节点），一般是数据范围的子集
 	private String dataScope;		//数据范围，CATEGORY、DICT等
 	private Integer seqNo;			//序号
 	private String remark;			//备注
 	
-	public String getTenantCode() {
-		return tenantCode;
+	public String getText() {
+		return text;
 	}
-	public void setTenantCode(String tenantCode) {
-		this.tenantCode = tenantCode;
+	public void setText(String text) {
+		this.text = text;
+	}
+	public String getIconCls() {
+		return iconCls;
+	}
+	public void setIconCls(String iconCls) {
+		this.iconCls = iconCls;
+	}
+	public String getState() {
+		return state;
+	}
+	public void setState(String state) {
+		this.state = state;
+	}
+	public boolean isChecked() {
+		return checked;
+	}
+	public void setChecked(boolean checked) {
+		this.checked = checked;
+	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
 	}
 	public String getItemName() {
 		return itemName;
@@ -53,12 +72,6 @@ public class UupmDictionaryModel extends GenericPO {
 	}
 	public void setParentCode(String parentCode) {
 		this.parentCode = parentCode;
-	}
-	public String getDataPath() {
-		return dataPath;
-	}
-	public void setDataPath(String dataPath) {
-		this.dataPath = dataPath;
 	}
 	public String getDataLabel() {
 		return dataLabel;
@@ -86,3 +99,4 @@ public class UupmDictionaryModel extends GenericPO {
 	}
 	
 }
+

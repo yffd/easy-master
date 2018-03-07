@@ -12,41 +12,45 @@ import java.util.List;
  */
 public class TreeNode {
 
-	private String id;
-	private String pid;
+	private String id_;
+	private String pid_;
     private List<TreeNode> children;
     
     public TreeNode() {
+    }
+    
+    public TreeNode(String id_, String pid_) {
+        this.id_ = id_;
+        this.pid_ = pid_;
+    }
+    
+	public String getId_() {
+		return id_;
+	}
 
-    }
-    
-    public TreeNode(String id, String pid) {
-        this.id = id;
-        this.pid = pid;
-    }
-    
-	public String getId() {
-		return id;
+	public void setId_(String id_) {
+		this.id_ = id_;
 	}
-	public void setId(String id) {
-		this.id = id;
+
+	public String getPid_() {
+		return pid_;
 	}
-	public String getPid() {
-		return pid;
+
+	public void setPid_(String pid_) {
+		this.pid_ = pid_;
 	}
-	public void setPid(String pid) {
-		this.pid = pid;
-	}
+
 	public List<TreeNode> getChildren() {
 		return children;
 	}
+
 	public void setChildren(List<TreeNode> children) {
 		this.children = children;
 	}
 
 	@Override
 	public String toString() {
-		return "TreeNode [id=" + id + ", pid=" + pid + "]";
+		return "TreeNode [id_=" + id_ + ", pid_=" + pid_ + "]";
 	}
 
 }

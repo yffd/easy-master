@@ -19,7 +19,17 @@ $(function() {
 			result = $.parseJSON(result);
 			if(result.status=='OK') {
 				parent.$.modalDialog.handler.dialog('close');//打开此窗口时预定义的对象
-				parent.$.modalDialog.openner.datagrid('reload');//打开此窗口时预定义的对象
+				
+				var dictionary_parentCode = parent.$.modalDialog.openner_dictionary_pcode;
+				parent.$.modalDialog.openner_dictionary_pcode=undefined;
+				if(dictionary_parentCode) {
+					$.post('uupm/dictionary/listDictTree', {'parentCode':dictionary_parentCode}, function(result) {
+						console.info("vvvvvvv");
+						parent.$.modalDialog.openner_dictionary.treegrid('loadData', result);//打开此窗口时预定义的对象
+					}, 'json');
+				} else {
+					parent.$.modalDialog.openner.treegrid('reload');//打开此窗口时预定义的对象
+				}
 			}
 			parent.$.modalDialog.openWindow.$.messager.show({
 				title :commonui.msg_title,
@@ -33,40 +43,27 @@ $(function() {
 <div class="easyui-layout" data-options="fit:true,border:false">
 	<div data-options="region:'center',border:false" class="edit-form-div">
 		<form id="form_id" method="post" style="width:100%;height:100%;">
-			<input name="id" value="" type="hidden"/>
+			<input type="hidden" name="dataScope" value=""/>
+			<input type="hidden" name="id" value=""/>
+			<input type="hidden" name="parentCode" value="-1"/>
 			<fieldset>
 				<table class="edit-form-table">
 					<tr>
-						<th>租户编号：</th>
-						<td><input id="tenantCode_id" name="tenantCode" class="easyui-textbox easyui-validatebox" required="required" placeholder="请输入编号"/></td>
-						<th>租户名称：</th>
-						<td><input name="tenantName" class="easyui-textbox easyui-validatebox" required="required" placeholder="请输入名称" /></td>
+						<th>名称：</th>
+						<td><input name="itemName" class="easyui-textbox easyui-validatebox" required="required" placeholder="请输入名称" /></td>
+						<th>编号：</th>
+						<td><input id="itemCode_id" name="itemCode" class="easyui-textbox easyui-validatebox" required="required" placeholder="请输入编号"/></td>
 					</tr>
 					<tr>
-						<th>类型：</th>
-						<td><input id="tenantType_id" name="tenantType" type="text"/></td>
-						<th>状态：</th>
-						<td>
-							<input id="tenantStatus_id" name="tenantStatus" type="text" />
-						</td>
+						<th>序号：</th>
+						<td><input name="seqNo" type="text" class="easyui-numberspinner" value="1" data-options="min:0,precision:0"/></td>
+						<th></th>
+						<td></td>
 					</tr>
-					<tr>
-						<th>服务方式：</th>
-						<td>
-							<input id="serveType_id" name="serveType" type="text" />
-						</td>
-						<th></th><td></td>
+				 	<tr>
+						<th>描述：</th>
+						<td colspan="3"><textarea name="remark" class="easyui-textbox" style="width:600px;height:80px;"></textarea></td>
 					</tr>
-					<tr>
-						<th>服务开始时间：</th>
-						<td>
-							<input type="text" name="startTime" id="startTime" class="Wdate" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:'#F{$dp.$D(\'endTime\',{d:0});}'})"/>
-						</td>
-						<th>服务结束时间：</th><td>
-							<input type="text" name="endTime" id="endTime" class="Wdate" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'startTime\',{d:0});}'})"/>
-						</td>
-					</tr>
-					 
 				</table>
 			</fieldset>
 		</form>
