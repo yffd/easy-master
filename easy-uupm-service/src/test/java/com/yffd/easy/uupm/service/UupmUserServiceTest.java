@@ -204,19 +204,19 @@ public class UupmUserServiceTest extends UupmBaseServiceTest {
 	public void delByTest() {
 		UupmUserModel model = new UupmUserModel();
 		model.setId("2000");
-		this.uupmUserService.delBy(model);
+		this.uupmUserService.delBy(model, null);
 
 		/*******************************/
 		
 //		Map<String, Object> paramMap = new HashMap<String, Object>();
 //		paramMap.put("id", "2001");
-//		this.uupmUserService.delBy(paramMap);
+//		this.uupmUserService.delBy(paramMap, null);
 	}
 	
 	@Test
 	public void delByIdTest() {
 		String id = "2110";
-		this.uupmUserService.delById(id);
+		this.uupmUserService.delById(id, null);
 	}
 	
 	@Test
@@ -226,12 +226,12 @@ public class UupmUserServiceTest extends UupmBaseServiceTest {
 		for(int i=0;i<2;i++) {
 			list.add((startId+i) + "");
 		}
-		this.uupmUserService.delByIds(list);
+		this.uupmUserService.delByIds(list, null);
 		
 		/*******************************/
 		
 //		String ids = "2011,2012";
-//		this.uupmUserService.delByIds(ids);
+//		this.uupmUserService.delByIds(ids, null);
 		
 	}
 	

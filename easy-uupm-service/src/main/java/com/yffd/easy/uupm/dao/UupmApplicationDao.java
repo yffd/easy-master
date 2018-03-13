@@ -1,13 +1,13 @@
 package com.yffd.easy.uupm.dao;
 
 import org.springframework.stereotype.Repository;
-import com.yffd.easy.uupm.api.model.UupmUserModel;
+import com.yffd.easy.uupm.api.model.UupmApplicationModel;
 
 import com.yffd.easy.uupm.base.UupmBaseDao;
 
 /**
  * @Description	简单描述该类的功能（可选）.
- * @Date		2018年03月12日 17时44分25秒 <br/>
+ * @Date		2018年03月08日 14时03分16秒 <br/>
  * @author		ZhangST
  * @version		1.0
  * @since		JDK 1.7+
@@ -15,6 +15,6 @@ import com.yffd.easy.uupm.base.UupmBaseDao;
  */
 
 @Repository
-public class UupmUserDao extends UupmBaseDao<UupmUserModel> {
+public class UupmApplicationDao extends UupmBaseDao<UupmApplicationModel> {
 
 }

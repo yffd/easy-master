@@ -203,8 +203,36 @@ public class SqlCodeGenerator extends CodeGenerator {
 		String conditionsWhere = this.makeConditionsWhere(modelClazz, null, null, false);
 		StringBuilder sb = new StringBuilder();
 		sb.append("<where>").append("\r\n");
-		sb.append(conditionsWhere);
-		sb.append("\r\n").append("</where>");
+		sb.append(conditionsWhere).append("\r\n");
+		sb.append("\r\n");
+		sb.append("<!-- 防止没有参数传递，导致全部删除 -->").append("\r\n");
+		sb.append("or 1=2").append("\r\n");
+		sb.append("</where>");
+		
+		return sb.toString();
+	}
+	
+	/**
+	 * 生成删除：可以带in条件
+	 * @Date	2018年2月1日 下午5:28:40 <br/>
+	 * @author  zhangST
+	 * @param modelClazz
+	 * @return
+	 */
+	public String makeDeleteWithInBy(Class<?> modelClazz) {
+		String conditionsWhere = this.makeConditionsWhere(modelClazz, null, null, false);
+		String makeForeach = this.makeForeach(modelClazz, null, null);
+		StringBuilder sb = new StringBuilder();
+		sb.append("<where>").append("\r\n");
+		sb.append(conditionsWhere).append("\r\n");
+		if(null!=makeForeach) {
+			sb.append("\r\n");
+			sb.append("<!-- 批量处理拼写，要求List集合的值能转换成map形式 -->").append("\r\n");
+			sb.append(makeForeach).append("\r\n");
+		}
+		sb.append("<!-- 防止没有参数传递，导致全部删除 -->").append("\r\n");
+		sb.append("or 1=2").append("\r\n");
+		sb.append("</where>");
 		
 		return sb.toString();
 	}
@@ -379,6 +407,60 @@ public class SqlCodeGenerator extends CodeGenerator {
 		return sb.toString();
 	}
 	
+	protected String makeForeach(Class<?> modelClazz, String tableAliasName, String parameterAliasName) {
+		LinkedHashMap<String, Class<?>> propsMap = this.sortPropsName(modelClazz);
+		if(null==propsMap || propsMap.size()==0) return null;
+		
+		StringBuilder sb = new StringBuilder();
+		for(Iterator<Entry<String, Class<?>>> it = propsMap.entrySet().iterator();it.hasNext();) {
+			Entry<String, Class<?>> entry = (Entry<String, Class<?>>)it.next();
+			String propName = entry.getKey();
+			String columnName = this.name2column(propName);
+			if(null==columnName || "".equals(columnName)) continue;
+			
+			if(null!=tableAliasName && !"".equals(tableAliasName)) {
+				columnName = tableAliasName + "." + columnName;
+			}
+			String parameterName = propName;
+			if(null!=parameterAliasName && !"".equals(parameterAliasName)) {
+				parameterName = parameterAliasName + "." + parameterName;
+			}
+			if("version".equals(propName)) {
+				
+			} else if("delFlag".equals(propName)) {
+				
+			} else if("createBy".equals(propName)) {
+				
+			} else if("createTime".equals(propName)) {
+				
+			} else if("updateBy".equals(propName)) {
+				
+			} else if("updateTime".equals(propName)) {
+				
+			} else if(propName.matches(".*(?i)remark.*")) {
+				
+			} else {
+				sb.append("<if test=\""+propName+"List != null and "+propName+"List.size()>0\">").append("\r\n");
+				sb.append("and ").append(columnName).append(" in ")
+				.append("<foreach item=\"item\" index=\"index\" collection=\""+propName+"List\" open=\"(\" separator=\",\" close=\")\">")
+				.append("#{item."+propName+"}").append("</foreach>").append("\r\n");
+				sb.append("</if>").append("\r\n");
+			}
+			
+			// .*(?i)code.*
+//			if(propName.matches(columnNameMatch)) {
+//				sb.append("<!-- 批量处理拼写 -->").append("\r\n");
+//				sb.append("<if test=\"paramList != null and paramList.size()>0\">").append("\r\n");
+//				sb.append("and ").append(columnName).append(" in ")
+//				.append("<foreach item=\"item\" index=\"index\" collection=\"paramListForBatch\" open=\"(\" separator=\",\" close=\")\">")
+//				.append("#{item."+propName+"}").append("</foreach>").append("\r\n");
+//				sb.append("</if>").append("\r\n");
+//				return sb.toString();
+//			}
+		}
+		return sb.toString();
+	}
+	
 	protected LinkedHashMap<String, Class<?>> getPropsName(Class<?> modelClazz) {
 		try {
 			LinkedHashMap<String, Class<?>> propsMap = new LinkedHashMap<String, Class<?>>();
@@ -458,15 +540,21 @@ public class SqlCodeGenerator extends CodeGenerator {
 		System.out.println(">>>>>>>>>>>>>>>>>>>end::makeDeleteBy");
 		System.out.println();
 		
-		String result7 = generator.makeInsertBatch(modelClass);
-		System.out.println(">>>>>>>>>>>>>>>>>>>start::makeInsertBatch");
+		String result7 = generator.makeDeleteWithInBy(modelClass);
+		System.out.println(">>>>>>>>>>>>>>>>>>>start::deleteWithInBy");
 		System.out.println(result7);
+		System.out.println(">>>>>>>>>>>>>>>>>>>end::deleteWithInBy");
+		System.out.println();
+		
+		String result8 = generator.makeInsertBatch(modelClass);
+		System.out.println(">>>>>>>>>>>>>>>>>>>start::makeInsertBatch");
+		System.out.println(result8);
 		System.out.println(">>>>>>>>>>>>>>>>>>>end::makeInsertBatch");
 		System.out.println();
 		
-		String result8 = generator.makeUpdateBatch(modelClass);
+		String result9 = generator.makeUpdateBatch(modelClass);
 		System.out.println(">>>>>>>>>>>>>>>>>>>start::makeUpdateBatch");
-		System.out.println(result8);
+		System.out.println(result9);
 		System.out.println(">>>>>>>>>>>>>>>>>>>end::makeUpdateBatch");
 		System.out.println();
 		

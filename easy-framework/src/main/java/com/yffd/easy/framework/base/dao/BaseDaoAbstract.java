@@ -1,10 +1,14 @@
 package com.yffd.easy.framework.base.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.ibatis.session.SqlSession;
 
 import com.yffd.easy.common.core.converter.EasyModelConverter;
+import com.yffd.easy.common.core.exception.EasyDaoException;
 
 /**
  * @Description  持久化常用操作类.
@@ -38,12 +42,10 @@ public abstract class BaseDaoAbstract extends EasyModelConverter {
     /** mapper xml 中的SQL ID，即statement=updateBatch */
     public static final String SQL_UPDATE_BATCH = "updateBatch";
     
-    /** mapper xml 中的SQL ID，即statement=deleteById */
-    public static final String SQL_DELETE_BY_ID = "deleteById";
-    /** mapper xml 中的SQL ID，即statement=deleteByIds */
-    public static final String SQL_DELETE_BY_IDS = "deleteByIds";
     /** mapper xml 中的SQL ID，即statement=deleteBy */
     public static final String SQL_DELETE_BY = "deleteBy";
+    /** mapper xml 中的SQL ID，即statement=deleteWithInBy */
+    public static final String SQL_DELETE_WITH_IN_BY = "deleteWithInBy";
     
     public abstract SqlSession getSqlSession();
     
@@ -63,10 +65,6 @@ public abstract class BaseDaoAbstract extends EasyModelConverter {
         return this.getSqlSession().selectList(getStatement(SQL_SELECT_LIST_BY_IDS), parameter);
 	}
 
-	protected <T> List<T> selectAll() {
-		return this.selectListBy_(null);
-	}
-	
 	protected <T> T selectOne_(Object parameter) {
 		return this.getSqlSession().selectOne(getStatement(SQL_SELECT_ONE_BY), parameter);
 	}
@@ -87,18 +85,28 @@ public abstract class BaseDaoAbstract extends EasyModelConverter {
 		return this.getSqlSession().update(getStatement(SQL_UPDATE_BATCH), parameter);
 	}
 
-	protected int deleteById_(String id) {
-		return this.getSqlSession().delete(getStatement(SQL_DELETE_BY_ID), id);
-	}
-
-	protected int deleteByIds_(List<String> list) {
-		return this.getSqlSession().delete(getStatement(SQL_DELETE_BY_IDS), list);
-	}
-
 	protected int deleteBy_(Object parameter) {
 		return this.getSqlSession().delete(getStatement(SQL_DELETE_BY), parameter);
 	}
-
+	
+	/**
+	 * 
+	 * @Date	2018年3月12日 下午4:41:04 <br/>
+	 * @author  zhangST
+	 * @param paramMap		可以为空
+	 * @param inMap			不可以为空，key in ( objList )
+	 * @return
+	 */
+	public int deleteWithInBy_(Map<String, Object> paramMap, Map<String, Object> inMap) {
+		if(null==inMap || inMap.size()==0) throw EasyDaoException.DB_DELETE_NULL(getStatement(SQL_DELETE_WITH_IN_BY));
+		if(null==paramMap || paramMap.size()==0) paramMap = new HashMap<String, Object>();
+		Set<String> keys = inMap.keySet();
+		for(String key : keys) {
+			paramMap.put(key + "List", inMap.get(key));
+		}
+		return this.getSqlSession().delete(getStatement(SQL_DELETE_WITH_IN_BY), paramMap);
+	}
+	
 	protected String getStatement(String sqlId) {
 		String name = this.getClass().getName();
         // 单线程用StringBuilder，确保速度；多线程用StringBuffer,确保安全

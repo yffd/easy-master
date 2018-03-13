@@ -38,7 +38,8 @@ public class GenericDao<PO> extends CommonDao {
 	 * @return
 	 */
 	public Long selectCountBy(PO model) {
-		return super.selectCountBy_(model);
+		Map<String, Object> paramMap = this.model2map(model, null);
+		return super.selectCountBy(paramMap);
 	}
 	
 	/**
@@ -65,7 +66,8 @@ public class GenericDao<PO> extends CommonDao {
 	 * @return
 	 */
 	public List<?> selectListBy(PO model) {
-		return super.selectListBy_(model);
+		Map<String, Object> paramMap = this.model2map(model, null);
+		return super.selectListBy(paramMap);
 	}
 
 	/**
@@ -78,7 +80,8 @@ public class GenericDao<PO> extends CommonDao {
 	 */
 	public PO selectOne(PO model) {
 		if(null==model) return null;
-		return super.selectOne_(model);
+		Map<String, Object> paramMap = this.model2map(model, null);
+		return super.selectOne(paramMap);
 	}
 
 	/**
@@ -91,8 +94,9 @@ public class GenericDao<PO> extends CommonDao {
 	 */
 	public int insertOne(PO model) {
 		if(null==model) throw EasyDaoException.DB_INSERT_NULL(getStatement(SQL_INSERT_ONE));
-		int result = super.insertOne_(model);
-        if(result <= 0) throw EasyDaoException.DB_INSERT_RESULT_0(getStatement(SQL_INSERT_ONE));
+		Map<String, Object> paramMap = this.model2map(model, null);
+		int result = super.insertOne(paramMap);
+//        if(result <= 0) throw EasyDaoException.DB_INSERT_RESULT_0(getStatement(SQL_INSERT_ONE));
         return result;
 	}
 
@@ -106,8 +110,9 @@ public class GenericDao<PO> extends CommonDao {
 	 */
 	public int updateBy(PO model) {
 		if(null==model) throw EasyDaoException.DB_UPDATE_NULL(getStatement(SQL_UPDATE_BY));
-        int result = super.updateBy_(model);
-        if(result <= 0) throw EasyDaoException.DB_UPDATE_RESULT_0(getStatement(SQL_UPDATE_BY));
+		Map<String, Object> paramMap = this.model2map(model, null);
+        int result = super.updateBy(paramMap);
+//        if(result <= 0) throw EasyDaoException.DB_UPDATE_RESULT_0(getStatement(SQL_UPDATE_BY));
         return result;
 	}
 
@@ -121,10 +126,11 @@ public class GenericDao<PO> extends CommonDao {
 	 */
 	public int deleteBy(PO model) {
 		if(null==model) throw EasyDaoException.DB_DELETE_NULL(getStatement(SQL_DELETE_BY));
-		int result = super.deleteBy_(model);
-		if(result <= 0) throw EasyDaoException.DB_DELETE_RESULT_0(getStatement(SQL_DELETE_BY));
+		Map<String, Object> paramMap = this.model2map(model, null);
+		int result = super.deleteBy(paramMap);
+//		if(result <= 0) throw EasyDaoException.DB_DELETE_RESULT_0(getStatement(SQL_DELETE_BY));
         return result;
 	}
-
+	
 }
 

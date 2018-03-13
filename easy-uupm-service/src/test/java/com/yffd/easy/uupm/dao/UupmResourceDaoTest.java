@@ -1,4 +1,4 @@
-package ##dao_package_name##;
+package com.yffd.easy.uupm.dao;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,30 +11,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.yffd.easy.common.core.page.PageParam;
 import com.yffd.easy.common.core.page.PageResult;
-import ##import_model_name##;
-##import_base_dao_name##
+import com.yffd.easy.uupm.api.model.UupmResourceModel;
+import com.yffd.easy.uupm.base.UupmBaseDaoTest;
 
 /**
  * @Description	简单描述该类的功能（可选）.
- * @Date		##date## <br/>
- * @author		##author##
+ * @Date		2018年03月08日 15时17分17秒 <br/>
+ * @author		ZhangST
  * @version		1.0
  * @since		JDK 1.7+
  * @see
  */
-public class ##test_dao_name## ##test_base_dao_name##{
+public class UupmResourceDaoTest extends UupmBaseDaoTest {
 
 	@Autowired
-	private ##dao_name## dao;
+	private UupmResourceDao dao;
 
 	@Override
 	public Class<?> getModelClass() {
-		return ##model_class_name##;
+		return UupmResourceModel.class;
 	}
 
 	@Test
 	public void selectCountByTest() {
-		##model_simple_name## model = new ##model_simple_name##();
+		UupmResourceModel model = new UupmResourceModel();
 		long result = this.dao.selectCountBy(model);
 		System.out.println(result);
 		
@@ -46,12 +46,12 @@ public class ##test_dao_name## ##test_base_dao_name##{
 	@Test
 	public void selectPageTest() {
 		PageParam pageParam = new PageParam(1L, 10L);
-		##model_simple_name## model = new ##model_simple_name##();
+		UupmResourceModel model = new UupmResourceModel();
 		if(null!=model) {
-			PageResult<##model_simple_name##> pageResult = (PageResult<##model_simple_name##>) this.dao.selectPage(model, pageParam);
+			PageResult<UupmResourceModel> pageResult = (PageResult<UupmResourceModel>) this.dao.selectPage(model, pageParam);
 			
 //			Map<String, Object> paramMap = this.dao.model2map(model, null);
-//			PageResult<##model_simple_name##> pageResult = (PageResult<##model_simple_name##>) this.dao.selectPage(paramMap, pageParam);
+//			PageResult<UupmResourceModel> pageResult = (PageResult<UupmResourceModel>) this.dao.selectPage(paramMap, pageParam);
 			
 			Assert.assertNotNull(pageResult);
 			Assert.assertNotNull(pageResult.getRecordList());
@@ -66,27 +66,27 @@ public class ##test_dao_name## ##test_base_dao_name##{
 	
 	@Test
 	public void selectListByTest() {
-		##model_simple_name## model = new ##model_simple_name##();
-		List<##model_simple_name##> resultList = (List<##model_simple_name##>) this.dao.selectListBy(model);
+		UupmResourceModel model = new UupmResourceModel();
+		List<UupmResourceModel> resultList = (List<UupmResourceModel>) this.dao.selectListBy(model);
 		
 //		Map<String, Object> paramMap = this.dao.model2map(model, null);
-//		List<##model_simple_name##> resultList = (List<##model_simple_name##>) this.dao.selectListBy(paramMap);
+//		List<UupmResourceModel> resultList = (List<UupmResourceModel>) this.dao.selectListBy(paramMap);
 		
 		Assert.assertNotNull(resultList);
 		System.out.println(resultList.size());
-		for(##model_simple_name## tmp : resultList) {
+		for(UupmResourceModel tmp : resultList) {
 			System.out.println(tmp.getId());
 		}
 	}
 	
 	@Test
 	public void selectOneTest() {
-		##model_simple_name## model = new ##model_simple_name##();
+		UupmResourceModel model = new UupmResourceModel();
 		model.setId(2000+"");
-		##model_simple_name## result = this.dao.selectOne(model);
+		UupmResourceModel result = this.dao.selectOne(model);
 		
 //		Map<String, Object> paramMap = this.dao.model2map(model, null);
-//		##model_simple_name## result = this.dao.selectOne(paramMap);
+//		UupmResourceModel result = this.dao.selectOne(paramMap);
 		
 		Assert.assertNotNull(result);
 		System.out.println(result);
@@ -94,7 +94,7 @@ public class ##test_dao_name## ##test_base_dao_name##{
 	
 	@Test
 	public void insertOneTest() {
-		##model_simple_name## model = (##model_simple_name##) this.getRandomModel();
+		UupmResourceModel model = (UupmResourceModel) this.getRandomModel();
 		int result = this.dao.insertOne(model);
 		
 //		Map<String, Object> paramMap = this.dao.model2map(model, null);
@@ -105,7 +105,7 @@ public class ##test_dao_name## ##test_base_dao_name##{
 	
 	@Test
 	public void updateByTest() {
-		##model_simple_name## model = new ##model_simple_name##();
+		UupmResourceModel model = new UupmResourceModel();
 		model.setId(2000+"");
 		int result = this.dao.updateBy(model);
 		
@@ -117,7 +117,7 @@ public class ##test_dao_name## ##test_base_dao_name##{
 	
 	@Test
 	public void deleteByTest() {
-		##model_simple_name## model = new ##model_simple_name##();
+		UupmResourceModel model = new UupmResourceModel();
 		model.setId(2000+"");
 		int result = this.dao.deleteBy(model);
 		
@@ -127,40 +127,19 @@ public class ##test_dao_name## ##test_base_dao_name##{
 		System.out.println(result);
 	}
 	
-	@Test
-	public void deleteWithInByTest() {
-		String inName = "id";
-		List<Map<String, Object>> inValueList = new ArrayList<Map<String, Object>>();
-		for(int i=0;i<5;i++) {
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put(inName, "200"+i);
-			inValueList.add(map);
-		}
-//		int result = this.dao.deleteWithInBy(inName, inValueList);
-		
-//		System.out.println(result);
-		
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("id", "2000");
-		int result2 = this.dao.deleteWithInBy(paramMap, inName, inValueList);
-		
-		System.out.println(result2);
-		
-	}
-	
 	/**********************************************************************/
 	
 	@Test
 	public void insertBatchTest() {
-		List<##model_simple_name##> models = (List<##model_simple_name##>) this.getRandomModelList();
+		List<UupmResourceModel> models = (List<UupmResourceModel>) this.getRandomModelList();
 		this.dao.insertBatch(models);
 	}
 
 	@Test
 	public void updateBatchTest() {
 		int i = 2001;
-		List<##model_simple_name##> models = (List<##model_simple_name##>) this.getRandomModelList();
-		for(##model_simple_name## model : models) {
+		List<UupmResourceModel> models = (List<UupmResourceModel>) this.getRandomModelList();
+		for(UupmResourceModel model : models) {
 			model.setId(""+i);
 			i++;
 		}
@@ -170,7 +149,7 @@ public class ##test_dao_name## ##test_base_dao_name##{
 	@Test
 	public void selectByIdTest() {
 		String id = "2001";
-		##model_simple_name## result = this.dao.selectById(id);
+		UupmResourceModel result = this.dao.selectById(id);
 		Assert.assertNotNull(result);
 		System.out.println(result);
 	}
@@ -181,20 +160,20 @@ public class ##test_dao_name## ##test_base_dao_name##{
 		for(int i=2001;i<2005;i++) {
 			list.add("" + i);
 		}
-		List<##model_simple_name##> result = (List<##model_simple_name##>) this.dao.selectListByIds(list);
+		List<UupmResourceModel> result = (List<UupmResourceModel>) this.dao.selectListByIds(list);
 		Assert.assertNotNull(result);
 		System.out.println(result.size());
-		for(##model_simple_name## tmp : result) {
+		for(UupmResourceModel tmp : result) {
 			System.out.println(tmp);
 		}
 	}
 	
 	@Test
 	public void selectAllTest() {
-		List<##model_simple_name##> result = (List<##model_simple_name##>) this.dao.selectAll();
+		List<UupmResourceModel> result = (List<UupmResourceModel>) this.dao.selectAll();
 		Assert.assertNotNull(result);
 		System.out.println(result.size());
-		for(##model_simple_name## tmp : result) {
+		for(UupmResourceModel tmp : result) {
 			System.out.println(tmp);
 		}
 	}
@@ -209,22 +188,10 @@ public class ##test_dao_name## ##test_base_dao_name##{
 	@Test
 	public void deleteByIdsTest() {
 		List<String> list = new ArrayList<String>();
-		for(int i=2002;i<20016;i++) {
+		for(int i=2014;i<2016;i++) {
 			list.add("" + i);
 		}
 		int result = this.dao.deleteByIds(list);
-		System.out.println(result);
-	}
-	
-	@Test
-	public void deleteByInTest() {
-		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		for(int i=2014;i<2016;i++) {
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("id", "" + i);
-			list.add(map);
-		}
-		int result = this.dao.deleteByIn("id", list);
 		System.out.println(result);
 	}
 	

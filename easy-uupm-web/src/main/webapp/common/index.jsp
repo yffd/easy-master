@@ -88,7 +88,36 @@ function initMenu(){
 
 function initMenuLocal() {
 	var menuJson = [{
-		"id": "sys",
+		"id": "15",
+        "pid": "-1",
+        "text": "系统资源管理",
+        "children": [{
+        	"id": "sys-101",
+            "pid": "sys",
+            "text": "应用系统管理",
+            "state": "open",
+            "iconCls": "icon-sys",
+            "inUrl": "views/uupm/app/appMain.jsp",
+            "rsType": "M"
+        },{
+        	"id": "sys-102",
+            "pid": "sys",
+            "text": "应用资源管理",
+            "state": "open",
+            "iconCls": "icon-sys",
+            "inUrl": "views/uupm/resource/resourceMain.jsp",
+            "rsType": "M"
+        },{
+        	"id": "sys-103",
+            "pid": "sys",
+            "text": "资源授权管理",
+            "state": "open",
+            "iconCls": "icon-sys",
+            "inUrl": "views/uupm/tenant/tenantMain.jsp",
+            "rsType": "M"
+        }]
+	},{
+		"id": "16",
         "pid": "-1",
         "text": "租赁信息管理",
         "children": [{

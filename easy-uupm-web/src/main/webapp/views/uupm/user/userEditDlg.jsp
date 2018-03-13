@@ -46,11 +46,8 @@ $(function() {
 						<th>机构：</th>
 						<td><input id="orgCode_id" name="orgCode" class="easyui-textbox" required="required"/></td>
 						<th>账户状态：</th>
-						<td>
-							<input id="loginStatus_id" name="loginStatus" type="text" />
-						</td>
+						<td><input id="loginStatus_id" name="loginStatus" type="text" /></td>
 					</tr>
-					 
 				</table>
 			</fieldset>
 		</form>

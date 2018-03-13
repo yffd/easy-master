@@ -1,6 +1,6 @@
 package com.yffd.easy.uupm.web.vo;
 
-import com.yffd.easy.common.core.tree.TreeNode;
+import com.yffd.easy.framework.web.view.vo.ComboTreeVO;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -10,11 +10,7 @@ import com.yffd.easy.common.core.tree.TreeNode;
  * @since		 JDK 1.7+
  * @see 	 
  */
-public class UupmDictionaryTreeVO extends TreeNode {
-	private String text;
-	private String iconCls = "icon-save";
-	private String state = "closed";	//closed、open
-	private boolean checked = false;
+public class UupmDictionaryComboTreeVO extends ComboTreeVO {
 
 	private String id;
 	private String itemName;		//项名称
@@ -25,30 +21,6 @@ public class UupmDictionaryTreeVO extends TreeNode {
 	private Integer seqNo;			//序号
 	private String remark;			//备注
 	
-	public String getText() {
-		return text;
-	}
-	public void setText(String text) {
-		this.text = text;
-	}
-	public String getIconCls() {
-		return iconCls;
-	}
-	public void setIconCls(String iconCls) {
-		this.iconCls = iconCls;
-	}
-	public String getState() {
-		return state;
-	}
-	public void setState(String state) {
-		this.state = state;
-	}
-	public boolean isChecked() {
-		return checked;
-	}
-	public void setChecked(boolean checked) {
-		this.checked = checked;
-	}
 	public String getId() {
 		return id;
 	}

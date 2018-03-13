@@ -1,9 +1,10 @@
 package com.yffd.easy.uupm.web.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +17,7 @@ import com.yffd.easy.framework.domain.RespModel;
 import com.yffd.easy.uupm.api.model.UupmDictionaryModel;
 import com.yffd.easy.uupm.service.UupmDictionaryService;
 import com.yffd.easy.uupm.web.support.UupmDictionarySupport;
-import com.yffd.easy.uupm.web.vo.UupmDictionaryTreeVO;
+import com.yffd.easy.uupm.web.vo.UupmDictionaryComboTreeVO;
 
 
 /**
@@ -39,7 +40,7 @@ public class UupmDictionaryController extends UupmBaseController {
 	public RespModel listCategory(@RequestParam Map<String, Object> paramMap) {
 		List<UupmDictionaryModel> result = this.uupmDictionaryService.findChildrenListForCategory("CATEGORY");
 		if(null!=result && !result.isEmpty()) {
-			List<UupmDictionaryTreeVO> treeList = this.uupmDictionarySupport.toSyncTreeVO(result, null);
+			List<UupmDictionaryComboTreeVO> treeList = this.uupmDictionarySupport.toSyncTreeVO(result, null);
 			return this.successAjax(treeList);
 		}
 		return this.successAjax();
@@ -51,7 +52,7 @@ public class UupmDictionaryController extends UupmBaseController {
 		if(null==parentCode || EasyStringCheckUtils.isEmpty(parentCode)) return this.error("参数无效");
 		List<UupmDictionaryModel> result = this.uupmDictionaryService.findChildrenListForDict(parentCode);
 		if(null!=result && !result.isEmpty()) {
-			List<UupmDictionaryTreeVO> treeList = this.uupmDictionarySupport.toSyncTreeVO(result, parentCode);
+			List<UupmDictionaryComboTreeVO> treeList = this.uupmDictionarySupport.toSyncTreeVO(result, parentCode);
 			return this.successAjax(treeList);
 		}
 		return this.successAjax();
@@ -106,25 +107,19 @@ public class UupmDictionaryController extends UupmBaseController {
 		return this.successAjax();
 	}
 	
-	@RequestMapping(value="/del", method=RequestMethod.POST)
-	public RespModel del(String itemCodes) {
+	@RequestMapping(value="/delById", method=RequestMethod.POST)
+	public RespModel delById(String id) {
+		if(null==id || EasyStringCheckUtils.isEmpty(id)) return this.error("参数无效");
+		this.uupmDictionaryService.delById(id, null);
+		return this.successAjax();
+	}
+	
+	@RequestMapping(value="/delBatch", method=RequestMethod.POST)
+	public RespModel delBatch(HttpServletRequest req) {
+		String itemCodes = req.getParameter("itemCodes");
 		if(EasyStringCheckUtils.isEmpty(itemCodes)) return this.error("参数无效");
-		if(itemCodes.indexOf(",")!=-1) {
-			List<UupmDictionaryModel> list = new ArrayList<UupmDictionaryModel>();
-			String[] arr = itemCodes.split(",");
-			for(String code : arr) {
-				UupmDictionaryModel model = new UupmDictionaryModel();
-				model.setItemCode(code);
-				list.add(model);
-			}
-			Map<String, Object> paramMap = new HashMap<String, Object>();
-			paramMap.put("modelList", list);
-			this.uupmDictionaryService.delBy(paramMap);
-		} else {
-			Map<String, Object> paramMap = new HashMap<String, Object>();
-			paramMap.put("itemCode", itemCodes);
-			this.uupmDictionaryService.delBy(paramMap);
-		}
+		int result = this.uupmDictionaryService.deleteByIn("itemCode", itemCodes, null, null);
+		if(result==-1) return this.error("参数无效");
 		return this.successAjax();
 	}
 }

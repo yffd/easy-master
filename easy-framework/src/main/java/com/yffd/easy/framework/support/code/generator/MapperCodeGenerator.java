@@ -133,6 +133,24 @@ public class MapperCodeGenerator extends CodeGenerator {
 	}
 	
 	/**
+	 * 生成删除
+	 * @Date	2018年2月1日 下午5:28:40 <br/>
+	 * @author  zhangST
+	 * @param modelClazz
+	 * @return
+	 */
+	public String deleteWithInBy(Class<?> modelClazz) {
+		String tmp = this.sqlGenerator.makeDeleteWithInBy(modelClazz);
+		StringBuilder sb = new StringBuilder();
+		sb.append("<!-- 删除：可以带in条件 -->").append("\r\n");
+		sb.append("<delete id=\"deleteWithInBy\" parameterType=\"java.util.Map\">").append("\r\n");
+		sb.append("\t").append("delete from <include refid=\"table_name\" />").append("\r\n");
+		sb.append(this.strFmt(tmp, "\t"));
+		sb.append("</delete>");
+		return sb.toString();
+	}
+	
+	/**
 	 * 生成批量插入
 	 * @Date	2018年2月1日 下午5:36:37 <br/>
 	 * @author  zhangST

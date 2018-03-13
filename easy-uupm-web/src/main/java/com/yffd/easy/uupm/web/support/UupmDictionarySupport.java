@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import com.yffd.easy.common.core.tree.TreeBuilder;
 import com.yffd.easy.common.core.util.EasyStringCheckUtils;
 import com.yffd.easy.uupm.api.model.UupmDictionaryModel;
-import com.yffd.easy.uupm.web.vo.UupmDictionaryTreeVO;
+import com.yffd.easy.uupm.web.vo.UupmDictionaryComboTreeVO;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -29,11 +29,11 @@ public class UupmDictionarySupport {
 	 * @param list
 	 * @return
 	 */
-	public List<UupmDictionaryTreeVO> toSyncTreeVO(List<UupmDictionaryModel> list, String rootPid) {
+	public List<UupmDictionaryComboTreeVO> toSyncTreeVO(List<UupmDictionaryModel> list, String rootPid) {
 		if(null==list || list.isEmpty()) return null;
-		List<UupmDictionaryTreeVO> voList = new ArrayList<UupmDictionaryTreeVO>();
+		List<UupmDictionaryComboTreeVO> voList = new ArrayList<UupmDictionaryComboTreeVO>();
 		for(UupmDictionaryModel model : list) {
-			UupmDictionaryTreeVO vo = new UupmDictionaryTreeVO();
+			UupmDictionaryComboTreeVO vo = new UupmDictionaryComboTreeVO();
 			vo.setId_(model.getItemCode());			// treeNode:设置父子关系
 			vo.setPid_(model.getParentCode());		// treeNode:设置父子关系
 			vo.setText(model.getItemName());		// treeNode:设置文本
@@ -49,10 +49,10 @@ public class UupmDictionarySupport {
 			voList.add(vo);
 		}
 		if(null!=rootPid && !EasyStringCheckUtils.isEmpty(rootPid)) {
-			List<UupmDictionaryTreeVO> treeList = (List<UupmDictionaryTreeVO>) treeBuilder.buildByRecursive(voList, rootPid);
+			List<UupmDictionaryComboTreeVO> treeList = (List<UupmDictionaryComboTreeVO>) treeBuilder.buildByRecursive(voList, rootPid);
 			return treeList;
 		}
-		List<UupmDictionaryTreeVO> treeList = (List<UupmDictionaryTreeVO>) treeBuilder.buildByRecursive(voList);
+		List<UupmDictionaryComboTreeVO> treeList = (List<UupmDictionaryComboTreeVO>) treeBuilder.buildByRecursive(voList);
 //		if(null!=treeList && treeList.size()>0) {
 //			UupmDictionaryTreeVO first = treeList.get(0);
 //			first.setState("open");

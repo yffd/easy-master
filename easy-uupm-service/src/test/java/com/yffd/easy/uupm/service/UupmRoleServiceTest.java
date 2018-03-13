@@ -1,4 +1,4 @@
-package ##service_package_name##;
+package com.yffd.easy.uupm.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,21 +12,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.yffd.easy.common.core.page.PageParam;
 import com.yffd.easy.common.core.page.PageResult;
 import com.yffd.easy.framework.domain.LoginInfo;
-import ##import_model_full_name##;
-import ##import_test_base_service_full_name##;
+import com.yffd.easy.uupm.api.model.UupmRoleModel;
+import com.yffd.easy.uupm.base.UupmBaseServiceTest;
 
 /**
  * @Description  简单描述该类的功能（可选）.
- * @Date		##date## <br/>
- * @author		##author##
+ * @Date		2018年03月12日 16时06分18秒 <br/>
+ * @author		ZhangST
  * @version		 1.0
  * @since		 JDK 1.7+
  * @see 	 
  */
-public class ##test_service_name## ##test_base_service_name##{
+public class UupmRoleServiceTest extends UupmBaseServiceTest {
 
 	@Autowired
-	private ##service_name## ##service_alias_name##;
+	private UupmRoleService uupmRoleService;
 	
 	private LoginInfo loginInfo = null;
 	
@@ -41,9 +41,9 @@ public class ##test_service_name## ##test_base_service_name##{
 	@Test
 	public void findPageTest() {
 		PageParam pageParam = new PageParam(1L, 10L);
-		##model_simple_name## model = new ##model_simple_name##();
+		UupmRoleModel model = new UupmRoleModel();
 		model.setId("2010");
-		PageResult<##model_simple_name##> result1 = this.##service_alias_name##.findPage(model, pageParam);
+		PageResult<UupmRoleModel> result1 = this.uupmRoleService.findPage(model, pageParam);
 		Assert.assertNotNull(result1);
 		System.out.println(result1.getPageParam());
 		System.out.println(result1.getRecordList());
@@ -52,7 +52,7 @@ public class ##test_service_name## ##test_base_service_name##{
 		
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("id", "2010");
-		PageResult<##model_simple_name##> result2 = this.##service_alias_name##.findPage(paramMap, pageParam);
+		PageResult<UupmRoleModel> result2 = this.uupmRoleService.findPage(paramMap, pageParam);
 		Assert.assertNotNull(result2);
 		System.out.println(result2.getPageParam());
 		System.out.println(result2.getRecordList());
@@ -60,9 +60,9 @@ public class ##test_service_name## ##test_base_service_name##{
 	
 	@Test
 	public void findListTest() {
-		##model_simple_name## model = new ##model_simple_name##();
+		UupmRoleModel model = new UupmRoleModel();
 		model.setId("2010");
-		List<##model_simple_name##> result1 = this.##service_alias_name##.findList(model);
+		List<UupmRoleModel> result1 = this.uupmRoleService.findList(model);
 		Assert.assertNotNull(result1);
 		System.out.println(result1.size());
 		
@@ -70,16 +70,16 @@ public class ##test_service_name## ##test_base_service_name##{
 		
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("id", "2010");
-		List<##model_simple_name##> result2 = this.##service_alias_name##.findList(paramMap);
+		List<UupmRoleModel> result2 = this.uupmRoleService.findList(paramMap);
 		Assert.assertNotNull(result2);
 		System.out.println(result2.size());
 	}
 	
 	@Test
 	public void findOneTest() {
-		##model_simple_name## model = new ##model_simple_name##();
+		UupmRoleModel model = new UupmRoleModel();
 		model.setId("2010");
-		##model_simple_name## result1 = this.##service_alias_name##.findOne(model);
+		UupmRoleModel result1 = this.uupmRoleService.findOne(model);
 		Assert.assertNotNull(result1);
 		System.out.println(result1.getCreateTime());
 		
@@ -87,7 +87,7 @@ public class ##test_service_name## ##test_base_service_name##{
 		
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("id", "2010");
-		##model_simple_name## result2 = this.##service_alias_name##.findOne(paramMap);
+		UupmRoleModel result2 = this.uupmRoleService.findOne(paramMap);
 		Assert.assertNotNull(result2);
 		System.out.println(result2.getCreateTime());
 	}
@@ -95,7 +95,7 @@ public class ##test_service_name## ##test_base_service_name##{
 	@Test
 	public void findByIdTest() {
 		String id = "2010";
-		##model_simple_name## model = this.##service_alias_name##.findById(id);
+		UupmRoleModel model = this.uupmRoleService.findById(id);
 		Assert.assertNotNull(model);
 		System.out.println(model.getCreateTime());
 	}
@@ -105,21 +105,21 @@ public class ##test_service_name## ##test_base_service_name##{
 		List<String> ids = new ArrayList<String>();
 		ids.add("2010");
 		ids.add("2111");
-		List<##model_simple_name##> result1 = this.##service_alias_name##.findByIds(ids);
+		List<UupmRoleModel> result1 = this.uupmRoleService.findByIds(ids);
 		Assert.assertNotNull(result1);
 		System.out.println(result1.size());
 		
 		/*******************************/
 		
 		String idsStr = "2010,2111";
-		List<##model_simple_name##> result2 = this.##service_alias_name##.findByIds(idsStr);
+		List<UupmRoleModel> result2 = this.uupmRoleService.findByIds(idsStr);
 		Assert.assertNotNull(result2);
 		System.out.println(result2.size());
 	}
 	
 	@Test
 	public void findAllTest() {
-		List<##model_simple_name##> result1 = this.##service_alias_name##.findAll();
+		List<UupmRoleModel> result1 = this.uupmRoleService.findAll();
 		Assert.assertNotNull(result1);
 		System.out.println(result1.size());
 	}
@@ -128,26 +128,26 @@ public class ##test_service_name## ##test_base_service_name##{
 	
 	@Test
 	public void addOneTest() {
-		##model_simple_name## model = new ##model_simple_name##();
+		UupmRoleModel model = new UupmRoleModel();
 		model.setId("2000");
-		this.##service_alias_name##.addOne(model, loginInfo);
+		this.uupmRoleService.addOne(model, loginInfo);
 		
 		/*******************************/
 		
 //		Map<String, Object> paramMap = new HashMap<String, Object>();
 //		paramMap.put("id", "2001");
-//		this.##service_alias_name##.addOne(paramMap, loginInfo);
+//		this.uupmRoleService.addOne(paramMap, loginInfo);
 	}
 	
 	@Test
 	public void addBatchTest() {
-		List<##model_simple_name##> list = new ArrayList<##model_simple_name##>();
+		List<UupmRoleModel> list = new ArrayList<UupmRoleModel>();
 		for(int i=10;i<15;i++) {
-			##model_simple_name## model = new ##model_simple_name##();
+			UupmRoleModel model = new UupmRoleModel();
 			model.setId("20"+i);
 			list.add(model);
 		}
-		this.##service_alias_name##.addBatch(list, loginInfo);
+		this.uupmRoleService.addBatch(list, loginInfo);
 		
 		/*******************************/
 		
@@ -157,34 +157,34 @@ public class ##test_service_name## ##test_base_service_name##{
 //			paramMap.put("id", "21"+i);
 //			list.add(paramMap);
 //		}
-//		this.##service_alias_name##.addBatch(list, loginInfo);
+//		this.uupmRoleService.addBatch(list, loginInfo);
 	}
 
 	/***********************修改********************************/
 	
 	@Test
 	public void updateByTest() {
-		##model_simple_name## model = new ##model_simple_name##();
+		UupmRoleModel model = new UupmRoleModel();
 		model.setId("2000");
-		this.##service_alias_name##.updateBy(model, loginInfo);
+		this.uupmRoleService.updateBy(model, loginInfo);
 		
 		/*******************************/
 		
 //		Map<String, Object> paramMap = new HashMap<String, Object>();
 //		paramMap.put("id", "2001");
-//		this.##service_alias_name##.updateBy(paramMap, loginInfo);
+//		this.uupmRoleService.updateBy(paramMap, loginInfo);
 	}
 	
 	@Test
 	public void updateBatchByTest() {
-		List<##model_simple_name##> list = new ArrayList<##model_simple_name##>();
+		List<UupmRoleModel> list = new ArrayList<UupmRoleModel>();
 		int startId = 2010;
 		for(int i=0;i<3;i++) {
-			##model_simple_name## model = new ##model_simple_name##();
+			UupmRoleModel model = new UupmRoleModel();
 			model.setId((startId+i) + "");
 			list.add(model);
 		}
-		this.##service_alias_name##.updateBatchBy(list, loginInfo);
+		this.uupmRoleService.updateBatchBy(list, loginInfo);
 		
 		/*******************************/
 		
@@ -195,28 +195,29 @@ public class ##test_service_name## ##test_base_service_name##{
 //			paramMap.put("id", (startId+i) + "");
 //			list.add(paramMap);
 //		}
-//		this.##service_alias_name##.updateBatchBy(list, loginInfo);
+//		this.uupmRoleService.updateBatchBy(list, loginInfo);
 	}
 
 	/***********************物理删除********************************/
 
 	@Test
 	public void delByTest() {
-		##model_simple_name## model = new ##model_simple_name##();
+		UupmRoleModel model = new UupmRoleModel();
 		model.setId("2000");
-		this.##service_alias_name##.delBy(model, null);
+		this.uupmRoleService.delBy(model, null);
 
 		/*******************************/
 		
 //		Map<String, Object> paramMap = new HashMap<String, Object>();
 //		paramMap.put("id", "2001");
-//		this.##service_alias_name##.delBy(paramMap, null);
+//		this.uupmRoleService.delBy(paramMap, null);
 	}
+	
 	
 	@Test
 	public void delByIdTest() {
 		String id = "2110";
-		this.##service_alias_name##.delById(id, null);
+		this.uupmRoleService.delById(id, null);
 	}
 	
 	@Test
@@ -226,50 +227,40 @@ public class ##test_service_name## ##test_base_service_name##{
 		for(int i=0;i<2;i++) {
 			list.add((startId+i) + "");
 		}
-		this.##service_alias_name##.delByIds(list, null);
+		this.uupmRoleService.delByIds(list, null);
 		
 		/*******************************/
 		
 //		String ids = "2011,2012";
-//		this.##service_alias_name##.delByIds(ids, null);
+//		this.uupmRoleService.delByIds(ids, null);
 		
-	}
-	
-	@Test
-	public void deleteWithInByTest() {
-		String attributeName = "id";
-		String values = "";
-		for(int i=2014;i<2016;i++) {
-			values += i + ",";
-		}
-		this.##service_alias_name##.deleteWithInBy(attributeName, values, null, null);
 	}
 	
 	/***********************逻辑删除********************************/
 	
 	@Test
 	public void removeByTest() {
-		##model_simple_name## model = new ##model_simple_name##();
+		UupmRoleModel model = new UupmRoleModel();
 		model.setId("2000");
-		this.##service_alias_name##.removeBy(model, null);
+		this.uupmRoleService.removeBy(model, null);
 		
 		/*******************************/
 		
 //		Map<String, Object> paramMap = new HashMap<String, Object>();
 //		paramMap.put("id", "2001");
-//		this.##service_alias_name##.removeBy(paramMap, null);
+//		this.uupmRoleService.removeBy(paramMap, null);
 	}
 	
 	@Test
 	public void removeByIdTest() {
 		String id = "2110";
-		this.##service_alias_name##.removeById(id, null);
+		this.uupmRoleService.removeById(id, null);
 	}
 	
 	@Test
 	public void removeByIdsTest() {
 		String ids = "2110,2111";
-		this.##service_alias_name##.removeByIds(ids, null);
+		this.uupmRoleService.removeByIds(ids, null);
 	}
 	
 }

@@ -204,7 +204,7 @@ public class UupmDictionaryServiceTest extends UupmBaseServiceTest {
 	public void delByTest() {
 		UupmDictionaryModel model = new UupmDictionaryModel();
 		model.setId("2000");
-		this.uupmDictionaryService.delBy(model);
+		this.uupmDictionaryService.delBy(model, null);
 
 		/*******************************/
 		
@@ -216,7 +216,7 @@ public class UupmDictionaryServiceTest extends UupmBaseServiceTest {
 	@Test
 	public void delByIdTest() {
 		String id = "2110";
-		this.uupmDictionaryService.delById(id);
+		this.uupmDictionaryService.delById(id, null);
 	}
 	
 	@Test
@@ -226,12 +226,12 @@ public class UupmDictionaryServiceTest extends UupmBaseServiceTest {
 		for(int i=0;i<2;i++) {
 			list.add((startId+i) + "");
 		}
-		this.uupmDictionaryService.delByIds(list);
+		this.uupmDictionaryService.delByIds(list, null);
 		
 		/*******************************/
 		
 //		String ids = "2011,2012";
-//		this.uupmDictionaryService.delByIds(ids);
+//		this.uupmDictionaryService.delByIds(ids, null);
 		
 	}
 	

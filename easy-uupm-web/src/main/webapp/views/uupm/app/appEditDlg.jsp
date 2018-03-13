@@ -19,16 +19,7 @@ $(function() {
 			result = $.parseJSON(result);
 			if(result.status=='OK') {
 				parent.$.modalDialog.handler.dialog('close');//打开此窗口时预定义的对象
-				
-				var dictionary_parentCode = parent.$.modalDialog.openner_dictionary_pcode;
-				parent.$.modalDialog.openner_dictionary_pcode=undefined;
-				if(dictionary_parentCode) {
-					$.post('uupm/dictionary/listDictTree', {'parentCode':dictionary_parentCode}, function(result) {
-						parent.$.modalDialog.openner_dictionary.treegrid('loadData', result);//打开此窗口时预定义的对象
-					}, 'json');
-				} else {
-					parent.$.modalDialog.openner.treegrid('reload');//打开此窗口时预定义的对象
-				}
+				parent.$.modalDialog.openner.datagrid('reload');//打开此窗口时预定义的对象
 			}
 			parent.$.modalDialog.openWindow.$.messager.show({
 				title :commonui.msg_title,
@@ -42,24 +33,34 @@ $(function() {
 <div class="easyui-layout" data-options="fit:true,border:false">
 	<div data-options="region:'center',border:false" class="edit-form-div">
 		<form id="form_id" method="post" style="width:100%;height:100%;">
-			<input type="hidden" name="dataScope" value=""/>
-			<input type="hidden" name="id" value=""/>
-			<input type="hidden" name="parentCode" value="-1"/>
+			<input name="id" value="" type="hidden"/>
 			<fieldset>
 				<table class="edit-form-table">
 					<tr>
 						<th>名称：</th>
-						<td><input name="itemName" class="easyui-textbox easyui-validatebox" required="required" placeholder="请输入名称" /></td>
+						<td><input name="appName" class="easyui-textbox easyui-validatebox" required="required" placeholder="请输入名称" /></td>
 						<th>编号：</th>
-						<td><input id="itemCode_id" name="itemCode" class="easyui-textbox easyui-validatebox" required="required" placeholder="请输入编号"/></td>
+						<td><input id="appCode_id" name="appCode" class="easyui-textbox easyui-validatebox" required="required" placeholder="请输入编号"/></td>
 					</tr>
 					<tr>
-						<th>序号：</th>
-						<td><input name="seqNo" type="text" class="easyui-numberspinner" value="1" data-options="min:0,precision:0"/></td>
+						<th>类型：</th>
+						<td><input id="appType_id" name="appType" type="text"/></td>
+						<th>状态：</th>
+						<td><input id="appStatus_id" name="appStatus" type="text"/></td>
+					</tr>
+					<tr>
+						<th>域名：</th>
+						<td><input name="appDomain" type="text" /></td>
+						<th>端口：</th>
+						<td><input name="appPort" type="text" /></td>
+					</tr>
+					<tr>
+						<th>路径前缀：</th>
+						<td><input name="appContextPath" type="text" /></td>
 						<th></th>
 						<td></td>
 					</tr>
-				 	<tr>
+					<tr>
 						<th>备注：</th>
 						<td colspan="3"><textarea name="remark" class="easyui-textbox" style="width:600px;height:80px;"></textarea></td>
 					</tr>

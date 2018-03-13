@@ -62,11 +62,10 @@ public class UupmTenantController extends UupmBaseController {
 		return this.successAjax();
 	}
 	
-	@RequestMapping(value="/del", method=RequestMethod.POST)
-	public RespModel del(HttpServletRequest req) {
-		String id = req.getParameter("id");
-		if(EasyStringCheckUtils.isEmpty(id)) return this.errorAjax("参数无效");
-		this.uupmTenantService.delById(id);
+	@RequestMapping(value="/delById", method=RequestMethod.POST)
+	public RespModel delById(String id) {
+		if(null==id || EasyStringCheckUtils.isEmpty(id)) return this.errorAjax("参数无效");
+		this.uupmTenantService.delById(id, null);
 		return this.successAjax();
 	}
 }

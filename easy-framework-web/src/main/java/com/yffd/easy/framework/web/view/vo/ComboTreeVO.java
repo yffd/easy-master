@@ -14,9 +14,11 @@ public class ComboTreeVO extends TreeNode {
 
 	private String id;
 	private String text;
-	private String state;
-    private boolean checked;
-    
+	private String iconCls = "icon-save";
+	private String state = "closed";	//closed、open
+	private boolean selected = false;
+	private boolean checked = false;
+	
 	public String getId() {
 		return id;
 	}
@@ -29,11 +31,23 @@ public class ComboTreeVO extends TreeNode {
 	public void setText(String text) {
 		this.text = text;
 	}
+	public String getIconCls() {
+		return iconCls;
+	}
+	public void setIconCls(String iconCls) {
+		this.iconCls = iconCls;
+	}
 	public String getState() {
 		return state;
 	}
 	public void setState(String state) {
 		this.state = state;
+	}
+	public boolean isSelected() {
+		return selected;
+	}
+	public void setSelected(boolean selected) {
+		this.selected = selected;
 	}
 	public boolean isChecked() {
 		return checked;
@@ -41,6 +55,6 @@ public class ComboTreeVO extends TreeNode {
 	public void setChecked(boolean checked) {
 		this.checked = checked;
 	}
-    
+	
 }
 

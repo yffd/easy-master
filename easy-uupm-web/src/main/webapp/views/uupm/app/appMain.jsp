@@ -13,29 +13,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <jsp:include page="/common/layout/script.jsp"></jsp:include>
 
 <script type="text/javascript">
-	var $json_loginStatus = [];
-
+	var $json_appType = [ {id:"", text:"全部", "selected": true} ];
+	var $json_appStatus = [ {id:"", text:"全部", "selected": true} ];
 	var $openWindow = this;// 当前窗口
 	var $dg;
 	$(function() {
 		$dg = $('#dg_id');
 		// 初始化控件数据
 		$.post('/uupm/combox/findComboByDict', 
-				{'comboxKeys':'func-status,'}, 
+				{'comboxKeys':'app-type,func-status'}, 
 				function(result) {
 					if("OK"==result.status) {
 						var jsonData = result.data;
-						$json_loginStatus = $json_loginStatus.concat(jsonData['func-status']);
-						
+						$json_appType = $json_appType.concat(jsonData['app-type']);
+						$json_appStatus = $json_appStatus.concat(jsonData['func-status']);
+
 						initDatagrid();	// 初始化datagrid组件
-						$json_loginStatus[0]['selected']=true;
-						$('#loginStatus_id').combobox({
-							editable:false,
-							panelHeight: 120,
-						    valueField:'id',
-						    textField:'text',
-						    data: $json_loginStatus
-						});
 						
 					}
 				}, 'json');
@@ -44,7 +37,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	// 初始化datagrid组件
 	function initDatagrid() {
 		$dg.datagrid({
-		    url:'uupm/user/findPage',
+		    url:'uupm/app/findPage',
 		    width: 'auto',
 		    height: $(this).height()-commonui.remainHeight-$('.search-form-div').height(),
 			pagination: true,
@@ -70,21 +63,29 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    		}
 	    	},
 	    	frozenColumns: [[
-	    	                 {field: 'userName', title: '名称', width: 200, align: 'left'}
+	    	                 {field: 'appName', title: '名称', width: 200, align: 'left'}
 	    	                 ]],
 	        columns: [[
-						{field: 'userCode', title: '编号', width: 100, align: 'left'},
-						{field: 'loginId', title: '账户ID', width: 100, align: 'left'},
-						{field: 'loginStatus', title: '账户状态', width: 100, align: 'left',
+						{field: 'appCode', title: '编号', width: 100, align: 'left'},
+						{field: 'appDomain', title: '域名/IP', width: 100, align: 'left'},
+						{field: 'appPort', title: '端口', width: 100, align: 'left'},
+						{field: 'appContextPath', title: '路径前缀', width: 100, align: 'left'},
+						{field: 'appType', title: '类型', width: 100, align: 'left',
 							formatter: function(value, row) {
-								return utils.fmtDict($json_loginStatus, value);
-							}
+								return utils.fmtDict($json_appType, value);
+							}	
+						},
+						{field: 'appStatus', title: '状态', width: 100, align: 'left',
+							formatter: function(value, row) {
+								return utils.fmtDict($json_appStatus, value);
+							}	
 						},
 						{field: 'createTime', title: '创建时间', width: 100, align: 'center',
 							formatter: function(value, row) {
 								return value?new Date(value).format("yyyy-MM-dd HH:mm:ss"):"";
 							}	
 						},
+						{field: 'remark', title: '备注', width: 100, align: 'left'},
 	                   ]]
 		});
 	}
@@ -103,9 +104,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	// 清除搜索条件
 	function cleanSearch() {
 		$('#searchForm_id input').val('');
-		
-		var val = $('#loginStatus_id').combobox('getData');
-		$('#loginStatus_id').combobox('select',val[0]['id']);
 	}
 	
 	// 打开添加对话框
@@ -114,7 +112,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			title: "添加",
 			width: 800,
 			height: 400,
-			href: 'views/uupm/user/userEditDlg.jsp',
+			href: 'views/uupm/app/appEditDlg.jsp',
 			onLoad:function(){
 				var editForm = parent.$.modalDialog.handler.find("#form_id");
 				setComboForSelected(editForm);
@@ -126,7 +124,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					parent.$.modalDialog.openWindow = $openWindow;//定义打开对话框的窗口
 					parent.$.modalDialog.openner = $dg;//定义对话框关闭要刷新的grid
 					var editForm = parent.$.modalDialog.handler.find("#form_id");
-					editForm.attr("action", "uupm/user/add");
+					editForm.attr("action", "uupm/app/add");
 					editForm.submit();
 				}
 			},{
@@ -148,12 +146,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				title: "编辑",
 				width: 600,
 				height: 400,
-				href: 'views/uupm/user/userEditDlg.jsp',
+				href: 'views/uupm/app/appEditDlg.jsp',
 				onLoad:function(){
 					var editForm = parent.$.modalDialog.handler.find("#form_id");
 					setComboForSelected(editForm);
 					editForm.form("load", row);
-					editForm.find("#userCode_id").attr('readonly',true);
+					editForm.find("#appCode_id").attr('readonly',true);
 				},
 				buttons: [{
 					text: '确定',
@@ -162,7 +160,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						parent.$.modalDialog.openWindow = $openWindow;//定义打开对话框的窗口
 						parent.$.modalDialog.openner = $dg;//定义对话框关闭要刷新的grid
 						var editForm = parent.$.modalDialog.handler.find("#form_id");
-						editForm.attr("action", "uupm/user/edit");
+						editForm.attr("action", "uupm/app/edit");
 						editForm.submit();
 					}
 				},{
@@ -189,7 +187,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		if(row) {
 			parent.$.messager.confirm("提示","确定要删除记录吗?",function(r){  
 			    if(r) {
-			    	$.post("uupm/user/del", {id:row.id}, function(result) {
+			    	$.post("uupm/app/del", {id:row.id}, function(result) {
 						if(result.status=='OK') {
 							var rowIndex = $dg.datagrid('getRowIndex', row);
 							$dg.datagrid('deleteRow', rowIndex);
@@ -218,14 +216,24 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	}
 	// 设置控件选中
 	function setComboForSelected(selectForm) {
-		selectForm.find('#loginStatus_id').combobox({
+		selectForm.find('#appType_id').combobox({
 			editable:false,
 			panelHeight: 120,
 			valueField:'id',
 		    textField:'text',
-		    data: $.grep($json_loginStatus, function(n,i){
-		    	if(i==0) n['selected']=true;
-		    	return i == 0;
+		    data: $.grep($json_appType, function(n,i){
+		    	if(i==1) n['selected']=true;
+		    	return i > 0;
+		    })
+		});
+		selectForm.find('#appStatus_id').combobox({
+			editable:false,
+			panelHeight: 120,
+			valueField:'id',
+		    textField:'text',
+		    data: $.grep($json_appStatus, function(n,i){
+		    	if(i==1) n['selected']=true;
+		    	return i > 0;
 		    })
 		});
 	}	
@@ -244,22 +252,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<tr>
 					<th>名称：</th>
 					<td>
-						<input name="userName" type="text" />
+						<input name="appName" type="text" />
 					</td>
 					<th>编号：</th>
 					<td>
-						<input name="userCode" type="text" />
-					</td>
-				</tr>
-				<tr>
-					<th>账户状态：</th>
-					<td>
-						<input id="loginStatus_id" name="loginStatus" type="text" />
-					</td>
-					<th>创建时间：</th><td>
-						<input type="text" name="sCreateTime" id="sStartTime_id" class="Wdate" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:'#F{$dp.$D(\'eStartTime_id\',{d:0});}'})"/>
-						~
-						<input type="text" name="eCreateTime" id="eStartTime_id" class="Wdate" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'sStartTime_id\',{d:0});}'})"/>
+						<input name="appCode" type="text" />
 					</td>
 				</tr>
 				<tr>

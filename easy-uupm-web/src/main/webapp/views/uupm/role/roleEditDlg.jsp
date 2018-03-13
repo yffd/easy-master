@@ -37,28 +37,20 @@ $(function() {
 			<fieldset>
 				<table class="edit-form-table">
 					<tr>
-						<th>租户名称：</th>
-						<td><input name="tenantName" class="easyui-textbox easyui-validatebox" required="required" placeholder="请输入名称" /></td>
-						<th>租户编号：</th>
-						<td><input id="tenantCode_id" name="tenantCode" class="easyui-textbox easyui-validatebox" required="required" placeholder="请输入编号"/></td>
+						<th>名称：</th>
+						<td><input name="userName" class="easyui-textbox easyui-validatebox" required="required" placeholder="请输入名称" /></td>
+						<th>编号：</th>
+						<td><input id="userCode_id" name="userCode" class="easyui-textbox easyui-validatebox" required="required" placeholder="请输入编号"/></td>
 					</tr>
 					<tr>
-						<th>类型：</th>
-						<td><input id="tenantType_id" name="tenantType" type="text"/></td>
-						<th>状态：</th>
-						<td><input id="tenantStatus_id" name="tenantStatus" type="text" /></td>
+						<th>机构：</th>
+						<td><input id="orgCode_id" name="orgCode" class="easyui-textbox" required="required"/></td>
+						<th>账户状态：</th>
+						<td>
+							<input id="loginStatus_id" name="loginStatus" type="text" />
+						</td>
 					</tr>
-					<tr>
-						<th>服务方式：</th>
-						<td><input id="serveType_id" name="serveType" type="text" /></td>
-						<th></th><td></td>
-					</tr>
-					<tr>
-						<th>服务开始时间：</th>
-						<td><input type="text" name="startTime" id="startTime" class="Wdate" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:'#F{$dp.$D(\'endTime\',{d:0});}'})"/></td>
-						<th>服务结束时间：</th>
-						<td><input type="text" name="endTime" id="endTime" class="Wdate" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'startTime\',{d:0});}'})"/></td>
-					</tr>
+					 
 				</table>
 			</fieldset>
 		</form>

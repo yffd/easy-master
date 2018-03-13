@@ -1,6 +1,7 @@
 package com.yffd.easy.uupm.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +16,7 @@ import com.yffd.easy.uupm.base.UupmBaseDaoTest;
 
 /**
  * @Description	简单描述该类的功能（可选）.
- * @Date		2018年03月07日 16时15分23秒 <br/>
+ * @Date		2018年03月12日 17时44分31秒 <br/>
  * @author		ZhangST
  * @version		1.0
  * @since		JDK 1.7+
@@ -101,7 +102,7 @@ public class UupmUserDaoTest extends UupmBaseDaoTest {
 		
 		System.out.println(result);
 	}
-	
+
 	@Test
 	public void updateByTest() {
 		UupmUserModel model = new UupmUserModel();
@@ -124,6 +125,27 @@ public class UupmUserDaoTest extends UupmBaseDaoTest {
 //		int result = this.dao.deleteBy(paramMap);
 		
 		System.out.println(result);
+	}
+	
+	@Test
+	public void deleteWithInByTest() {
+		String inName = "id";
+		List<Map<String, Object>> inValueList = new ArrayList<Map<String, Object>>();
+		for(int i=0;i<5;i++) {
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put(inName, "200"+i);
+			inValueList.add(map);
+		}
+//		int result = this.dao.deleteWithInBy(inName, inValueList);
+		
+//		System.out.println(result);
+		
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("id", "2000");
+		int result2 = this.dao.deleteWithInBy(paramMap, inName, inValueList);
+		
+		System.out.println(result2);
+		
 	}
 	
 	/**********************************************************************/
@@ -193,6 +215,5 @@ public class UupmUserDaoTest extends UupmBaseDaoTest {
 		int result = this.dao.deleteByIds(list);
 		System.out.println(result);
 	}
-	
 	
 }

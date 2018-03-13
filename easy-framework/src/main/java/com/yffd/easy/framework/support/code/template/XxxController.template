@@ -45,7 +45,7 @@ public class ##controller_name## ##base_controller_name##{
 	@RequestMapping(value="/findOne", method=RequestMethod.POST)
 	public RespModel findOne(##model_simple_name## model) {
 		if(null==model || EasyStringCheckUtils.isEmpty(model.getId())) return this.error("参数无效");
-		##model_simple_name## result = this.##service_alias_name##.findOne(model);
+		##model_simple_name## result = this.##service_alias_name##.findById(model.getId());
 		return this.successAjax(result);
 	}
 	
@@ -65,11 +65,20 @@ public class ##controller_name## ##base_controller_name##{
 		return this.successAjax();
 	}
 	
-	@RequestMapping(value="/del", method=RequestMethod.POST)
-	public RespModel del(HttpServletRequest req) {
-		String id = req.getParameter("id");
+	@RequestMapping(value="/delById", method=RequestMethod.POST)
+	public RespModel delById(String id) {
 		if(EasyStringCheckUtils.isEmpty(id)) return this.errorAjax("参数无效");
-		this.##service_alias_name##.delById(id);
+		this.##service_alias_name##.delById(id, null);
 		return this.successAjax();
 	}
+	
+	@RequestMapping(value="/delBatch", method=RequestMethod.POST)
+	public RespModel delBatch(HttpServletRequest req) {
+		String ids = req.getParameter("ids");
+		if(EasyStringCheckUtils.isEmpty(ids)) return this.error("参数无效");
+		int result = this.##service_alias_name##.deleteByIn("id", ids, null, null);
+		if(result==-1) return this.error("参数无效");
+		return this.successAjax();
+	}
+	
 }

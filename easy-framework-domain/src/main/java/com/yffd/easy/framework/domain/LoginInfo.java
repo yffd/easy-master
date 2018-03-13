@@ -17,10 +17,17 @@ public class LoginInfo implements Serializable {
 	 * @since JDK 1.7+
 	 */
 	private static final long serialVersionUID = -963343316238514415L;
+	private String tenantCode;
 	private String userCode;
 	private String userName;
 	private String orgCode;
 	private String orgName;
+	public String getTenantCode() {
+		return tenantCode;
+	}
+	public void setTenantCode(String tenantCode) {
+		this.tenantCode = tenantCode;
+	}
 	public String getUserCode() {
 		return userCode;
 	}

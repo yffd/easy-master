@@ -70,7 +70,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	function makeDictionaryGrid() {
 		$dg_dictionary = $('#dg_id_dictionary');
 		$dg_dictionary.treegrid({
-// 			url:'uupm/dictionary/listDictTree',
 		    width: 'auto',
 		    height: $(this).height()-commonui.remainHeight-20,
 		    fit:true,
@@ -221,7 +220,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			    	
 			    	var _itemCodes = arr_category_id.join(",");
 			    	
-			    	$.post("uupm/dictionary/del", {itemCodes: _itemCodes}, function(result) {
+			    	$.post("uupm/dictionary/delBatch", {itemCodes: _itemCodes}, function(result) {
 						if(result.status=='OK') {
 							$dg_category.treegrid('remove', row.itemCode); //分类：移除row
 							if(arr_dict_codes && arr_dict_codes.length>0) { //字典：移除row
@@ -419,7 +418,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		} else {
 			$.messager.show({
 				title :commonui.msg_title,
-				msg : "请选择【数据分类】!",
+				msg : "请选择一行记录!",
 				timeout : commonui.msg_timeout
 			});
 		}
@@ -433,7 +432,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			    if(r) {
 			    	var arr_id = getItemCodesFromTree(row);
 			    	var ids = arr_id.join(",");
-			    	$.post("uupm/dictionary/del", {itemCodes:ids}, function(result) {
+			    	$.post("uupm/dictionary/delBatch", {itemCodes:ids}, function(result) {
 						if(result.status=='OK') {
 							$dg_dictionary.treegrid('remove', row.itemCode);
 						}

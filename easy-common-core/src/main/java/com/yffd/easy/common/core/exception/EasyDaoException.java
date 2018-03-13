@@ -89,7 +89,11 @@ public class EasyDaoException extends EasySysException {
 	 * 数据库操作，查询条件为空
 	 */
 	public static final EasySysException DB_SELECT_NULL(String Statement) {
-		return new EasySysException("5D0101", "数据库操作，查询条件为空.{" + Statement + "}");
+		return new EasySysException("5D0601", "数据库操作，查询条件为空.{" + Statement + "}");
+	}
+	
+	public static final EasySysException DB_UNSUPPORTTYPE(String Statement) {
+		return new EasySysException("5D0701", "数据库操作，不支持类型.{" + Statement + "}");
 	}
     
 

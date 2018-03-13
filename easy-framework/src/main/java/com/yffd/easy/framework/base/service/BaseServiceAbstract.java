@@ -170,8 +170,9 @@ public abstract class BaseServiceAbstract extends EasyModelConverter {
 	 * @Date	2018年3月2日 上午11:23:01 <br/>
 	 * @author  zhangST
 	 * @param paramMap
+	 * @param loginInfo
 	 */
-	public void delBy(Map<String, Object> paramMap) {
+	public void delBy(Map<String, Object> paramMap, LoginInfo loginInfo) {
 		if(null==paramMap || paramMap.size()==0) return;
 		this.getBindDao().deleteBy(paramMap);
 	}
@@ -181,19 +182,21 @@ public abstract class BaseServiceAbstract extends EasyModelConverter {
 	 * @Date	2018年3月2日 上午11:23:32 <br/>
 	 * @author  zhangST
 	 * @param id
+	 * @param loginInfo
 	 */
-	public void delById(String id) {
+	public void delById(String id, LoginInfo loginInfo) {
 		if(EasyStringCheckUtils.isEmpty(id)) return;
 		this.getBindDao().deleteById(id);
 	}
-
+	
 	/**
 	 * 删除-物理.<br/>
 	 * @Date	2018年3月2日 上午11:23:45 <br/>
 	 * @author  zhangST
 	 * @param list
+	 * @param loginInfo
 	 */
-	public void delByIds(List<String> list) {
+	public void delByIds(List<String> list, LoginInfo loginInfo) {
 		if(null==list || list.size()==0) return;
 		if(list.size()==1) {
 			this.getBindDao().deleteById(list.get(0));
@@ -207,8 +210,9 @@ public abstract class BaseServiceAbstract extends EasyModelConverter {
 	 * @Date	2018年3月2日 上午11:24:03 <br/>
 	 * @author  zhangST
 	 * @param ids
+	 * @param loginInfo
 	 */
-	public void delByIds(String ids) {
+	public void delByIds(String ids, LoginInfo loginInfo) {
 		if(EasyStringCheckUtils.isEmpty(ids)) return;
 		if(ids.indexOf(",")==-1) {
 			this.getBindDao().deleteById(ids);
@@ -219,74 +223,38 @@ public abstract class BaseServiceAbstract extends EasyModelConverter {
 	}
 	
 	/**
-	 * 删除-逻辑.<br/>
-	 * @Date	2018年3月2日 上午11:24:10 <br/>
+	 * 删除-物理.<br/>
+	 * @Date	2018年3月12日 下午3:18:53 <br/>
 	 * @author  zhangST
-	 * @param paramMap
+	 * @param arributeName	属性名称
+	 * @param values		带定界符的字符串
+	 * @param delimiter		values字符串的定界符，默认为逗号（,）
 	 * @param loginInfo
+	 * @return				返回-1代表参数（values）为空，即values转换成数组后，数组为空
 	 */
-	public void removeBy(Map<String, Object> paramMap, LoginInfo loginInfo) {
-		if(null==paramMap || paramMap.size()==0) return;
-		this.setEditDefault(paramMap, loginInfo, true);
-		this.getBindDao().updateBy(paramMap);
-	}
-
-	/**
-	 * 删除-逻辑.<br/>
-	 * @Date	2018年3月2日 上午11:25:07 <br/>
-	 * @author  zhangST
-	 * @param id
-	 * @param loginInfo
-	 */
-	public void removeById(String id, LoginInfo loginInfo) {
-		if(EasyStringCheckUtils.isEmpty(id)) return;
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("id", id);
-		this.setEditDefault(paramMap, loginInfo, true);
-		this.getBindDao().updateBy(paramMap);
-	}
-
-	/**
-	 * 删除-逻辑.<br/>
-	 * @Date	2018年3月2日 上午11:25:11 <br/>
-	 * @author  zhangST
-	 * @param list
-	 * @param loginInfo
-	 */
-	public void removeByIds(List<String> list, LoginInfo loginInfo) {
-		if(null==list || list.size()==0) return;
-		if(list.size()==1) {
+	public int deleteWithInBy(String arributeName, String values, String delimiter, LoginInfo loginInfo) {
+		if(EasyStringCheckUtils.isEmpty(arributeName) || EasyStringCheckUtils.isEmpty(values)) return -1; 
+		if(EasyStringCheckUtils.isEmpty(delimiter)) delimiter = ",";
+		if(values.indexOf(delimiter)!=-1) {
+			String[] arr = values.split(delimiter);
+			if(arr.length==0) return -1;
+			List<Map<String, Object>> paramList = new ArrayList<Map<String, Object>>();
+			for(String tmp : arr) {
+				if(EasyStringCheckUtils.isEmpty(tmp)) continue;
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put(arributeName, tmp);
+				paramList.add(map);
+			}
 			Map<String, Object> paramMap = new HashMap<String, Object>();
-			paramMap.put("id", list.get(0));
-			this.setEditDefault(paramMap, loginInfo, true);
-			this.getBindDao().updateBy(paramMap);
-			return;
-		}
-		List<Map<String, Object>> params = new ArrayList<Map<String, Object>>();
-		for(String id : list) {
-			Map<String, Object> paramMap = new HashMap<String, Object>();
-			paramMap.put("id", id);
-			this.setEditDefault(paramMap, loginInfo, true);
-			params.add(paramMap);
-		}
-		this.getBindDao().updateBatch(params);
-	}
-	
-	/**
-	 * 删除-逻辑.<br/>
-	 * @Date	2018年3月2日 上午11:25:15 <br/>
-	 * @author  zhangST
-	 * @param ids
-	 * @param loginInfo
-	 */
-	public void removeByIds(String ids, LoginInfo loginInfo) {
-		if(EasyStringCheckUtils.isEmpty(ids)) return;
-		if(ids.indexOf(",")==-1) {
-			this.removeById(ids, loginInfo);
+			paramMap.put("tenantCode", loginInfo.getTenantCode());
+			return this.getBindDao().deleteWithInBy(paramMap, arributeName, paramList);
 		} else {
-			List<String> list = Arrays.asList(ids.split(","));
-			this.removeByIds(list, loginInfo);
+			Map<String, Object> paramMap = new HashMap<String, Object>();
+			paramMap.put("tenantCode", loginInfo.getTenantCode());
+			paramMap.put(arributeName, values);
+			return this.getBindDao().deleteBy(paramMap);
 		}
+		
 	}
 	
 	/**

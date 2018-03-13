@@ -1,6 +1,5 @@
 package com.yffd.easy.uupm.web.controller;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,69 +15,70 @@ import com.yffd.easy.common.core.page.PageResult;
 import com.yffd.easy.common.core.util.EasyStringCheckUtils;
 import com.yffd.easy.framework.domain.RespModel;
 import com.yffd.easy.framework.web.view.vo.DataGridVO;
-import com.yffd.easy.uupm.api.model.UupmUserModel;
-import com.yffd.easy.uupm.service.UupmUserService;
+import com.yffd.easy.uupm.api.model.UupmRoleModel;
+import com.yffd.easy.uupm.service.UupmRoleService;
 
 
 /**
  * @Description  简单描述该类的功能（可选）.
- * @Date		 2018年03月07日 16时16分21秒 <br/>
+ * @Date		 2018年03月12日 16时09分52秒 <br/>
  * @author		 ZhangST
  * @version		 1.0
  * @since		 JDK 1.7+
  * @see 	 
  */
 @RestController
-@RequestMapping("/uupm/user")
-public class UupmUserController extends UupmBaseController {
+@RequestMapping("/uupm/role")
+public class UupmRoleController extends UupmBaseController {
 
 	@Autowired
-	private UupmUserService uupmUserService;
+	private UupmRoleService uupmRoleService;
 	
 	@RequestMapping(value="/findPage", method=RequestMethod.POST)
 	public RespModel findPage(@RequestParam Map<String, Object> paramMap) {
 		PageParam pageParam = this.getPageParam(paramMap);
-		PageResult<UupmUserModel> pageResult = this.uupmUserService.findPage(paramMap, pageParam);
+		PageResult<UupmRoleModel> pageResult = this.uupmRoleService.findPage(paramMap, pageParam);
 		DataGridVO dataGridVO = this.toDataGrid(pageResult);
 		return this.successAjax(dataGridVO);
 	}
 	
 	@RequestMapping(value="/findOne", method=RequestMethod.POST)
-	public RespModel findOne(UupmUserModel model) {
+	public RespModel findOne(UupmRoleModel model) {
 		if(null==model || EasyStringCheckUtils.isEmpty(model.getId())) return this.error("参数无效");
-		UupmUserModel result = this.uupmUserService.findOne(model);
+		UupmRoleModel result = this.uupmRoleService.findById(model.getId());
 		return this.successAjax(result);
 	}
 	
 	@RequestMapping(value="/add", method=RequestMethod.POST)
-	public RespModel add(UupmUserModel model) {
-		if(null==model || EasyStringCheckUtils.isEmpty(model.getUserCode())) return this.error("参数无效");
-		// 存在判断
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("userCode", model.getUserCode());
-		UupmUserModel result = this.uupmUserService.findOne(paramMap);
-		if(null!=result) return this.error("编号已存在");
-		
-		if(null==model || EasyStringCheckUtils.isEmpty(model.getLoginId())) model.setLoginId(model.getUserCode());
-		if(null==model || EasyStringCheckUtils.isEmpty(model.getLoginPwd())) model.setLoginPwd(model.getLoginPwd());
-		this.uupmUserService.addOne(model, null);
+	public RespModel add(UupmRoleModel model) {
+		if(null==model) return this.error("参数无效");
+		this.uupmRoleService.addOne(model, null);
 		return this.successAjax();
 	}
 	
 	@RequestMapping(value="/edit", method=RequestMethod.POST)
-	public RespModel edit(UupmUserModel model) {
+	public RespModel edit(UupmRoleModel model) {
 		if(null==model || EasyStringCheckUtils.isEmpty(model.getId())) {
 			return this.error("参数无效");
 		}
-		this.uupmUserService.updateBy(model, null);
+		this.uupmRoleService.updateBy(model, null);
 		return this.successAjax();
 	}
 	
-	@RequestMapping(value="/del", method=RequestMethod.POST)
-	public RespModel del(HttpServletRequest req) {
-		String id = req.getParameter("id");
+	@RequestMapping(value="/delById", method=RequestMethod.POST)
+	public RespModel delById(String id) {
 		if(EasyStringCheckUtils.isEmpty(id)) return this.errorAjax("参数无效");
-		this.uupmUserService.delById(id);
+		this.uupmRoleService.delById(id, null);
 		return this.successAjax();
 	}
+	
+	@RequestMapping(value="/delBatch", method=RequestMethod.POST)
+	public RespModel delBatch(HttpServletRequest req) {
+		String ids = req.getParameter("ids");
+		if(EasyStringCheckUtils.isEmpty(ids)) return this.error("参数无效");
+		int result = this.uupmRoleService.deleteByIn("id", ids, null, null);
+		if(result==-1) return this.error("参数无效");
+		return this.successAjax();
+	}
+	
 }
