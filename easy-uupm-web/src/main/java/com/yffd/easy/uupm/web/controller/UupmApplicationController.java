@@ -76,13 +76,12 @@ public class UupmApplicationController extends UupmBaseController {
 		if(null==model || EasyStringCheckUtils.isEmpty(model.getId())) {
 			return this.error("参数无效");
 		}
-		this.uupmApplicationService.updateBy(model, null);
+		this.uupmApplicationService.updateById(model, null);
 		return this.successAjax();
 	}
 	
-	@RequestMapping(value="/del", method=RequestMethod.POST)
-	public RespModel del(HttpServletRequest req) {
-		String id = req.getParameter("id");
+	@RequestMapping(value="/delById", method=RequestMethod.POST)
+	public RespModel delById(String id) {
 		if(EasyStringCheckUtils.isEmpty(id)) return this.errorAjax("参数无效");
 		this.uupmApplicationService.delById(id, null);
 		return this.successAjax();

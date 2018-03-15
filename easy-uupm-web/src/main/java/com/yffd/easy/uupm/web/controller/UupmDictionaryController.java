@@ -103,7 +103,7 @@ public class UupmDictionaryController extends UupmBaseController {
 		if(null==model || EasyStringCheckUtils.isEmpty(model.getId())) {
 			return this.error("参数无效");
 		}
-		this.uupmDictionaryService.updateBy(model, null);
+		this.uupmDictionaryService.updateById(model, null);
 		return this.successAjax();
 	}
 	
@@ -118,7 +118,7 @@ public class UupmDictionaryController extends UupmBaseController {
 	public RespModel delBatch(HttpServletRequest req) {
 		String itemCodes = req.getParameter("itemCodes");
 		if(EasyStringCheckUtils.isEmpty(itemCodes)) return this.error("参数无效");
-		int result = this.uupmDictionaryService.deleteByIn("itemCode", itemCodes, null, null);
+		int result = this.uupmDictionaryService.delWithInBy("itemCode", itemCodes, null);
 		if(result==-1) return this.error("参数无效");
 		return this.successAjax();
 	}

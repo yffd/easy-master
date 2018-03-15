@@ -49,7 +49,7 @@ public class UupmComboController extends UupmBaseController {
 				List<ComboTreeVO> treeList = treeBuilder.buildByRecursive(voList, comboxKeys);
 				Map<String, Object> resultMap = new HashMap<String, Object>();
 				resultMap.put(comboxKeys, treeList);
-				return this.successAjax(treeList);
+				return this.successAjax(resultMap);
 			}
 		} else {
 			Map<String, Object> resultMap = new HashMap<String, Object>();

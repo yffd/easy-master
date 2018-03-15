@@ -61,7 +61,7 @@ public class ##controller_name## ##base_controller_name##{
 		if(null==model || EasyStringCheckUtils.isEmpty(model.getId())) {
 			return this.error("参数无效");
 		}
-		this.##service_alias_name##.updateBy(model, null);
+		this.##service_alias_name##.updateById(model, null);
 		return this.successAjax();
 	}
 	
@@ -76,7 +76,7 @@ public class ##controller_name## ##base_controller_name##{
 	public RespModel delBatch(HttpServletRequest req) {
 		String ids = req.getParameter("ids");
 		if(EasyStringCheckUtils.isEmpty(ids)) return this.error("参数无效");
-		int result = this.##service_alias_name##.deleteByIn("id", ids, null, null);
+		int result = this.##service_alias_name##.delWithInBy("id", ids, null);
 		if(result==-1) return this.error("参数无效");
 		return this.successAjax();
 	}

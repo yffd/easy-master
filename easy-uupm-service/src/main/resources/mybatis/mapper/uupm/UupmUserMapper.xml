@@ -54,46 +54,34 @@
 		<if test="userType != null and userType != ''"> and t.USER_TYPE = #{userType} </if>
 		<!-- Like query -->
 		<if test="userName != null and userName != ''"> and t.USER_NAME like CONCAT(CONCAT('%', #{userName}), '%') </if>
-		<!-- 非model属性 -->
-		<!-- in条件处理拼写，要求List集合中的值能转换成key-value形式，例如map、自定义model对象等 -->
+	
+		<!-- 非model属性：in条件处理拼写，要求List集合中的值能转换成key-value形式，例如map、自定义model对象等 -->
 		<if test="idList != null and idList.size()>0">
-		and ID in <foreach item="item" index="index" collection="idList" open="(" separator="," close=")">#{item.id}</foreach>
+		and ID in <foreach item="item" index="index" collection="idList" open="(" separator="," close=")">#{item}</foreach>
 		</if>
 		<if test="loginIdList != null and loginIdList.size()>0">
-		and LOGIN_ID in <foreach item="item" index="index" collection="loginIdList" open="(" separator="," close=")">#{item.loginId}</foreach>
+		and LOGIN_ID in <foreach item="item" index="index" collection="loginIdList" open="(" separator="," close=")">#{item}</foreach>
 		</if>
 		<if test="loginPwdList != null and loginPwdList.size()>0">
-		and LOGIN_PWD in <foreach item="item" index="index" collection="loginPwdList" open="(" separator="," close=")">#{item.loginPwd}</foreach>
+		and LOGIN_PWD in <foreach item="item" index="index" collection="loginPwdList" open="(" separator="," close=")">#{item}</foreach>
 		</if>
 		<if test="loginStatusList != null and loginStatusList.size()>0">
-		and LOGIN_STATUS in <foreach item="item" index="index" collection="loginStatusList" open="(" separator="," close=")">#{item.loginStatus}</foreach>
+		and LOGIN_STATUS in <foreach item="item" index="index" collection="loginStatusList" open="(" separator="," close=")">#{item}</foreach>
 		</if>
 		<if test="tenantCodeList != null and tenantCodeList.size()>0">
-		and TENANT_CODE in <foreach item="item" index="index" collection="tenantCodeList" open="(" separator="," close=")">#{item.tenantCode}</foreach>
+		and TENANT_CODE in <foreach item="item" index="index" collection="tenantCodeList" open="(" separator="," close=")">#{item}</foreach>
 		</if>
 		<if test="userCodeList != null and userCodeList.size()>0">
-		and USER_CODE in <foreach item="item" index="index" collection="userCodeList" open="(" separator="," close=")">#{item.userCode}</foreach>
+		and USER_CODE in <foreach item="item" index="index" collection="userCodeList" open="(" separator="," close=")">#{item}</foreach>
 		</if>
 		<if test="userNameList != null and userNameList.size()>0">
-		and USER_NAME in <foreach item="item" index="index" collection="userNameList" open="(" separator="," close=")">#{item.userName}</foreach>
+		and USER_NAME in <foreach item="item" index="index" collection="userNameList" open="(" separator="," close=")">#{item}</foreach>
 		</if>
 		<if test="userTypeList != null and userTypeList.size()>0">
-		and USER_TYPE in <foreach item="item" index="index" collection="userTypeList" open="(" separator="," close=")">#{item.userType}</foreach>
+		and USER_TYPE in <foreach item="item" index="index" collection="userTypeList" open="(" separator="," close=")">#{item}</foreach>
 		</if>
-		
-		<if test="sUpdateTime != null and sUpdateTime != ''"><![CDATA[ and t.UPDATE_TIME = #{sUpdateTime}]]> </if>
+	
 	</sql>
-
-<!-- 	分页查询 -->
-<!-- 	<select id="selectRangeBy" parameterType="java.util.Map" resultMap="resutlId"> -->
-<!-- 		select <include refid="table_columns" /> -->
-<!-- 		from <include refid="table_name"/>  as t  -->
-<!-- 		<where> -->
-<!-- 			<include refid="conditions_where" /> -->
-<!-- 		</where> -->
-<!-- 		<include refid="conditions_orderby" /> -->
-<!-- 		<include refid="conditions_limit" /> -->
-<!-- 	</select> -->
 
 	<!-- 条件查询 -->
 	<select id="selectListBy" parameterType="java.util.Map" resultMap="resutlId">
@@ -103,7 +91,6 @@
 			<include refid="conditions_where" />
 		</where>
 		<include refid="conditions_orderby" />
-		<include refid="conditions_limit" />
 	</select>
 
 	<!-- 统计查询 -->
@@ -114,16 +101,6 @@
 			<include refid="conditions_where" />
 		</where>
 	</select>
-
-	<!-- in条件查询 -->
-<!-- 	<select id="selectListByIds" parameterType="java.util.List" resultMap="resutlId"> -->
-<!-- 		select <include refid="table_columns" />  -->
-<!-- 		from <include refid="table_name"/>  as t  -->
-<!-- 		<where> -->
-<!-- 			t.ID in  -->
-<!-- 			<foreach item="item" index="index" collection="list" open="(" separator="," close=")">#{item}</foreach> -->
-<!-- 		</where> -->
-<!-- 	</select> -->
 
 	<!-- 单条查询 -->
 	<select id="selectOneBy" parameterType="java.util.Map" resultMap="resutlId">
@@ -169,55 +146,72 @@
 	<update id="updateBy" parameterType="java.util.Map">
 		update <include refid="table_name" />
 		<set>
-		VERSION = VERSION + 1, 
-		<if test="delFlag != null and delFlag != ''"> DEL_FLAG = #{delFlag},  </if>
-		<if test="createBy != null and createBy != ''"> CREATE_BY = #{createBy},  </if>
-		<if test="updateBy != null and updateBy != ''"> UPDATE_BY = #{updateBy},  </if>
-		<if test="updateTime != null "> UPDATE_TIME = #{updateTime},  </if>
-		<if test="loginId != null and loginId != ''"> LOGIN_ID = #{loginId},  </if>
-		<if test="loginPwd != null and loginPwd != ''"> LOGIN_PWD = #{loginPwd},  </if>
-		<if test="loginStatus != null and loginStatus != ''"> LOGIN_STATUS = #{loginStatus},  </if>
-		<if test="tenantCode != null and tenantCode != ''"> TENANT_CODE = #{tenantCode},  </if>
-		<if test="userCode != null and userCode != ''"> USER_CODE = #{userCode},  </if>
-		<if test="userName != null and userName != ''"> USER_NAME = #{userName},  </if>
-		<if test="userType != null and userType != ''"> USER_TYPE = #{userType},  </if>
+		<if test="newParam != null">
+			VERSION = VERSION + 1, 
+			<if test="newParam.delFlag != null and newParam.delFlag != ''"> DEL_FLAG = #{newParam.delFlag},  </if>
+			<if test="newParam.updateBy != null and newParam.updateBy != ''"> UPDATE_BY = #{newParam.updateBy},  </if>
+			<if test="newParam.updateTime != null"> UPDATE_TIME = #{newParam.updateTime},  </if>
+			<if test="newParam.loginId != null and newParam.loginId != ''"> LOGIN_ID = #{newParam.loginId},  </if>
+			<if test="newParam.loginPwd != null and newParam.loginPwd != ''"> LOGIN_PWD = #{newParam.loginPwd},  </if>
+			<if test="newParam.loginStatus != null and newParam.loginStatus != ''"> LOGIN_STATUS = #{newParam.loginStatus},  </if>
+			<if test="newParam.tenantCode != null and newParam.tenantCode != ''"> TENANT_CODE = #{newParam.tenantCode},  </if>
+			<if test="newParam.userCode != null and newParam.userCode != ''"> USER_CODE = #{newParam.userCode},  </if>
+			<if test="newParam.userName != null and newParam.userName != ''"> USER_NAME = #{newParam.userName},  </if>
+			<if test="newParam.userType != null and newParam.userType != ''"> USER_TYPE = #{newParam.userType},  </if>
+		</if>
 		</set>
 		<where>
-			ID = #{id}
-			<if test="version != null "> and VERSION = #{version} </if>
+		<if test="oldParam != null">
+			<if test="oldParam.version != null"> and VERSION = #{oldParam.version}  </if>
+			<if test="oldParam.delFlag != null and oldParam.delFlag != ''"> and DEL_FLAG = #{oldParam.delFlag}  </if>
+			<if test="oldParam.createBy != null and oldParam.createBy != ''"> and CREATE_BY = #{oldParam.createBy}  </if>
+			<if test="oldParam.createTime != null"><![CDATA[ and CREATE_TIME = #{oldParam.createTime} ]]> </if>
+			<if test="oldParam.id != null and oldParam.id != ''"> and ID = #{oldParam.id}  </if>
+			<if test="oldParam.loginId != null and oldParam.loginId != ''"> and LOGIN_ID = #{oldParam.loginId}  </if>
+			<if test="oldParam.loginPwd != null and oldParam.loginPwd != ''"> and LOGIN_PWD = #{oldParam.loginPwd}  </if>
+			<if test="oldParam.loginStatus != null and oldParam.loginStatus != ''"> and LOGIN_STATUS = #{oldParam.loginStatus}  </if>
+			<if test="oldParam.tenantCode != null and oldParam.tenantCode != ''"> and TENANT_CODE = #{oldParam.tenantCode}  </if>
+			<if test="oldParam.userCode != null and oldParam.userCode != ''"> and USER_CODE = #{oldParam.userCode}  </if>
+			<if test="oldParam.userName != null and oldParam.userName != ''"> and USER_NAME = #{oldParam.userName}  </if>
+			<if test="oldParam.userType != null and oldParam.userType != ''"> and USER_TYPE = #{oldParam.userType}  </if>
+		</if>
+		<if test="oldInParam != null">
+			<!-- 非model属性：in条件处理拼写，要求List集合中的值能转换成key-value形式，例如map、自定义model对象等 -->
+			<if test="oldInParam.idList != null and oldInParam.idList.size()>0">
+			and ID in <foreach item="item" index="index" collection="oldInParam.idList" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+			<if test="oldInParam.loginIdList != null and oldInParam.loginIdList.size()>0">
+			and LOGIN_ID in <foreach item="item" index="index" collection="oldInParam.loginIdList" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+			<if test="oldInParam.loginPwdList != null and oldInParam.loginPwdList.size()>0">
+			and LOGIN_PWD in <foreach item="item" index="index" collection="oldInParam.loginPwdList" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+			<if test="oldInParam.loginStatusList != null and oldInParam.loginStatusList.size()>0">
+			and LOGIN_STATUS in <foreach item="item" index="index" collection="oldInParam.loginStatusList" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+			<if test="oldInParam.tenantCodeList != null and oldInParam.tenantCodeList.size()>0">
+			and TENANT_CODE in <foreach item="item" index="index" collection="oldInParam.tenantCodeList" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+			<if test="oldInParam.userCodeList != null and oldInParam.userCodeList.size()>0">
+			and USER_CODE in <foreach item="item" index="index" collection="oldInParam.userCodeList" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+			<if test="oldInParam.userNameList != null and oldInParam.userNameList.size()>0">
+			and USER_NAME in <foreach item="item" index="index" collection="oldInParam.userNameList" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+			<if test="oldInParam.userTypeList != null and oldInParam.userTypeList.size()>0">
+			and USER_TYPE in <foreach item="item" index="index" collection="oldInParam.userTypeList" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+		</if>
+		<!-- 防止没有参数传递，导致全部更新 -->
+		or 1=2
 		</where>
-	</update>
-
-	<!-- 批量更新 -->
-	<update id="updateBatch" parameterType="java.util.List">
-		<foreach collection="list" item="item" index="index" separator=";">
-		update <include refid="table_name" />
-		<set>
-		VERSION = VERSION + 1, 
-		<if test="item.delFlag != null and item.delFlag != ''"> DEL_FLAG = #{item.delFlag},  </if>
-		<if test="item.createBy != null and item.createBy != ''"> CREATE_BY = #{item.createBy},  </if>
-		<if test="item.createTime != null "> CREATE_TIME = #{item.createTime},  </if>
-		<if test="item.updateBy != null and item.updateBy != ''"> UPDATE_BY = #{item.updateBy},  </if>
-		<if test="item.updateTime != null "> UPDATE_TIME = #{item.updateTime},  </if>
-		<if test="item.loginId != null and item.loginId != ''"> LOGIN_ID = #{item.loginId},  </if>
-		<if test="item.loginPwd != null and item.loginPwd != ''"> LOGIN_PWD = #{item.loginPwd},  </if>
-		<if test="item.loginStatus != null and item.loginStatus != ''"> LOGIN_STATUS = #{item.loginStatus},  </if>
-		<if test="item.tenantCode != null and item.tenantCode != ''"> TENANT_CODE = #{item.tenantCode},  </if>
-		<if test="item.userCode != null and item.userCode != ''"> USER_CODE = #{item.userCode},  </if>
-		<if test="item.userName != null and item.userName != ''"> USER_NAME = #{item.userName},  </if>
-		<if test="item.userType != null and item.userType != ''"> USER_TYPE = #{item.userType},  </if>
-		</set>
-		<where>
-			ID = #{item.id}
-			<if test="item.version != null "> and VERSION = #{item.version} </if>
-		</where>
-		</foreach>
 	</update>
 
 	<!-- 删除 -->
 	<delete id="deleteBy" parameterType="java.util.Map">
 		delete from <include refid="table_name" />
 		<where>
+		<!-- model属性： -->
 		<if test="version != null "> and VERSION = #{version} </if>
 		<if test="delFlag != null and delFlag != ''"> and DEL_FLAG = #{delFlag} </if>
 		<if test="createBy != null and createBy != ''"> and CREATE_BY = #{createBy} </if>
@@ -233,54 +227,30 @@
 		<if test="userName != null and userName != ''"> and USER_NAME = #{userName} </if>
 		<if test="userType != null and userType != ''"> and USER_TYPE = #{userType} </if>
 		
-		<!-- 防止没有参数传递，导致全部删除 -->
-		or 1=2
-		</where>
-	</delete>
-
-	<!-- 删除：可以带in条件 -->
-	<delete id="deleteWithInBy" parameterType="java.util.Map">
-		delete from <include refid="table_name" />
-		<where>
-		<if test="version != null "> and VERSION = #{version} </if>
-		<if test="delFlag != null and delFlag != ''"> and DEL_FLAG = #{delFlag} </if>
-		<if test="createBy != null and createBy != ''"> and CREATE_BY = #{createBy} </if>
-		<if test="createTime != null "><![CDATA[ and CREATE_TIME = #{createTime}]]> </if>
-		<if test="updateBy != null and updateBy != ''"> and UPDATE_BY = #{updateBy} </if>
-		<if test="updateTime != null "><![CDATA[ and UPDATE_TIME = #{updateTime}]]> </if>
-		<if test="id != null and id != ''"> and ID = #{id} </if>
-		<if test="loginId != null and loginId != ''"> and LOGIN_ID = #{loginId} </if>
-		<if test="loginPwd != null and loginPwd != ''"> and LOGIN_PWD = #{loginPwd} </if>
-		<if test="loginStatus != null and loginStatus != ''"> and LOGIN_STATUS = #{loginStatus} </if>
-		<if test="tenantCode != null and tenantCode != ''"> and TENANT_CODE = #{tenantCode} </if>
-		<if test="userCode != null and userCode != ''"> and USER_CODE = #{userCode} </if>
-		<if test="userName != null and userName != ''"> and USER_NAME = #{userName} </if>
-		<if test="userType != null and userType != ''"> and USER_TYPE = #{userType} </if>
-		
-		<!-- 批量处理拼写，要求List集合的值能转换成map形式 -->
+		<!-- 非model属性：in条件处理拼写，要求List集合中的值能转换成key-value形式，例如map、自定义model对象等 -->
 		<if test="idList != null and idList.size()>0">
-		and ID in <foreach item="item" index="index" collection="idList" open="(" separator="," close=")">#{item.id}</foreach>
+		and ID in <foreach item="item" index="index" collection="idList" open="(" separator="," close=")">#{item}</foreach>
 		</if>
 		<if test="loginIdList != null and loginIdList.size()>0">
-		and LOGIN_ID in <foreach item="item" index="index" collection="loginIdList" open="(" separator="," close=")">#{item.loginId}</foreach>
+		and LOGIN_ID in <foreach item="item" index="index" collection="loginIdList" open="(" separator="," close=")">#{item}</foreach>
 		</if>
 		<if test="loginPwdList != null and loginPwdList.size()>0">
-		and LOGIN_PWD in <foreach item="item" index="index" collection="loginPwdList" open="(" separator="," close=")">#{item.loginPwd}</foreach>
+		and LOGIN_PWD in <foreach item="item" index="index" collection="loginPwdList" open="(" separator="," close=")">#{item}</foreach>
 		</if>
 		<if test="loginStatusList != null and loginStatusList.size()>0">
-		and LOGIN_STATUS in <foreach item="item" index="index" collection="loginStatusList" open="(" separator="," close=")">#{item.loginStatus}</foreach>
+		and LOGIN_STATUS in <foreach item="item" index="index" collection="loginStatusList" open="(" separator="," close=")">#{item}</foreach>
 		</if>
 		<if test="tenantCodeList != null and tenantCodeList.size()>0">
-		and TENANT_CODE in <foreach item="item" index="index" collection="tenantCodeList" open="(" separator="," close=")">#{item.tenantCode}</foreach>
+		and TENANT_CODE in <foreach item="item" index="index" collection="tenantCodeList" open="(" separator="," close=")">#{item}</foreach>
 		</if>
 		<if test="userCodeList != null and userCodeList.size()>0">
-		and USER_CODE in <foreach item="item" index="index" collection="userCodeList" open="(" separator="," close=")">#{item.userCode}</foreach>
+		and USER_CODE in <foreach item="item" index="index" collection="userCodeList" open="(" separator="," close=")">#{item}</foreach>
 		</if>
 		<if test="userNameList != null and userNameList.size()>0">
-		and USER_NAME in <foreach item="item" index="index" collection="userNameList" open="(" separator="," close=")">#{item.userName}</foreach>
+		and USER_NAME in <foreach item="item" index="index" collection="userNameList" open="(" separator="," close=")">#{item}</foreach>
 		</if>
 		<if test="userTypeList != null and userTypeList.size()>0">
-		and USER_TYPE in <foreach item="item" index="index" collection="userTypeList" open="(" separator="," close=")">#{item.userType}</foreach>
+		and USER_TYPE in <foreach item="item" index="index" collection="userTypeList" open="(" separator="," close=")">#{item}</foreach>
 		</if>
 		
 		<!-- 防止没有参数传递，导致全部删除 -->

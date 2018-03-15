@@ -10,7 +10,7 @@ import com.yffd.easy.uupm.api.model.UupmTenantModel;
 
 /**
  * @Description	简单描述该类的功能（可选）.
- * @Date		2018年03月07日 15时30分32秒 <br/>
+ * @Date		2018年03月14日 18时15分23秒 <br/>
  * @author		ZhangST
  * @version		1.0
  * @since		JDK 1.7+

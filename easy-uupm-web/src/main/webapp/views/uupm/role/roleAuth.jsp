@@ -14,43 +14,42 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 <script type="text/javascript">
 	var $json_activeStatus = [ {id:"", text:"全部", "selected": true} ];
-	var $json_rsType = [ {id:"", text:"全部", "selected": true} ];
 	var $openWindow = this;// 当前窗口
-	var $dg_app;
+	var $dg_role;
 	var $dg_res;
 	$(function() {
-		$dg_app = $('#dg_id_app');
+		$dg_role = $('#dg_id_role');
 		// 初始化控件数据
 		$.post('/uupm/combox/findComboByDict', 
-				{'comboxKeys':'active-status,rs-type'}, 
+				{'comboxKeys':'active-status'}, 
 				function(result) {
 					if("OK"==result.status) {
 						var jsonData = result.data;
 						$json_activeStatus = $json_activeStatus.concat(jsonData['active-status']);
-						$json_rsType = $json_rsType.concat(jsonData['rs-type']);
 
-						initDatagrid_app();	// 初始化datagrid组件
+						initDatagrid_role();	// 初始化datagrid组件
 						initTreegrid_res();
 					}
 				}, 'json');
-		//搜索框-app
-		$("#searchbox_id_app").searchbox({
-			menu:"#mm_id_app",
+		//搜索框
+		$("#searchbox_id").searchbox({
+			menu:"#mm_id_role",
 			prompt :'请输入',
 // 			height: 28,
+// 			width:200,
 			searcher:function(value, name) {
 				var obj = {};
 				obj[name] = value;
-				$dg_app.datagrid('reload', obj); 
+				$dg_role.datagrid('reload', obj); 
 		    }
 		});
 	});
 	// 初始化datagrid组件
-	function initDatagrid_app() {
-		$dg_app.datagrid({
-		    url:'uupm/app/findList',
+	function initDatagrid_role() {
+		$dg_role.datagrid({
+		    url:'uupm/role/findPage',
 		    width: 'auto',
-		    height: $(this).height()-commonui.remainHeight-20-$('#tb_id_app').height(),
+		    height: $(this).height()-commonui.remainHeight-20-$('#tb_id_role').height(),
 			pagination: true,
 			pageSize: commonui.pageSize,
 			rownumbers: true,
@@ -79,10 +78,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				}, 'json');
 	    	},
 	    	frozenColumns: [[
-	    	                 {field: 'appName', title: '名称', width: 200, align: 'left'}
+	    	                 {field: 'roleName', title: '名称', width: 200, align: 'left'}
 	    	                 ]],
 	        columns: [[
-						{field: 'appCode', title: '编号', width: 100, align: 'left'},
+						{field: 'roleCode', title: '编号', width: 100, align: 'left'},
+						{field: 'roleStatus', title: '状态', width: 100, align: 'left',
+							formatter: function(value, row) {
+								return utils.fmtDict($json_activeStatus, value);
+							}
+						},
 						{field: 'remark', title: '备注', width: 100, align: 'left'}
 	                   ]]
 		});
@@ -90,8 +94,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	function initTreegrid_res() {
 		$dg_res = $('#dg_id_res');
 		$dg_res.treegrid({
+			url:'uupm/resource/findTree',
 		    width: 'auto',
-		    height: $(this).height()-commonui.remainHeight-20-$('#tb_id_res').height(),
+		    height: $(this).height()-commonui.remainHeight-20,
 			rownumbers: true,
 			animate: true,
 			collapsible: true,
@@ -99,7 +104,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			border: false,
 			striped: true,
 			singleSelect: true,
-			toolbar: '#tb_id_res',
+			toolbar: '',
 			idField: 'id_',
 			treeField: 'rsName',
 			loadFilter: function(result) {
@@ -173,7 +178,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	
 	// 清除搜索条件
 	function cleanSearch() {
-		$('#searchbox_id_app').searchbox('setValue', '');
+		$('#searchbox_id_role').searchbox('setValue', '');
 	}
 	
 	// 打开添加对话框
@@ -382,12 +387,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </script>
 </head>
 <body class="easyui-layout">
-    <div data-options="region:'west',title:'应用系统列表',split:true,border:true" style="width:500px;">
-	    <div id="tb_id_app" style="background-color: #F5F5F5;padding-left:25px;">
+    <div data-options="region:'west',title:'角色列表',split:true,border:true" style="width:500px;">
+	    <div id="tb_id_role" style="background-color: #F5F5F5;padding-left:25px;">
 	    	<table cellpadding="0" cellspacing="0">
 				<tr>
 					<td style="padding-left:2px;padding-bottom:2px;">
-						<input id="searchbox_id_app" type="text"/>
+						<input id="searchbox_id" type="text"/>
 					</td>
 					<td style="padding-left:2px">
 						<a class="easyui-linkbutton" data-options="iconCls:'icon-clear',plain:'true'" onclick="cleanSearch();" href="javascript:void(0);"></a>
@@ -395,35 +400,26 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</tr>
 			</table>
 		</div>
-		<table id="dg_id_app"></table>
+		<table id="dg_id_role"></table>
 		
-		<div id="mm_id_app">
-			<div name="appName">应用名称</div>
-			<div name="appCode">应用编号</div>
+		<div id="mm_id_role">
+			<div name="roleName">&nbsp;&nbsp;名称&nbsp;&nbsp;&nbsp;&nbsp;</div>
+			<div name="roleCode">&nbsp;&nbsp;编号&nbsp;&nbsp;&nbsp;&nbsp;</div>
+			<div class="menu-sep"></div>
+			<div name="roleStatus">
+				<span>&nbsp;&nbsp;状态&nbsp;&nbsp;&nbsp;&nbsp;</span>
+				<div>
+					<div>&nbsp;&nbsp;有效&nbsp;&nbsp;&nbsp;&nbsp;</div>
+					<div>&nbsp;&nbsp;无效&nbsp;&nbsp;&nbsp;&nbsp;</div>
+				</div>
+			</div>
 		</div>
     </div>
 
     <div data-options="region:'center',title:'资源列表'" style="padding:5px;">
 	    <table id="dg_id_res"></table>
-		<div id="tb_id_res" style="border-bottom:1px solid #cccccc;">
-			<shiro:hasPermission name="org-add">
-			<a class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:'true'" onclick="openAddDlg();" href="javascript:void(0);">添加</a>
-			<a class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:'true'" onclick="openAddDlg_child();" href="javascript:void(0);">添加子项</a>
-			</shiro:hasPermission>
-			<shiro:hasPermission name="org-edit">
-			<a class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:'true'" onclick="openEditDlg();" href="javascript:void(0);">编辑</a>
-			</shiro:hasPermission>
-			<shiro:hasPermission name="org-del">
-			<a class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:'true'" onclick="removeFunc();" href="javascript:void(0);">删除</a>
-			</shiro:hasPermission>
-			<a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-undo" plain="true" onclick="expandAll();">展开</a>
-			<a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-redo" plain="true" onclick="collapseAll();">收缩</a>
-		</div>
 		
 		<div id="mm_id_res" class="easyui-menu" style="width:120px;">
-			<div onclick="openAddDlg_child()" data-options="iconCls:'icon-add'">添加子项</div>
-			<div onclick="openEditDlg()" data-options="iconCls:'icon-edit'">编辑</div>
-			<div onclick="removeFunc()" data-options="iconCls:'icon-remove'">删除</div>
 			<div class="menu-sep"></div>
 	        <div onclick="expandAll()" data-options="iconCls:'icon-undo'">展开</div>
 	        <div onclick="collapseAll()" data-options="iconCls:'icon-redo'">收缩</div>

@@ -14,19 +14,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 <script type="text/javascript">
 	var $json_appType = [ {id:"", text:"全部", "selected": true} ];
-	var $json_appStatus = [ {id:"", text:"全部", "selected": true} ];
+	var $json_activeStatus = [ {id:"", text:"全部", "selected": true} ];
 	var $openWindow = this;// 当前窗口
 	var $dg;
 	$(function() {
 		$dg = $('#dg_id');
 		// 初始化控件数据
 		$.post('/uupm/combox/findComboByDict', 
-				{'comboxKeys':'app-type,func-status'}, 
+				{'comboxKeys':'active-status,app-type'}, 
 				function(result) {
 					if("OK"==result.status) {
 						var jsonData = result.data;
 						$json_appType = $json_appType.concat(jsonData['app-type']);
-						$json_appStatus = $json_appStatus.concat(jsonData['func-status']);
+						$json_activeStatus = $json_activeStatus.concat(jsonData['active-status']);
 
 						initDatagrid();	// 初始化datagrid组件
 						
@@ -77,7 +77,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						},
 						{field: 'appStatus', title: '状态', width: 100, align: 'left',
 							formatter: function(value, row) {
-								return utils.fmtDict($json_appStatus, value);
+								return utils.fmtDict($json_activeStatus, value);
 							}	
 						},
 						{field: 'createTime', title: '创建时间', width: 100, align: 'center',
@@ -112,7 +112,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			title: "添加",
 			width: 800,
 			height: 400,
-			href: 'views/uupm/app/appEditDlg.jsp',
+			href: 'views/uupm/application/appEditDlg.jsp',
 			onLoad:function(){
 				var editForm = parent.$.modalDialog.handler.find("#form_id");
 				setComboForSelected(editForm);
@@ -146,7 +146,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				title: "编辑",
 				width: 600,
 				height: 400,
-				href: 'views/uupm/app/appEditDlg.jsp',
+				href: 'views/uupm/application/appEditDlg.jsp',
 				onLoad:function(){
 					var editForm = parent.$.modalDialog.handler.find("#form_id");
 					setComboForSelected(editForm);
@@ -187,7 +187,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		if(row) {
 			parent.$.messager.confirm("提示","确定要删除记录吗?",function(r){  
 			    if(r) {
-			    	$.post("uupm/app/del", {id:row.id}, function(result) {
+			    	$.post("uupm/app/delById", {id:row.id}, function(result) {
 						if(result.status=='OK') {
 							var rowIndex = $dg.datagrid('getRowIndex', row);
 							$dg.datagrid('deleteRow', rowIndex);
@@ -231,7 +231,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			panelHeight: 120,
 			valueField:'id',
 		    textField:'text',
-		    data: $.grep($json_appStatus, function(n,i){
+		    data: $.grep($json_activeStatus, function(n,i){
 		    	if(i==1) n['selected']=true;
 		    	return i > 0;
 		    })

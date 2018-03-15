@@ -78,12 +78,26 @@ public abstract class GenericService<PO> extends BaseServiceAbstract {
 	 * @Date	2018年3月2日 上午11:17:27 <br/>
 	 * @author  zhangST
 	 * @param model
+	 * @param attributeName
 	 * @param loginInfo
 	 */
-	public void updateBy(PO model, LoginInfo loginInfo) {
-		if(null==model) return;
+	public int updateBy(PO model, String attributeName, LoginInfo loginInfo) {
+		if(null==model) return -1;
 		this.setEditDefault(model, loginInfo, false);
-		this.getBindDao().updateBy(model);
+		return this.getBindDao().updateBy(model, attributeName);
+	}
+	
+	/**
+	 * 修改.<br/>
+	 * @Date	2018年3月2日 上午11:17:27 <br/>
+	 * @author  zhangST
+	 * @param model
+	 * @param loginInfo
+	 */
+	public int updateById(PO model, LoginInfo loginInfo) {
+		if(null==model) return -1;
+		this.setEditDefault(model, loginInfo, false);
+		return this.getBindDao().updateById(model);
 	}
 	
 	/**
@@ -93,9 +107,9 @@ public abstract class GenericService<PO> extends BaseServiceAbstract {
 	 * @param model
 	 * @param loginInfo
 	 */
-	public void delBy(PO model, LoginInfo loginInfo) {
-		if(null==model) return;
-		this.getBindDao().deleteBy(model);
+	public int delBy(PO model, LoginInfo loginInfo) {
+		if(null==model) return -1;
+		return this.getBindDao().deleteBy(model);
 	}
 	
 	/**
@@ -108,7 +122,7 @@ public abstract class GenericService<PO> extends BaseServiceAbstract {
 	public void removeBy(PO model, LoginInfo loginInfo) {
 		if(null==model) return;
 		this.setEditDefault(model, loginInfo, true);
-		this.getBindDao().updateBy(model);
+//		this.getBindDao().updateBy(model);
 	}
 	
 	/**
@@ -162,7 +176,7 @@ public abstract class GenericService<PO> extends BaseServiceAbstract {
 			this.setEditDefault(paramMap, loginInfo, true);
 			params.add(paramMap);
 		}
-		this.getBindDao().updateBatch(params);
+//		this.getBindDao().updateBatch(params);
 	}
 	
 	/**

@@ -21,7 +21,7 @@ import com.yffd.easy.uupm.service.UupmRoleService;
 
 /**
  * @Description  简单描述该类的功能（可选）.
- * @Date		 2018年03月12日 16时09分52秒 <br/>
+ * @Date		 2018年03月15日 10时02分10秒 <br/>
  * @author		 ZhangST
  * @version		 1.0
  * @since		 JDK 1.7+
@@ -61,7 +61,7 @@ public class UupmRoleController extends UupmBaseController {
 		if(null==model || EasyStringCheckUtils.isEmpty(model.getId())) {
 			return this.error("参数无效");
 		}
-		this.uupmRoleService.updateBy(model, null);
+		this.uupmRoleService.updateById(model, null);
 		return this.successAjax();
 	}
 	
@@ -76,7 +76,7 @@ public class UupmRoleController extends UupmBaseController {
 	public RespModel delBatch(HttpServletRequest req) {
 		String ids = req.getParameter("ids");
 		if(EasyStringCheckUtils.isEmpty(ids)) return this.error("参数无效");
-		int result = this.uupmRoleService.deleteByIn("id", ids, null, null);
+		int result = this.uupmRoleService.delWithInBy("id", ids, null);
 		if(result==-1) return this.error("参数无效");
 		return this.successAjax();
 	}

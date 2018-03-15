@@ -50,18 +50,25 @@
 		<if test="tenantCode != null and tenantCode != ''"> and t.TENANT_CODE = #{tenantCode} </if>
 		<!-- Like query -->
 		<if test="roleName != null and roleName != ''"> and t.ROLE_NAME like CONCAT(CONCAT('%', #{roleName}), '%') </if>
+	
+		<!-- 非model属性：in条件处理拼写，要求List集合中的值能转换成key-value形式，例如map、自定义model对象等 -->
+		<if test="idList != null and idList.size()>0">
+		and ID in <foreach item="item" index="index" collection="idList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="roleCodeList != null and roleCodeList.size()>0">
+		and ROLE_CODE in <foreach item="item" index="index" collection="roleCodeList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="roleNameList != null and roleNameList.size()>0">
+		and ROLE_NAME in <foreach item="item" index="index" collection="roleNameList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="roleStatusList != null and roleStatusList.size()>0">
+		and ROLE_STATUS in <foreach item="item" index="index" collection="roleStatusList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="tenantCodeList != null and tenantCodeList.size()>0">
+		and TENANT_CODE in <foreach item="item" index="index" collection="tenantCodeList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+	
 	</sql>
-
-	<!-- 分页查询 -->
-	<select id="selectRangeBy" parameterType="java.util.Map" resultMap="resutlId">
-		select <include refid="table_columns" />
-		from <include refid="table_name"/>  as t 
-		<where>
-			<include refid="conditions_where" />
-		</where>
-		<include refid="conditions_orderby" />
-		<include refid="conditions_limit" />
-	</select>
 
 	<!-- 条件查询 -->
 	<select id="selectListBy" parameterType="java.util.Map" resultMap="resutlId">
@@ -79,16 +86,6 @@
 		<include refid="table_name"/>  as t 
 		<where>
 			<include refid="conditions_where" />
-		</where>
-	</select>
-
-	<!-- in条件查询 -->
-	<select id="selectListByIds" parameterType="java.util.List" resultMap="resutlId">
-		select <include refid="table_columns" /> 
-		from <include refid="table_name"/>  as t 
-		<where>
-			t.ID in 
-			<foreach item="item" index="index" collection="list" open="(" separator="," close=")">#{item}</foreach>
 		</where>
 	</select>
 
@@ -134,51 +131,59 @@
 	<update id="updateBy" parameterType="java.util.Map">
 		update <include refid="table_name" />
 		<set>
-		VERSION = VERSION + 1, 
-		<if test="delFlag != null and delFlag != ''"> DEL_FLAG = #{delFlag},  </if>
-		<if test="createBy != null and createBy != ''"> CREATE_BY = #{createBy},  </if>
-		<if test="updateBy != null and updateBy != ''"> UPDATE_BY = #{updateBy},  </if>
-		<if test="updateTime != null "> UPDATE_TIME = #{updateTime},  </if>
-		<if test="remark != null and remark != ''"> REMARK = #{remark},  </if>
-		<if test="roleCode != null and roleCode != ''"> ROLE_CODE = #{roleCode},  </if>
-		<if test="roleName != null and roleName != ''"> ROLE_NAME = #{roleName},  </if>
-		<if test="roleStatus != null and roleStatus != ''"> ROLE_STATUS = #{roleStatus},  </if>
-		<if test="tenantCode != null and tenantCode != ''"> TENANT_CODE = #{tenantCode},  </if>
+		<if test="newParam != null">
+			VERSION = VERSION + 1, 
+			<if test="newParam.delFlag != null and newParam.delFlag != ''"> DEL_FLAG = #{newParam.delFlag},  </if>
+			<if test="newParam.updateBy != null and newParam.updateBy != ''"> UPDATE_BY = #{newParam.updateBy},  </if>
+			<if test="newParam.updateTime != null"> UPDATE_TIME = #{newParam.updateTime},  </if>
+			<if test="newParam.remark != null and newParam.remark != ''"> REMARK = #{newParam.remark},  </if>
+			<if test="newParam.roleCode != null and newParam.roleCode != ''"> ROLE_CODE = #{newParam.roleCode},  </if>
+			<if test="newParam.roleName != null and newParam.roleName != ''"> ROLE_NAME = #{newParam.roleName},  </if>
+			<if test="newParam.roleStatus != null and newParam.roleStatus != ''"> ROLE_STATUS = #{newParam.roleStatus},  </if>
+			<if test="newParam.tenantCode != null and newParam.tenantCode != ''"> TENANT_CODE = #{newParam.tenantCode},  </if>
+		</if>
 		</set>
 		<where>
-			ID = #{id}
-			<if test="version != null "> and VERSION = #{version} </if>
+		<if test="oldParam != null">
+			<if test="oldParam.version != null"> and VERSION = #{oldParam.version}  </if>
+			<if test="oldParam.delFlag != null and oldParam.delFlag != ''"> and DEL_FLAG = #{oldParam.delFlag}  </if>
+			<if test="oldParam.createBy != null and oldParam.createBy != ''"> and CREATE_BY = #{oldParam.createBy}  </if>
+			<if test="oldParam.createTime != null"><![CDATA[ and CREATE_TIME = #{oldParam.createTime} ]]> </if>
+			<if test="oldParam.id != null and oldParam.id != ''"> and ID = #{oldParam.id}  </if>
+			<if test="oldParam.remark != null and oldParam.remark != ''"> and REMARK = #{oldParam.remark}  </if>
+			<if test="oldParam.roleCode != null and oldParam.roleCode != ''"> and ROLE_CODE = #{oldParam.roleCode}  </if>
+			<if test="oldParam.roleName != null and oldParam.roleName != ''"> and ROLE_NAME = #{oldParam.roleName}  </if>
+			<if test="oldParam.roleStatus != null and oldParam.roleStatus != ''"> and ROLE_STATUS = #{oldParam.roleStatus}  </if>
+			<if test="oldParam.tenantCode != null and oldParam.tenantCode != ''"> and TENANT_CODE = #{oldParam.tenantCode}  </if>
+		</if>
+		<if test="oldInParam != null">
+			<!-- 非model属性：in条件处理拼写，要求List集合中的值能转换成key-value形式，例如map、自定义model对象等 -->
+			<if test="oldInParam.idList != null and oldInParam.idList.size()>0">
+			and ID in <foreach item="item" index="index" collection="oldInParam.idList" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+			<if test="oldInParam.roleCodeList != null and oldInParam.roleCodeList.size()>0">
+			and ROLE_CODE in <foreach item="item" index="index" collection="oldInParam.roleCodeList" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+			<if test="oldInParam.roleNameList != null and oldInParam.roleNameList.size()>0">
+			and ROLE_NAME in <foreach item="item" index="index" collection="oldInParam.roleNameList" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+			<if test="oldInParam.roleStatusList != null and oldInParam.roleStatusList.size()>0">
+			and ROLE_STATUS in <foreach item="item" index="index" collection="oldInParam.roleStatusList" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+			<if test="oldInParam.tenantCodeList != null and oldInParam.tenantCodeList.size()>0">
+			and TENANT_CODE in <foreach item="item" index="index" collection="oldInParam.tenantCodeList" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+		</if>
+		<!-- 防止没有参数传递，导致全部更新 -->
+		or 1=2
 		</where>
-	</update>
-
-	<!-- 批量更新 -->
-	<update id="updateBatch" parameterType="java.util.List">
-		<foreach collection="list" item="item" index="index" separator=";">
-		update <include refid="table_name" />
-		<set>
-		VERSION = VERSION + 1, 
-		<if test="item.delFlag != null and item.delFlag != ''"> DEL_FLAG = #{item.delFlag},  </if>
-		<if test="item.createBy != null and item.createBy != ''"> CREATE_BY = #{item.createBy},  </if>
-		<if test="item.createTime != null "> CREATE_TIME = #{item.createTime},  </if>
-		<if test="item.updateBy != null and item.updateBy != ''"> UPDATE_BY = #{item.updateBy},  </if>
-		<if test="item.updateTime != null "> UPDATE_TIME = #{item.updateTime},  </if>
-		<if test="item.remark != null and item.remark != ''"> REMARK = #{item.remark},  </if>
-		<if test="item.roleCode != null and item.roleCode != ''"> ROLE_CODE = #{item.roleCode},  </if>
-		<if test="item.roleName != null and item.roleName != ''"> ROLE_NAME = #{item.roleName},  </if>
-		<if test="item.roleStatus != null and item.roleStatus != ''"> ROLE_STATUS = #{item.roleStatus},  </if>
-		<if test="item.tenantCode != null and item.tenantCode != ''"> TENANT_CODE = #{item.tenantCode},  </if>
-		</set>
-		<where>
-			ID = #{item.id}
-			<if test="item.version != null "> and VERSION = #{item.version} </if>
-		</where>
-		</foreach>
 	</update>
 
 	<!-- 删除 -->
 	<delete id="deleteBy" parameterType="java.util.Map">
 		delete from <include refid="table_name" />
 		<where>
+		<!-- model属性： -->
 		<if test="version != null "> and VERSION = #{version} </if>
 		<if test="delFlag != null and delFlag != ''"> and DEL_FLAG = #{delFlag} </if>
 		<if test="createBy != null and createBy != ''"> and CREATE_BY = #{createBy} </if>
@@ -192,43 +197,21 @@
 		<if test="roleStatus != null and roleStatus != ''"> and ROLE_STATUS = #{roleStatus} </if>
 		<if test="tenantCode != null and tenantCode != ''"> and TENANT_CODE = #{tenantCode} </if>
 		
-		<!-- 防止没有参数传递，导致全部删除 -->
-		or 1=2
-		</where>
-	</delete>
-	
-	<!-- 删除 -->
-	<delete id="deleteWithInBy" parameterType="java.util.Map">
-		delete from <include refid="table_name" />
-		<where>
-		<if test="version != null "> and VERSION = #{version} </if>
-		<if test="delFlag != null and delFlag != ''"> and DEL_FLAG = #{delFlag} </if>
-		<if test="createBy != null and createBy != ''"> and CREATE_BY = #{createBy} </if>
-		<if test="createTime != null "><![CDATA[ and CREATE_TIME = #{createTime}]]> </if>
-		<if test="updateBy != null and updateBy != ''"> and UPDATE_BY = #{updateBy} </if>
-		<if test="updateTime != null "><![CDATA[ and UPDATE_TIME = #{updateTime}]]> </if>
-		<if test="id != null and id != ''"> and ID = #{id} </if>
-		<if test="remark != null and remark != ''"> and REMARK = #{remark} </if>
-		<if test="roleCode != null and roleCode != ''"> and ROLE_CODE = #{roleCode} </if>
-		<if test="roleName != null and roleName != ''"> and ROLE_NAME = #{roleName} </if>
-		<if test="roleStatus != null and roleStatus != ''"> and ROLE_STATUS = #{roleStatus} </if>
-		<if test="tenantCode != null and tenantCode != ''"> and TENANT_CODE = #{tenantCode} </if>
-		
-		<!-- 批量处理拼写，要求List集合的值能转换成map形式 -->
+		<!-- 非model属性：in条件处理拼写，要求List集合中的值能转换成key-value形式，例如map、自定义model对象等 -->
 		<if test="idList != null and idList.size()>0">
-		and ID in <foreach item="item" index="index" collection="idList" open="(" separator="," close=")">#{item.id}</foreach>
+		and ID in <foreach item="item" index="index" collection="idList" open="(" separator="," close=")">#{item}</foreach>
 		</if>
 		<if test="roleCodeList != null and roleCodeList.size()>0">
-		and ROLE_CODE in <foreach item="item" index="index" collection="roleCodeList" open="(" separator="," close=")">#{item.roleCode}</foreach>
+		and ROLE_CODE in <foreach item="item" index="index" collection="roleCodeList" open="(" separator="," close=")">#{item}</foreach>
 		</if>
 		<if test="roleNameList != null and roleNameList.size()>0">
-		and ROLE_NAME in <foreach item="item" index="index" collection="roleNameList" open="(" separator="," close=")">#{item.roleName}</foreach>
+		and ROLE_NAME in <foreach item="item" index="index" collection="roleNameList" open="(" separator="," close=")">#{item}</foreach>
 		</if>
 		<if test="roleStatusList != null and roleStatusList.size()>0">
-		and ROLE_STATUS in <foreach item="item" index="index" collection="roleStatusList" open="(" separator="," close=")">#{item.roleStatus}</foreach>
+		and ROLE_STATUS in <foreach item="item" index="index" collection="roleStatusList" open="(" separator="," close=")">#{item}</foreach>
 		</if>
 		<if test="tenantCodeList != null and tenantCodeList.size()>0">
-		and TENANT_CODE in <foreach item="item" index="index" collection="tenantCodeList" open="(" separator="," close=")">#{item.tenantCode}</foreach>
+		and TENANT_CODE in <foreach item="item" index="index" collection="tenantCodeList" open="(" separator="," close=")">#{item}</foreach>
 		</if>
 		
 		<!-- 防止没有参数传递，导致全部删除 -->

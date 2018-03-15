@@ -96,24 +96,37 @@ public class GenericDao<PO> extends CommonDao {
 		if(null==model) throw EasyDaoException.DB_INSERT_NULL(getStatement(SQL_INSERT_ONE));
 		Map<String, Object> paramMap = this.model2map(model, null);
 		int result = super.insertOne(paramMap);
-//        if(result <= 0) throw EasyDaoException.DB_INSERT_RESULT_0(getStatement(SQL_INSERT_ONE));
         return result;
 	}
 
 	/**
-	 * 更新.<br/>
+	 * 更新：根据指定属性更新其它属性.<br/>
 	 * @sqlid : {@link com.yffd.easy.framework.base.dao.BaseDaoAbstract#SQL_UPDATE_BY} <br/>
 	 * @Date	2018年3月2日 上午10:19:31 <br/>
 	 * @author  zhangST
 	 * @param model
+	 * @param attributeName
 	 * @return
 	 */
-	public int updateBy(PO model) {
+	public int updateBy(PO model, String attributeName) {
 		if(null==model) throw EasyDaoException.DB_UPDATE_NULL(getStatement(SQL_UPDATE_BY));
 		Map<String, Object> paramMap = this.model2map(model, null);
-        int result = super.updateBy(paramMap);
-//        if(result <= 0) throw EasyDaoException.DB_UPDATE_RESULT_0(getStatement(SQL_UPDATE_BY));
+        int result = super.updateBy(paramMap, attributeName);
         return result;
+	}
+	
+	/**
+	 * 更新：根据id属性更新其它属性
+	 * @sqlid : {@link com.yffd.easy.framework.base.dao.BaseDaoAbstract#SQL_UPDATE_BY} <br/>
+	 * @Date	2018年3月14日 上午11:36:46 <br/>
+	 * @author  zhangST
+	 * @param model
+	 * @return
+	 */
+	public int updateById(PO model) {
+		if(null==model) throw EasyDaoException.DB_UPDATE_NULL(getStatement(SQL_UPDATE_BY));
+		int result = this.updateBy(model, "id");
+		return result;
 	}
 
 	/**
@@ -123,12 +136,12 @@ public class GenericDao<PO> extends CommonDao {
 	 * @author  zhangST
 	 * @param model
 	 * @return
+	 * @see #deleteBy(Map)
 	 */
 	public int deleteBy(PO model) {
 		if(null==model) throw EasyDaoException.DB_DELETE_NULL(getStatement(SQL_DELETE_BY));
 		Map<String, Object> paramMap = this.model2map(model, null);
 		int result = super.deleteBy(paramMap);
-//		if(result <= 0) throw EasyDaoException.DB_DELETE_RESULT_0(getStatement(SQL_DELETE_BY));
         return result;
 	}
 	

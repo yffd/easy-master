@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,15 +105,24 @@ public class CommonDao extends BaseDaoAbstract {
 	
 	/**
 	 * in条件查询.<br/>
-	 * @sqlid : {@link com.yffd.easy.framework.base.dao.BaseDaoAbstract#SQL_SELECT_LIST_BY_IDS} <br/>
+	 * @sqlid : {@link com.yffd.easy.framework.base.dao.BaseDaoAbstract#SQL_SELECT_LIST_BY} <br/>
 	 * @Date	2018年3月2日 上午9:41:35 <br/>
 	 * @author  zhangST
 	 * @param list
 	 * @return
+	 * @see #selectListBy(Map)
 	 */
 	public List<?> selectListByIds(List<String> list) {
-		if(null==list || list.size()==0) throw EasyDaoException.DB_SELECT_NULL(getStatement(SQL_SELECT_LIST_BY_IDS));
-        return super.selectListByIds_(list);
+		if(null==list || list.size()==0) throw EasyDaoException.DB_SELECT_NULL(getStatement(SQL_SELECT_LIST_BY));
+		List<Map<String, Object>> paramList = new ArrayList<Map<String, Object>>();
+		for(String id : list) {
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("id", id);
+			paramList.add(map);
+		}
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("idList", paramList);
+        return this.selectListBy(paramMap);
 	}
 	
 	/**
@@ -157,34 +168,169 @@ public class CommonDao extends BaseDaoAbstract {
 
 	/**
 	 * 更新.<br/>
-	 * @sqlid : {@link com.yffd.easy.framework.base.dao.BaseDaoAbstract#SQL_UPDATE_BY} <br/>
-	 * @Date	2018年3月2日 上午9:45:41 <br/>
+	 * @sqlid : {@link com.yffd.easy.framework.base.dao.BaseDaoAbstract#SQL_DELETE_BY} <br/>
+	 * @Date	2018年3月13日 下午3:41:23 <br/>
+	 * @author  zhangST
+	 * @param newMap
+	 * @param oldMap
+	 * @return
+	 */
+	public int updateBy(Map<String, Object> newMap, Map<String, Object> oldMap) {
+		if(null==newMap || newMap.size()==0 || null==oldMap || oldMap.size()==0) 
+			throw EasyDaoException.DB_UPDATE_NULL(getStatement(SQL_DELETE_BY));
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("newParam", newMap);
+		paramMap.put("oldParam", oldMap);
+		int result = super.updateBy_(paramMap);
+		return result;
+	}
+	
+	/**
+	 * 更新.<br/>
+	 * @Date	2018年3月13日 下午4:47:06 <br/>
 	 * @author  zhangST
 	 * @param paramMap
+	 * @param attributeNames		条件属性名称集合
 	 * @return
 	 */
-	public int updateBy(Map<String, Object> paramMap) {
-		if(null==paramMap || paramMap.size()==0) throw EasyDaoException.DB_UPDATE_NULL(getStatement(SQL_UPDATE_BY));
-        int result = super.updateBy_(paramMap);
-//        if(result <= 0) throw EasyDaoException.DB_UPDATE_RESULT_0(getStatement(SQL_UPDATE_BY));
-        return result;
+	public int updateBy(Map<String, Object> paramMap, String... attributeNames) {
+		if(null==paramMap || paramMap.size()==0 || null==attributeNames || attributeNames.length==0) 
+			throw EasyDaoException.DB_UPDATE_NULL(getStatement(SQL_DELETE_BY));
+		Map<String, Object> oldMap = new HashMap<String, Object>();
+		Map<String, Object> newMap = new HashMap<String, Object>();
+		newMap.putAll(paramMap);
+		
+		for(String attributeName : attributeNames) {
+			if(paramMap.containsKey(attributeName)) {
+				Object idValue = paramMap.get(attributeName);
+				if(null==idValue || EasyStringCheckUtils.isEmpty((String) idValue)) continue;
+				oldMap.put(attributeName, paramMap.get(attributeName));
+				
+				newMap.remove(attributeName);
+			}
+		}
+		int result = this.updateBy(newMap, oldMap);
+		return result;
 	}
-
+	
 	/**
-	 * 批量更新.<br/>
-	 * @sqlid : {@link com.yffd.easy.framework.base.dao.BaseDaoAbstract#SQL_UPDATE_BATCH} <br/>
-	 * @Date	2018年3月2日 上午9:45:56 <br/>
+	 * 更新.<br/>
+	 * @Date	2018年3月13日 下午4:39:21 <br/>
 	 * @author  zhangST
-	 * @param list
+	 * @param paramMap
+	 * @param attributeName		条件属性名称
+	 * @return
+	 * @see #updateBy(Map, String...)
+	 */
+	public int updateBy(Map<String, Object> paramMap, String attributeName) {
+		String[] arr = {attributeName};
+		int result = this.updateBy(paramMap, arr);
+		return result;
+	}
+	
+	/**
+	 * 更新.<br/>
+	 * @Date	2018年3月13日 下午3:43:51 <br/>
+	 * @author  zhangST
+	 * @param paramMap
+	 * @return			-1：没有找到key为“id”所对应的有效值
+	 * @see #updateBy(Map, String...)
+	 */
+	public int updateById(Map<String, Object> paramMap) {
+		String[] arr = {"id"};
+		int result = this.updateBy(paramMap, arr);
+		return result;
+	}
+	
+	/**
+	 * 更新.<br/>
+	 * @Date	2018年3月13日 下午3:55:25 <br/>
+	 * @author  zhangST
+	 * @param newMap
+	 * @param idsList
+	 * @return
+	 * @see #updateWithInBy(Map, Map, Map)
+	 */
+	public int updateByIds(Map<String, Object> newMap, List<String> idsList) {
+		if(null==idsList || idsList.size()==0) 
+			throw EasyDaoException.DB_DELETE_NULL(getStatement(SQL_DELETE_BY));
+		
+		Map<String, Object> oldInMap = new HashMap<String, Object>();
+		oldInMap.put("id", idsList);
+		int result = this.updateWithInBy(newMap, null, oldInMap);
+		return result;
+	}
+	
+	/**
+	 * 更新.<br/>
+	 * @Date	2018年3月13日 下午3:52:34 <br/>
+	 * @author  zhangST
+	 * @param newMap		新值集合，作为set列
+	 * @param inName		in条件名称，作为where列
+	 * @param inValueList	in条件值，不可以为空，数据格式：List<String> == " ID in ( 1,2,3 ) "
+	 * @return
+	 * @see #updateWithInBy(Map, Map, Map)
+	 */
+	public int updateWithInBy(Map<String, Object> newMap, String inName, List<?> inValueList) {
+		if(EasyStringCheckUtils.isEmpty(inName) || null==inValueList || inValueList.size()==0) 
+			throw EasyDaoException.DB_DELETE_NULL(getStatement(SQL_DELETE_BY));
+		
+		Map<String, Object> oldInMap = new HashMap<String, Object>();
+		oldInMap.put(inName, inValueList);
+		int result = this.updateWithInBy(newMap, null, oldInMap);
+		return result;
+	}
+	
+	/**
+	 * 更新.<br/>
+	 * @Date	2018年3月13日 下午3:50:19 <br/>
+	 * @author  zhangST
+	 * @param newMap		新值集合，作为set列
+	 * @param oldMap		旧值集合，作为where列
+	 * @param inName		in条件名称，不可以为空，作为where列
+	 * @param inValueList	in条件值，不可以为空，数据格式：List<String> == " ID in ( 1,2,3 ) "
+	 * @return
+	 * @see #updateWithInBy(Map, Map, Map)
+	 */
+	public int updateWithInBy(Map<String, Object> newMap, Map<String, Object> oldMap, String inName, List<?> inValueList) {
+		if(EasyStringCheckUtils.isEmpty(inName) || null==inValueList || inValueList.size()==0) 
+			throw EasyDaoException.DB_DELETE_NULL(getStatement(SQL_DELETE_BY));
+		Map<String, Object> oldInMap = new HashMap<String, Object>();
+		oldInMap.put(inName, inValueList);
+		int result = this.updateWithInBy(newMap, oldMap, oldInMap);
+		return result;
+	}
+	
+	/**
+	 * 更新.<br/>
+	 * @sqlid : {@link com.yffd.easy.framework.base.dao.BaseDaoAbstract#SQL_DELETE_BY} <br/>
+	 * @Date	2018年3月13日 下午4:13:33 <br/>
+	 * @author  zhangST
+	 * @param newMap		新值集合，作为set列
+	 * @param oldMap		旧值集合，作为where列
+	 * @param oldInMap		in值集合，作为where列，数据格式：inName：inValueList，如：Map<String,List<String>> == Map<"id", List<String>> == " ID in ( 1,2,3 ) "
 	 * @return
 	 */
-	public int updateBatch(List<?> list) {
-		if(null==list || list.size()==0) throw EasyDaoException.DB_UPDATE_NULL(getStatement(SQL_UPDATE_BATCH));
-        int result = super.updateBatch_(list);
-//        if(result <= 0) throw EasyDaoException.DB_UPDATE_RESULT_0(getStatement(SQL_UPDATE_BATCH));
-        return result;
-	}
+	public int updateWithInBy(Map<String, Object> newMap, Map<String, Object> oldMap, Map<String, Object> oldInMap) {
+		if((null==oldMap || oldMap.size()==0)
+				&& (null==oldInMap || oldInMap.size()==0)) throw EasyDaoException.DB_DELETE_NULL(getStatement(SQL_DELETE_BY));
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("newParam", newMap);
+		paramMap.put("oldParam", oldMap);
 
+		Map<String, Object> _oldInMap = null;
+		if(null!=oldInMap && oldInMap.size()>0) {
+			_oldInMap = new HashMap<String, Object>();
+			for(Entry<String, Object> entry : oldInMap.entrySet()) {
+				_oldInMap.put(entry.getKey() + "List", entry.getValue());
+			}
+		}
+		
+		paramMap.put("oldInParam", _oldInMap);
+		int result = this.updateBy_(paramMap);
+		return result;
+	}
+	
 	/**
 	 * 删除.<br/>
 	 * @sqlid : {@link com.yffd.easy.framework.base.dao.BaseDaoAbstract#SQL_DELETE_BY} <br/>
@@ -196,7 +342,6 @@ public class CommonDao extends BaseDaoAbstract {
 	public int deleteBy(Map<String, Object> paramMap) {
 		if(null==paramMap || paramMap.size()==0) throw EasyDaoException.DB_DELETE_NULL(getStatement(SQL_DELETE_BY));
 		int result = super.deleteBy_(paramMap);
-//		if(result <= 0) throw EasyDaoException.DB_DELETE_RESULT_0(getStatement(SQL_DELETE_BY));
         return result;
 	}
 	
@@ -213,42 +358,7 @@ public class CommonDao extends BaseDaoAbstract {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("id", id);
 		int result = this.deleteBy(paramMap);
-//		if(result <= 0) throw EasyDaoException.DB_DELETE_RESULT_0(getStatement(SQL_DELETE_BY));
         return result;
-	}
-	
-	/**
-	 * 删除.<br/>
-	 * @sqlid : {@link com.yffd.easy.framework.base.dao.BaseDaoAbstract#SQL_DELETE_WITH_IN_BY} <br/>
-	 * @Date	2018年3月12日 下午4:49:38 <br/>
-	 * @author  zhangST
-	 * @param paramMap			其它条件
-	 * @param inName			in条件名称
-	 * @param inValueList		in条件值
-	 * @return
-	 */
-	public int deleteWithInBy(Map<String, Object> paramMap, String inName, List<?> inValueList) {
-		if(EasyStringCheckUtils.isEmpty(inName) || null==inValueList || inValueList.size()==0) 
-			throw EasyDaoException.DB_DELETE_NULL(getStatement(SQL_DELETE_WITH_IN_BY));
-		Map<String, Object> inMap = new HashMap<String, Object>();
-		inMap.put(inName, inValueList);
-		int result = super.deleteWithInBy_(paramMap, inMap);
-//		if(result <= 0) throw EasyDaoException.DB_DELETE_RESULT_0(getStatement(SQL_DELETE_WITH_IN_BY));
-		return result;
-	}
-	
-	/**
-	 * 删除.<br/>
-	 * @Date	2018年3月12日 下午4:49:38 <br/>
-	 * @author  zhangST
-	 * @param inName			in条件名称
-	 * @param inValueList		in条件值，list中的类型为能转换成key-value对形式，如 Map、自定义实体类等
-	 * @return
-	 * @see #deleteWithInBy(Map, String, List)
-	 */
-	public int deleteWithInBy(String inName, List<?> inValueList) {
-		int result = this.deleteWithInBy(null, inName, inValueList);
-		return result;
 	}
 	
 	/**
@@ -257,18 +367,74 @@ public class CommonDao extends BaseDaoAbstract {
 	 * @author  zhangST
 	 * @param list
 	 * @return
-	 * @see #deleteBy(String, List)
+	 * @see #deleteWithInBy(Map, Map)
 	 */
 	public int deleteByIds(List<String> list) {
-		List<Map<String, Object>> paramList = new ArrayList<Map<String, Object>>();
-		for(String id : list) {
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("id", id);
-			paramList.add(map);
-		}
-		int result = this.deleteWithInBy(null, "id", paramList);
+		int result = this.deleteWithInBy(null, "id", list);
+		if(null==list || list.size()==0) throw EasyDaoException.DB_DELETE_NULL(getStatement(SQL_DELETE_BY));
+		Map<String, Object> inMap = new HashMap<String, Object>();
+		inMap.put("id", list);
         return result;
 	}
+	
+	/**
+	 * 删除.<br/>
+	 * @Date	2018年3月12日 下午4:49:38 <br/>
+	 * @author  zhangST
+	 * @param inName			in条件名称
+	 * @param inValueList		in条件，格式：List<String> == " ID in ( 1,2,3 ) "
+	 * @return
+	 * @see #deleteWithInBy(Map, Map)
+	 */
+	public int deleteWithInBy(String inName, List<?> inValueList) {
+		if(EasyStringCheckUtils.isEmpty(inName) || null==inValueList || inValueList.size()==0) 
+			throw EasyDaoException.DB_DELETE_NULL(getStatement(SQL_DELETE_BY));
+		Map<String, Object> inMap = new HashMap<String, Object>();
+		inMap.put(inName, inValueList);
+		int result = this.deleteWithInBy(null, inMap);
+		return result;
+	}
+	
+	/**
+	 * 删除.<br/>
+	 * @Date	2018年3月12日 下午4:49:38 <br/>
+	 * @author  zhangST
+	 * @param paramMap			其它条件
+	 * @param inName			in条件名称
+	 * @param inValueList		in条件，格式：List<String> == " ID in ( 1,2,3 ) "
+	 * @return
+	 * @see #deleteWithInBy(Map, Map)
+	 */
+	public int deleteWithInBy(Map<String, Object> paramMap, String inName, List<?> inValueList) {
+		if(EasyStringCheckUtils.isEmpty(inName) || null==inValueList || inValueList.size()==0) 
+			throw EasyDaoException.DB_DELETE_NULL(getStatement(SQL_DELETE_BY));
+		Map<String, Object> inMap = new HashMap<String, Object>();
+		inMap.put(inName, inValueList);
+		int result = this.deleteWithInBy(paramMap, inMap);
+		return result;
+	}
+	
+	/**
+	 * 删除.<br/>
+	 * @sqlid : {@link com.yffd.easy.framework.base.dao.BaseDaoAbstract#SQL_DELETE_BY} <br/>
+	 * @Date	2018年3月12日 下午4:41:04 <br/>
+	 * @author  zhangST
+	 * @param paramMap		普通条件
+	 * @param inMap			in条件，格式：Map<String, List<String>> == Map<"id", List<String>> == " ID in ( 1,2,3 ) "
+	 * @return
+	 */
+	public <T> int deleteWithInBy(Map<String, Object> paramMap, Map<String, T> inMap) {
+		if(null!=inMap && inMap.size()>0) {
+			if(null==paramMap || paramMap.size()==0) paramMap = new HashMap<String, Object>();
+			Set<String> keys = inMap.keySet();
+			for(String key : keys) {
+				paramMap.put(key + "List", inMap.get(key));
+			}
+		}
+		if(null==paramMap || paramMap.size()==0) throw EasyDaoException.DB_DELETE_NULL(getStatement(SQL_DELETE_BY));
+		return super.deleteBy_(paramMap);
+	}
+	
 	
 	private List<Object> selectList(Map<String, Object> paramMap, PageParam pageParam) {
 		if (null==paramMap) paramMap = new HashMap<String, Object>();
@@ -300,7 +466,7 @@ public class CommonDao extends BaseDaoAbstract {
 			paramMap.put("pageParam", null);
 		}
 		// 获取分页数据集
-		List<Object> recordList = super.selectRangeBy_(paramMap);
+		List<Object> recordList = super.selectListBy_(paramMap);
 		return recordList;
 	}
 	

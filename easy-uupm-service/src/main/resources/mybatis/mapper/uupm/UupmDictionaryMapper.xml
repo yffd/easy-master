@@ -58,18 +58,37 @@
 		<if test="tenantCode != null and tenantCode != ''"> and t.TENANT_CODE = #{tenantCode} </if>
 		<!-- Like query -->
 		<if test="itemName != null and itemName != ''"> and t.ITEM_NAME like CONCAT(CONCAT('%', #{itemName}), '%') </if>
+	
+		<!-- 非model属性：in条件处理拼写，要求List集合中的值能转换成key-value形式，例如map、自定义model对象等 -->
+		<if test="idList != null and idList.size()>0">
+		and ID in <foreach item="item" index="index" collection="idList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="dataLabelList != null and dataLabelList.size()>0">
+		and DATA_LABEL in <foreach item="item" index="index" collection="dataLabelList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="dataPathList != null and dataPathList.size()>0">
+		and DATA_PATH in <foreach item="item" index="index" collection="dataPathList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="dataScopeList != null and dataScopeList.size()>0">
+		and DATA_SCOPE in <foreach item="item" index="index" collection="dataScopeList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="itemCodeList != null and itemCodeList.size()>0">
+		and ITEM_CODE in <foreach item="item" index="index" collection="itemCodeList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="itemNameList != null and itemNameList.size()>0">
+		and ITEM_NAME in <foreach item="item" index="index" collection="itemNameList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="parentCodeList != null and parentCodeList.size()>0">
+		and PARENT_CODE in <foreach item="item" index="index" collection="parentCodeList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="seqNoList != null and seqNoList.size()>0">
+		and SEQ_NO in <foreach item="item" index="index" collection="seqNoList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="tenantCodeList != null and tenantCodeList.size()>0">
+		and TENANT_CODE in <foreach item="item" index="index" collection="tenantCodeList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+	
 	</sql>
-
-	<!-- 分页查询 -->
-	<select id="selectRangeBy" parameterType="java.util.Map" resultMap="resutlId">
-		select <include refid="table_columns" />
-		from <include refid="table_name"/>  as t 
-		<where>
-			<include refid="conditions_where" />
-		</where>
-		<include refid="conditions_orderby" />
-		<include refid="conditions_limit" />
-	</select>
 
 	<!-- 条件查询 -->
 	<select id="selectListBy" parameterType="java.util.Map" resultMap="resutlId">
@@ -87,16 +106,6 @@
 		<include refid="table_name"/>  as t 
 		<where>
 			<include refid="conditions_where" />
-		</where>
-	</select>
-
-	<!-- in条件查询 -->
-	<select id="selectListByIds" parameterType="java.util.List" resultMap="resutlId">
-		select <include refid="table_columns" /> 
-		from <include refid="table_name"/>  as t 
-		<where>
-			t.ID in 
-			<foreach item="item" index="index" collection="list" open="(" separator="," close=")">#{item}</foreach>
 		</where>
 	</select>
 
@@ -146,71 +155,79 @@
 	<update id="updateBy" parameterType="java.util.Map">
 		update <include refid="table_name" />
 		<set>
-		VERSION = VERSION + 1, 
-		<if test="delFlag != null and delFlag != ''"> DEL_FLAG = #{delFlag},  </if>
-		<if test="createBy != null and createBy != ''"> CREATE_BY = #{createBy},  </if>
-		<if test="updateBy != null and updateBy != ''"> UPDATE_BY = #{updateBy},  </if>
-		<if test="updateTime != null "> UPDATE_TIME = #{updateTime},  </if>
-		<if test="dataLabel != null and dataLabel != ''"> DATA_LABEL = #{dataLabel},  </if>
-		<if test="dataPath != null and dataPath != ''"> DATA_PATH = #{dataPath},  </if>
-		<if test="dataScope != null and dataScope != ''"> DATA_SCOPE = #{dataScope},  </if>
-		<if test="itemCode != null and itemCode != ''"> ITEM_CODE = #{itemCode},  </if>
-		<if test="itemName != null and itemName != ''"> ITEM_NAME = #{itemName},  </if>
-		<if test="parentCode != null and parentCode != ''"> PARENT_CODE = #{parentCode},  </if>
-		<if test="remark != null and remark != ''"> REMARK = #{remark},  </if>
-		<if test="seqNo != null "> SEQ_NO = #{seqNo},  </if>
-		<if test="tenantCode != null and tenantCode != ''"> TENANT_CODE = #{tenantCode},  </if>
+		<if test="newParam != null">
+			VERSION = VERSION + 1, 
+			<if test="newParam.delFlag != null and newParam.delFlag != ''"> DEL_FLAG = #{newParam.delFlag},  </if>
+			<if test="newParam.updateBy != null and newParam.updateBy != ''"> UPDATE_BY = #{newParam.updateBy},  </if>
+			<if test="newParam.updateTime != null"> UPDATE_TIME = #{newParam.updateTime},  </if>
+			<if test="newParam.dataLabel != null and newParam.dataLabel != ''"> DATA_LABEL = #{newParam.dataLabel},  </if>
+			<if test="newParam.dataPath != null and newParam.dataPath != ''"> DATA_PATH = #{newParam.dataPath},  </if>
+			<if test="newParam.dataScope != null and newParam.dataScope != ''"> DATA_SCOPE = #{newParam.dataScope},  </if>
+			<if test="newParam.itemCode != null and newParam.itemCode != ''"> ITEM_CODE = #{newParam.itemCode},  </if>
+			<if test="newParam.itemName != null and newParam.itemName != ''"> ITEM_NAME = #{newParam.itemName},  </if>
+			<if test="newParam.parentCode != null and newParam.parentCode != ''"> PARENT_CODE = #{newParam.parentCode},  </if>
+			<if test="newParam.remark != null and newParam.remark != ''"> REMARK = #{newParam.remark},  </if>
+			<if test="newParam.seqNo != null"> SEQ_NO = #{newParam.seqNo},  </if>
+			<if test="newParam.tenantCode != null and newParam.tenantCode != ''"> TENANT_CODE = #{newParam.tenantCode},  </if>
+		</if>
 		</set>
 		<where>
-			ID = #{id}
-			<if test="version != null "> and VERSION = #{version} </if>
+		<if test="oldParam != null">
+			<if test="oldParam.version != null"> and VERSION = #{oldParam.version}  </if>
+			<if test="oldParam.delFlag != null and oldParam.delFlag != ''"> and DEL_FLAG = #{oldParam.delFlag}  </if>
+			<if test="oldParam.createBy != null and oldParam.createBy != ''"> and CREATE_BY = #{oldParam.createBy}  </if>
+			<if test="oldParam.createTime != null"><![CDATA[ and CREATE_TIME = #{oldParam.createTime} ]]> </if>
+			<if test="oldParam.id != null and oldParam.id != ''"> and ID = #{oldParam.id}  </if>
+			<if test="oldParam.dataLabel != null and oldParam.dataLabel != ''"> and DATA_LABEL = #{oldParam.dataLabel}  </if>
+			<if test="oldParam.dataPath != null and oldParam.dataPath != ''"> and DATA_PATH = #{oldParam.dataPath}  </if>
+			<if test="oldParam.dataScope != null and oldParam.dataScope != ''"> and DATA_SCOPE = #{oldParam.dataScope}  </if>
+			<if test="oldParam.itemCode != null and oldParam.itemCode != ''"> and ITEM_CODE = #{oldParam.itemCode}  </if>
+			<if test="oldParam.itemName != null and oldParam.itemName != ''"> and ITEM_NAME = #{oldParam.itemName}  </if>
+			<if test="oldParam.parentCode != null and oldParam.parentCode != ''"> and PARENT_CODE = #{oldParam.parentCode}  </if>
+			<if test="oldParam.remark != null and oldParam.remark != ''"> and REMARK = #{oldParam.remark}  </if>
+			<if test="oldParam.seqNo != null"> and SEQ_NO = #{oldParam.seqNo}  </if>
+			<if test="oldParam.tenantCode != null and oldParam.tenantCode != ''"> and TENANT_CODE = #{oldParam.tenantCode}  </if>
+		</if>
+		<if test="oldInParam != null">
+			<!-- 非model属性：in条件处理拼写，要求List集合中的值能转换成key-value形式，例如map、自定义model对象等 -->
+			<if test="oldInParam.idList != null and oldInParam.idList.size()>0">
+			and ID in <foreach item="item" index="index" collection="oldInParam.idList" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+			<if test="oldInParam.dataLabelList != null and oldInParam.dataLabelList.size()>0">
+			and DATA_LABEL in <foreach item="item" index="index" collection="oldInParam.dataLabelList" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+			<if test="oldInParam.dataPathList != null and oldInParam.dataPathList.size()>0">
+			and DATA_PATH in <foreach item="item" index="index" collection="oldInParam.dataPathList" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+			<if test="oldInParam.dataScopeList != null and oldInParam.dataScopeList.size()>0">
+			and DATA_SCOPE in <foreach item="item" index="index" collection="oldInParam.dataScopeList" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+			<if test="oldInParam.itemCodeList != null and oldInParam.itemCodeList.size()>0">
+			and ITEM_CODE in <foreach item="item" index="index" collection="oldInParam.itemCodeList" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+			<if test="oldInParam.itemNameList != null and oldInParam.itemNameList.size()>0">
+			and ITEM_NAME in <foreach item="item" index="index" collection="oldInParam.itemNameList" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+			<if test="oldInParam.parentCodeList != null and oldInParam.parentCodeList.size()>0">
+			and PARENT_CODE in <foreach item="item" index="index" collection="oldInParam.parentCodeList" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+			<if test="oldInParam.seqNoList != null and oldInParam.seqNoList.size()>0">
+			and SEQ_NO in <foreach item="item" index="index" collection="oldInParam.seqNoList" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+			<if test="oldInParam.tenantCodeList != null and oldInParam.tenantCodeList.size()>0">
+			and TENANT_CODE in <foreach item="item" index="index" collection="oldInParam.tenantCodeList" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+		</if>
+		<!-- 防止没有参数传递，导致全部更新 -->
+		or 1=2
 		</where>
 	</update>
-
-	<!-- 批量更新 -->
-	<update id="updateBatch" parameterType="java.util.List">
-		<foreach collection="list" item="item" index="index" separator=";">
-		update <include refid="table_name" />
-		<set>
-		VERSION = VERSION + 1, 
-		<if test="item.delFlag != null and item.delFlag != ''"> DEL_FLAG = #{item.delFlag},  </if>
-		<if test="item.createBy != null and item.createBy != ''"> CREATE_BY = #{item.createBy},  </if>
-		<if test="item.createTime != null "> CREATE_TIME = #{item.createTime},  </if>
-		<if test="item.updateBy != null and item.updateBy != ''"> UPDATE_BY = #{item.updateBy},  </if>
-		<if test="item.updateTime != null "> UPDATE_TIME = #{item.updateTime},  </if>
-		<if test="item.dataLabel != null and item.dataLabel != ''"> DATA_LABEL = #{item.dataLabel},  </if>
-		<if test="item.dataPath != null and item.dataPath != ''"> DATA_PATH = #{item.dataPath},  </if>
-		<if test="item.dataScope != null and item.dataScope != ''"> DATA_SCOPE = #{item.dataScope},  </if>
-		<if test="item.itemCode != null and item.itemCode != ''"> ITEM_CODE = #{item.itemCode},  </if>
-		<if test="item.itemName != null and item.itemName != ''"> ITEM_NAME = #{item.itemName},  </if>
-		<if test="item.parentCode != null and item.parentCode != ''"> PARENT_CODE = #{item.parentCode},  </if>
-		<if test="item.remark != null and item.remark != ''"> REMARK = #{item.remark},  </if>
-		<if test="item.seqNo != null "> SEQ_NO = #{item.seqNo},  </if>
-		<if test="item.tenantCode != null and item.tenantCode != ''"> TENANT_CODE = #{item.tenantCode},  </if>
-		</set>
-		<where>
-			ID = #{item.id}
-			<if test="item.version != null "> and VERSION = #{item.version} </if>
-		</where>
-		</foreach>
-	</update>
-
-	<!-- 主键删除 -->
-	<delete id="deleteById" parameterType="java.lang.String">
-		delete from <include refid="table_name" /> where ID = #{_parameter}
-	</delete>
-
-	<!-- 主键批量删除 -->
-	<delete id="deleteByIds" parameterType="java.util.List">
-		delete from <include refid="table_name" /> 
-		where ID in 
-		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">#{item}</foreach>
-	</delete>
 
 	<!-- 删除 -->
 	<delete id="deleteBy" parameterType="java.util.Map">
 		delete from <include refid="table_name" />
 		<where>
+		<!-- model属性： -->
 		<if test="version != null "> and VERSION = #{version} </if>
 		<if test="delFlag != null and delFlag != ''"> and DEL_FLAG = #{delFlag} </if>
 		<if test="createBy != null and createBy != ''"> and CREATE_BY = #{createBy} </if>
@@ -228,9 +245,35 @@
 		<if test="seqNo != null "> and SEQ_NO = #{seqNo} </if>
 		<if test="tenantCode != null and tenantCode != ''"> and TENANT_CODE = #{tenantCode} </if>
 		
-		<if test="paramList != null and paramList.size()>0"> 
-		and ITEM_CODE in <foreach item="item" index="index" collection="paramList" open="(" separator="," close=")">#{item.itemCode}</foreach>
+		<!-- 非model属性：in条件处理拼写，要求List集合中的值能转换成key-value形式，例如map、自定义model对象等 -->
+		<if test="idList != null and idList.size()>0">
+		and ID in <foreach item="item" index="index" collection="idList" open="(" separator="," close=")">#{item}</foreach>
 		</if>
+		<if test="dataLabelList != null and dataLabelList.size()>0">
+		and DATA_LABEL in <foreach item="item" index="index" collection="dataLabelList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="dataPathList != null and dataPathList.size()>0">
+		and DATA_PATH in <foreach item="item" index="index" collection="dataPathList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="dataScopeList != null and dataScopeList.size()>0">
+		and DATA_SCOPE in <foreach item="item" index="index" collection="dataScopeList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="itemCodeList != null and itemCodeList.size()>0">
+		and ITEM_CODE in <foreach item="item" index="index" collection="itemCodeList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="itemNameList != null and itemNameList.size()>0">
+		and ITEM_NAME in <foreach item="item" index="index" collection="itemNameList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="parentCodeList != null and parentCodeList.size()>0">
+		and PARENT_CODE in <foreach item="item" index="index" collection="parentCodeList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="seqNoList != null and seqNoList.size()>0">
+		and SEQ_NO in <foreach item="item" index="index" collection="seqNoList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="tenantCodeList != null and tenantCodeList.size()>0">
+		and TENANT_CODE in <foreach item="item" index="index" collection="tenantCodeList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		
 		<!-- 防止没有参数传递，导致全部删除 -->
 		or 1=2
 		</where>

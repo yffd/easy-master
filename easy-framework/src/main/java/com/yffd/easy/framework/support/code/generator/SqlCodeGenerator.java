@@ -4,6 +4,12 @@ import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -11,6 +17,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+import com.yffd.easy.common.core.util.EasyStringCheckUtils;
 import com.yffd.easy.framework.domain.GenericPO;
 
 /**
@@ -148,96 +155,6 @@ public class SqlCodeGenerator extends CodeGenerator {
 	}
 	
 	/**
-	 * 生成单条修改
-	 * @Date	2018年2月1日 下午5:18:45 <br/>
-	 * @author  zhangST
-	 * @param modelClazz
-	 * @return
-	 */
-	public String makeUpdateBy(Class<?> modelClazz) {
-		LinkedHashMap<String, Class<?>> propsMap = this.sortPropsName(modelClazz);
-		if(null==propsMap || propsMap.size()==0) return null;
-		
-		List<String> setList = new ArrayList<String>();
-		for(Iterator<Entry<String, Class<?>>> it = propsMap.entrySet().iterator();it.hasNext();) {
-			Entry<String, Class<?>> entry = (Entry<String, Class<?>>)it.next();
-			String typeName = entry.getValue().getName();
-			String propName = entry.getKey();
-			String columnName = this.name2column(propName);
-			if(null==columnName || "".equals(columnName)) continue;
-			columnName = columnName + " = " + "#{"+propName+"}, ";
-			if("version".equals(propName)) {
-				String tmp = "VERSION = VERSION + 1, ";
-				setList.add(tmp);
-			} else if("id".equals(propName) || "creator".equals(propName) || "createTime".equals(propName)) {
-				
-			} else if(String.class.getName().equals(typeName)) {
-				String tmp = "<if test=\""+propName+" != null and "+propName+" != ''\"> "+columnName+" </if>";
-				setList.add(tmp);
-			} else {
-				String tmp = "<if test=\""+propName+" != null \"> "+columnName+" </if>";
-				setList.add(tmp);
-			}
-		}
-		
-		if(setList.size()==0) return null;
-				
-		StringBuilder sb = new StringBuilder();
-		sb.append("<set>").append("\r\n");
-		
-		for(String name : setList) {
-			sb.append(name).append("\r\n");
-		}
-		sb.append("</set>");
-		return sb.toString();
-	}
-	
-	/**
-	 * 生成删除
-	 * @Date	2018年2月1日 下午5:28:40 <br/>
-	 * @author  zhangST
-	 * @param modelClazz
-	 * @return
-	 */
-	public String makeDeleteBy(Class<?> modelClazz) {
-		String conditionsWhere = this.makeConditionsWhere(modelClazz, null, null, false);
-		StringBuilder sb = new StringBuilder();
-		sb.append("<where>").append("\r\n");
-		sb.append(conditionsWhere).append("\r\n");
-		sb.append("\r\n");
-		sb.append("<!-- 防止没有参数传递，导致全部删除 -->").append("\r\n");
-		sb.append("or 1=2").append("\r\n");
-		sb.append("</where>");
-		
-		return sb.toString();
-	}
-	
-	/**
-	 * 生成删除：可以带in条件
-	 * @Date	2018年2月1日 下午5:28:40 <br/>
-	 * @author  zhangST
-	 * @param modelClazz
-	 * @return
-	 */
-	public String makeDeleteWithInBy(Class<?> modelClazz) {
-		String conditionsWhere = this.makeConditionsWhere(modelClazz, null, null, false);
-		String makeForeach = this.makeForeach(modelClazz, null, null);
-		StringBuilder sb = new StringBuilder();
-		sb.append("<where>").append("\r\n");
-		sb.append(conditionsWhere).append("\r\n");
-		if(null!=makeForeach) {
-			sb.append("\r\n");
-			sb.append("<!-- 批量处理拼写，要求List集合的值能转换成map形式 -->").append("\r\n");
-			sb.append(makeForeach).append("\r\n");
-		}
-		sb.append("<!-- 防止没有参数传递，导致全部删除 -->").append("\r\n");
-		sb.append("or 1=2").append("\r\n");
-		sb.append("</where>");
-		
-		return sb.toString();
-	}
-	
-	/**
 	 * 生成批量插入
 	 * @Date	2018年2月1日 下午5:36:37 <br/>
 	 * @author  zhangST
@@ -282,12 +199,178 @@ public class SqlCodeGenerator extends CodeGenerator {
 	}
 	
 	/**
+	 * 生成修改
+	 * @Date	2018年2月1日 下午5:18:45 <br/>
+	 * @author  zhangST
+	 * @param modelClazz
+	 * @return
+	 */
+	public String makeUpdateBy(Class<?> modelClazz) {
+		LinkedHashMap<String, Class<?>> propsMap = this.sortPropsName(modelClazz);
+		if(null==propsMap || propsMap.size()==0) return null;
+		
+		List<String> newParamList = new ArrayList<String>();
+		List<String> oldParamList = new ArrayList<String>();
+		List<String> oldInParamList = new ArrayList<String>();
+		
+		for(Iterator<Entry<String, Class<?>>> it = propsMap.entrySet().iterator();it.hasNext();) {
+			Entry<String, Class<?>> entry = (Entry<String, Class<?>>)it.next();
+			String typeName = entry.getValue().getName();
+			String propName = entry.getKey();
+			String columnName = this.name2column(propName);
+			if(null==columnName || "".equals(columnName)) continue;
+			
+			// set字段
+			if("id".equals(propName) || "createBy".equals(propName) || "createTime".equals(propName)) {
+				
+			} else if("version".equals(propName)) {
+				String tmp = "VERSION = VERSION + 1, ";
+				newParamList.add(tmp);
+			} else if(String.class.getName().equals(typeName)) {
+				String columnName_new = columnName + " = " + "#{newParam."+propName+"}, ";
+				String tmp_new = "<if test=\"newParam."+propName+" != null and newParam."+propName+" != ''\"> "+columnName_new+" </if>";
+				newParamList.add(tmp_new);
+			} else {
+				String columnName_new = columnName + " = " + "#{newParam."+propName+"}, ";
+				String tmp_new = "<if test=\"newParam."+propName+" != null\"> "+columnName_new+" </if>";
+				newParamList.add(tmp_new);
+			}
+			
+			// 条件字段
+			if("updateBy".equals(propName) || "updateTime".equals(propName)) {
+
+			} else if(String.class.getName().equals(typeName)) {
+				String columnName_old = columnName + " = " + "#{oldParam."+propName+"} ";
+				String tmp_old = "<if test=\"oldParam."+propName+" != null and oldParam."+propName+" != ''\"> and "+columnName_old+" </if>";
+				oldParamList.add(tmp_old);
+			} else if(Date.class.getName().equals(typeName)) {
+				String columnName_old = columnName + " = " + "#{oldParam."+propName+"} ";
+				String tmp_old = "<if test=\"oldParam."+propName+" != null\"><![CDATA[ and "+columnName_old+"]]> </if>";
+				oldParamList.add(tmp_old);
+			} else {
+				String columnName_old = columnName + " = " + "#{oldParam."+propName+"} ";
+				String tmp_old = "<if test=\"oldParam."+propName+" != null\"> and "+columnName_old+" </if>";
+				oldParamList.add(tmp_old);
+			}
+			
+			// in条件字段
+//			if("version".equals(propName) || "createBy".equals(propName) || "createTime".equals(propName)
+//					|| "updateBy".equals(propName) || "updateTime".equals(propName)) {
+//				
+//			} else if(String.class.getName().equals(typeName)
+//					|| BigDecimal.class.getName().equals(typeName)
+//					|| Integer.class.getName().equals(typeName) || "int".equals(typeName)
+//					|| Float.class.getName().equals(typeName) || "float".equals(typeName)
+//					|| Double.class.getName().equals(typeName) || "double".equals(typeName)) {
+//				StringBuilder sb = new StringBuilder();
+//				sb.append("\t").append("\t").append("<if test=\"oldInParam."+propName+"List != null and oldInParam."+propName+"List.size()>0\">").append("\r\n");
+//				sb.append("\t").append("\t").append("and "+columnName+" in <foreach item=\"item\" index=\"index\" collection=\"oldInParam."+propName+"List\" open=\"(\" separator=\",\" close=\")\">#{item}</foreach>").append("\r\n");;
+//				sb.append("\t").append("\t").append("</if>").append("\r\n");
+//				String tmp_oldIn = sb.toString(); 
+//				oldInParamList.add(tmp_oldIn);
+//			}
+			
+		}
+
+		StringBuilder sb = new StringBuilder();
+		sb.append("<!-- 更新 -->").append("\r\n");
+		sb.append("<update id=\"updateBy\" parameterType=\"java.util.Map\">").append("\r\n");
+		sb.append("\t").append("update <include refid=\"table_name\" />").append("\r\n");
+		sb.append("\t").append("<set>").append("\r\n");
+		// set字段
+		if(newParamList.size()>0) {
+			sb.append("\t").append("<if test=\"newParam != null\">").append("\r\n");
+			for(String str : newParamList) {
+				sb.append("\t").append("\t").append(str).append("\r\n");
+			}
+			sb.append("\t").append("</if>").append("\r\n");
+			sb.append("\t").append("</set>").append("\r\n");
+		}
+		sb.append("\t").append("<where>").append("\r\n");
+		// 条件字段
+		if(oldParamList.size()>0) {
+			sb.append("\t").append("<if test=\"oldParam != null\">").append("\r\n");
+			for(String str : oldParamList) {
+				sb.append("\t").append("\t").append(str).append("\r\n");
+			}
+			sb.append("\t").append("</if>").append("\r\n");
+		}
+		// in条件字段
+		// in条件字段
+		String oldInParamStr = this.makeForeach(modelClazz, null, null, "oldInParam.");
+		if(!EasyStringCheckUtils.isEmpty(oldInParamStr)) {
+			sb.append("\t").append("<if test=\"oldInParam != null\">").append("\r\n");
+			sb.append("\t").append("\t").append("<!-- 非model属性：in条件处理拼写，要求List集合中的值能转换成key-value形式，例如map、自定义model对象等 -->").append("\r\n");
+			sb.append(this.lineFmt(oldInParamStr, "\t\t"));
+			sb.append("\t").append("</if>").append("\r\n");
+		}
+		
+		sb.append("\t").append("<!-- 防止没有参数传递，导致全部更新 -->").append("\r\n");
+		sb.append("\t").append("or 1=2").append("\r\n");
+		
+		sb.append("\t").append("</where>").append("\r\n");
+		sb.append("</update>");
+		return sb.toString();
+	}
+	
+	/**
+	 * 生成单条修改
+	 * @Date	2018年2月1日 下午5:18:45 <br/>
+	 * @author  zhangST
+	 * @param modelClazz
+	 * @return
+	 */
+	@Deprecated
+	public String makeUpdateBy123(Class<?> modelClazz) {
+		LinkedHashMap<String, Class<?>> propsMap = this.sortPropsName(modelClazz);
+		if(null==propsMap || propsMap.size()==0) return null;
+		
+		List<String> setList = new ArrayList<String>();
+		for(Iterator<Entry<String, Class<?>>> it = propsMap.entrySet().iterator();it.hasNext();) {
+			Entry<String, Class<?>> entry = (Entry<String, Class<?>>)it.next();
+			String typeName = entry.getValue().getName();
+			String propName = entry.getKey();
+			String columnName = this.name2column(propName);
+			if(null==columnName || "".equals(columnName)) continue;
+			columnName = columnName + " = " + "#{"+propName+"}, ";
+			
+			if("version".equals(propName)) {
+				String tmp = "VERSION = VERSION + 1, ";
+				setList.add(tmp);
+			} else if("id".equals(propName) || "createBy".equals(propName) || "createTime".equals(propName)) {
+				
+			} else if(String.class.getName().equals(typeName)) {
+				String tmp = "<if test=\""+propName+" != null and "+propName+" != ''\"> "+columnName+" </if>";
+				setList.add(tmp);
+			} else if(Date.class.getName().equals(typeName)) {
+				String tmp = "<if test=\""+propName+" != null \"><![CDATA[ and " + columnName + " = #{"+columnName+"}]]> </if>";
+				setList.add(tmp);
+			} else {
+				String tmp = "<if test=\""+propName+" != null \"> "+columnName+" </if>";
+				setList.add(tmp);
+			}
+		}
+		
+		if(setList.size()==0) return null;
+				
+		StringBuilder sb = new StringBuilder();
+		sb.append("<set>").append("\r\n");
+		
+		for(String name : setList) {
+			sb.append(name).append("\r\n");
+		}
+		sb.append("</set>");
+		return sb.toString();
+	}
+	
+	/**
 	 * 生成批量修改
 	 * @Date	2018年2月1日 下午5:38:44 <br/>
 	 * @author  zhangST
 	 * @param modelClazz
 	 * @return
 	 */
+	@Deprecated
 	public String makeUpdateBatch(Class<?> modelClazz) {
 		LinkedHashMap<String, Class<?>> propsMap = this.sortPropsName(modelClazz);
 		if(null==propsMap || propsMap.size()==0) return null;
@@ -304,7 +387,7 @@ public class SqlCodeGenerator extends CodeGenerator {
 			if("version".equals(propName)) {
 				String tmp = "VERSION = VERSION + 1, ";
 				setList.add(tmp);
-			} else if("id".equals(propName) || "creator".equals(propName) || "creatTime".equals(propName)) {
+			} else if("id".equals(propName) || "createBy".equals(propName) || "createTime".equals(propName)) {
 				
 			} else if(String.class.getName().equals(typeName)) {
 				String tmp = "<if test=\"item."+propName+" != null and item."+propName+" != ''\"> "+columnName+" </if>";
@@ -333,6 +416,32 @@ public class SqlCodeGenerator extends CodeGenerator {
 //		sb.append(whereConditions).append("\r\n");
 		sb.append("</where>").append("\r\n");
 		sb.append("</foreach>");
+		return sb.toString();
+	}
+	
+	/**
+	 * 生成删除
+	 * @Date	2018年2月1日 下午5:28:40 <br/>
+	 * @author  zhangST
+	 * @param modelClazz
+	 * @return
+	 */
+	public String makeDeleteBy(Class<?> modelClazz) {
+		String conditionsWhere = this.makeConditionsWhere(modelClazz, null, null, false);
+		String makeForeach = this.makeForeach(modelClazz, null, null, "");
+		StringBuilder sb = new StringBuilder();
+		sb.append("<where>").append("\r\n");
+		sb.append("<!-- model属性： -->").append("\r\n");
+		sb.append(conditionsWhere).append("\r\n");
+		if(null!=makeForeach) {
+			sb.append("\r\n");
+			sb.append("<!-- 非model属性：in条件处理拼写，要求List集合中的值能转换成key-value形式，例如map、自定义model对象等 -->").append("\r\n");
+			sb.append(makeForeach).append("\r\n");
+		}
+		sb.append("<!-- 防止没有参数传递，导致全部删除 -->").append("\r\n");
+		sb.append("or 1=2").append("\r\n");
+		sb.append("</where>");
+		
 		return sb.toString();
 	}
 	
@@ -407,13 +516,16 @@ public class SqlCodeGenerator extends CodeGenerator {
 		return sb.toString();
 	}
 	
-	protected String makeForeach(Class<?> modelClazz, String tableAliasName, String parameterAliasName) {
+	protected String makeForeach(Class<?> modelClazz, String tableAliasName, String parameterAliasName, String prefix) {
 		LinkedHashMap<String, Class<?>> propsMap = this.sortPropsName(modelClazz);
 		if(null==propsMap || propsMap.size()==0) return null;
+		
+		if(null==prefix) prefix = "";
 		
 		StringBuilder sb = new StringBuilder();
 		for(Iterator<Entry<String, Class<?>>> it = propsMap.entrySet().iterator();it.hasNext();) {
 			Entry<String, Class<?>> entry = (Entry<String, Class<?>>)it.next();
+			String typeName = entry.getValue().getName();
 			String propName = entry.getKey();
 			String columnName = this.name2column(propName);
 			if(null==columnName || "".equals(columnName)) continue;
@@ -439,11 +551,17 @@ public class SqlCodeGenerator extends CodeGenerator {
 				
 			} else if(propName.matches(".*(?i)remark.*")) {
 				
-			} else {
-				sb.append("<if test=\""+propName+"List != null and "+propName+"List.size()>0\">").append("\r\n");
+			} else if(Date.class.getName().equals(typeName)) {
+				
+			} else if(String.class.getName().equals(typeName)
+					|| BigDecimal.class.getName().equals(typeName)
+					|| Integer.class.getName().equals(typeName) || "int".equals(typeName)
+					|| Float.class.getName().equals(typeName) || "float".equals(typeName)
+					|| Double.class.getName().equals(typeName) || "double".equals(typeName)) {
+				sb.append("<if test=\""+prefix+""+propName+"List != null and "+ prefix + propName+"List.size()>0\">").append("\r\n");
 				sb.append("and ").append(columnName).append(" in ")
-				.append("<foreach item=\"item\" index=\"index\" collection=\""+propName+"List\" open=\"(\" separator=\",\" close=\")\">")
-				.append("#{item."+propName+"}").append("</foreach>").append("\r\n");
+				.append("<foreach item=\"item\" index=\"index\" collection=\""+prefix+""+propName+"List\" open=\"(\" separator=\",\" close=\")\">")
+				.append("#{item}").append("</foreach>").append("\r\n");
 				sb.append("</if>").append("\r\n");
 			}
 			
@@ -459,6 +577,24 @@ public class SqlCodeGenerator extends CodeGenerator {
 //			}
 		}
 		return sb.toString();
+	}
+	
+	public String lineFmt(String str, String prefix) {
+		if(null==str || "".equals(str)) return null; 
+		try {
+			StringBuilder sb = new StringBuilder();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(str.getBytes("utf8"))));
+			String line;
+			while((line = reader.readLine()) !=null) {
+				sb.append(prefix).append(line).append("\r\n");
+			}
+			return sb.toString();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	protected LinkedHashMap<String, Class<?>> getPropsName(Class<?> modelClazz) {
@@ -504,59 +640,63 @@ public class SqlCodeGenerator extends CodeGenerator {
 //		LinkedHashMap<String, Class<?>> list2 = generator.sortPropsName(modelClass);
 //		System.out.println(list2);
 		
-		String result1 = generator.makeTableColumns(modelClass, "t");
-		System.out.println(">>>>>>>>>>>>>>>>>>>start::tableColumns");
-		System.out.println(result1);
-		System.out.println(">>>>>>>>>>>>>>>>>>>end::tableColumns");
+		String makeTableColumns = generator.makeTableColumns(modelClass, "t");
+		System.out.println(">>>>>>>>>>>>>>>>>>>start::makeTableColumns");
+		System.out.println(makeTableColumns);
+		System.out.println(">>>>>>>>>>>>>>>>>>>end::makeTableColumns");
 		System.out.println();
 		
-		String result2 = generator.makeConditionsWhere(modelClass, "t");
+		String makeConditionsWhere = generator.makeConditionsWhere(modelClass, "t");
 		System.out.println(">>>>>>>>>>>>>>>>>>>start::makeConditionsWhere");
-		System.out.println(result2);
+		System.out.println(makeConditionsWhere);
 		System.out.println(">>>>>>>>>>>>>>>>>>>end::makeConditionsWhere");
 		System.out.println();
 		
-		String result3 = generator.makeResultMap(modelClass);
+		String makeResultMap = generator.makeResultMap(modelClass);
 		System.out.println(">>>>>>>>>>>>>>>>>>>start::makeResultMap");
-		System.out.println(result3);
+		System.out.println(makeResultMap);
 		System.out.println(">>>>>>>>>>>>>>>>>>>end::makeResultMap");
 		System.out.println();
 		
-		String result4 = generator.makeInsertOne(modelClass);
+		String makeInsertOne = generator.makeInsertOne(modelClass);
 		System.out.println(">>>>>>>>>>>>>>>>>>>start::makeInsertOne");
-		System.out.println(result4);
+		System.out.println(makeInsertOne);
 		System.out.println(">>>>>>>>>>>>>>>>>>>end::makeInsertOne");
 		System.out.println();
 		
-		String result5 = generator.makeUpdateBy(modelClass);
-		System.out.println(">>>>>>>>>>>>>>>>>>>start::makeUpdateBy");
-		System.out.println(result5);
-		System.out.println(">>>>>>>>>>>>>>>>>>>end::makeUpdateBy");
-		System.out.println();
-		
-		String result6 = generator.makeDeleteBy(modelClass);
-		System.out.println(">>>>>>>>>>>>>>>>>>>start::makeDeleteBy");
-		System.out.println(result6);
-		System.out.println(">>>>>>>>>>>>>>>>>>>end::makeDeleteBy");
-		System.out.println();
-		
-		String result7 = generator.makeDeleteWithInBy(modelClass);
-		System.out.println(">>>>>>>>>>>>>>>>>>>start::deleteWithInBy");
-		System.out.println(result7);
-		System.out.println(">>>>>>>>>>>>>>>>>>>end::deleteWithInBy");
-		System.out.println();
-		
-		String result8 = generator.makeInsertBatch(modelClass);
+		String makeInsertBatch = generator.makeInsertBatch(modelClass);
 		System.out.println(">>>>>>>>>>>>>>>>>>>start::makeInsertBatch");
-		System.out.println(result8);
+		System.out.println(makeInsertBatch);
 		System.out.println(">>>>>>>>>>>>>>>>>>>end::makeInsertBatch");
 		System.out.println();
 		
-		String result9 = generator.makeUpdateBatch(modelClass);
+		String makeUpdateBy = generator.makeUpdateBy(modelClass);
+		System.out.println(">>>>>>>>>>>>>>>>>>>start::makeUpdateBy");
+		System.out.println(makeUpdateBy);
+		System.out.println(">>>>>>>>>>>>>>>>>>>end::makeUpdateBy");
+		System.out.println();
+		
+		String makeUpdateBy123 = generator.makeUpdateBy123(modelClass);
+		System.out.println(">>>>>>>>>>>>>>>>>>>start::makeUpdateBy123");
+		System.out.println(makeUpdateBy123);
+		System.out.println(">>>>>>>>>>>>>>>>>>>end::makeUpdateBy123");
+		System.out.println();
+		
+		String makeUpdateBatch = generator.makeUpdateBatch(modelClass);
 		System.out.println(">>>>>>>>>>>>>>>>>>>start::makeUpdateBatch");
-		System.out.println(result9);
+		System.out.println(makeUpdateBatch);
 		System.out.println(">>>>>>>>>>>>>>>>>>>end::makeUpdateBatch");
 		System.out.println();
+		
+		String makeDeleteBy = generator.makeDeleteBy(modelClass);
+		System.out.println(">>>>>>>>>>>>>>>>>>>start::makeDeleteBy");
+		System.out.println(makeDeleteBy);
+		System.out.println(">>>>>>>>>>>>>>>>>>>end::makeDeleteBy");
+		System.out.println();
+		
+		
+		
+		
 		
 	}
 }

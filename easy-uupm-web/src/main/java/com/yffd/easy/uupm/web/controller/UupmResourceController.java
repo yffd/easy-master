@@ -40,14 +40,6 @@ public class UupmResourceController extends UupmBaseController {
 	@Autowired
 	private UupmResourceService uupmResourceService;
 	
-	@RequestMapping(value="/findPage", method=RequestMethod.POST)
-	public RespModel findPage(@RequestParam Map<String, Object> paramMap) {
-		PageParam pageParam = this.getPageParam(paramMap);
-		PageResult<UupmResourceModel> pageResult = this.uupmResourceService.findPage(paramMap, pageParam);
-		DataGridVO dataGridVO = this.toDataGrid(pageResult);
-		return this.successAjax(dataGridVO);
-	}
-	
 	@RequestMapping(value="/findTree", method=RequestMethod.POST)
 	public RespModel findList(@RequestParam Map<String, Object> paramMap) {
 		String appCode = (String) paramMap.get("appCode");
@@ -93,13 +85,13 @@ public class UupmResourceController extends UupmBaseController {
 		if(null==model || EasyStringCheckUtils.isEmpty(model.getId())) {
 			return this.error("参数无效");
 		}
-		this.uupmResourceService.updateBy(model, null);
+		this.uupmResourceService.updateById(model, null);
 		return this.successAjax();
 	}
 	
 	@RequestMapping(value="/delById", method=RequestMethod.POST)
 	public RespModel delById(String id) {
-		if(null==id || EasyStringCheckUtils.isEmpty(id)) return this.error("参数无效");
+		if(EasyStringCheckUtils.isEmpty(id)) return this.error("参数无效");
 		this.uupmResourceService.delById(id, null);
 		return this.successAjax();
 	}
@@ -108,7 +100,7 @@ public class UupmResourceController extends UupmBaseController {
 	public RespModel delBatch(HttpServletRequest req) {
 		String rsCodes = req.getParameter("rsCodes");
 		if(EasyStringCheckUtils.isEmpty(rsCodes)) return this.error("参数无效");
-		int result = this.uupmResourceService.deleteByIn("rsCode", rsCodes, null, null);
+		int result = this.uupmResourceService.delWithInBy("rsCode", rsCodes, null);
 		if(result==-1) return this.error("参数无效");
 		return this.successAjax();
 	}

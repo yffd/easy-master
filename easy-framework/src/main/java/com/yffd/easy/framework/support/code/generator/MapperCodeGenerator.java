@@ -5,6 +5,12 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map.Entry;
 
 import com.yffd.easy.framework.domain.GenericPO;
 
@@ -48,10 +54,16 @@ public class MapperCodeGenerator extends CodeGenerator {
 	 */
 	public String conditionsWhere(Class<?> modelClazz, String tableAliasName) {
 		String tmp = this.sqlGenerator.makeConditionsWhere(modelClazz, tableAliasName);
+		String makeForeach = this.sqlGenerator.makeForeach(modelClazz, null, null, "");
 		StringBuilder sb = new StringBuilder();
 		sb.append("<!-- 动态组装复合查询条件 -->").append("\r\n");
 		sb.append("<sql id=\"conditions_where\">").append("\r\n");
 		sb.append(this.strFmt(tmp, "\t"));
+		
+		sb.append("\r\n");
+		sb.append(this.strFmt("<!-- 非model属性：in条件处理拼写，要求List集合中的值能转换成key-value形式，例如map、自定义model对象等 -->", "\t"));
+		sb.append(this.strFmt(makeForeach, "\t")).append("\r\n");
+		
 		sb.append("</sql>");
 		return sb.toString();
 	}
@@ -93,14 +105,43 @@ public class MapperCodeGenerator extends CodeGenerator {
 	}
 	
 	/**
-	 * 生成单条修改
+	 * 生成批量插入
+	 * @Date	2018年2月1日 下午5:36:37 <br/>
+	 * @author  zhangST
+	 * @param modelClazz
+	 * @return
+	 */
+	public String insertBatch(Class<?> modelClazz) {
+		String tmp = this.sqlGenerator.makeInsertBatch(modelClazz);
+		StringBuilder sb = new StringBuilder();
+		sb.append("<!-- 批量插入 -->").append("\r\n");
+		sb.append("<insert id=\"insertBatch\" parameterType=\"java.util.Map\" keyProperty=\"id\" useGeneratedKeys=\"true\">").append("\r\n");
+		sb.append("\t").append("insert into <include refid=\"table_name\" />").append("\r\n");
+		sb.append(this.strFmt(tmp, "\t"));
+		sb.append("</insert>");
+		return sb.toString();
+	}
+	
+	/**
+	 * 生成修改
 	 * @Date	2018年2月1日 下午5:18:45 <br/>
 	 * @author  zhangST
 	 * @param modelClazz
 	 * @return
 	 */
 	public String updateBy(Class<?> modelClazz) {
-		String tmp = this.sqlGenerator.makeUpdateBy(modelClazz);
+		return this.sqlGenerator.makeUpdateBy(modelClazz);
+	}
+	
+	/**
+	 * 生成单条修改
+	 * @Date	2018年2月1日 下午5:18:45 <br/>
+	 * @author  zhangST
+	 * @param modelClazz
+	 * @return
+	 */
+	public String updateBy123(Class<?> modelClazz) {
+		String tmp = this.sqlGenerator.makeUpdateBy123(modelClazz);
 		StringBuilder sb = new StringBuilder();
 		sb.append("<!-- 更新 -->").append("\r\n");
 		sb.append("<update id=\"updateBy\" parameterType=\"java.util.Map\">").append("\r\n");
@@ -110,6 +151,23 @@ public class MapperCodeGenerator extends CodeGenerator {
 		sb.append("\t\t").append("ID = #{id}").append("\r\n");
 		sb.append("\t\t").append("<if test=\"version != null \"> and VERSION = #{version} </if>").append("\r\n");
 		sb.append("\t").append("</where>").append("\r\n");
+		sb.append("</update>");
+		return sb.toString();
+	}
+	
+	/**
+	 * 生成批量修改
+	 * @Date	2018年2月1日 下午5:38:44 <br/>
+	 * @author  zhangST
+	 * @param modelClazz
+	 * @return
+	 */
+	public String updateBatch(Class<?> modelClazz) {
+		String tmp = this.sqlGenerator.makeUpdateBatch(modelClazz);
+		StringBuilder sb = new StringBuilder();
+		sb.append("<!-- 批量更新 -->").append("\r\n");
+		sb.append("<update id=\"updateBatch\" parameterType=\"java.util.List\">").append("\r\n");
+		sb.append(this.strFmt(tmp, "\t"));
 		sb.append("</update>");
 		return sb.toString();
 	}
@@ -129,59 +187,6 @@ public class MapperCodeGenerator extends CodeGenerator {
 		sb.append("\t").append("delete from <include refid=\"table_name\" />").append("\r\n");
 		sb.append(this.strFmt(tmp, "\t"));
 		sb.append("</delete>");
-		return sb.toString();
-	}
-	
-	/**
-	 * 生成删除
-	 * @Date	2018年2月1日 下午5:28:40 <br/>
-	 * @author  zhangST
-	 * @param modelClazz
-	 * @return
-	 */
-	public String deleteWithInBy(Class<?> modelClazz) {
-		String tmp = this.sqlGenerator.makeDeleteWithInBy(modelClazz);
-		StringBuilder sb = new StringBuilder();
-		sb.append("<!-- 删除：可以带in条件 -->").append("\r\n");
-		sb.append("<delete id=\"deleteWithInBy\" parameterType=\"java.util.Map\">").append("\r\n");
-		sb.append("\t").append("delete from <include refid=\"table_name\" />").append("\r\n");
-		sb.append(this.strFmt(tmp, "\t"));
-		sb.append("</delete>");
-		return sb.toString();
-	}
-	
-	/**
-	 * 生成批量插入
-	 * @Date	2018年2月1日 下午5:36:37 <br/>
-	 * @author  zhangST
-	 * @param modelClazz
-	 * @return
-	 */
-	public String insertBatch(Class<?> modelClazz) {
-		String tmp = this.sqlGenerator.makeInsertBatch(modelClazz);
-		StringBuilder sb = new StringBuilder();
-		sb.append("<!-- 批量插入 -->").append("\r\n");
-		sb.append("<insert id=\"insertBatch\" parameterType=\"java.util.Map\" keyProperty=\"id\" useGeneratedKeys=\"true\">").append("\r\n");
-		sb.append("\t").append("insert into <include refid=\"table_name\" />").append("\r\n");
-		sb.append(this.strFmt(tmp, "\t"));
-		sb.append("</insert>");
-		return sb.toString();
-	}
-	
-	/**
-	 * 生成批量修改
-	 * @Date	2018年2月1日 下午5:38:44 <br/>
-	 * @author  zhangST
-	 * @param modelClazz
-	 * @return
-	 */
-	public String updateBatch(Class<?> modelClazz) {
-		String tmp = this.sqlGenerator.makeUpdateBatch(modelClazz);
-		StringBuilder sb = new StringBuilder();
-		sb.append("<!-- 批量更新 -->").append("\r\n");
-		sb.append("<update id=\"updateBatch\" parameterType=\"java.util.List\">").append("\r\n");
-		sb.append(this.strFmt(tmp, "\t"));
-		sb.append("</update>");
 		return sb.toString();
 	}
 	
@@ -341,105 +346,111 @@ public class MapperCodeGenerator extends CodeGenerator {
 		String tableAliasName = "t";
 		Class<?> modelClass = GenericPO.class;
 		
-		String result1 = generator.tableColumns(modelClass, tableAliasName);
+		String tableColumns = generator.tableColumns(modelClass, tableAliasName);
 		System.out.println(">>>>>>>>>>>>>>>>>>>start::tableColumns");
-		System.out.println(result1);
+		System.out.println(tableColumns);
 		System.out.println(">>>>>>>>>>>>>>>>>>>end::tableColumns");
 		System.out.println();
 		
-		String result2 = generator.conditionsWhere(modelClass, tableAliasName);
+		String conditionsWhere = generator.conditionsWhere(modelClass, tableAliasName);
 		System.out.println(">>>>>>>>>>>>>>>>>>>start::conditionsWhere");
-		System.out.println(result2);
+		System.out.println(conditionsWhere);
 		System.out.println(">>>>>>>>>>>>>>>>>>>end::conditionsWhere");
 		System.out.println();
 		
-		String result3 = generator.resultMap(modelClass);
+		String resultMap = generator.resultMap(modelClass);
 		System.out.println(">>>>>>>>>>>>>>>>>>>start::resultMap");
-		System.out.println(result3);
+		System.out.println(resultMap);
 		System.out.println(">>>>>>>>>>>>>>>>>>>end::resultMap");
 		System.out.println();
 		
-		String result4 = generator.insertOne(modelClass);
+		String insertOne = generator.insertOne(modelClass);
 		System.out.println(">>>>>>>>>>>>>>>>>>>start::insertOne");
-		System.out.println(result4);
+		System.out.println(insertOne);
 		System.out.println(">>>>>>>>>>>>>>>>>>>end::insertOne");
 		System.out.println();
 		
-		String result5 = generator.updateBy(modelClass);
-		System.out.println(">>>>>>>>>>>>>>>>>>>start::updateBy");
-		System.out.println(result5);
-		System.out.println(">>>>>>>>>>>>>>>>>>>end::updateBy");
-		System.out.println();
-		
-		String result6 = generator.deleteBy(modelClass);
-		System.out.println(">>>>>>>>>>>>>>>>>>>start::deleteBy");
-		System.out.println(result6);
-		System.out.println(">>>>>>>>>>>>>>>>>>>end::deleteBy");
-		System.out.println();
-		
-		String result7 = generator.insertBatch(modelClass);
+		String insertBatch = generator.insertBatch(modelClass);
 		System.out.println(">>>>>>>>>>>>>>>>>>>start::insertBatch");
-		System.out.println(result7);
+		System.out.println(insertBatch);
 		System.out.println(">>>>>>>>>>>>>>>>>>>end::insertBatch");
 		System.out.println();
 		
-		String result8 = generator.updateBatch(modelClass);
+		String updateBy = generator.updateBy(modelClass);
+		System.out.println(">>>>>>>>>>>>>>>>>>>start::updateBy");
+		System.out.println(updateBy);
+		System.out.println(">>>>>>>>>>>>>>>>>>>end::updateBy");
+		System.out.println();
+		
+		String updateBy123 = generator.updateBy123(modelClass);
+		System.out.println(">>>>>>>>>>>>>>>>>>>start::updateBy123");
+		System.out.println(updateBy123);
+		System.out.println(">>>>>>>>>>>>>>>>>>>end::updateBy123");
+		System.out.println();
+		
+		String updateBatch = generator.updateBatch(modelClass);
 		System.out.println(">>>>>>>>>>>>>>>>>>>start::updateBatch");
-		System.out.println(result8);
+		System.out.println(updateBatch);
 		System.out.println(">>>>>>>>>>>>>>>>>>>end::updateBatch");
 		System.out.println();
 		
-		String result9 = generator.tableName(modelClass);
+		String deleteBy = generator.deleteBy(modelClass);
+		System.out.println(">>>>>>>>>>>>>>>>>>>start::deleteBy");
+		System.out.println(deleteBy);
+		System.out.println(">>>>>>>>>>>>>>>>>>>end::deleteBy");
+		System.out.println();
+		
+		String tableName = generator.tableName(modelClass);
 		System.out.println(">>>>>>>>>>>>>>>>>>>start::tableName");
-		System.out.println(result9);
+		System.out.println(tableName);
 		System.out.println(">>>>>>>>>>>>>>>>>>>end::tableName");
 		System.out.println();
 		
-		String result10 = generator.conditionsLimit();
+		String conditionsLimit = generator.conditionsLimit();
 		System.out.println(">>>>>>>>>>>>>>>>>>>start::conditionsLimit");
-		System.out.println(result10);
+		System.out.println(conditionsLimit);
 		System.out.println(">>>>>>>>>>>>>>>>>>>end::conditionsLimit");
 		System.out.println();
 		
-		String result11 = generator.conditionsOrderby(tableAliasName);
+		String conditionsOrderby = generator.conditionsOrderby(tableAliasName);
 		System.out.println(">>>>>>>>>>>>>>>>>>>start::conditionsOrderby");
-		System.out.println(result11);
+		System.out.println(conditionsOrderby);
 		System.out.println(">>>>>>>>>>>>>>>>>>>end::conditionsOrderby");
 		System.out.println();
 		
-		String result12 = generator.selectListBy(tableAliasName);
+		String selectListBy = generator.selectListBy(tableAliasName);
 		System.out.println(">>>>>>>>>>>>>>>>>>>start::selectListBy");
-		System.out.println(result12);
+		System.out.println(selectListBy);
 		System.out.println(">>>>>>>>>>>>>>>>>>>end::selectListBy");
 		System.out.println();
 		
-		String result13 = generator.selectCountBy(tableAliasName);
+		String selectCountBy = generator.selectCountBy(tableAliasName);
 		System.out.println(">>>>>>>>>>>>>>>>>>>start::selectCountBy");
-		System.out.println(result13);
+		System.out.println(selectCountBy);
 		System.out.println(">>>>>>>>>>>>>>>>>>>end::selectCountBy");
 		System.out.println();
 		
-		String result14 = generator.selectListByIds(tableAliasName);
+		String selectListByIds = generator.selectListByIds(tableAliasName);
 		System.out.println(">>>>>>>>>>>>>>>>>>>start::selectListByIn");
-		System.out.println(result14);
+		System.out.println(selectListByIds);
 		System.out.println(">>>>>>>>>>>>>>>>>>>end::selectListByIn");
 		System.out.println();
 		
-		String result15 = generator.selectOneBy(tableAliasName);
+		String selectOneBy = generator.selectOneBy(tableAliasName);
 		System.out.println(">>>>>>>>>>>>>>>>>>>start::selectOneBy");
-		System.out.println(result15);
+		System.out.println(selectOneBy);
 		System.out.println(">>>>>>>>>>>>>>>>>>>end::selectOneBy");
 		System.out.println();
 		
-		String result16 = generator.deleteById();
+		String deleteById = generator.deleteById();
 		System.out.println(">>>>>>>>>>>>>>>>>>>start::deleteById");
-		System.out.println(result16);
+		System.out.println(deleteById);
 		System.out.println(">>>>>>>>>>>>>>>>>>>end::deleteById");
 		System.out.println();
 		
-		String result17 = generator.deleteByIds();
+		String deleteByIds = generator.deleteByIds();
 		System.out.println(">>>>>>>>>>>>>>>>>>>start::deleteByIds");
-		System.out.println(result17);
+		System.out.println(deleteByIds);
 		System.out.println(">>>>>>>>>>>>>>>>>>>end::deleteByIds");
 		System.out.println();
 		

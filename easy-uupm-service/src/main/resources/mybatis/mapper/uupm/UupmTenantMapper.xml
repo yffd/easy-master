@@ -54,18 +54,28 @@
 		<if test="tenantType != null and tenantType != ''"> and t.TENANT_TYPE = #{tenantType} </if>
 		<!-- Like query -->
 		<if test="tenantName != null and tenantName != ''"> and t.TENANT_NAME like CONCAT(CONCAT('%', #{tenantName}), '%') </if>
+	
+		<!-- 非model属性：in条件处理拼写，要求List集合中的值能转换成key-value形式，例如map、自定义model对象等 -->
+		<if test="idList != null and idList.size()>0">
+		and ID in <foreach item="item" index="index" collection="idList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="serveTypeList != null and serveTypeList.size()>0">
+		and SERVE_TYPE in <foreach item="item" index="index" collection="serveTypeList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="tenantCodeList != null and tenantCodeList.size()>0">
+		and TENANT_CODE in <foreach item="item" index="index" collection="tenantCodeList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="tenantNameList != null and tenantNameList.size()>0">
+		and TENANT_NAME in <foreach item="item" index="index" collection="tenantNameList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="tenantStatusList != null and tenantStatusList.size()>0">
+		and TENANT_STATUS in <foreach item="item" index="index" collection="tenantStatusList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="tenantTypeList != null and tenantTypeList.size()>0">
+		and TENANT_TYPE in <foreach item="item" index="index" collection="tenantTypeList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+	
 	</sql>
-
-	<!-- 分页查询 -->
-	<select id="selectRangeBy" parameterType="java.util.Map" resultMap="resutlId">
-		select <include refid="table_columns" />
-		from <include refid="table_name"/>  as t 
-		<where>
-			<include refid="conditions_where" />
-		</where>
-		<include refid="conditions_orderby" />
-		<include refid="conditions_limit" />
-	</select>
 
 	<!-- 条件查询 -->
 	<select id="selectListBy" parameterType="java.util.Map" resultMap="resutlId">
@@ -83,16 +93,6 @@
 		<include refid="table_name"/>  as t 
 		<where>
 			<include refid="conditions_where" />
-		</where>
-	</select>
-
-	<!-- in条件查询 -->
-	<select id="selectListByIds" parameterType="java.util.List" resultMap="resutlId">
-		select <include refid="table_columns" /> 
-		from <include refid="table_name"/>  as t 
-		<where>
-			t.ID in 
-			<foreach item="item" index="index" collection="list" open="(" separator="," close=")">#{item}</foreach>
 		</where>
 	</select>
 
@@ -140,67 +140,66 @@
 	<update id="updateBy" parameterType="java.util.Map">
 		update <include refid="table_name" />
 		<set>
-		VERSION = VERSION + 1, 
-		<if test="delFlag != null and delFlag != ''"> DEL_FLAG = #{delFlag},  </if>
-		<if test="createBy != null and createBy != ''"> CREATE_BY = #{createBy},  </if>
-		<if test="updateBy != null and updateBy != ''"> UPDATE_BY = #{updateBy},  </if>
-		<if test="updateTime != null "> UPDATE_TIME = #{updateTime},  </if>
-		<if test="endTime != null "> END_TIME = #{endTime},  </if>
-		<if test="serveType != null and serveType != ''"> SERVE_TYPE = #{serveType},  </if>
-		<if test="startTime != null "> START_TIME = #{startTime},  </if>
-		<if test="tenantCode != null and tenantCode != ''"> TENANT_CODE = #{tenantCode},  </if>
-		<if test="tenantName != null and tenantName != ''"> TENANT_NAME = #{tenantName},  </if>
-		<if test="tenantStatus != null and tenantStatus != ''"> TENANT_STATUS = #{tenantStatus},  </if>
-		<if test="tenantType != null and tenantType != ''"> TENANT_TYPE = #{tenantType},  </if>
+		<if test="newParam != null">
+			VERSION = VERSION + 1, 
+			<if test="newParam.delFlag != null and newParam.delFlag != ''"> DEL_FLAG = #{newParam.delFlag},  </if>
+			<if test="newParam.updateBy != null and newParam.updateBy != ''"> UPDATE_BY = #{newParam.updateBy},  </if>
+			<if test="newParam.updateTime != null"> UPDATE_TIME = #{newParam.updateTime},  </if>
+			<if test="newParam.endTime != null"> END_TIME = #{newParam.endTime},  </if>
+			<if test="newParam.serveType != null and newParam.serveType != ''"> SERVE_TYPE = #{newParam.serveType},  </if>
+			<if test="newParam.startTime != null"> START_TIME = #{newParam.startTime},  </if>
+			<if test="newParam.tenantCode != null and newParam.tenantCode != ''"> TENANT_CODE = #{newParam.tenantCode},  </if>
+			<if test="newParam.tenantName != null and newParam.tenantName != ''"> TENANT_NAME = #{newParam.tenantName},  </if>
+			<if test="newParam.tenantStatus != null and newParam.tenantStatus != ''"> TENANT_STATUS = #{newParam.tenantStatus},  </if>
+			<if test="newParam.tenantType != null and newParam.tenantType != ''"> TENANT_TYPE = #{newParam.tenantType},  </if>
+		</if>
 		</set>
 		<where>
-			ID = #{id}
-			<if test="version != null "> and VERSION = #{version} </if>
+		<if test="oldParam != null">
+			<if test="oldParam.version != null"> and VERSION = #{oldParam.version}  </if>
+			<if test="oldParam.delFlag != null and oldParam.delFlag != ''"> and DEL_FLAG = #{oldParam.delFlag}  </if>
+			<if test="oldParam.createBy != null and oldParam.createBy != ''"> and CREATE_BY = #{oldParam.createBy}  </if>
+			<if test="oldParam.createTime != null"><![CDATA[ and CREATE_TIME = #{oldParam.createTime} ]]> </if>
+			<if test="oldParam.id != null and oldParam.id != ''"> and ID = #{oldParam.id}  </if>
+			<if test="oldParam.endTime != null"><![CDATA[ and END_TIME = #{oldParam.endTime} ]]> </if>
+			<if test="oldParam.serveType != null and oldParam.serveType != ''"> and SERVE_TYPE = #{oldParam.serveType}  </if>
+			<if test="oldParam.startTime != null"><![CDATA[ and START_TIME = #{oldParam.startTime} ]]> </if>
+			<if test="oldParam.tenantCode != null and oldParam.tenantCode != ''"> and TENANT_CODE = #{oldParam.tenantCode}  </if>
+			<if test="oldParam.tenantName != null and oldParam.tenantName != ''"> and TENANT_NAME = #{oldParam.tenantName}  </if>
+			<if test="oldParam.tenantStatus != null and oldParam.tenantStatus != ''"> and TENANT_STATUS = #{oldParam.tenantStatus}  </if>
+			<if test="oldParam.tenantType != null and oldParam.tenantType != ''"> and TENANT_TYPE = #{oldParam.tenantType}  </if>
+		</if>
+		<if test="oldInParam != null">
+			<!-- 非model属性：in条件处理拼写，要求List集合中的值能转换成key-value形式，例如map、自定义model对象等 -->
+			<if test="oldInParam.idList != null and oldInParam.idList.size()>0">
+			and ID in <foreach item="item" index="index" collection="oldInParam.idList" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+			<if test="oldInParam.serveTypeList != null and oldInParam.serveTypeList.size()>0">
+			and SERVE_TYPE in <foreach item="item" index="index" collection="oldInParam.serveTypeList" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+			<if test="oldInParam.tenantCodeList != null and oldInParam.tenantCodeList.size()>0">
+			and TENANT_CODE in <foreach item="item" index="index" collection="oldInParam.tenantCodeList" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+			<if test="oldInParam.tenantNameList != null and oldInParam.tenantNameList.size()>0">
+			and TENANT_NAME in <foreach item="item" index="index" collection="oldInParam.tenantNameList" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+			<if test="oldInParam.tenantStatusList != null and oldInParam.tenantStatusList.size()>0">
+			and TENANT_STATUS in <foreach item="item" index="index" collection="oldInParam.tenantStatusList" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+			<if test="oldInParam.tenantTypeList != null and oldInParam.tenantTypeList.size()>0">
+			and TENANT_TYPE in <foreach item="item" index="index" collection="oldInParam.tenantTypeList" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+		</if>
+		<!-- 防止没有参数传递，导致全部更新 -->
+		or 1=2
 		</where>
 	</update>
-
-	<!-- 批量更新 -->
-	<update id="updateBatch" parameterType="java.util.List">
-		<foreach collection="list" item="item" index="index" separator=";">
-		update <include refid="table_name" />
-		<set>
-		VERSION = VERSION + 1, 
-		<if test="item.delFlag != null and item.delFlag != ''"> DEL_FLAG = #{item.delFlag},  </if>
-		<if test="item.createBy != null and item.createBy != ''"> CREATE_BY = #{item.createBy},  </if>
-		<if test="item.createTime != null "> CREATE_TIME = #{item.createTime},  </if>
-		<if test="item.updateBy != null and item.updateBy != ''"> UPDATE_BY = #{item.updateBy},  </if>
-		<if test="item.updateTime != null "> UPDATE_TIME = #{item.updateTime},  </if>
-		<if test="item.endTime != null "> END_TIME = #{item.endTime},  </if>
-		<if test="item.serveType != null and item.serveType != ''"> SERVE_TYPE = #{item.serveType},  </if>
-		<if test="item.startTime != null "> START_TIME = #{item.startTime},  </if>
-		<if test="item.tenantCode != null and item.tenantCode != ''"> TENANT_CODE = #{item.tenantCode},  </if>
-		<if test="item.tenantName != null and item.tenantName != ''"> TENANT_NAME = #{item.tenantName},  </if>
-		<if test="item.tenantStatus != null and item.tenantStatus != ''"> TENANT_STATUS = #{item.tenantStatus},  </if>
-		<if test="item.tenantType != null and item.tenantType != ''"> TENANT_TYPE = #{item.tenantType},  </if>
-		</set>
-		<where>
-			ID = #{item.id}
-			<if test="item.version != null "> and VERSION = #{item.version} </if>
-		</where>
-		</foreach>
-	</update>
-
-	<!-- 主键删除 -->
-	<delete id="deleteById" parameterType="java.lang.String">
-		delete from <include refid="table_name" /> where ID = #{_parameter}
-	</delete>
-
-	<!-- 主键批量删除 -->
-	<delete id="deleteByIds" parameterType="java.util.List">
-		delete from <include refid="table_name" /> 
-		where ID in 
-		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">#{item}</foreach>
-	</delete>
 
 	<!-- 删除 -->
 	<delete id="deleteBy" parameterType="java.util.Map">
 		delete from <include refid="table_name" />
 		<where>
+		<!-- model属性： -->
 		<if test="version != null "> and VERSION = #{version} </if>
 		<if test="delFlag != null and delFlag != ''"> and DEL_FLAG = #{delFlag} </if>
 		<if test="createBy != null and createBy != ''"> and CREATE_BY = #{createBy} </if>
@@ -215,6 +214,29 @@
 		<if test="tenantName != null and tenantName != ''"> and TENANT_NAME = #{tenantName} </if>
 		<if test="tenantStatus != null and tenantStatus != ''"> and TENANT_STATUS = #{tenantStatus} </if>
 		<if test="tenantType != null and tenantType != ''"> and TENANT_TYPE = #{tenantType} </if>
+		
+		<!-- 非model属性：in条件处理拼写，要求List集合中的值能转换成key-value形式，例如map、自定义model对象等 -->
+		<if test="idList != null and idList.size()>0">
+		and ID in <foreach item="item" index="index" collection="idList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="serveTypeList != null and serveTypeList.size()>0">
+		and SERVE_TYPE in <foreach item="item" index="index" collection="serveTypeList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="tenantCodeList != null and tenantCodeList.size()>0">
+		and TENANT_CODE in <foreach item="item" index="index" collection="tenantCodeList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="tenantNameList != null and tenantNameList.size()>0">
+		and TENANT_NAME in <foreach item="item" index="index" collection="tenantNameList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="tenantStatusList != null and tenantStatusList.size()>0">
+		and TENANT_STATUS in <foreach item="item" index="index" collection="tenantStatusList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="tenantTypeList != null and tenantTypeList.size()>0">
+		and TENANT_TYPE in <foreach item="item" index="index" collection="tenantTypeList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		
+		<!-- 防止没有参数传递，导致全部删除 -->
+		or 1=2
 		</where>
 	</delete>
 

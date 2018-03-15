@@ -97,7 +97,7 @@ function initMenuLocal() {
             "text": "应用系统管理",
             "state": "open",
             "iconCls": "icon-sys",
-            "inUrl": "views/uupm/app/appMain.jsp",
+            "inUrl": "views/uupm/application/appMain.jsp",
             "rsType": "M"
         },{
         	"id": "sys-102",
@@ -209,6 +209,27 @@ function initMenuLocal() {
             "state": "open",
             "iconCls": "icon-sys",
             "inUrl": "views/uupm/dictionary/dictionaryMain.jsp",
+            "rsType": "M"
+        }]
+	},{
+		"id": "19",
+        "pid": "-1",
+        "text": "角色信息管理",
+        "children": [{
+        	"id": "sys-191",
+            "pid": "19",
+            "text": "角色管理",
+            "state": "open",
+            "iconCls": "icon-sys",
+            "inUrl": "views/uupm/role/roleMain.jsp",
+            "rsType": "M"
+        },{
+        	"id": "sys-192",
+            "pid": "19",
+            "text": "角色授权管理",
+            "state": "open",
+            "iconCls": "icon-sys",
+            "inUrl": "views/uupm/role/roleAuth.jsp",
             "rsType": "M"
         }]
 	}];

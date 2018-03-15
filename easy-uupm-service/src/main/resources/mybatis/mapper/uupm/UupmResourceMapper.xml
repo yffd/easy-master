@@ -56,18 +56,34 @@
 		<if test="rsType != null and rsType != ''"> and t.RS_TYPE = #{rsType} </if>
 		<!-- Like query -->
 		<if test="rsName != null and rsName != ''"> and t.RS_NAME like CONCAT(CONCAT('%', #{rsName}), '%') </if>
+	
+		<!-- 非model属性：in条件处理拼写，要求List集合中的值能转换成key-value形式，例如map、自定义model对象等 -->
+		<if test="idList != null and idList.size()>0">
+		and ID in <foreach item="item" index="index" collection="idList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="appCodeList != null and appCodeList.size()>0">
+		and APP_CODE in <foreach item="item" index="index" collection="appCodeList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="parentCodeList != null and parentCodeList.size()>0">
+		and PARENT_CODE in <foreach item="item" index="index" collection="parentCodeList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="rsCodeList != null and rsCodeList.size()>0">
+		and RS_CODE in <foreach item="item" index="index" collection="rsCodeList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="rsNameList != null and rsNameList.size()>0">
+		and RS_NAME in <foreach item="item" index="index" collection="rsNameList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="rsPathList != null and rsPathList.size()>0">
+		and RS_PATH in <foreach item="item" index="index" collection="rsPathList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="rsStatusList != null and rsStatusList.size()>0">
+		and RS_STATUS in <foreach item="item" index="index" collection="rsStatusList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="rsTypeList != null and rsTypeList.size()>0">
+		and RS_TYPE in <foreach item="item" index="index" collection="rsTypeList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+	
 	</sql>
-
-	<!-- 分页查询 -->
-	<select id="selectRangeBy" parameterType="java.util.Map" resultMap="resutlId">
-		select <include refid="table_columns" />
-		from <include refid="table_name"/>  as t 
-		<where>
-			<include refid="conditions_where" />
-		</where>
-		<include refid="conditions_orderby" />
-		<include refid="conditions_limit" />
-	</select>
 
 	<!-- 条件查询 -->
 	<select id="selectListBy" parameterType="java.util.Map" resultMap="resutlId">
@@ -85,16 +101,6 @@
 		<include refid="table_name"/>  as t 
 		<where>
 			<include refid="conditions_where" />
-		</where>
-	</select>
-
-	<!-- in条件查询 -->
-	<select id="selectListByIds" parameterType="java.util.List" resultMap="resutlId">
-		select <include refid="table_columns" /> 
-		from <include refid="table_name"/>  as t 
-		<where>
-			t.ID in 
-			<foreach item="item" index="index" collection="list" open="(" separator="," close=")">#{item}</foreach>
 		</where>
 	</select>
 
@@ -143,69 +149,74 @@
 	<update id="updateBy" parameterType="java.util.Map">
 		update <include refid="table_name" />
 		<set>
-		VERSION = VERSION + 1, 
-		<if test="delFlag != null and delFlag != ''"> DEL_FLAG = #{delFlag},  </if>
-		<if test="createBy != null and createBy != ''"> CREATE_BY = #{createBy},  </if>
-		<if test="updateBy != null and updateBy != ''"> UPDATE_BY = #{updateBy},  </if>
-		<if test="updateTime != null "> UPDATE_TIME = #{updateTime},  </if>
-		<if test="appCode != null and appCode != ''"> APP_CODE = #{appCode},  </if>
-		<if test="parentCode != null and parentCode != ''"> PARENT_CODE = #{parentCode},  </if>
-		<if test="remark != null and remark != ''"> REMARK = #{remark},  </if>
-		<if test="rsCode != null and rsCode != ''"> RS_CODE = #{rsCode},  </if>
-		<if test="rsName != null and rsName != ''"> RS_NAME = #{rsName},  </if>
-		<if test="rsPath != null and rsPath != ''"> RS_PATH = #{rsPath},  </if>
-		<if test="rsStatus != null and rsStatus != ''"> RS_STATUS = #{rsStatus},  </if>
-		<if test="rsType != null and rsType != ''"> RS_TYPE = #{rsType},  </if>
+		<if test="newParam != null">
+			VERSION = VERSION + 1, 
+			<if test="newParam.delFlag != null and newParam.delFlag != ''"> DEL_FLAG = #{newParam.delFlag},  </if>
+			<if test="newParam.updateBy != null and newParam.updateBy != ''"> UPDATE_BY = #{newParam.updateBy},  </if>
+			<if test="newParam.updateTime != null"> UPDATE_TIME = #{newParam.updateTime},  </if>
+			<if test="newParam.appCode != null and newParam.appCode != ''"> APP_CODE = #{newParam.appCode},  </if>
+			<if test="newParam.parentCode != null and newParam.parentCode != ''"> PARENT_CODE = #{newParam.parentCode},  </if>
+			<if test="newParam.remark != null and newParam.remark != ''"> REMARK = #{newParam.remark},  </if>
+			<if test="newParam.rsCode != null and newParam.rsCode != ''"> RS_CODE = #{newParam.rsCode},  </if>
+			<if test="newParam.rsName != null and newParam.rsName != ''"> RS_NAME = #{newParam.rsName},  </if>
+			<if test="newParam.rsPath != null and newParam.rsPath != ''"> RS_PATH = #{newParam.rsPath},  </if>
+			<if test="newParam.rsStatus != null and newParam.rsStatus != ''"> RS_STATUS = #{newParam.rsStatus},  </if>
+			<if test="newParam.rsType != null and newParam.rsType != ''"> RS_TYPE = #{newParam.rsType},  </if>
+		</if>
 		</set>
 		<where>
-			ID = #{id}
-			<if test="version != null "> and VERSION = #{version} </if>
+		<if test="oldParam != null">
+			<if test="oldParam.version != null"> and VERSION = #{oldParam.version}  </if>
+			<if test="oldParam.delFlag != null and oldParam.delFlag != ''"> and DEL_FLAG = #{oldParam.delFlag}  </if>
+			<if test="oldParam.createBy != null and oldParam.createBy != ''"> and CREATE_BY = #{oldParam.createBy}  </if>
+			<if test="oldParam.createTime != null"><![CDATA[ and CREATE_TIME = #{oldParam.createTime} ]]> </if>
+			<if test="oldParam.id != null and oldParam.id != ''"> and ID = #{oldParam.id}  </if>
+			<if test="oldParam.appCode != null and oldParam.appCode != ''"> and APP_CODE = #{oldParam.appCode}  </if>
+			<if test="oldParam.parentCode != null and oldParam.parentCode != ''"> and PARENT_CODE = #{oldParam.parentCode}  </if>
+			<if test="oldParam.remark != null and oldParam.remark != ''"> and REMARK = #{oldParam.remark}  </if>
+			<if test="oldParam.rsCode != null and oldParam.rsCode != ''"> and RS_CODE = #{oldParam.rsCode}  </if>
+			<if test="oldParam.rsName != null and oldParam.rsName != ''"> and RS_NAME = #{oldParam.rsName}  </if>
+			<if test="oldParam.rsPath != null and oldParam.rsPath != ''"> and RS_PATH = #{oldParam.rsPath}  </if>
+			<if test="oldParam.rsStatus != null and oldParam.rsStatus != ''"> and RS_STATUS = #{oldParam.rsStatus}  </if>
+			<if test="oldParam.rsType != null and oldParam.rsType != ''"> and RS_TYPE = #{oldParam.rsType}  </if>
+		</if>
+		<if test="oldInParam != null">
+			<!-- 非model属性：in条件处理拼写，要求List集合中的值能转换成key-value形式，例如map、自定义model对象等 -->
+			<if test="oldInParam.idList != null and oldInParam.idList.size()>0">
+			and ID in <foreach item="item" index="index" collection="oldInParam.idList" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+			<if test="oldInParam.appCodeList != null and oldInParam.appCodeList.size()>0">
+			and APP_CODE in <foreach item="item" index="index" collection="oldInParam.appCodeList" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+			<if test="oldInParam.parentCodeList != null and oldInParam.parentCodeList.size()>0">
+			and PARENT_CODE in <foreach item="item" index="index" collection="oldInParam.parentCodeList" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+			<if test="oldInParam.rsCodeList != null and oldInParam.rsCodeList.size()>0">
+			and RS_CODE in <foreach item="item" index="index" collection="oldInParam.rsCodeList" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+			<if test="oldInParam.rsNameList != null and oldInParam.rsNameList.size()>0">
+			and RS_NAME in <foreach item="item" index="index" collection="oldInParam.rsNameList" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+			<if test="oldInParam.rsPathList != null and oldInParam.rsPathList.size()>0">
+			and RS_PATH in <foreach item="item" index="index" collection="oldInParam.rsPathList" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+			<if test="oldInParam.rsStatusList != null and oldInParam.rsStatusList.size()>0">
+			and RS_STATUS in <foreach item="item" index="index" collection="oldInParam.rsStatusList" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+			<if test="oldInParam.rsTypeList != null and oldInParam.rsTypeList.size()>0">
+			and RS_TYPE in <foreach item="item" index="index" collection="oldInParam.rsTypeList" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+		</if>
+		<!-- 防止没有参数传递，导致全部更新 -->
+		or 1=2
 		</where>
 	</update>
-
-	<!-- 批量更新 -->
-	<update id="updateBatch" parameterType="java.util.List">
-		<foreach collection="list" item="item" index="index" separator=";">
-		update <include refid="table_name" />
-		<set>
-		VERSION = VERSION + 1, 
-		<if test="item.delFlag != null and item.delFlag != ''"> DEL_FLAG = #{item.delFlag},  </if>
-		<if test="item.createBy != null and item.createBy != ''"> CREATE_BY = #{item.createBy},  </if>
-		<if test="item.createTime != null "> CREATE_TIME = #{item.createTime},  </if>
-		<if test="item.updateBy != null and item.updateBy != ''"> UPDATE_BY = #{item.updateBy},  </if>
-		<if test="item.updateTime != null "> UPDATE_TIME = #{item.updateTime},  </if>
-		<if test="item.appCode != null and item.appCode != ''"> APP_CODE = #{item.appCode},  </if>
-		<if test="item.parentCode != null and item.parentCode != ''"> PARENT_CODE = #{item.parentCode},  </if>
-		<if test="item.remark != null and item.remark != ''"> REMARK = #{item.remark},  </if>
-		<if test="item.rsCode != null and item.rsCode != ''"> RS_CODE = #{item.rsCode},  </if>
-		<if test="item.rsName != null and item.rsName != ''"> RS_NAME = #{item.rsName},  </if>
-		<if test="item.rsPath != null and item.rsPath != ''"> RS_PATH = #{item.rsPath},  </if>
-		<if test="item.rsStatus != null and item.rsStatus != ''"> RS_STATUS = #{item.rsStatus},  </if>
-		<if test="item.rsType != null and item.rsType != ''"> RS_TYPE = #{item.rsType},  </if>
-		</set>
-		<where>
-			ID = #{item.id}
-			<if test="item.version != null "> and VERSION = #{item.version} </if>
-		</where>
-		</foreach>
-	</update>
-
-	<!-- 主键删除 -->
-<!-- 	<delete id="deleteById" parameterType="java.lang.String"> -->
-<!-- 		delete from <include refid="table_name" /> where ID = #{_parameter} -->
-<!-- 	</delete> -->
-
-	<!-- 主键批量删除 -->
-<!-- 	<delete id="deleteByIds" parameterType="java.util.List"> -->
-<!-- 		delete from <include refid="table_name" />  -->
-<!-- 		where ID in  -->
-<!-- 		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">#{item}</foreach> -->
-<!-- 	</delete> -->
 
 	<!-- 删除 -->
 	<delete id="deleteBy" parameterType="java.util.Map">
 		delete from <include refid="table_name" />
 		<where>
+		<!-- model属性： -->
 		<if test="version != null "> and VERSION = #{version} </if>
 		<if test="delFlag != null and delFlag != ''"> and DEL_FLAG = #{delFlag} </if>
 		<if test="createBy != null and createBy != ''"> and CREATE_BY = #{createBy} </if>
@@ -222,38 +233,37 @@
 		<if test="rsStatus != null and rsStatus != ''"> and RS_STATUS = #{rsStatus} </if>
 		<if test="rsType != null and rsType != ''"> and RS_TYPE = #{rsType} </if>
 		
-		<!-- 批量处理拼写，要求List集合的值能转换成map形式 -->
+		<!-- 非model属性：in条件处理拼写，要求List集合中的值能转换成key-value形式，例如map、自定义model对象等 -->
 		<if test="idList != null and idList.size()>0">
-		and ID in <foreach item="item" index="index" collection="idList" open="(" separator="," close=")">#{item.id}</foreach>
+		and ID in <foreach item="item" index="index" collection="idList" open="(" separator="," close=")">#{item}</foreach>
 		</if>
 		<if test="appCodeList != null and appCodeList.size()>0">
-		and APP_CODE in <foreach item="item" index="index" collection="appCodeList" open="(" separator="," close=")">#{item.appCode}</foreach>
+		and APP_CODE in <foreach item="item" index="index" collection="appCodeList" open="(" separator="," close=")">#{item}</foreach>
 		</if>
 		<if test="parentCodeList != null and parentCodeList.size()>0">
-		and PARENT_CODE in <foreach item="item" index="index" collection="parentCodeList" open="(" separator="," close=")">#{item.parentCode}</foreach>
+		and PARENT_CODE in <foreach item="item" index="index" collection="parentCodeList" open="(" separator="," close=")">#{item}</foreach>
 		</if>
 		<if test="rsCodeList != null and rsCodeList.size()>0">
-		and RS_CODE in <foreach item="item" index="index" collection="rsCodeList" open="(" separator="," close=")">#{item.rsCode}</foreach>
+		and RS_CODE in <foreach item="item" index="index" collection="rsCodeList" open="(" separator="," close=")">#{item}</foreach>
 		</if>
 		<if test="rsNameList != null and rsNameList.size()>0">
-		and RS_NAME in <foreach item="item" index="index" collection="rsNameList" open="(" separator="," close=")">#{item.rsName}</foreach>
+		and RS_NAME in <foreach item="item" index="index" collection="rsNameList" open="(" separator="," close=")">#{item}</foreach>
 		</if>
 		<if test="rsPathList != null and rsPathList.size()>0">
-		and RS_PATH in <foreach item="item" index="index" collection="rsPathList" open="(" separator="," close=")">#{item.rsPath}</foreach>
+		and RS_PATH in <foreach item="item" index="index" collection="rsPathList" open="(" separator="," close=")">#{item}</foreach>
 		</if>
 		<if test="rsStatusList != null and rsStatusList.size()>0">
-		and RS_STATUS in <foreach item="item" index="index" collection="rsStatusList" open="(" separator="," close=")">#{item.rsStatus}</foreach>
+		and RS_STATUS in <foreach item="item" index="index" collection="rsStatusList" open="(" separator="," close=")">#{item}</foreach>
 		</if>
 		<if test="rsTypeList != null and rsTypeList.size()>0">
-		and RS_TYPE in <foreach item="item" index="index" collection="rsTypeList" open="(" separator="," close=")">#{item.rsType}</foreach>
+		and RS_TYPE in <foreach item="item" index="index" collection="rsTypeList" open="(" separator="," close=")">#{item}</foreach>
 		</if>
 		
 		<!-- 防止没有参数传递，导致全部删除 -->
 		or 1=2
-		
 		</where>
 	</delete>
-	
+
 	<!-- ######################################################################### -->
 	<!-- ##############################   基础sql结束    ############################## -->
 	<!-- ######################################################################### -->
@@ -270,4 +280,5 @@
 		<if test="appCode != null and appCode != ''"> and APP_CODE = #{appCode} </if>
 		</where>
 	</select>
+	
 </mapper>

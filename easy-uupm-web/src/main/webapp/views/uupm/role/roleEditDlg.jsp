@@ -38,19 +38,22 @@ $(function() {
 				<table class="edit-form-table">
 					<tr>
 						<th>名称：</th>
-						<td><input name="userName" class="easyui-textbox easyui-validatebox" required="required" placeholder="请输入名称" /></td>
+						<td><input name="roleName" class="easyui-textbox easyui-validatebox" required="required" placeholder="请输入名称" /></td>
 						<th>编号：</th>
-						<td><input id="userCode_id" name="userCode" class="easyui-textbox easyui-validatebox" required="required" placeholder="请输入编号"/></td>
+						<td><input id="roleCode_id" name="roleCode" class="easyui-textbox easyui-validatebox" required="required" placeholder="请输入编号"/></td>
 					</tr>
 					<tr>
-						<th>机构：</th>
-						<td><input id="orgCode_id" name="orgCode" class="easyui-textbox" required="required"/></td>
-						<th>账户状态：</th>
+						<th>状态：</th>
 						<td>
-							<input id="loginStatus_id" name="loginStatus" type="text" />
+							<input id="roleStatus_id" name="roleStatus" type="text" />
 						</td>
+						<th></th>
+						<td></td>
 					</tr>
-					 
+					<tr>
+						<th>备注：</th>
+						<td colspan="3"><textarea name="remark" class="easyui-textbox" style="width:600px;height:80px;"></textarea></td>
+					</tr>
 				</table>
 			</fieldset>
 		</form>

@@ -6,8 +6,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
 
 import com.yffd.easy.common.core.converter.EasyModelConverter;
+import com.yffd.easy.common.core.exception.EasyDaoException;
 import com.yffd.easy.common.core.page.PageParam;
 import com.yffd.easy.common.core.page.PageResult;
 import com.yffd.easy.common.core.util.EasyStringCheckUtils;
@@ -140,29 +143,134 @@ public abstract class BaseServiceAbstract extends EasyModelConverter {
 	}
 
 	/**
-	 * 修改.<br/>
-	 * @Date	2018年3月2日 上午11:22:28 <br/>
+	 * 更新.<br/>
+	 * @Date	2018年3月14日 下午4:03:29 <br/>
+	 * @author  zhangST
+	 * @param newMap
+	 * @param oldMap
+	 * @param loginInfo
+	 * @return
+	 */
+	public int updateBy(Map<String, Object> newMap, Map<String, Object> oldMap, LoginInfo loginInfo) {
+		if(null==newMap || newMap.size()==0 || null==oldMap || oldMap.size()==0) return -1;
+		this.setEditDefault(newMap, loginInfo, false);
+		int result = this.getBindDao().updateBy(newMap, oldMap);
+		return result;
+	}
+	
+	/**
+	 * 更新.<br/>
+	 * @Date	2018年3月14日 下午4:03:43 <br/>
 	 * @author  zhangST
 	 * @param paramMap
 	 * @param loginInfo
+	 * @param attributeNames	条件属性名称集合
+	 * @return
 	 */
-	public void updateBy(Map<String, Object> paramMap, LoginInfo loginInfo) {
-		if(null==paramMap || paramMap.size()==0) return;
+	public int updateBy(Map<String, Object> paramMap, LoginInfo loginInfo, String... attributeNames) {
+		if(null==paramMap || paramMap.size()==0 || null==attributeNames || attributeNames.length==0) return -1;
 		this.setEditDefault(paramMap, loginInfo, false);
-		this.getBindDao().updateBy(paramMap);
+		int result = this.getBindDao().updateBy(paramMap, attributeNames);
+		return result;
 	}
-
+	
 	/**
-	 * 修改-批量.<br/>
-	 * @Date	2018年3月2日 上午11:22:48 <br/>
+	 * 更新.<br/>
+	 * @Date	2018年3月14日 下午4:04:55 <br/>
 	 * @author  zhangST
-	 * @param list
+	 * @param paramMap
+	 * @param attributeName		条件属性名称集合
 	 * @param loginInfo
+	 * @return
+	 * @see #updateBy(Map, String...)
 	 */
-	public void updateBatchBy(List<?> list, LoginInfo loginInfo) {
-		if(null==list || list.size()==0) return;
-		this.setEditDefault(list, loginInfo, false);
-		this.getBindDao().updateBatch(list);
+	public int updateBy(Map<String, Object> paramMap, String attributeName, LoginInfo loginInfo) {
+		String[] arr = {attributeName};
+		int result = this.updateBy(paramMap, loginInfo, arr);
+		return result;
+	}
+	
+	/**
+	 * 更新.<br/>
+	 * @Date	2018年3月14日 下午4:05:42 <br/>
+	 * @author  zhangST
+	 * @param paramMap
+	 * @param loginInfo
+	 * @return						-1：没有找到key为“id”所对应的有效值
+	 * @see #updateBy(Map, String)
+	 */
+	public int updateById(Map<String, Object> paramMap, LoginInfo loginInfo) {
+		if(null==paramMap || paramMap.size()==0) return -1;
+		String attributeName = "id";
+		int result = this.updateBy(paramMap, attributeName, loginInfo);
+		return result;
+	}
+	
+	/**
+	 * 更新.<br/>
+	 * @Date	2018年3月14日 下午4:06:20 <br/>
+	 * @author  zhangST
+	 * @param newMap
+	 * @param idsList
+	 * @param loginInfo
+	 * @return
+	 * @see #updateWithInBy(Map, String, List, LoginInfo)
+	 */
+	public int updateByIds(Map<String, Object> newMap, List<String> idsList, LoginInfo loginInfo) {
+		if(null==newMap || newMap.size()==0 || null==idsList || idsList.size()==0) return -1;
+		int result = this.updateWithInBy(newMap, "id", idsList, loginInfo);
+        return result;
+	}
+	
+	/**
+	 * 更新.<br/>
+	 * @Date	2018年3月13日 下午3:52:34 <br/>
+	 * @author  zhangST
+	 * @param newMap		新值集合
+	 * @param inName		in条件名称
+	 * @param inValueList	in条件值
+	 * @return
+	 * @see #updateWithInBy(Map, Map, String, List, LoginInfo)
+	 */
+	public int updateWithInBy(Map<String, Object> newMap, String inName, List<?> inValueList, LoginInfo loginInfo) {
+		if(null==newMap || newMap.size()==0 || EasyStringCheckUtils.isEmpty(inName) 
+				|| null==inValueList || inValueList.size()==0) return -1;
+		int result = this.updateWithInBy(newMap, null, inName, inValueList, loginInfo);
+		return result;
+	}
+	
+	/**
+	 * 更新.<br/>
+	 * @Date	2018年3月13日 下午3:50:19 <br/>
+	 * @author  zhangST
+	 * @param newMap		新值集合
+	 * @param oldMap		旧值集合
+	 * @param inName		in条件名称
+	 * @param inValueList	in值集合
+	 * @return
+	 * @see #updateWithInBy(Map, Map, Map, LoginInfo)
+	 */
+	public int updateWithInBy(Map<String, Object> newMap, Map<String, Object> oldMap, String inName, List<?> inValueList, LoginInfo loginInfo) {
+		Map<String, Object> oldInMap = new HashMap<String, Object>();
+		oldInMap.put(inName, inValueList);
+		int result = this.updateWithInBy(newMap, oldMap, oldInMap, loginInfo);
+		return result;
+	}
+	
+	/**
+	 * 更新.<br/>
+	 * @Date	2018年3月13日 下午4:13:33 <br/>
+	 * @author  zhangST
+	 * @param newMap		新值集合
+	 * @param oldMap		旧值集合
+	 * @param oldInMap		in值集合，数据格式：inName：inValueList，如：Map<String,List<String>> == Map<"id", List<String>> == " ID in ( 1,2,3 ) "
+	 * @return
+	 */
+	public int updateWithInBy(Map<String, Object> newMap, Map<String, Object> oldMap, Map<String, Object> oldInMap, LoginInfo loginInfo) {
+		if((null==oldMap || oldMap.size()==0) && (null==oldInMap || oldInMap.size()==0)) return -1;
+		this.setEditDefault(newMap, loginInfo, false);
+		int result = this.getBindDao().updateWithInBy(newMap, oldMap, oldInMap);
+		return result;
 	}
 
 	/**
@@ -172,9 +280,9 @@ public abstract class BaseServiceAbstract extends EasyModelConverter {
 	 * @param paramMap
 	 * @param loginInfo
 	 */
-	public void delBy(Map<String, Object> paramMap, LoginInfo loginInfo) {
-		if(null==paramMap || paramMap.size()==0) return;
-		this.getBindDao().deleteBy(paramMap);
+	public int delBy(Map<String, Object> paramMap, LoginInfo loginInfo) {
+		if(null==paramMap || paramMap.size()==0) return -1;
+		return this.getBindDao().deleteBy(paramMap);
 	}
 
 	/**
@@ -184,9 +292,9 @@ public abstract class BaseServiceAbstract extends EasyModelConverter {
 	 * @param id
 	 * @param loginInfo
 	 */
-	public void delById(String id, LoginInfo loginInfo) {
-		if(EasyStringCheckUtils.isEmpty(id)) return;
-		this.getBindDao().deleteById(id);
+	public int delById(String id, LoginInfo loginInfo) {
+		if(EasyStringCheckUtils.isEmpty(id)) return -1;
+		return this.getBindDao().deleteById(id);
 	}
 	
 	/**
@@ -196,12 +304,12 @@ public abstract class BaseServiceAbstract extends EasyModelConverter {
 	 * @param list
 	 * @param loginInfo
 	 */
-	public void delByIds(List<String> list, LoginInfo loginInfo) {
-		if(null==list || list.size()==0) return;
+	public int delByIds(List<String> list, LoginInfo loginInfo) {
+		if(null==list || list.size()==0) return -1;
 		if(list.size()==1) {
-			this.getBindDao().deleteById(list.get(0));
+			return this.getBindDao().deleteById(list.get(0));
 		} else {
-			this.getBindDao().deleteByIds(list);
+			return this.getBindDao().deleteByIds(list);
 		}
 	}
 
@@ -209,17 +317,26 @@ public abstract class BaseServiceAbstract extends EasyModelConverter {
 	 * 删除-物理.<br/>
 	 * @Date	2018年3月2日 上午11:24:03 <br/>
 	 * @author  zhangST
-	 * @param ids
+	 * @param ids			逗号分隔的字符串值
 	 * @param loginInfo
+	 * @see #deleteWithInBy(String, String, String, LoginInfo)
 	 */
-	public void delByIds(String ids, LoginInfo loginInfo) {
-		if(EasyStringCheckUtils.isEmpty(ids)) return;
-		if(ids.indexOf(",")==-1) {
-			this.getBindDao().deleteById(ids);
-		} else {
-			List<String> list = Arrays.asList(ids.split(","));
-			this.getBindDao().deleteByIds(list);
-		}
+	public int delByIds(String ids, LoginInfo loginInfo) {
+		return this.delWithInBy("id", ids, ",", loginInfo);
+	}
+	
+	/**
+	 * 删除-物理.<br/>
+	 * @Date	2018年3月12日 下午3:18:53 <br/>
+	 * @author  zhangST
+	 * @param arributeName	属性名称
+	 * @param values		带定界符的字符串（逗号）
+	 * @param loginInfo
+	 * @return				返回-1代表参数（values）为空，即values转换成数组后，数组为空
+	 * @see #deleteWithInBy(String, String, String, LoginInfo)
+	 */
+	public int delWithInBy(String arributeName, String values, LoginInfo loginInfo) {
+		return this.delWithInBy(arributeName, values, null, loginInfo);
 	}
 	
 	/**
@@ -231,31 +348,69 @@ public abstract class BaseServiceAbstract extends EasyModelConverter {
 	 * @param delimiter		values字符串的定界符，默认为逗号（,）
 	 * @param loginInfo
 	 * @return				返回-1代表参数（values）为空，即values转换成数组后，数组为空
+	 * @see #deleteWithInBy(Map, Map, LoginInfo)
 	 */
-	public int deleteWithInBy(String arributeName, String values, String delimiter, LoginInfo loginInfo) {
+	public int delWithInBy(String arributeName, String values, String delimiter, LoginInfo loginInfo) {
 		if(EasyStringCheckUtils.isEmpty(arributeName) || EasyStringCheckUtils.isEmpty(values)) return -1; 
 		if(EasyStringCheckUtils.isEmpty(delimiter)) delimiter = ",";
+		List<String> inValueList = new ArrayList<String>();
 		if(values.indexOf(delimiter)!=-1) {
 			String[] arr = values.split(delimiter);
 			if(arr.length==0) return -1;
-			List<Map<String, Object>> paramList = new ArrayList<Map<String, Object>>();
 			for(String tmp : arr) {
 				if(EasyStringCheckUtils.isEmpty(tmp)) continue;
-				Map<String, Object> map = new HashMap<String, Object>();
-				map.put(arributeName, tmp);
-				paramList.add(map);
+				inValueList.add(tmp);
 			}
-			Map<String, Object> paramMap = new HashMap<String, Object>();
-			paramMap.put("tenantCode", loginInfo.getTenantCode());
-			return this.getBindDao().deleteWithInBy(paramMap, arributeName, paramList);
 		} else {
-			Map<String, Object> paramMap = new HashMap<String, Object>();
-			paramMap.put("tenantCode", loginInfo.getTenantCode());
-			paramMap.put(arributeName, values);
-			return this.getBindDao().deleteBy(paramMap);
+			inValueList.add(values);
 		}
 		
+		Map<String, List<?>> inMap = new HashMap<String, List<?>>();
+		inMap.put(arributeName, inValueList);
+		
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		if(null!=loginInfo) paramMap.put("tenantCode", loginInfo.getTenantCode());
+		
+		return this.delWithInBy(paramMap, inMap, loginInfo);
+		
 	}
+	
+	/**
+	 * 删除-物理.<br/>
+	 * @Date	2018年3月12日 下午3:18:53 <br/>
+	 * @author  zhangST
+	 * @param arributeName	属性名称
+	 * @param inValueList	in条件值集合
+	 * @param loginInfo
+	 * @return				-1：参数错误
+	 * @see #deleteWithInBy(Map, Map, LoginInfo)
+	 */
+	public int delWithInBy(String arributeName, List<?> inValueList, LoginInfo loginInfo) {
+		if(EasyStringCheckUtils.isEmpty(arributeName) || inValueList==null || inValueList.size()==0) return -1; 
+		
+		Map<String, List<?>> inMap = new HashMap<String, List<?>>();
+		inMap.put(arributeName, inValueList);
+		
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		if(null!=loginInfo) paramMap.put("tenantCode", loginInfo.getTenantCode());
+		
+		return this.delWithInBy(paramMap, inMap, loginInfo);
+	}
+	
+	/**
+	 * 删除.<br/>
+	 * @Date	2018年3月12日 下午4:41:04 <br/>
+	 * @author  zhangST
+	 * @param paramMap		普通条件
+	 * @param inMap			in条件，格式：Map<String, List<String>> == Map<"id", List<String>>
+	 * @param loginInfo
+	 * @return				-1：参数错误
+	 */
+	public int delWithInBy(Map<String, Object> paramMap, Map<String, List<?>> inMap, LoginInfo loginInfo) {
+		if((null==paramMap || paramMap.size()==0) && (null==inMap || inMap.size()==0)) return -1;
+		return this.getBindDao().deleteWithInBy(paramMap, inMap);
+	}
+	
 	
 	/**
 	 * 设置数据模型的默认值-新增
