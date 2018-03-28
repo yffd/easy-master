@@ -32,7 +32,13 @@ public class UupmResourceService extends GenericService<UupmResourceModel> {
 	}
 	
 	public List<Map<String, Object>> findResWithApp() {
-		return this.uupmResourceDao.selectResWithApp();
+		List<Map<String, Object>> listResult = this.uupmResourceDao.selectResWithApp();
+		return this.map2map(listResult, true);
+	}
+	
+	public List<UupmResourceModel> findResWithAppList() {
+		List<Map<String, Object>> listResult = this.uupmResourceDao.selectResWithApp();
+		return this.map2model(listResult, UupmResourceModel.class, true);
 	}
 	
 }

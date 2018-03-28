@@ -38,6 +38,7 @@ public class CodeGenerator extends EasyModelConverter {
 		sortedPropsList.add("updateBy");
 		sortedPropsList.add("updateTime");
 		sortedPropsList.add("id");
+		sortedPropsList.add("tenantCode");
 		
 		skipModelNamesLike.add("EasyPersistModel");
 		skipModelNamesLike.add("BaseModel");

@@ -275,7 +275,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<table id="dg_id" title="查询列表"></table>
 	</div>
 	
-	<div id="tb_id" style="display:none;padding:10px;height:auto">
+	<div id="tb_id" style="display:none;padding:5px;height:auto">
 		<table cellpadding="0" cellspacing="0">
 			<tr>
 				<td style="padding-left:2px;padding-bottom:2px;">

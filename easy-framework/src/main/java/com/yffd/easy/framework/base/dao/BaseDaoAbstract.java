@@ -1,10 +1,14 @@
 package com.yffd.easy.framework.base.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
 import com.yffd.easy.common.core.converter.EasyModelConverter;
+import com.yffd.easy.common.core.page.PageParam;
+import com.yffd.easy.common.core.page.PageResult;
 
 /**
  * @Description  持久化常用操作类.
@@ -50,6 +54,7 @@ public abstract class BaseDaoAbstract extends EasyModelConverter {
 	}
 
 	protected <T> T selectOne_(Object parameter) {
+		Object o =this.getSqlSession().selectOne(getStatement(SQL_SELECT_ONE_BY), parameter);
 		return this.getSqlSession().selectOne(getStatement(SQL_SELECT_ONE_BY), parameter);
 	}
 
@@ -71,6 +76,27 @@ public abstract class BaseDaoAbstract extends EasyModelConverter {
 
 	protected int deleteBy_(Object parameter) {
 		return this.getSqlSession().delete(getStatement(SQL_DELETE_BY), parameter);
+	}
+	
+	/*************************************************************************************/
+	/*************************************************************************************/
+	
+	protected <T> PageResult<T> selectPage(Map<String, Object> paramMap, PageParam pageParam, String sqlId, String countSqlId) {
+		List<Object> recordList = this.selectRangeList(paramMap, pageParam, sqlId, countSqlId); // 获取分页数据集
+		return new PageResult(pageParam, recordList);
+	}
+	
+	protected <T> List<T> selectRangeList(Map<String, Object> paramMap, PageParam pageParam, String sqlId, String countSqlId) {
+		if(null==paramMap) paramMap = new HashMap<String, Object>();
+		if(null!=pageParam) {
+			Long totalRecord = this.getSqlSession().selectOne(countSqlId, paramMap); // 统计总记录数
+			pageParam.setTotalRecord(totalRecord);
+			paramMap.put("pageParam", pageParam); // 根据页面传来的分页参数构造SQL分页参数
+		} else {
+			paramMap.put("pageParam", null);
+		}
+		List<T> recordList = this.getSqlSession().selectList(sqlId, paramMap); // 获取分页数据集
+		return recordList;
 	}
 	
 	protected String getStatement(String sqlId) {

@@ -1,5 +1,6 @@
 package com.yffd.easy.uupm.web.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,7 @@ import com.yffd.easy.common.core.util.EasyStringCheckUtils;
 import com.yffd.easy.framework.domain.RespModel;
 import com.yffd.easy.framework.web.view.vo.DataGridVO;
 import com.yffd.easy.uupm.api.model.UupmRoleModel;
+import com.yffd.easy.uupm.api.model.UupmUserModel;
 import com.yffd.easy.uupm.service.UupmRoleService;
 
 
@@ -51,7 +53,11 @@ public class UupmRoleController extends UupmBaseController {
 	
 	@RequestMapping(value="/add", method=RequestMethod.POST)
 	public RespModel add(UupmRoleModel model) {
-		if(null==model) return this.error("参数无效");
+		if(null==model || EasyStringCheckUtils.isEmpty(model.getRoleCode())) return this.error("参数无效");
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("roleCode", model.getRoleCode());
+		UupmRoleModel result = this.uupmRoleService.findOne(paramMap);
+		if(null!=result) return this.error("编号已存在");
 		this.uupmRoleService.addOne(model, null);
 		return this.successAjax();
 	}
@@ -72,11 +78,18 @@ public class UupmRoleController extends UupmBaseController {
 		return this.successAjax();
 	}
 	
+	@RequestMapping(value="/delByRoleCode", method=RequestMethod.POST)
+	public RespModel delByRoleCode(String roleCode) {
+		if(EasyStringCheckUtils.isEmpty(roleCode)) return this.errorAjax("参数无效");
+		this.uupmRoleService.delByRoleCode(roleCode, null);
+		return this.successAjax();
+	}
+	
 	@RequestMapping(value="/delBatch", method=RequestMethod.POST)
 	public RespModel delBatch(HttpServletRequest req) {
 		String ids = req.getParameter("ids");
 		if(EasyStringCheckUtils.isEmpty(ids)) return this.error("参数无效");
-		int result = this.uupmRoleService.delWithInBy("id", ids, null);
+		int result = this.uupmRoleService.delByIds(ids, null);
 		if(result==-1) return this.error("参数无效");
 		return this.successAjax();
 	}

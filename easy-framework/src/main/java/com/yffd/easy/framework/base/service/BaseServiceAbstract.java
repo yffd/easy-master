@@ -6,16 +6,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.Map.Entry;
 
 import com.yffd.easy.common.core.converter.EasyModelConverter;
-import com.yffd.easy.common.core.exception.EasyDaoException;
 import com.yffd.easy.common.core.page.PageParam;
 import com.yffd.easy.common.core.page.PageResult;
 import com.yffd.easy.common.core.util.EasyStringCheckUtils;
 import com.yffd.easy.framework.base.dao.GenericDao;
-import com.yffd.easy.framework.domain.GenericPO;
+import com.yffd.easy.framework.domain.CustomPo;
 import com.yffd.easy.framework.domain.LoginInfo;
 
 /**
@@ -153,7 +150,7 @@ public abstract class BaseServiceAbstract extends EasyModelConverter {
 	 */
 	public int updateBy(Map<String, Object> newMap, Map<String, Object> oldMap, LoginInfo loginInfo) {
 		if(null==newMap || newMap.size()==0 || null==oldMap || oldMap.size()==0) return -1;
-		this.setEditDefault(newMap, loginInfo, false);
+		this.setEditDefault(newMap, loginInfo);
 		int result = this.getBindDao().updateBy(newMap, oldMap);
 		return result;
 	}
@@ -169,7 +166,7 @@ public abstract class BaseServiceAbstract extends EasyModelConverter {
 	 */
 	public int updateBy(Map<String, Object> paramMap, LoginInfo loginInfo, String... attributeNames) {
 		if(null==paramMap || paramMap.size()==0 || null==attributeNames || attributeNames.length==0) return -1;
-		this.setEditDefault(paramMap, loginInfo, false);
+		this.setEditDefault(paramMap, loginInfo);
 		int result = this.getBindDao().updateBy(paramMap, attributeNames);
 		return result;
 	}
@@ -268,7 +265,7 @@ public abstract class BaseServiceAbstract extends EasyModelConverter {
 	 */
 	public int updateWithInBy(Map<String, Object> newMap, Map<String, Object> oldMap, Map<String, Object> oldInMap, LoginInfo loginInfo) {
 		if((null==oldMap || oldMap.size()==0) && (null==oldInMap || oldInMap.size()==0)) return -1;
-		this.setEditDefault(newMap, loginInfo, false);
+		this.setEditDefault(newMap, loginInfo);
 		int result = this.getBindDao().updateWithInBy(newMap, oldMap, oldInMap);
 		return result;
 	}
@@ -420,8 +417,8 @@ public abstract class BaseServiceAbstract extends EasyModelConverter {
 	 * @param loginInfo
 	 */
 	protected void setAddDefault(Object parameter, LoginInfo loginInfo) {
-		if(parameter instanceof GenericPO) {
-			GenericPO model = (GenericPO) parameter;
+		if(parameter instanceof CustomPo) {
+			CustomPo model = (CustomPo) parameter;
 			if(null==model.getVersion()) model.setVersion(0);
 			if(null==model.getDelFlag()) model.setDelFlag("0");
 			if(null==model.getCreateTime()) model.setCreateTime(new Date());
@@ -457,9 +454,9 @@ public abstract class BaseServiceAbstract extends EasyModelConverter {
 	 * @param parameter
 	 * @param loginInfo
 	 */
-	protected void setEditDefault(Object parameter, LoginInfo loginInfo, boolean delFlag) {
-		if(parameter instanceof GenericPO) {
-			GenericPO model = (GenericPO) parameter;
+	protected void setEditDefault(Object parameter, LoginInfo loginInfo) {
+		if(parameter instanceof CustomPo) {
+			CustomPo model = (CustomPo) parameter;
 			if(null==model.getUpdateTime()) model.setUpdateTime(new Date()); 
 			if(null==model.getUpdateBy()) {
 				if(null!=loginInfo) 
@@ -467,7 +464,6 @@ public abstract class BaseServiceAbstract extends EasyModelConverter {
 				else 
 					model.setUpdateBy("sys");
 			}
-			if(delFlag) model.setDelFlag("1");
 		} else if(parameter instanceof Map) {
 			Map<String, Object> paramMap = (Map<String, Object>) parameter;
 			if(null==paramMap.get("editTime")) paramMap.put("editTime", new Date());
@@ -477,13 +473,11 @@ public abstract class BaseServiceAbstract extends EasyModelConverter {
 				else 
 					paramMap.put("editor", "sys");
 			}
-			if(delFlag) paramMap.put("delFlag", "1");
 		} else if(parameter instanceof List) {
 			List<Object> list = (List<Object>) parameter;
 			for(Object obj : list) {
-				this.setEditDefault(obj, loginInfo, delFlag);
+				this.setEditDefault(obj, loginInfo);
 			}
 		}
 	}
 }
-

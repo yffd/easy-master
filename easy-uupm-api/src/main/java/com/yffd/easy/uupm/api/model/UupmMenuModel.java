@@ -6,7 +6,7 @@
 
 package com.yffd.easy.uupm.api.model;
 
-import com.yffd.easy.framework.domain.GenericPO;
+import com.yffd.easy.framework.domain.CustomPo;
 
 /**
  * 
@@ -17,10 +17,10 @@ import com.yffd.easy.framework.domain.GenericPO;
  * @since		 JDK 1.7+
  * @see
  */
-public class UupmMenuModel extends GenericPO {
+public class UupmMenuModel extends CustomPo {
 	
 	private static final long serialVersionUID = -7089319244476271520L;
-	private String tenantCode;			//租户编号
+	private String tenantId;			//租户ID
 	private String applicationCode;		//应用系统编号
 	private String functionCode;		//功能编号
 	private String menuName;			//菜单名称
@@ -29,11 +29,11 @@ public class UupmMenuModel extends GenericPO {
 	private String menuUrl;				//菜单链接
 	private String remark;				//备注
 	
-	public String getTenantCode() {
-		return tenantCode;
+	public String getTenantId() {
+		return tenantId;
 	}
-	public void setTenantCode(String tenantCode) {
-		this.tenantCode = tenantCode;
+	public void setTenantId(String tenantId) {
+		this.tenantId = tenantId;
 	}
 	public String getApplicationCode() {
 		return applicationCode;

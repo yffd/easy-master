@@ -62,48 +62,48 @@ public class PaginationExecutorQueryInterceptor implements Interceptor {
             }
         }
         // PageParam对象存在，开始分页处理
-        if(null!=pageParam) {
-            Configuration configuration = mappedStatement.getConfiguration();
-            String dbType = configuration.getVariables().getProperty("dbtype");
-            if(ValidUtils.isEmpty(dbType)) {
-                throw new Exception("分页拦截器获取数据库类型失败");
-            }
-            
-            IDialect.Type databaseType = IDialect.Type.valueOf(dbType.toUpperCase());
-            IDialect dialect = null;
-            switch (databaseType) {
-                case MYSQL:
-                    dialect = new MySql5Dialect(); break;
-                case ORACLE:
-                    break;
-            }
-            
-            Long pageNum = pageParam.getPageNum();
-            Long pageLimit = pageParam.getPageLimit();
-            
-            // 校验当前页码值的有效范围
-            pageNum = pageParam.countPageNum(pageNum);
-            pageParam.setPageNum(pageNum); // 重新设值
-         	
-     		// 校验每页码值的有效范围
-     		pageLimit = pageParam.countPageLimit(pageLimit);
-     		pageParam.setPageLimit(pageLimit); // 重新设值
-     		
-     		pageParam.setPageStartRow(pageParam.countPageStartRow(pageNum, pageLimit));
-     		pageParam.setPageEndRow(pageParam.countPageEndRow(pageNum, pageLimit));
-
-            Long pageStartRow = pageParam.countPageStartRow(pageNum, pageLimit);
-            Long pageEndRow = pageParam.countPageEndRow(pageNum, pageLimit);
-            pageParam.setPageStartRow(pageStartRow);
-            pageParam.setPageEndRow(pageEndRow);
-            
-            String originalSql = boundSql.getSql().trim();
-            String newSql = dialect.getLimitString(originalSql, pageStartRow, pageEndRow);
-            BoundSql newBoundSql = copyFromBoundSql(mappedStatement, boundSql, newSql.toString());
-            LoggerFormat.info(LOG, "分页拦截器生成的分页SQL : " + CommonUtils.getLineSeparator() + newBoundSql.getSql());
-            MappedStatement newMs = copyFromMappedStatement(mappedStatement, new BoundSqlSqlSource(newBoundSql));
-            invocation.getArgs()[0] = newMs;
-        }
+//        if(null!=pageParam) {
+//            Configuration configuration = mappedStatement.getConfiguration();
+//            String dbType = configuration.getVariables().getProperty("dbtype");
+//            if(ValidUtils.isEmpty(dbType)) {
+//                throw new Exception("分页拦截器获取数据库类型失败");
+//            }
+//            
+//            IDialect.Type databaseType = IDialect.Type.valueOf(dbType.toUpperCase());
+//            IDialect dialect = null;
+//            switch (databaseType) {
+//                case MYSQL:
+//                    dialect = new MySql5Dialect(); break;
+//                case ORACLE:
+//                    break;
+//            }
+//            
+//            Long pageNum = pageParam.getPageNum();
+//            Long pageLimit = pageParam.getPageLimit();
+//            
+//            // 校验当前页码值的有效范围
+//            pageNum = pageParam.countPageNum(pageNum);
+//            pageParam.setPageNum(pageNum); // 重新设值
+//         	
+//     		// 校验每页码值的有效范围
+//     		pageLimit = pageParam.countPageLimit(pageLimit);
+//     		pageParam.setPageLimit(pageLimit); // 重新设值
+//     		
+//     		pageParam.setPageStartRow(pageParam.countPageStartRow(pageNum, pageLimit));
+//     		pageParam.setPageEndRow(pageParam.countPageEndRow(pageNum, pageLimit));
+//
+//            Long pageStartRow = pageParam.countPageStartRow(pageNum, pageLimit);
+//            Long pageEndRow = pageParam.countPageEndRow(pageNum, pageLimit);
+//            pageParam.setPageStartRow(pageStartRow);
+//            pageParam.setPageEndRow(pageEndRow);
+//            
+//            String originalSql = boundSql.getSql().trim();
+//            String newSql = dialect.getLimitString(originalSql, pageStartRow, pageEndRow);
+//            BoundSql newBoundSql = copyFromBoundSql(mappedStatement, boundSql, newSql.toString());
+//            LoggerFormat.info(LOG, "分页拦截器生成的分页SQL : " + CommonUtils.getLineSeparator() + newBoundSql.getSql());
+//            MappedStatement newMs = copyFromMappedStatement(mappedStatement, new BoundSqlSqlSource(newBoundSql));
+//            invocation.getArgs()[0] = newMs;
+//        }
         // 将执行权交给下一个拦截器
         return invocation.proceed();
     }

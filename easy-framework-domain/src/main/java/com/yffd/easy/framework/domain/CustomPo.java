@@ -4,17 +4,20 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @Description  持久化模型基类.
- * @Date		 2018年1月29日 下午3:03:16 <br/>
+ * @Description  自定义持久化类基类.
+ * @Date		 2018年3月26日 上午11:44:34 <br/>
  * @author       zhangST
  * @version		 1.0
  * @since		 JDK 1.7+
  * @see 	 
  */
-public class GenericPO extends DomainModel implements Serializable {
+public class CustomPo implements CustomObj, Serializable {
 	
-	private static final long serialVersionUID = 1569029662385519388L;
-	
+	/**
+	 * serialVersionUID:TODO(用一句话描述这个变量表示什么).
+	 * @since JDK 1.7+
+	 */
+	private static final long serialVersionUID = 4635049042528833163L;
 	private String id;
 	private Integer version;	// 版本号
 	private String createBy;	// 创建人
@@ -22,6 +25,7 @@ public class GenericPO extends DomainModel implements Serializable {
 	private String updateBy;	// 最后修改人
 	private Date updateTime;	// 最后修改时间
 	private String delFlag;		//逻辑删除标识：0=未删除、1=已删除
+	private String tenantCode;	//租户编号
 	
 	public String getId() {
 		return id;
@@ -64,6 +68,12 @@ public class GenericPO extends DomainModel implements Serializable {
 	}
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
+	}
+	public String getTenantCode() {
+		return tenantCode;
+	}
+	public void setTenantCode(String tenantCode) {
+		this.tenantCode = tenantCode;
 	}
 	
 }

@@ -7,7 +7,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Date;
 
-import com.yffd.easy.framework.domain.GenericPO;
+import com.yffd.easy.framework.domain.CustomPo;
 
 /**
  * @Description  XxxDaoTest代码生成器.
@@ -108,7 +108,7 @@ public class DaoTestCodeGenerator extends CodeGenerator {
 	public static void main(String[] args) {
 		DaoTestCodeGenerator generator = new DaoTestCodeGenerator();
 		String author = "ZhangST";
-		Class<?> modelClazz = GenericPO.class;
+		Class<?> modelClazz = CustomPo.class;
 		Class<?> baseDaoTestClazz = null;
 		String daoTestPackageName = "com.yffd.easy.xxx.dao";
 		generator.writeToConsole(modelClazz, baseDaoTestClazz, daoTestPackageName, author);

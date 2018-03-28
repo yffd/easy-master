@@ -15,6 +15,8 @@ $(function() {
 			return isValid;
 		},
 		success: function(result) {
+			console.dir(result);
+			console.info(result.status);
 			parent.$.messager.progress('close');
 			result = $.parseJSON(result);
 			if(result.status=='OK') {

@@ -7,7 +7,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Date;
 
-import com.yffd.easy.framework.domain.GenericPO;
+import com.yffd.easy.framework.domain.CustomPo;
 
 /**
  * @Description  XxxDaoTest代码生成器.
@@ -113,7 +113,7 @@ public class ServiceTestCodeGenerator extends CodeGenerator {
 	public static void main(String[] args) {
 		ServiceTestCodeGenerator generator = new ServiceTestCodeGenerator();
 		String author = "ZhangST";
-		Class<?> modelClazz = GenericPO.class;
+		Class<?> modelClazz = CustomPo.class;
 		Class<?> baseServiceTestClazz = null;
 		String serviceTestPackageName = "com.yffd.easy.xxx.service";
 		generator.writeToConsole(modelClazz, baseServiceTestClazz, serviceTestPackageName, author);

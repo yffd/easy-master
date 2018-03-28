@@ -22,6 +22,11 @@
   
   	<dependency>
   		<groupId>com.yffd.easy</groupId>
+  <artifactId>easy-framework-web</artifactId>
+  <version>0.0.1</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>com.yffd.easy</groupId>
   		<artifactId>easy-admin-service</artifactId>
   		<version>${easy.admin.service.version}</version>
   	</dependency>

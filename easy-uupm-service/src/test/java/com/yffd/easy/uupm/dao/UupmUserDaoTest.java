@@ -17,7 +17,7 @@ import com.yffd.easy.uupm.base.UupmBaseDaoTest;
 
 /**
  * @Description	简单描述该类的功能（可选）.
- * @Date		2018年03月12日 17时44分31秒 <br/>
+ * @Date		2018年03月23日 11时01分34秒 <br/>
  * @author		ZhangST
  * @version		1.0
  * @since		JDK 1.7+
@@ -96,7 +96,7 @@ public class UupmUserDaoTest extends UupmBaseDaoTest {
 	@Test
 	public void selectOneTest() {
 		UupmUserModel model = new UupmUserModel();
-		model.setId(2000+"");
+		model.setId(2063+"");
 		
 		UupmUserModel result = this.dao.selectOne(model);
 		System.out.println(result);
@@ -144,7 +144,8 @@ public class UupmUserDaoTest extends UupmBaseDaoTest {
 	@Test
 	public void insertOneTest() {
 		UupmUserModel model = (UupmUserModel) this.getRandomModel();
-		
+		model.setUserName(null);
+		model.setCreateTime(null);
 		int result = this.dao.insertOne(model);
 		System.out.println(result);
 		
@@ -167,7 +168,7 @@ public class UupmUserDaoTest extends UupmBaseDaoTest {
 		int result2 = this.dao.insertBatch(list);
 		System.out.println(result2);
 	}
-
+	
 	/******************* insert end***************************************************/
 	/******************* update begin***************************************************/
 	
@@ -253,7 +254,7 @@ public class UupmUserDaoTest extends UupmBaseDaoTest {
 		int result3 = this.dao.updateWithInBy(newMap, oldMap, oldInMap);
 		System.out.println(result3);
 	}
-	
+		
 	/******************* update end ***************************************************/
 	/******************* delete begin *************************************************/
 	

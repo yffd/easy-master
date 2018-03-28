@@ -269,6 +269,24 @@ public class EasyModelConverter {
 		}
 		return target;
 	}
+	
+	/**
+	 * 
+	 * @Date	2018年3月15日 下午3:47:03 <br/>
+	 * @author  zhangST
+	 * @param source
+	 * @param column2name
+	 * @return
+	 * @see #map2map(Map, Boolean)
+	 */
+	public List<Map<String, Object>> map2map(List<Map<String, Object>> source, Boolean column2name) {
+		if(null==source || source.size()==0) return source;
+		for(Map<String, Object> map : source) {
+			map = this.map2map(map, column2name);
+		}
+		return source;
+	}
+	
 	/**************************** map to map end ******************************************************/
 	
 	/**

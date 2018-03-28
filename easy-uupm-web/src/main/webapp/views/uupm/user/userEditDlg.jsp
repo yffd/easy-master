@@ -2,6 +2,38 @@
 
 <script type="text/javascript">
 $(function() {
+	var $orgCombox = $("#orgCode_id").combotree({
+		width:171,
+		url:"uupm/org/findTree",
+		idFiled:'id_',
+	 	textFiled:'orgName',
+	 	parentField:'pid_',
+	 	editable:false,
+	 	loadFilter:function(data,parent) {
+	 		if("OK"==data.status) {
+	    		return data.data;
+	    	} else {
+	    		$.messager.show({
+					title :commonui.msg_title,
+					msg : result.msg,
+					timeout : commonui.msg_timeout
+				});
+	    		return [];
+    		}
+		},
+		onLoadSuccess:function(node,data) {
+			if(data[0] && data[0].id) $orgCombox.combotree('setValue', data[0].id);// 设置选中
+        },
+		onBeforeExpand:function(node) {
+			var children = $orgCombox.tree("getChildren", node.target);
+			if(children && children.length>0) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+	});
+	
 	$("#form_id").form({
 		onSubmit: function() {
 			parent.$.messager.progress({
@@ -40,13 +72,13 @@ $(function() {
 						<th>名称：</th>
 						<td><input name="userName" class="easyui-textbox easyui-validatebox" required="required" placeholder="请输入名称" /></td>
 						<th>编号：</th>
-						<td><input id="userCode_id" name="userCode" class="easyui-textbox easyui-validatebox" required="required" placeholder="请输入编号"/></td>
+						<td><input name="userCode" class="easyui-textbox easyui-validatebox" required="required" placeholder="请输入编号"/></td>
 					</tr>
 					<tr>
 						<th>机构：</th>
 						<td><input id="orgCode_id" name="orgCode" class="easyui-textbox" required="required"/></td>
-						<th>账户状态：</th>
-						<td><input id="loginStatus_id" name="loginStatus" type="text" /></td>
+						<th></th>
+						<td></td>
 					</tr>
 				</table>
 			</fieldset>

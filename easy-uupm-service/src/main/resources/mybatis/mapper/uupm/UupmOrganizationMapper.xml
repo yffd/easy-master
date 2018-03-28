@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yffd.easy.uupm.dao.UupmOrganizationDao">
+	<!-- ######################################################################### -->
+	<!-- ##############################   基础sql开始    ############################## -->
+	<!-- ######################################################################### -->
+	
+	<resultMap id="resutlId" type="com.yffd.easy.uupm.api.model.UupmOrganizationModel">
+		<id column="ID" property="id" />
+		<result column="VERSION" property="version" />
+		<result column="DEL_FLAG" property="delFlag" />
+		<result column="CREATE_BY" property="createBy" />
+		<result column="CREATE_TIME" property="createTime" />
+		<result column="UPDATE_BY" property="updateBy" />
+		<result column="UPDATE_TIME" property="updateTime" />
+		<result column="TENANT_CODE" property="tenantCode" />
+		<result column="ORG_CODE" property="orgCode" />
+		<result column="ORG_NAME" property="orgName" />
+		<result column="PARENT_CODE" property="parentCode" />
+		<result column="REMARK" property="remark" />
+		<result column="SEQ_NO" property="seqNo" />
+	</resultMap>
+
+	<!-- 表名 -->
+	<sql id="table_name"> uupm_organization </sql>
+
+	<!-- 列名 -->
+	<sql id="table_columns">
+		t.VERSION, t.DEL_FLAG, t.CREATE_BY, t.CREATE_TIME, t.UPDATE_BY, t.UPDATE_TIME, t.ID, t.TENANT_CODE, t.ORG_CODE, t.ORG_NAME, t.PARENT_CODE, t.REMARK, t.SEQ_NO
+	</sql>
+
+	<!-- 分页条件 -->
+	<sql id="conditions_limit"><if test="pageParam != null"> limit #{pageParam.startIndex}, #{pageParam.pageLimit} </if></sql>
+
+	<!-- 排序条件 -->
+	<sql id="conditions_orderby"> ORDER BY t.CREATE_TIME desc </sql>
+
+	<!-- 动态组装复合查询条件 -->
+	<sql id="conditions_where">
+		<!-- Equal query -->
+		<if test="version != null "> and t.VERSION = #{version} </if>
+		<if test="delFlag != null and delFlag != ''"> and t.DEL_FLAG = #{delFlag} </if>
+		<if test="createBy != null and createBy != ''"> and t.CREATE_BY = #{createBy} </if>
+		<if test="createTime != null "><![CDATA[ and t.CREATE_TIME = #{createTime}]]> </if>
+		<if test="updateBy != null and updateBy != ''"> and t.UPDATE_BY = #{updateBy} </if>
+		<if test="updateTime != null "><![CDATA[ and t.UPDATE_TIME = #{updateTime}]]> </if>
+		<if test="id != null and id != ''"> and t.ID = #{id} </if>
+		<if test="tenantCode != null and tenantCode != ''"> and t.TENANT_CODE = #{tenantCode} </if>
+		<if test="orgCode != null and orgCode != ''"> and t.ORG_CODE = #{orgCode} </if>
+		<if test="parentCode != null and parentCode != ''"> and t.PARENT_CODE = #{parentCode} </if>
+		<if test="remark != null and remark != ''"> and t.REMARK = #{remark} </if>
+		<if test="seqNo != null "> and t.SEQ_NO = #{seqNo} </if>
+		<!-- Like query -->
+		<if test="orgName != null and orgName != ''"> and t.ORG_NAME like CONCAT(CONCAT('%', #{orgName}), '%') </if>
+	
+		<!-- 非model属性：in条件处理拼写，要求List集合中的值能转换成key-value形式，例如map、自定义model对象等 -->
+		<if test="idList != null and idList.size()>0">
+		and ID in <foreach item="item" index="index" collection="idList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="tenantCodeList != null and tenantCodeList.size()>0">
+		and TENANT_CODE in <foreach item="item" index="index" collection="tenantCodeList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="orgCodeList != null and orgCodeList.size()>0">
+		and ORG_CODE in <foreach item="item" index="index" collection="orgCodeList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="orgNameList != null and orgNameList.size()>0">
+		and ORG_NAME in <foreach item="item" index="index" collection="orgNameList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="parentCodeList != null and parentCodeList.size()>0">
+		and PARENT_CODE in <foreach item="item" index="index" collection="parentCodeList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="seqNoList != null and seqNoList.size()>0">
+		and SEQ_NO in <foreach item="item" index="index" collection="seqNoList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+	
+	</sql>
+
+	<!-- 条件查询 -->
+	<select id="selectListBy" parameterType="java.util.Map" resultMap="resutlId">
+		select <include refid="table_columns" />
+		from <include refid="table_name"/>  as t 
+		<where>
+			<include refid="conditions_where" />
+		</where>
+		<include refid="conditions_orderby" />
+		<include refid="conditions_limit" />
+	</select>
+
+	<!-- 统计查询 -->
+	<select id="selectCountBy" parameterType="java.util.Map" resultType="long">
+		select count(1) from 
+		<include refid="table_name"/>  as t 
+		<where>
+			<include refid="conditions_where" />
+		</where>
+	</select>
+
+	<!-- 单条查询 -->
+	<select id="selectOneBy" parameterType="java.util.Map" resultMap="resutlId">
+		select <include refid="table_columns" /> 
+		from <include refid="table_name"/>  as t 
+		<where>
+			<include refid="conditions_where" />
+		</where>
+	</select>
+
+	<!-- 单条插入 -->
+	<insert id="insertOne" parameterType="java.util.Map" keyProperty="id" useGeneratedKeys="true">
+		insert into
+		<include refid="table_name" />
+		(VERSION, DEL_FLAG, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME, TENANT_CODE, ORG_CODE, ORG_NAME, PARENT_CODE, REMARK, SEQ_NO)
+		values
+		(#{version}, #{delFlag}, #{createBy}, #{createTime}, #{updateBy}, #{updateTime}, #{tenantCode}, #{orgCode}, #{orgName}, #{parentCode}, #{remark}, #{seqNo})
+	</insert>
+
+	<!-- 批量插入 -->
+	<insert id="insertBatch" parameterType="java.util.Map" keyProperty="id" useGeneratedKeys="true">
+		insert into <include refid="table_name" />
+		(VERSION, DEL_FLAG, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME, TENANT_CODE, ORG_CODE, ORG_NAME, PARENT_CODE, REMARK, SEQ_NO)
+		values
+		<foreach collection="list" item="item" index="index" separator=",">
+		(#{item.version},
+		#{item.delFlag},
+		#{item.createBy},
+		#{item.createTime},
+		#{item.updateBy},
+		#{item.updateTime},
+		#{item.tenantCode},
+		#{item.orgCode},
+		#{item.orgName},
+		#{item.parentCode},
+		#{item.remark},
+		#{item.seqNo})
+		</foreach>
+	</insert>
+
+	<!-- 更新 -->
+	<update id="updateBy" parameterType="java.util.Map">
+		update <include refid="table_name" />
+		<set>
+		<if test="newParam != null">
+			VERSION = VERSION + 1, 
+			<if test="newParam.delFlag != null and newParam.delFlag != ''"> DEL_FLAG = #{newParam.delFlag},  </if>
+			<if test="newParam.updateBy != null and newParam.updateBy != ''"> UPDATE_BY = #{newParam.updateBy},  </if>
+			<if test="newParam.updateTime != null"> UPDATE_TIME = #{newParam.updateTime},  </if>
+			<if test="newParam.tenantCode != null and newParam.tenantCode != ''"> TENANT_CODE = #{newParam.tenantCode},  </if>
+			<if test="newParam.orgCode != null and newParam.orgCode != ''"> ORG_CODE = #{newParam.orgCode},  </if>
+			<if test="newParam.orgName != null and newParam.orgName != ''"> ORG_NAME = #{newParam.orgName},  </if>
+			<if test="newParam.parentCode != null and newParam.parentCode != ''"> PARENT_CODE = #{newParam.parentCode},  </if>
+			<if test="newParam.remark != null and newParam.remark != ''"> REMARK = #{newParam.remark},  </if>
+			<if test="newParam.seqNo != null"> SEQ_NO = #{newParam.seqNo},  </if>
+		</if>
+		</set>
+		<where>
+		<if test="oldParam != null">
+			<if test="oldParam.version != null"> and VERSION = #{oldParam.version}  </if>
+			<if test="oldParam.delFlag != null and oldParam.delFlag != ''"> and DEL_FLAG = #{oldParam.delFlag}  </if>
+			<if test="oldParam.createBy != null and oldParam.createBy != ''"> and CREATE_BY = #{oldParam.createBy}  </if>
+			<if test="oldParam.createTime != null"><![CDATA[ and CREATE_TIME = #{oldParam.createTime} ]]> </if>
+			<if test="oldParam.id != null and oldParam.id != ''"> and ID = #{oldParam.id}  </if>
+			<if test="oldParam.tenantCode != null and oldParam.tenantCode != ''"> and TENANT_CODE = #{oldParam.tenantCode}  </if>
+			<if test="oldParam.orgCode != null and oldParam.orgCode != ''"> and ORG_CODE = #{oldParam.orgCode}  </if>
+			<if test="oldParam.orgName != null and oldParam.orgName != ''"> and ORG_NAME = #{oldParam.orgName}  </if>
+			<if test="oldParam.parentCode != null and oldParam.parentCode != ''"> and PARENT_CODE = #{oldParam.parentCode}  </if>
+			<if test="oldParam.remark != null and oldParam.remark != ''"> and REMARK = #{oldParam.remark}  </if>
+			<if test="oldParam.seqNo != null"> and SEQ_NO = #{oldParam.seqNo}  </if>
+		</if>
+		<if test="oldInParam != null">
+			<!-- 非model属性：in条件处理拼写，要求List集合中的值能转换成key-value形式，例如map、自定义model对象等 -->
+			<if test="oldInParam.idList != null and oldInParam.idList.size()>0">
+			and ID in <foreach item="item" index="index" collection="oldInParam.idList" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+			<if test="oldInParam.tenantCodeList != null and oldInParam.tenantCodeList.size()>0">
+			and TENANT_CODE in <foreach item="item" index="index" collection="oldInParam.tenantCodeList" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+			<if test="oldInParam.orgCodeList != null and oldInParam.orgCodeList.size()>0">
+			and ORG_CODE in <foreach item="item" index="index" collection="oldInParam.orgCodeList" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+			<if test="oldInParam.orgNameList != null and oldInParam.orgNameList.size()>0">
+			and ORG_NAME in <foreach item="item" index="index" collection="oldInParam.orgNameList" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+			<if test="oldInParam.parentCodeList != null and oldInParam.parentCodeList.size()>0">
+			and PARENT_CODE in <foreach item="item" index="index" collection="oldInParam.parentCodeList" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+			<if test="oldInParam.seqNoList != null and oldInParam.seqNoList.size()>0">
+			and SEQ_NO in <foreach item="item" index="index" collection="oldInParam.seqNoList" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+		</if>
+		<!-- 防止没有参数传递，导致全部更新 -->
+		or 1=2
+		</where>
+	</update>
+
+	<!-- 删除 -->
+	<delete id="deleteBy" parameterType="java.util.Map">
+		delete from <include refid="table_name" />
+		<where>
+		<!-- model属性： -->
+		<if test="version != null "> and VERSION = #{version} </if>
+		<if test="delFlag != null and delFlag != ''"> and DEL_FLAG = #{delFlag} </if>
+		<if test="createBy != null and createBy != ''"> and CREATE_BY = #{createBy} </if>
+		<if test="createTime != null "><![CDATA[ and CREATE_TIME = #{createTime}]]> </if>
+		<if test="updateBy != null and updateBy != ''"> and UPDATE_BY = #{updateBy} </if>
+		<if test="updateTime != null "><![CDATA[ and UPDATE_TIME = #{updateTime}]]> </if>
+		<if test="id != null and id != ''"> and ID = #{id} </if>
+		<if test="tenantCode != null and tenantCode != ''"> and TENANT_CODE = #{tenantCode} </if>
+		<if test="orgCode != null and orgCode != ''"> and ORG_CODE = #{orgCode} </if>
+		<if test="orgName != null and orgName != ''"> and ORG_NAME = #{orgName} </if>
+		<if test="parentCode != null and parentCode != ''"> and PARENT_CODE = #{parentCode} </if>
+		<if test="remark != null and remark != ''"> and REMARK = #{remark} </if>
+		<if test="seqNo != null "> and SEQ_NO = #{seqNo} </if>
+		
+		<!-- 非model属性：in条件处理拼写，要求List集合中的值能转换成key-value形式，例如map、自定义model对象等 -->
+		<if test="idList != null and idList.size()>0">
+		and ID in <foreach item="item" index="index" collection="idList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="tenantCodeList != null and tenantCodeList.size()>0">
+		and TENANT_CODE in <foreach item="item" index="index" collection="tenantCodeList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="orgCodeList != null and orgCodeList.size()>0">
+		and ORG_CODE in <foreach item="item" index="index" collection="orgCodeList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="orgNameList != null and orgNameList.size()>0">
+		and ORG_NAME in <foreach item="item" index="index" collection="orgNameList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="parentCodeList != null and parentCodeList.size()>0">
+		and PARENT_CODE in <foreach item="item" index="index" collection="parentCodeList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="seqNoList != null and seqNoList.size()>0">
+		and SEQ_NO in <foreach item="item" index="index" collection="seqNoList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		
+		<!-- 防止没有参数传递，导致全部删除 -->
+		or 1=2
+		</where>
+	</delete>
+
+	<!-- ######################################################################### -->
+	<!-- ##############################   基础sql结束    ############################## -->
+	<!-- ######################################################################### -->
+
+</mapper>

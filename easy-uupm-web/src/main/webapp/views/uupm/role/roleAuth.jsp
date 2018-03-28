@@ -14,21 +14,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 <script type="text/javascript">
 	var $json_activeStatus = [ {id:"", text:"全部", "selected": true} ];
+	var $json_rsType = [ {id:"", text:"全部", "selected": true} ];
 	var $openWindow = this;// 当前窗口
 	var $dg_role;
-	var $dg_res;
+	var $dg_rs;
 	$(function() {
 		$dg_role = $('#dg_id_role');
 		// 初始化控件数据
 		$.post('/uupm/combox/findComboByDict', 
-				{'comboxKeys':'active-status'}, 
+				{'comboxKeys':'active-status,rs-type'}, 
 				function(result) {
 					if("OK"==result.status) {
 						var jsonData = result.data;
 						$json_activeStatus = $json_activeStatus.concat(jsonData['active-status']);
-
+						$json_rsType = $json_rsType.concat(jsonData['rs-type']);
+						
 						initDatagrid_role();	// 初始化datagrid组件
-						initTreegrid_res();
+						initTreegrid_rs();
 					}
 				}, 'json');
 		//搜索框
@@ -65,22 +67,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		    	} else {
 		    		$.messager.show({
 						title :commonui.msg_title,
-						msg : result.msg,
-						timeout : commonui.msg_timeout
+						timeout : commonui.msg_timeout,
+						msg : result.msg
 					});
 		    		return [];
 	    		}
 	    	},
-	    	onClickRow: function(rowIndex, rowData) {
-	    		$dg_res.treegrid('loadData', {'clean':true});
-				$.post('uupm/resource/findTree', {'appCode':rowData.appCode}, function(result) {
-					$('#dg_id_res').treegrid('loadData', result);
-				}, 'json');
-	    	},
-	    	frozenColumns: [[
-	    	                 {field: 'roleName', title: '名称', width: 200, align: 'left'}
-	    	                 ]],
+	    	onDblClickRow: function(rowIndex, rowData) {
+	    		findResByRole(rowIndex, rowData);
+            },
 	        columns: [[
+						{field: 'roleName', title: '名称', width: 200, align: 'left'},
 						{field: 'roleCode', title: '编号', width: 100, align: 'left'},
 						{field: 'roleStatus', title: '状态', width: 100, align: 'left',
 							formatter: function(value, row) {
@@ -91,10 +88,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                   ]]
 		});
 	}
-	function initTreegrid_res() {
-		$dg_res = $('#dg_id_res');
-		$dg_res.treegrid({
-			url:'uupm/resource/findTree',
+	function initTreegrid_rs() {
+		$dg_rs = $('#dg_id_rs');
+		$dg_rs.treegrid({
+		    url:'uupm/tenant/resource/findTenantResWithAppTree',
 		    width: 'auto',
 		    height: $(this).height()-commonui.remainHeight-20,
 			rownumbers: true,
@@ -103,37 +100,41 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			fitColumns: true,
 			border: false,
 			striped: true,
-			singleSelect: true,
-			toolbar: '',
+			singleSelect: false,
+			cascadeCheck: true,
 			idField: 'id_',
 			treeField: 'rsName',
 			loadFilter: function(result) {
-				if(result.clean) {
-		    		return [];
-		    	}
 		    	if("OK"==result.status) {
-		    		return result.data;
+		    		var jsonData = [];
+		    		$.each(result.data, function(i, obj) {
+		    			if(obj.children) {
+		    				jsonData[i] = result.data[i];
+		    			}
+		    		});
+		    		return jsonData;
 		    	} else {
 		    		$.messager.show({
 						title :commonui.msg_title,
-						msg : result.msg,
-						timeout : commonui.msg_timeout
+						timeout : commonui.msg_timeout,
+						msg : result.msg
 					});
 		    		return [];
 	    		}
 	    	},
+	    	onClickRow: function(row) {
+	    	},
 	    	onContextMenu: function(e, node){
 				e.preventDefault();
-				$dg_res.treegrid('select', node.id_);
-				$('#mm_id_res').menu('show', {
+				$dg_rs.treegrid('select', node.id_);
+				$('#mm_id_rs').menu('show', {
 					left: e.pageX,
 					top: e.pageY
 				});
 			},
-	    	frozenColumns: [[
-	    	                 {field: 'rsName', title: '名称', width: 200, align: 'left'}
-	    	                 ]],
 	        columns: [[
+						{field: 'ck', checkbox: true},
+						{field: 'rsName', title: '名称', width: 200, align: 'left'},
 						{field: 'rsCode', title: '编号', width: 100, align: 'left'},
 						{field: 'parentCode', title: '父编号', width: 100, align: 'left'},
 						{field: 'rsPath', title: '路径', width: 100, align: 'left'},
@@ -152,246 +153,127 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		});
 	}
 	
-	// 设置控件选中
-	function setComboForSelected(selectForm) {
-		selectForm.find('#rsStatus_id').combobox({
-			editable:false,
-			panelHeight: 120,
-			valueField:'id',
-		    textField:'text',
-		    data: $.grep($json_activeStatus, function(n,i){
-		    	if(i==1) n['selected']=true;
-		    	return i > 0;
-		    })
-		});
-		selectForm.find('#rsType_id').combobox({
-			editable:false,
-			panelHeight: 120,
-			valueField:'id',
-		    textField:'text',
-		    data: $.grep($json_rsType, function(n,i){
-		    	if(i==1) n['selected']=true;
-		    	return i > 0;
-		    })
-		});
-	}
-	
-	// 清除搜索条件
-	function cleanSearch() {
-		$('#searchbox_id_role').searchbox('setValue', '');
-	}
-	
-	// 打开添加对话框
-	function openAddDlg() {
-		var row = $dg_app.datagrid('getSelected');
-		if(row) {
-			parent.$.modalDialog({
-				title: "添加",
-				width: 800,
-				height: 400,
-				href: 'views/uupm/resource/resourceEditDlg.jsp',
-				onLoad:function() {
-					if(row) {
-						var editForm = parent.$.modalDialog.handler.find("#form_id");
-						editForm.find('input[name="appCode"]').val(row.appCode);
-						editForm.find('input[name="parentCode"]').val(row.appCode);
-						setComboForSelected(editForm);
-					}
-				},
-				buttons: [{
-					text: '确定',
-					iconCls: 'icon-ok',
-					handler: function() {
-						parent.$.modalDialog.openWindow = $openWindow;//定义打开对话框的窗口
-						parent.$.modalDialog.openner_res = $dg_res;//定义对话框关闭要刷新的组件
-						parent.$.modalDialog.openner_res_appCode = row.appCode;
-						var editForm = parent.$.modalDialog.handler.find("#form_id");
-						editForm.attr("action", "uupm/resource/add");
-						editForm.submit();
-					}
-				},{
-					text: '取消',
-					iconCls: 'icon-cancel',
-					handler: function() {
-						parent.$.modalDialog.handler.dialog('destroy');
-						parent.$.modalDialog.handler = undefined;
-					}
-				}]
-			});
-		} else {
-			$.messager.show({
-				title :commonui.msg_title,
-				msg : "请选择【应用系统】!",
-				timeout : commonui.msg_timeout
+	// 为角色分配功能
+	function saveRoleRes() {
+		var rows_rs = $dg_rs.treegrid('getSelections');//获取选中的行-多行
+		var rsCodeArr = [];
+		if(rows_rs) {
+			$.each(rows_rs, function(i, obj) {
+				if('A'==obj.rsType) {
+				} else {
+					rsCodeArr.push({'appCode': obj['appCode'], 'rsCode': obj['rsCode'], 'rsType': obj['rsType']});
+				}
 			});
 		}
-		
-	}
-	
-	// 打开添加对话框--child
-	function openAddDlg_child() {
-		var row = $dg_res.treegrid('getSelected');
-		if(row) {
-			parent.$.modalDialog({
-				title: "添加子项",
-				width: 800,
-				height: 400,
-				href: 'views/uupm/resource/resourceEditDlg.jsp',
-				onLoad:function() {
-					if(row) {
-						var editForm = parent.$.modalDialog.handler.find("#form_id");
-						editForm.find('input[name="appCode"]').val(row.appCode);
-						editForm.find('input[name="parentCode"]').val(row.rsCode);
-						setComboForSelected(editForm);
-					}
-				},
-				buttons: [{
-					text: '确定',
-					iconCls: 'icon-ok',
-					handler: function() {
-						parent.$.modalDialog.openWindow = $openWindow;//定义打开对话框的窗口
-						parent.$.modalDialog.openner_res = $dg_res;//定义对话框关闭要刷新的组件
-						parent.$.modalDialog.openner_res_appCode = row.appCode;
-						var editForm = parent.$.modalDialog.handler.find("#form_id");
-						editForm.attr("action", "uupm/resource/add");
-						editForm.submit();
-					}
-				},{
-					text: '取消',
-					iconCls: 'icon-cancel',
-					handler: function() {
-						parent.$.modalDialog.handler.dialog('destroy');
-						parent.$.modalDialog.handler = undefined;
-					}
-				}]
-			});
-		} else {
-			$.messager.show({
+		if(rsCodeArr.length==0) {
+			parent.$.messager.show({
 				title :commonui.msg_title,
-				msg : "请选择一行【资源】记录!",
-				timeout : commonui.msg_timeout
+				timeout : commonui.msg_timeout,
+				msg : "请选择资源"
 			});
+			return;
 		}
-	}
-	
-	// 打开修改对话框
-	function openEditDlg() {
-		var row = $dg_res.treegrid('getSelected');
-		if(row) {
-			parent.$.modalDialog({
-				title: "编辑",
-				width: 800,
-				height: 400,
-				href: 'views/uupm/resource/resourceEditDlg.jsp',
-				onLoad:function(){
-					var editForm = parent.$.modalDialog.handler.find("#form_id");
-					setComboForSelected(editForm);
-					editForm.form("load", row);
-					editForm.find("#rsCode_id").attr('readonly',true);
-				},
-				buttons: [{
-					text: '确定',
-					iconCls: 'icon-ok',
-					handler: function() {
-						parent.$.modalDialog.openWindow = $openWindow;//定义打开对话框的窗口
-						parent.$.modalDialog.openner_res = $dg_res;//定义对话框关闭要刷新的组件
-						parent.$.modalDialog.openner_res_appCode = row.appCode;
-						var editForm = parent.$.modalDialog.handler.find("#form_id");
-						editForm.attr("action", "uupm/resource/edit");
-						editForm.submit();
-					}
-				},{
-					text: '取消',
-					iconCls: 'icon-cancel',
-					handler: function() {
-						parent.$.modalDialog.handler.dialog('destroy');
-						parent.$.modalDialog.handler = undefined;
-					}
-				}]
-			});
-		} else {
-			$.messager.show({
-				title :commonui.msg_title,
-				msg : "请选择一行【资源】记录!",
-				timeout : commonui.msg_timeout
-			});
-		}
-	}
-	
-	// 删除
-	function removeFunc() {
-		var row = $dg_res.treegrid('getSelected');
-		if(row) {
-			parent.$.messager.confirm("提示","确定要删除记录吗?",function(r){  
-			    if(r) {
-			    	var arr_id = getItemCodesFromTree(row);
-			    	var ids = arr_id.join(",");
-			    	$.post("uupm/resource/delBatch", {rsCodes:ids}, function(result) {
-						if(result.status=='OK') {
-							$dg_res.treegrid('remove', row.id_);
-						}
+		var row_role = $dg_role.datagrid('getSelected');//获取选中的行-单行
+		if(row_role) {
+			var role_code = row_role.roleCode;
+			var data={"roleCode":role_code, "rsCodes": JSON.stringify(rsCodeArr)};
+			$.post("uupm/auth/saveRoleResource", data, function(result) {
 						$.messager.show({
 							title :commonui.msg_title,
-							msg : result.msg,
-							timeout : commonui.msg_timeout
+							timeout : commonui.msg_timeout,
+							msg : result.msg
 						});
 					}, "JSON").error(function() {
 						$.messager.show({
 							title :commonui.msg_title,
-							msg : result.msg,
-							timeout : commonui.msg_timeout
+							timeout : commonui.msg_timeout,
+							msg : "分配失败！"
 						});
 					});
-			    }  
-			});
 		} else {
-			$.messager.show({
+			parent.$.messager.show({
 				title :commonui.msg_title,
-				msg : "请选择一行【资源】记录!",
-				timeout : commonui.msg_timeout
+				timeout : commonui.msg_timeout,
+				msg : "请选择角色"
 			});
 		}
 	}
-	// 递归获取tree的itemCode
-	function getItemCodesFromTree(treeNode) {
-		var arrs = [];
-		if(treeNode) {
-			arrs.push(treeNode.id_);
-			if(treeNode.children) {
-				$.each(treeNode.children, function(i, obj){
-					arrs = arrs.concat(getItemCodesFromTree(obj));
+	//双击事件
+	function findResByRole(rowIndex, rowData) {
+		$.post("uupm/auth/findResourceByRoleCode", {roleCode:rowData.roleCode}, function(result) {
+			if(result.status=='OK') {
+				$dg_rs.treegrid('unselectAll');
+				var data = result.data;
+				if(data.length>0) {
+					if(data[0].appCode) $dg_rs.treegrid('select', data[0].appCode);
+					$.each(data, function(i, n) {
+						$dg_rs.treegrid('select', n.rsCode);
+					});
+				} else {
+					$.messager.show({
+						title :commonui.msg_title,
+						timeout : commonui.msg_timeout,
+						msg : "该角色暂无权限"
+					});
+				}
+			} else {
+				$.messager.show({
+					title :commonui.msg_title,
+					timeout : commonui.msg_timeout,
+					msg : result.msg
 				});
 			}
-		}
-		return arrs;
+			
+		}, "json");
+	}
+	
+	// 清除搜索条件
+	function cleanSearch() {
+		$('#searchbox_id').searchbox('setValue', '');
+	}
+	// 刷新资源列表
+	function reloadRs() {
+		$dg_rs.treegrid('reload', {});
 	}
 	// 展开
 	function expandAll() {
-		var node = $dg_res.treegrid('getSelected');
+		var node = $dg_rs.treegrid('getSelected');
 		if(node) {
-			$dg_res.treegrid('expandAll', node.rsCode);
+			$dg_rs.treegrid('expandAll', node.rsCode);
 		} else {
-			$dg_res.treegrid('expandAll');
+			$dg_rs.treegrid('expandAll');
 		}
 	}
 	// 收缩
 	function collapseAll() {
-		var node = $dg_res.treegrid('getSelected');
+		var node = $dg_rs.treegrid('getSelected');
 		if(node) {
-			$dg_res.treegrid('collapseAll', node.rsCode);
+			$dg_rs.treegrid('collapseAll', node.rsCode);
 		} else {
-			$dg_res.treegrid('collapseAll');
+			$dg_rs.treegrid('collapseAll');
 		}
 	}
 		
 </script>
 </head>
 <body class="easyui-layout">
+<!-- 	<div class="search-form-div" data-options="region:'north',border:false,title:'高级查询',iconCls:'icon-search',collapsible:true"> -->
+<!-- 		<div class="badge-div-hidden" > -->
+<!-- 			<span class="badge-title">提示</span> -->
+<!-- 			<p style="margin:0px;padding:2px;"> -->
+<!-- 				请<span class="label-info"><strong>双击角色</strong></span>查看所属资源！ -->
+<!-- 				超级管理员默认拥有<span class="label-info"><strong>所有资源！</strong></span> -->
+<!-- 			</p> -->
+<!-- 		</div> -->
+<!-- 	</div> -->
     <div data-options="region:'west',title:'角色列表',split:true,border:true" style="width:500px;">
 	    <div id="tb_id_role" style="background-color: #F5F5F5;padding-left:25px;">
 	    	<table cellpadding="0" cellspacing="0">
 				<tr>
 					<td style="padding-left:2px;padding-bottom:2px;">
+						<a class="easyui-linkbutton" data-options="iconCls:'icon-config',plain:'true'" onclick="saveRoleRes();" href="javascript:void(0);">保存设置</a>
+					</td>
+					<td style="padding-left:10px;padding-bottom:2px;">
 						<input id="searchbox_id" type="text"/>
 					</td>
 					<td style="padding-left:2px">
@@ -417,12 +299,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     </div>
 
     <div data-options="region:'center',title:'资源列表'" style="padding:5px;">
-	    <table id="dg_id_res"></table>
+	    <table id="dg_id_rs"></table>
 		
-		<div id="mm_id_res" class="easyui-menu" style="width:120px;">
-			<div class="menu-sep"></div>
+		<div id="mm_id_rs" class="easyui-menu" style="width:120px;">
 	        <div onclick="expandAll()" data-options="iconCls:'icon-undo'">展开</div>
 	        <div onclick="collapseAll()" data-options="iconCls:'icon-redo'">收缩</div>
+	        <div class="menu-sep"></div>
+	        <div onclick="reloadRs()" data-options="iconCls:'icon-reload'">刷新</div>
 		</div>
     </div>
 		

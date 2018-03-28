@@ -3,7 +3,7 @@ package com.yffd.easy.framework.support.code.generator;
 import java.io.File;
 import java.util.Date;
 
-import com.yffd.easy.framework.domain.GenericPO;
+import com.yffd.easy.framework.domain.CustomPo;
 
 /**
  * @Description  DAO代码生成器.
@@ -125,7 +125,7 @@ public class DaoCodeGenerator extends CodeGenerator {
 	
 	public static void main(String[] args) throws Exception {
 		DaoCodeGenerator generator = new DaoCodeGenerator();
-		Class<?> modelClazz = GenericPO.class;
+		Class<?> modelClazz = CustomPo.class;
 		Class<?> baseDaoClazz = null;
 		String daoPackageName = "com.yffd.easy.xxx.dao";
 		String author = "ZhangST";

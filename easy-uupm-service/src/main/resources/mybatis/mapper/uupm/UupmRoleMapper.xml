@@ -29,7 +29,7 @@
 	</sql>
 
 	<!-- 分页条件 -->
-	<sql id="conditions_limit"><if test="pageParam != null"> limit #{pageParam.pageStartRow}, #{pageParam.pageLimit} </if></sql>
+	<sql id="conditions_limit"><if test="pageParam != null"> limit #{pageParam.startIndex}, #{pageParam.pageLimit} </if></sql>
 
 	<!-- 排序条件 -->
 	<sql id="conditions_orderby"> ORDER BY t.CREATE_TIME desc </sql>
@@ -78,6 +78,7 @@
 			<include refid="conditions_where" />
 		</where>
 		<include refid="conditions_orderby" />
+		<include refid="conditions_limit" />
 	</select>
 
 	<!-- 统计查询 -->

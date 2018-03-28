@@ -6,7 +6,7 @@
 
 package com.yffd.easy.uupm.api.model;
 
-import com.yffd.easy.framework.domain.GenericPO;
+import com.yffd.easy.framework.domain.CustomPo;
 
 /**
  * 
@@ -17,7 +17,7 @@ import com.yffd.easy.framework.domain.GenericPO;
  * @since		 JDK 1.7+
  * @see
  */
-public class UupmDictionaryModel extends GenericPO {
+public class UupmDictionaryModel extends CustomPo {
    
 	private static final long serialVersionUID = -3027407448427505570L;
 	private String tenantCode;		//租户编号

@@ -6,7 +6,7 @@
 
 package com.yffd.easy.uupm.api.model;
 
-import com.yffd.easy.framework.domain.GenericPO;
+import com.yffd.easy.framework.domain.CustomPo;
 
 /**
  * 
@@ -17,15 +17,15 @@ import com.yffd.easy.framework.domain.GenericPO;
  * @since		 JDK 1.7+
  * @see
  */
-public class UupmOrganizationModel extends GenericPO {
+public class UupmOrganizationModel extends CustomPo {
 	
 	private static final long serialVersionUID = -7501122779556836599L;
 	private String tenantCode;		//租户编号
 	private String orgCode;			//机构编号
 	private String orgName;			//父机构编号
 	private String parentCode;		//父机构编号
-	private int seqNo;				//菜单序号
-	
+	private int seqNo;				//序号
+	private String remark;			//备注
 	public String getTenantCode() {
 		return tenantCode;
 	}
@@ -56,5 +56,11 @@ public class UupmOrganizationModel extends GenericPO {
 	public void setSeqNo(int seqNo) {
 		this.seqNo = seqNo;
 	}
-   
+	public String getRemark() {
+		return remark;
+	}
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+	
 }

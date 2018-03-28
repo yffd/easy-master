@@ -5,14 +5,8 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map.Entry;
 
-import com.yffd.easy.framework.domain.GenericPO;
+import com.yffd.easy.framework.domain.CustomPo;
 
 /**
  * @Description  Mapper代码生成器.
@@ -204,7 +198,7 @@ public class MapperCodeGenerator extends CodeGenerator {
 	public String conditionsLimit() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("<!-- 分页条件 -->").append("\r\n");
-		sb.append("<sql id=\"conditions_limit\"><if test=\"pageParam != null\"> limit #{pageParam.pageStartRow}, #{pageParam.pageLimit} </if></sql>");
+		sb.append("<sql id=\"conditions_limit\"><if test=\"pageParam != null\"> limit #{pageParam.startIndex}, #{pageParam.pageLimit} </if></sql>");
 		return sb.toString();
 	}
 	
@@ -236,18 +230,20 @@ public class MapperCodeGenerator extends CodeGenerator {
 		return sb.toString();
 	}
 	
-	public String selectListBy(String tableAliasName) {
+	public String selectListBy(String tableAliasName, Class<?> modelClazz) {
 		String asTableAliasName = "";
 		if(null!=tableAliasName) asTableAliasName = " as " + tableAliasName + " ";
 		StringBuilder sb = new StringBuilder();
 		sb.append("<!-- 条件查询 -->").append("\r\n");
-		sb.append("<select id=\"selectListBy\" parameterType=\"java.util.Map\" resultMap=\"resutlId\">").append("\r\n");
+//		sb.append("<select id=\"selectListBy\" parameterType=\"java.util.Map\" resultMap=\"resutlId\">").append("\r\n");
+		sb.append("<select id=\"selectListBy\" parameterType=\"java.util.Map\" resultType=\""+modelClazz.getName()+"\">").append("\r\n");
 		sb.append("\t").append("select <include refid=\"table_columns\" />").append("\r\n");
 		sb.append("\t").append("from <include refid=\"table_name\"/> ").append(asTableAliasName).append("\r\n");
 		sb.append("\t").append("<where>").append("\r\n");
 		sb.append("\t").append("\t").append("<include refid=\"conditions_where\" />").append("\r\n");
 		sb.append("\t").append("</where>").append("\r\n");
 		sb.append("\t").append("<include refid=\"conditions_orderby\" />").append("\r\n");
+		sb.append("\t").append("<include refid=\"conditions_limit\" />").append("\r\n");
 		sb.append("</select>");
 		return sb.toString();
 	}
@@ -267,33 +263,12 @@ public class MapperCodeGenerator extends CodeGenerator {
 		return sb.toString();
 	}
 	
-	public String selectListByIds(String tableAliasName) {
-		String asTableAliasName = "";
-		if(null!=tableAliasName) asTableAliasName = " as " + tableAliasName + " ";
-		StringBuilder sb = new StringBuilder();
-		sb.append("<!-- in条件查询 -->").append("\r\n");
-		sb.append("<select id=\"selectListByIds\" parameterType=\"java.util.List\" resultMap=\"resutlId\">").append("\r\n");
-		sb.append("\t").append("select <include refid=\"table_columns\" /> ").append("\r\n");
-		sb.append("\t").append("from <include refid=\"table_name\"/> ").append(asTableAliasName).append("\r\n");
-		sb.append("\t").append("<where>").append("\r\n");
-		if(null!=tableAliasName) {
-			sb.append("\t").append("\t").append("t.ID in ").append("\r\n");
-			sb.append("\t").append("\t").append("<foreach item=\"item\" index=\"index\" collection=\"list\" open=\"(\" separator=\",\" close=\")\">#{item}</foreach>").append("\r\n");
-		} else {
-			sb.append("\t").append("\t").append("ID in ").append("\r\n");
-			sb.append("\t").append("\t").append("<foreach item=\"item\" index=\"index\" collection=\"list\" open=\"(\" separator=\",\" close=\")\">#{item}</foreach>").append("\r\n");
-		}
-		sb.append("\t").append("</where>").append("\r\n");
-		sb.append("</select>");
-		return sb.toString();
-	}
-	
-	public String selectOneBy(String tableAliasName) {
+	public String selectOneBy(String tableAliasName, Class<?> modelClazz) {
 		String asTableAliasName = "";
 		if(null!=tableAliasName) asTableAliasName = " as " + tableAliasName + " ";
 		StringBuilder sb = new StringBuilder();
 		sb.append("<!-- 单条查询 -->").append("\r\n");
-		sb.append("<select id=\"selectOneBy\" parameterType=\"java.util.Map\" resultMap=\"resutlId\">").append("\r\n");
+		sb.append("<select id=\"selectOneBy\" parameterType=\"java.util.Map\" resultType=\""+modelClazz.getName()+"\">").append("\r\n");
 		sb.append("\t").append("select <include refid=\"table_columns\" /> ").append("\r\n");
 		sb.append("\t").append("from <include refid=\"table_name\"/> ").append(asTableAliasName).append("\r\n");
 		sb.append("\t").append("<where>").append("\r\n");
@@ -344,63 +319,63 @@ public class MapperCodeGenerator extends CodeGenerator {
 	public static void main(String[] args) {
 		MapperCodeGenerator generator = new MapperCodeGenerator();
 		String tableAliasName = "t";
-		Class<?> modelClass = GenericPO.class;
+		Class<?> modelClazz = CustomPo.class;
 		
-		String tableColumns = generator.tableColumns(modelClass, tableAliasName);
+		String tableColumns = generator.tableColumns(modelClazz, tableAliasName);
 		System.out.println(">>>>>>>>>>>>>>>>>>>start::tableColumns");
 		System.out.println(tableColumns);
 		System.out.println(">>>>>>>>>>>>>>>>>>>end::tableColumns");
 		System.out.println();
 		
-		String conditionsWhere = generator.conditionsWhere(modelClass, tableAliasName);
+		String conditionsWhere = generator.conditionsWhere(modelClazz, tableAliasName);
 		System.out.println(">>>>>>>>>>>>>>>>>>>start::conditionsWhere");
 		System.out.println(conditionsWhere);
 		System.out.println(">>>>>>>>>>>>>>>>>>>end::conditionsWhere");
 		System.out.println();
 		
-		String resultMap = generator.resultMap(modelClass);
+		String resultMap = generator.resultMap(modelClazz);
 		System.out.println(">>>>>>>>>>>>>>>>>>>start::resultMap");
 		System.out.println(resultMap);
 		System.out.println(">>>>>>>>>>>>>>>>>>>end::resultMap");
 		System.out.println();
 		
-		String insertOne = generator.insertOne(modelClass);
+		String insertOne = generator.insertOne(modelClazz);
 		System.out.println(">>>>>>>>>>>>>>>>>>>start::insertOne");
 		System.out.println(insertOne);
 		System.out.println(">>>>>>>>>>>>>>>>>>>end::insertOne");
 		System.out.println();
 		
-		String insertBatch = generator.insertBatch(modelClass);
+		String insertBatch = generator.insertBatch(modelClazz);
 		System.out.println(">>>>>>>>>>>>>>>>>>>start::insertBatch");
 		System.out.println(insertBatch);
 		System.out.println(">>>>>>>>>>>>>>>>>>>end::insertBatch");
 		System.out.println();
 		
-		String updateBy = generator.updateBy(modelClass);
+		String updateBy = generator.updateBy(modelClazz);
 		System.out.println(">>>>>>>>>>>>>>>>>>>start::updateBy");
 		System.out.println(updateBy);
 		System.out.println(">>>>>>>>>>>>>>>>>>>end::updateBy");
 		System.out.println();
 		
-		String updateBy123 = generator.updateBy123(modelClass);
+		String updateBy123 = generator.updateBy123(modelClazz);
 		System.out.println(">>>>>>>>>>>>>>>>>>>start::updateBy123");
 		System.out.println(updateBy123);
 		System.out.println(">>>>>>>>>>>>>>>>>>>end::updateBy123");
 		System.out.println();
 		
-		String updateBatch = generator.updateBatch(modelClass);
+		String updateBatch = generator.updateBatch(modelClazz);
 		System.out.println(">>>>>>>>>>>>>>>>>>>start::updateBatch");
 		System.out.println(updateBatch);
 		System.out.println(">>>>>>>>>>>>>>>>>>>end::updateBatch");
 		System.out.println();
 		
-		String deleteBy = generator.deleteBy(modelClass);
+		String deleteBy = generator.deleteBy(modelClazz);
 		System.out.println(">>>>>>>>>>>>>>>>>>>start::deleteBy");
 		System.out.println(deleteBy);
 		System.out.println(">>>>>>>>>>>>>>>>>>>end::deleteBy");
 		System.out.println();
 		
-		String tableName = generator.tableName(modelClass);
+		String tableName = generator.tableName(modelClazz);
 		System.out.println(">>>>>>>>>>>>>>>>>>>start::tableName");
 		System.out.println(tableName);
 		System.out.println(">>>>>>>>>>>>>>>>>>>end::tableName");
@@ -418,7 +393,7 @@ public class MapperCodeGenerator extends CodeGenerator {
 		System.out.println(">>>>>>>>>>>>>>>>>>>end::conditionsOrderby");
 		System.out.println();
 		
-		String selectListBy = generator.selectListBy(tableAliasName);
+		String selectListBy = generator.selectListBy(tableAliasName, modelClazz);
 		System.out.println(">>>>>>>>>>>>>>>>>>>start::selectListBy");
 		System.out.println(selectListBy);
 		System.out.println(">>>>>>>>>>>>>>>>>>>end::selectListBy");
@@ -430,13 +405,7 @@ public class MapperCodeGenerator extends CodeGenerator {
 		System.out.println(">>>>>>>>>>>>>>>>>>>end::selectCountBy");
 		System.out.println();
 		
-		String selectListByIds = generator.selectListByIds(tableAliasName);
-		System.out.println(">>>>>>>>>>>>>>>>>>>start::selectListByIn");
-		System.out.println(selectListByIds);
-		System.out.println(">>>>>>>>>>>>>>>>>>>end::selectListByIn");
-		System.out.println();
-		
-		String selectOneBy = generator.selectOneBy(tableAliasName);
+		String selectOneBy = generator.selectOneBy(tableAliasName, modelClazz);
 		System.out.println(">>>>>>>>>>>>>>>>>>>start::selectOneBy");
 		System.out.println(selectOneBy);
 		System.out.println(">>>>>>>>>>>>>>>>>>>end::selectOneBy");

@@ -6,7 +6,7 @@
 
 package com.yffd.easy.uupm.api.model;
 
-import com.yffd.easy.framework.domain.GenericPO;
+import com.yffd.easy.framework.domain.CustomPo;
 
 /**
  * 
@@ -17,9 +17,10 @@ import com.yffd.easy.framework.domain.GenericPO;
  * @since		 JDK 1.7+
  * @see
  */
-public class UupmResourceModel extends GenericPO {
+public class UupmResourceModel extends CustomPo {
 	
 	private static final long serialVersionUID = -7487327163115556293L;
+	private String tenantCode;		//租户编号
 	private String appCode;		//应用系统编号
 	private String rsName;		//资源名称
 	private String rsCode;		//资源编号
@@ -29,6 +30,12 @@ public class UupmResourceModel extends GenericPO {
 	private String rsStatus;	//资源状态：1=激活、0=冻结
 	private String remark;		//备注
 	
+	public String getTenantCode() {
+		return tenantCode;
+	}
+	public void setTenantCode(String tenantCode) {
+		this.tenantCode = tenantCode;
+	}
 	public String getAppCode() {
 		return appCode;
 	}

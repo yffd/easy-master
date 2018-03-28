@@ -19,7 +19,8 @@ import com.yffd.easy.framework.web.view.vo.SearchVO;
  * @see 	 
  */
 public class ViewModelConverter extends EasyModelConverter {
-
+	public static final Long PAGE_LIMIT_DEFAUL = 30L;
+	
 	/**
 	 * 将后台分页结果转换成EasyUI分页数据格式
 	 * @Date	2017年10月12日 下午6:13:01 <br/>
@@ -62,7 +63,7 @@ public class ViewModelConverter extends EasyModelConverter {
 	 */
 	public PageParam getPageParam(SearchVO searchBoxVO) {
 		Long pageNum = 1L;
-		Long pageLimit = PageParam.DEFAULT_NUM_PER_PAGE;
+		Long pageLimit = PAGE_LIMIT_DEFAUL;
 		if(null==searchBoxVO) {
 			return new PageParam(pageNum, pageLimit);
 		}
@@ -88,7 +89,7 @@ public class ViewModelConverter extends EasyModelConverter {
 	 */
 	public PageParam getPageParam(Map<String, Object> paramMap) {
 		Long pageNum = 1L;
-		Long pageLimit = PageParam.DEFAULT_NUM_PER_PAGE;
+		Long pageLimit = PAGE_LIMIT_DEFAUL;
 		if(null==paramMap) {
 			return new PageParam(pageNum, pageLimit);
 		}

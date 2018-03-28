@@ -71,37 +71,37 @@ public class PaginationResultSetInterceptor implements Interceptor {
         }
         
         // PageParam对象存在，开始分页处理
-        if(null!=pageParam) {
-            if(pageParam.isAutoCount() && pageParam.getTotalRecord()<1) {
-                LoggerFormat.info(LOG, "分页拦截器自动计算总条数开启");
-            } else {
-                LoggerFormat.info(LOG, "分页拦截器自动计算总条数关闭");
-                return invocation.proceed();
-            }
-            
-            BoundSql boundSql = (BoundSql) metaResultSetHandler.getValue("parameterHandler.boundSql");
-            Configuration configuration = (Configuration) metaResultSetHandler.getValue("configuration");
-            
-            String dbtype = configuration.getVariables().getProperty("dbtype");
-            if(null==dbtype || "".equals(dbtype.trim())) {
-                throw new Exception("数据库类型位指定");
-            }
-            IDialect.Type databaseType = IDialect.Type.valueOf(dbtype.toUpperCase());
-            IDialect dialect = null;
-            switch (databaseType) {
-                case MYSQL:
-                    dialect = new MySql5Dialect(); break;
-                case ORACLE:
-                    break;
-            }
-            
-            String originalSql = boundSql.getSql();
-            String conuntSql = dialect.getCountString(originalSql);// 修改sql，用于返回总记录数
-            LoggerFormat.info(LOG, "分页拦截器生成的统计SQL :"  + CommonUtils.getLineSeparator() + conuntSql);
-            
-            Long totalRecord = getTotalRecord(configuration, parameterHandler, conuntSql);
-            pageParam.setTotalRecord(totalRecord);  //设置总记录数和总页数
-        }
+//        if(null!=pageParam) {
+//            if(pageParam.isAutoCount() && pageParam.getTotalRecord()<1) {
+//                LoggerFormat.info(LOG, "分页拦截器自动计算总条数开启");
+//            } else {
+//                LoggerFormat.info(LOG, "分页拦截器自动计算总条数关闭");
+//                return invocation.proceed();
+//            }
+//            
+//            BoundSql boundSql = (BoundSql) metaResultSetHandler.getValue("parameterHandler.boundSql");
+//            Configuration configuration = (Configuration) metaResultSetHandler.getValue("configuration");
+//            
+//            String dbtype = configuration.getVariables().getProperty("dbtype");
+//            if(null==dbtype || "".equals(dbtype.trim())) {
+//                throw new Exception("数据库类型位指定");
+//            }
+//            IDialect.Type databaseType = IDialect.Type.valueOf(dbtype.toUpperCase());
+//            IDialect dialect = null;
+//            switch (databaseType) {
+//                case MYSQL:
+//                    dialect = new MySql5Dialect(); break;
+//                case ORACLE:
+//                    break;
+//            }
+//            
+//            String originalSql = boundSql.getSql();
+//            String conuntSql = dialect.getCountString(originalSql);// 修改sql，用于返回总记录数
+//            LoggerFormat.info(LOG, "分页拦截器生成的统计SQL :"  + CommonUtils.getLineSeparator() + conuntSql);
+//            
+//            Long totalRecord = getTotalRecord(configuration, parameterHandler, conuntSql);
+//            pageParam.setTotalRecord(totalRecord);  //设置总记录数和总页数
+//        }
         return invocation.proceed();
     }
 

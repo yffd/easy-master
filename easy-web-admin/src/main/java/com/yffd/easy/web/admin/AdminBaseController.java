@@ -8,7 +8,6 @@ import org.apache.shiro.subject.Subject;
 
 import com.yffd.easy.admin.login.model.LoginInfo;
 import com.yffd.easy.admin.login.service.LoginService;
-import com.yffd.easy.common.core.model.PersistModel;
 import com.yffd.easy.common.support.web.mvc.BaseController;
 
 /**

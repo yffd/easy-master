@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import com.yffd.easy.common.core.util.EasyStringCheckUtils;
-import com.yffd.easy.framework.domain.GenericPO;
+import com.yffd.easy.framework.domain.CustomPo;
 
 /**
  * @Description  Mapper中的sql片段拼写生成器.
@@ -41,7 +41,7 @@ public class SqlCodeGenerator extends CodeGenerator {
 	public String makeTableColumns(Class<?> modelClazz, String tableAliasName) {
 		LinkedHashMap<String, Class<?>> propsMap = this.sortPropsName(modelClazz);
 		if(null==propsMap || propsMap.size()==0) return null;
-		
+		int num = 0;
 		StringBuilder sb = new StringBuilder();
 		for(Iterator<Entry<String, Class<?>>> it = propsMap.entrySet().iterator();it.hasNext();) {
 			Entry<String, Class<?>> entry = (Entry<String, Class<?>>)it.next();
@@ -49,9 +49,11 @@ public class SqlCodeGenerator extends CodeGenerator {
 			String columnName = this.name2column(propName);
 			if(null==columnName || "".equals(columnName)) continue;
 			if(null!=tableAliasName && !"".equals(tableAliasName)) {
-				columnName = tableAliasName + "." + columnName;
+				columnName = tableAliasName + "." + columnName + " as " + propName;
 			}
 			sb.append(columnName).append(", ");
+			num++;
+			if(num % 5 == 0) sb.append("\r\n");
 		}
 		
 		if(sb.length()==0) return null;
@@ -634,7 +636,7 @@ public class SqlCodeGenerator extends CodeGenerator {
 	
 	public static void main(String[] args) {
 		SqlCodeGenerator generator = new SqlCodeGenerator();
-		Class<?> modelClass = GenericPO.class;
+		Class<?> modelClass = CustomPo.class;
 //		LinkedHashMap<String, Class<?>> list1 = generator.getPropsName(modelClass);
 //		System.out.println(list1);
 //		LinkedHashMap<String, Class<?>> list2 = generator.sortPropsName(modelClass);

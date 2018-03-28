@@ -1,37 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.yffd.easy.uupm.dao.UupmUserDao">
+<mapper namespace="com.yffd.easy.uupm.mapper.UupmUserMapper">
+
+	<select id="selectUserListBy" parameterType="java.util.Map" resultType="java.util.Map">
+		select <include refid="table_columns" />
+		, m.ORG_NAME as orgName
+		, n.ACCOUNT_ID as accountId, n.ACCOUNT_STATUS as accountStatus, n.ACCOUNT_TYPE as accountType
+		from <include refid="table_name"/>  as t 
+		left join uupm_organization m on t.ORG_CODE = m.ORG_CODE
+		left join uupm_account n on t.USER_CODE = n.ACCOUNT_ID
+		<where>
+			<include refid="conditions_where" />
+			<if test="accountStatus != null and accountStatus != ''"> and n.ACCOUNT_STATUS = #{accountStatus} </if>
+			<if test="accountType != null and accountType != ''"> and n.ACCOUNT_TYPE = #{accountType} </if>
+		</where>
+		<include refid="conditions_orderby" />
+		<include refid="conditions_limit" />
+	</select>
+	
+	<select id="selectUserCountBy" parameterType="java.util.Map" resultType="long">
+		select count(1) from 
+		<include refid="table_name"/>  as t 
+		left join uupm_account n on t.USER_CODE = n.ACCOUNT_ID
+		<where>
+			<include refid="conditions_where" />
+			<if test="accountStatus != null and accountStatus != ''"> and n.ACCOUNT_STATUS = #{accountStatus} </if>
+			<if test="accountType != null and accountType != ''"> and n.ACCOUNT_TYPE = #{accountType} </if>
+		</where>
+	</select>
+	
 	<!-- ######################################################################### -->
 	<!-- ##############################   基础sql开始    ############################## -->
 	<!-- ######################################################################### -->
 	
-	<resultMap id="resutlId" type="com.yffd.easy.uupm.api.model.UupmUserModel">
-		<id column="ID" property="id" />
-		<result column="VERSION" property="version" />
-		<result column="DEL_FLAG" property="delFlag" />
-		<result column="CREATE_BY" property="createBy" />
-		<result column="CREATE_TIME" property="createTime" />
-		<result column="UPDATE_BY" property="updateBy" />
-		<result column="UPDATE_TIME" property="updateTime" />
-		<result column="LOGIN_ID" property="loginId" />
-		<result column="LOGIN_PWD" property="loginPwd" />
-		<result column="LOGIN_STATUS" property="loginStatus" />
-		<result column="TENANT_CODE" property="tenantCode" />
-		<result column="USER_CODE" property="userCode" />
-		<result column="USER_NAME" property="userName" />
-		<result column="USER_TYPE" property="userType" />
-	</resultMap>
-
 	<!-- 表名 -->
 	<sql id="table_name"> uupm_user </sql>
 
 	<!-- 列名 -->
 	<sql id="table_columns">
-		t.VERSION, t.DEL_FLAG, t.CREATE_BY, t.CREATE_TIME, t.UPDATE_BY, t.UPDATE_TIME, t.ID, t.LOGIN_ID, t.LOGIN_PWD, t.LOGIN_STATUS, t.TENANT_CODE, t.USER_CODE, t.USER_NAME, t.USER_TYPE
+		t.VERSION as version, t.DEL_FLAG as delFlag, t.CREATE_BY as createBy, t.CREATE_TIME as createTime, t.UPDATE_BY as updateBy, 
+		t.UPDATE_TIME as updateTime, t.ID as id, t.TENANT_CODE as tenantCode, t.ORG_CODE as orgCode, t.USER_CODE as userCode, 
+		t.USER_NAME as userName, '' as vv
 	</sql>
 
 	<!-- 分页条件 -->
-	<sql id="conditions_limit"><if test="pageParam != null"> limit #{pageParam.pageStartRow}, #{pageParam.pageLimit} </if></sql>
+	<sql id="conditions_limit"><if test="paramPage != null"> limit #{paramPage.startIndex}, #{paramPage.pageLimit} </if></sql>
 
 	<!-- 排序条件 -->
 	<sql id="conditions_orderby"> ORDER BY t.CREATE_TIME desc </sql>
@@ -39,58 +52,31 @@
 	<!-- 动态组装复合查询条件 -->
 	<sql id="conditions_where">
 		<!-- Equal query -->
-		<if test="version != null "> and t.VERSION = #{version} </if>
-		<if test="delFlag != null and delFlag != ''"> and t.DEL_FLAG = #{delFlag} </if>
-		<if test="createBy != null and createBy != ''"> and t.CREATE_BY = #{createBy} </if>
-		<if test="createTime != null "><![CDATA[ and t.CREATE_TIME = #{createTime}]]> </if>
-		<if test="updateBy != null and updateBy != ''"> and t.UPDATE_BY = #{updateBy} </if>
-		<if test="updateTime != null "><![CDATA[ and t.UPDATE_TIME = #{updateTime}]]> </if>
-		<if test="id != null and id != ''"> and t.ID = #{id} </if>
-		<if test="loginId != null and loginId != ''"> and t.LOGIN_ID = #{loginId} </if>
-		<if test="loginPwd != null and loginPwd != ''"> and t.LOGIN_PWD = #{loginPwd} </if>
-		<if test="loginStatus != null and loginStatus != ''"> and t.LOGIN_STATUS = #{loginStatus} </if>
-		<if test="tenantCode != null and tenantCode != ''"> and t.TENANT_CODE = #{tenantCode} </if>
-		<if test="userCode != null and userCode != ''"> and t.USER_CODE = #{userCode} </if>
-		<if test="userType != null and userType != ''"> and t.USER_TYPE = #{userType} </if>
+		<if test="paramPo.id != null and paramPo.id != ''"> and t.ID = #{paramPo.id} </if>
+		<if test="paramPo.tenantCode != null and paramPo.tenantCode != ''"> and t.TENANT_CODE = #{paramPo.tenantCode} </if>
+		<if test="paramPo.userCode != null and paramPo.userCode != ''"> and t.USER_CODE = #{paramPo.userCode} </if>
 		<!-- Like query -->
-		<if test="userName != null and userName != ''"> and t.USER_NAME like CONCAT(CONCAT('%', #{userName}), '%') </if>
+		<if test="paramPo.userName != null and paramPo.userName != ''"> and t.USER_NAME like CONCAT(CONCAT('%', #{paramPo.userName}), '%') </if>
 	
 		<!-- 非model属性：in条件处理拼写，要求List集合中的值能转换成key-value形式，例如map、自定义model对象等 -->
-		<if test="idList != null and idList.size()>0">
-		and ID in <foreach item="item" index="index" collection="idList" open="(" separator="," close=")">#{item}</foreach>
+		<if test="paramMap.idList != null and paramMap.idList.size()>0">
+		and ID in <foreach item="item" index="index" collection="paramMap.idList" open="(" separator="," close=")">#{item}</foreach>
 		</if>
-		<if test="loginIdList != null and loginIdList.size()>0">
-		and LOGIN_ID in <foreach item="item" index="index" collection="loginIdList" open="(" separator="," close=")">#{item}</foreach>
-		</if>
-		<if test="loginPwdList != null and loginPwdList.size()>0">
-		and LOGIN_PWD in <foreach item="item" index="index" collection="loginPwdList" open="(" separator="," close=")">#{item}</foreach>
-		</if>
-		<if test="loginStatusList != null and loginStatusList.size()>0">
-		and LOGIN_STATUS in <foreach item="item" index="index" collection="loginStatusList" open="(" separator="," close=")">#{item}</foreach>
-		</if>
-		<if test="tenantCodeList != null and tenantCodeList.size()>0">
-		and TENANT_CODE in <foreach item="item" index="index" collection="tenantCodeList" open="(" separator="," close=")">#{item}</foreach>
-		</if>
-		<if test="userCodeList != null and userCodeList.size()>0">
-		and USER_CODE in <foreach item="item" index="index" collection="userCodeList" open="(" separator="," close=")">#{item}</foreach>
-		</if>
-		<if test="userNameList != null and userNameList.size()>0">
-		and USER_NAME in <foreach item="item" index="index" collection="userNameList" open="(" separator="," close=")">#{item}</foreach>
-		</if>
-		<if test="userTypeList != null and userTypeList.size()>0">
-		and USER_TYPE in <foreach item="item" index="index" collection="userTypeList" open="(" separator="," close=")">#{item}</foreach>
+		<if test="paramMap.tenantCodeList != null and paramMap.tenantCodeList.size()>0">
+		and TENANT_CODE in <foreach item="item" index="index" collection="paramMap.tenantCodeList" open="(" separator="," close=")">#{item}</foreach>
 		</if>
 	
 	</sql>
 
 	<!-- 条件查询 -->
-	<select id="selectListBy" parameterType="java.util.Map" resultMap="resutlId">
+	<select id="selectListBy" parameterType="java.util.Map" resultType="com.yffd.easy.uupm.api.model.UupmUserModel">
 		select <include refid="table_columns" />
 		from <include refid="table_name"/>  as t 
 		<where>
 			<include refid="conditions_where" />
 		</where>
 		<include refid="conditions_orderby" />
+		<include refid="conditions_limit" />
 	</select>
 
 	<!-- 统计查询 -->
@@ -103,7 +89,7 @@
 	</select>
 
 	<!-- 单条查询 -->
-	<select id="selectOneBy" parameterType="java.util.Map" resultMap="resutlId">
+	<select id="selectOneBy" parameterType="java.util.Map" resultType="com.yffd.easy.uupm.api.model.UupmUserModel">
 		select <include refid="table_columns" /> 
 		from <include refid="table_name"/>  as t 
 		<where>
@@ -115,15 +101,15 @@
 	<insert id="insertOne" parameterType="java.util.Map" keyProperty="id" useGeneratedKeys="true">
 		insert into
 		<include refid="table_name" />
-		(VERSION, DEL_FLAG, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME, LOGIN_ID, LOGIN_PWD, LOGIN_STATUS, TENANT_CODE, USER_CODE, USER_NAME, USER_TYPE)
+		(VERSION, DEL_FLAG, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME, TENANT_CODE, ORG_CODE, USER_CODE, USER_NAME)
 		values
-		(#{version}, #{delFlag}, #{createBy}, #{createTime}, #{updateBy}, #{updateTime}, #{loginId}, #{loginPwd}, #{loginStatus}, #{tenantCode}, #{userCode}, #{userName}, #{userType})
+		(#{version}, #{delFlag}, #{createBy}, #{createTime}, #{updateBy}, #{updateTime}, #{tenantCode}, #{orgCode}, #{userCode}, #{userName})
 	</insert>
 
 	<!-- 批量插入 -->
-	<insert id="insertBatch" parameterType="java.util.Map" keyProperty="id" useGeneratedKeys="true">
+	<insert id="insertList" parameterType="java.util.Map" keyProperty="id" useGeneratedKeys="true">
 		insert into <include refid="table_name" />
-		(VERSION, DEL_FLAG, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME, LOGIN_ID, LOGIN_PWD, LOGIN_STATUS, TENANT_CODE, USER_CODE, USER_NAME, USER_TYPE)
+		(VERSION, DEL_FLAG, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME, TENANT_CODE, ORG_CODE, USER_CODE, USER_NAME)
 		values
 		<foreach collection="list" item="item" index="index" separator=",">
 		(#{item.version},
@@ -132,13 +118,10 @@
 		#{item.createTime},
 		#{item.updateBy},
 		#{item.updateTime},
-		#{item.loginId},
-		#{item.loginPwd},
-		#{item.loginStatus},
 		#{item.tenantCode},
+		#{item.orgCode},
 		#{item.userCode},
-		#{item.userName},
-		#{item.userType})
+		#{item.userName})
 		</foreach>
 	</insert>
 
@@ -146,61 +129,22 @@
 	<update id="updateBy" parameterType="java.util.Map">
 		update <include refid="table_name" />
 		<set>
-		<if test="newParam != null">
-			VERSION = VERSION + 1, 
-			<if test="newParam.delFlag != null and newParam.delFlag != ''"> DEL_FLAG = #{newParam.delFlag},  </if>
-			<if test="newParam.updateBy != null and newParam.updateBy != ''"> UPDATE_BY = #{newParam.updateBy},  </if>
-			<if test="newParam.updateTime != null"> UPDATE_TIME = #{newParam.updateTime},  </if>
-			<if test="newParam.loginId != null and newParam.loginId != ''"> LOGIN_ID = #{newParam.loginId},  </if>
-			<if test="newParam.loginPwd != null and newParam.loginPwd != ''"> LOGIN_PWD = #{newParam.loginPwd},  </if>
-			<if test="newParam.loginStatus != null and newParam.loginStatus != ''"> LOGIN_STATUS = #{newParam.loginStatus},  </if>
-			<if test="newParam.tenantCode != null and newParam.tenantCode != ''"> TENANT_CODE = #{newParam.tenantCode},  </if>
-			<if test="newParam.userCode != null and newParam.userCode != ''"> USER_CODE = #{newParam.userCode},  </if>
-			<if test="newParam.userName != null and newParam.userName != ''"> USER_NAME = #{newParam.userName},  </if>
-			<if test="newParam.userType != null and newParam.userType != ''"> USER_TYPE = #{newParam.userType},  </if>
-		</if>
+		VERSION = VERSION + 1, 
+		<if test="paramPoNew.orgCode != null and paramPoNew.orgCode != ''"> ORG_CODE = #{paramPoNew.orgCode},  </if>
+		<if test="paramPoNew.userCode != null and paramPoNew.userCode != ''"> USER_CODE = #{paramPoNew.userCode},  </if>
+		<if test="paramPoNew.userName != null and paramPoNew.userName != ''"> USER_NAME = #{paramPoNew.userName},  </if>
 		</set>
 		<where>
-		<if test="oldParam != null">
-			<if test="oldParam.version != null"> and VERSION = #{oldParam.version}  </if>
-			<if test="oldParam.delFlag != null and oldParam.delFlag != ''"> and DEL_FLAG = #{oldParam.delFlag}  </if>
-			<if test="oldParam.createBy != null and oldParam.createBy != ''"> and CREATE_BY = #{oldParam.createBy}  </if>
-			<if test="oldParam.createTime != null"><![CDATA[ and CREATE_TIME = #{oldParam.createTime} ]]> </if>
-			<if test="oldParam.id != null and oldParam.id != ''"> and ID = #{oldParam.id}  </if>
-			<if test="oldParam.loginId != null and oldParam.loginId != ''"> and LOGIN_ID = #{oldParam.loginId}  </if>
-			<if test="oldParam.loginPwd != null and oldParam.loginPwd != ''"> and LOGIN_PWD = #{oldParam.loginPwd}  </if>
-			<if test="oldParam.loginStatus != null and oldParam.loginStatus != ''"> and LOGIN_STATUS = #{oldParam.loginStatus}  </if>
-			<if test="oldParam.tenantCode != null and oldParam.tenantCode != ''"> and TENANT_CODE = #{oldParam.tenantCode}  </if>
-			<if test="oldParam.userCode != null and oldParam.userCode != ''"> and USER_CODE = #{oldParam.userCode}  </if>
-			<if test="oldParam.userName != null and oldParam.userName != ''"> and USER_NAME = #{oldParam.userName}  </if>
-			<if test="oldParam.userType != null and oldParam.userType != ''"> and USER_TYPE = #{oldParam.userType}  </if>
+		<if test="paramPoOld.id != null and paramPoOld.id != ''"> and ID = #{paramPoOld.id}  </if>
+		<if test="paramPoOld.orgCode != null and paramPoOld.orgCode != ''"> and ORG_CODE = #{paramPoOld.orgCode}  </if>
+		<if test="paramPoOld.userCode != null and paramPoOld.userCode != ''"> and USER_CODE = #{paramPoOld.userCode}  </if>
+		<if test="paramPoOld.userName != null and paramPoOld.userName != ''"> and USER_NAME = #{paramPoOld.userName}  </if>
+		<!-- 非model属性：in条件处理拼写，要求List集合中的值能转换成key-value形式，例如map、自定义model对象等 -->
+		<if test="paramMap.idList != null and paramMap.idList.size()>0">
+		and ID in <foreach item="item" index="index" collection="paramMap.idList" open="(" separator="," close=")">#{item}</foreach>
 		</if>
-		<if test="oldInParam != null">
-			<!-- 非model属性：in条件处理拼写，要求List集合中的值能转换成key-value形式，例如map、自定义model对象等 -->
-			<if test="oldInParam.idList != null and oldInParam.idList.size()>0">
-			and ID in <foreach item="item" index="index" collection="oldInParam.idList" open="(" separator="," close=")">#{item}</foreach>
-			</if>
-			<if test="oldInParam.loginIdList != null and oldInParam.loginIdList.size()>0">
-			and LOGIN_ID in <foreach item="item" index="index" collection="oldInParam.loginIdList" open="(" separator="," close=")">#{item}</foreach>
-			</if>
-			<if test="oldInParam.loginPwdList != null and oldInParam.loginPwdList.size()>0">
-			and LOGIN_PWD in <foreach item="item" index="index" collection="oldInParam.loginPwdList" open="(" separator="," close=")">#{item}</foreach>
-			</if>
-			<if test="oldInParam.loginStatusList != null and oldInParam.loginStatusList.size()>0">
-			and LOGIN_STATUS in <foreach item="item" index="index" collection="oldInParam.loginStatusList" open="(" separator="," close=")">#{item}</foreach>
-			</if>
-			<if test="oldInParam.tenantCodeList != null and oldInParam.tenantCodeList.size()>0">
-			and TENANT_CODE in <foreach item="item" index="index" collection="oldInParam.tenantCodeList" open="(" separator="," close=")">#{item}</foreach>
-			</if>
-			<if test="oldInParam.userCodeList != null and oldInParam.userCodeList.size()>0">
-			and USER_CODE in <foreach item="item" index="index" collection="oldInParam.userCodeList" open="(" separator="," close=")">#{item}</foreach>
-			</if>
-			<if test="oldInParam.userNameList != null and oldInParam.userNameList.size()>0">
-			and USER_NAME in <foreach item="item" index="index" collection="oldInParam.userNameList" open="(" separator="," close=")">#{item}</foreach>
-			</if>
-			<if test="oldInParam.userTypeList != null and oldInParam.userTypeList.size()>0">
-			and USER_TYPE in <foreach item="item" index="index" collection="oldInParam.userTypeList" open="(" separator="," close=")">#{item}</foreach>
-			</if>
+		<if test="paramMap.tenantCodeList != null and paramMap.tenantCodeList.size()>0">
+		and TENANT_CODE in <foreach item="item" index="index" collection="paramMap.tenantCodeList" open="(" separator="," close=")">#{item}</foreach>
 		</if>
 		<!-- 防止没有参数传递，导致全部更新 -->
 		or 1=2
@@ -212,47 +156,34 @@
 		delete from <include refid="table_name" />
 		<where>
 		<!-- model属性： -->
-		<if test="version != null "> and VERSION = #{version} </if>
-		<if test="delFlag != null and delFlag != ''"> and DEL_FLAG = #{delFlag} </if>
-		<if test="createBy != null and createBy != ''"> and CREATE_BY = #{createBy} </if>
-		<if test="createTime != null "><![CDATA[ and CREATE_TIME = #{createTime}]]> </if>
-		<if test="updateBy != null and updateBy != ''"> and UPDATE_BY = #{updateBy} </if>
-		<if test="updateTime != null "><![CDATA[ and UPDATE_TIME = #{updateTime}]]> </if>
-		<if test="id != null and id != ''"> and ID = #{id} </if>
-		<if test="loginId != null and loginId != ''"> and LOGIN_ID = #{loginId} </if>
-		<if test="loginPwd != null and loginPwd != ''"> and LOGIN_PWD = #{loginPwd} </if>
-		<if test="loginStatus != null and loginStatus != ''"> and LOGIN_STATUS = #{loginStatus} </if>
-		<if test="tenantCode != null and tenantCode != ''"> and TENANT_CODE = #{tenantCode} </if>
-		<if test="userCode != null and userCode != ''"> and USER_CODE = #{userCode} </if>
-		<if test="userName != null and userName != ''"> and USER_NAME = #{userName} </if>
-		<if test="userType != null and userType != ''"> and USER_TYPE = #{userType} </if>
+		<if test="paramPo.version != null "> and VERSION = #{paramPo.version} </if>
+		<if test="paramPo.delFlag != null and paramPo.delFlag != ''"> and DEL_FLAG = #{paramPo.delFlag} </if>
+		<if test="paramPo.createBy != null and paramPo.createBy != ''"> and CREATE_BY = #{paramPo.createBy} </if>
+		<if test="paramPo.createTime != null "><![CDATA[ and CREATE_TIME = #{paramPo.createTime}]]> </if>
+		<if test="paramPo.updateBy != null and paramPo.updateBy != ''"> and UPDATE_BY = #{paramPo.updateBy} </if>
+		<if test="paramPo.updateTime != null "><![CDATA[ and UPDATE_TIME = #{paramPo.updateTime}]]> </if>
+		<if test="paramPo.id != null and id != ''"> and ID = #{id} </if>
+		<if test="paramPo.tenantCode != null and paramPo.tenantCode != ''"> and TENANT_CODE = #{paramPo.tenantCode} </if>
+		<if test="paramPo.orgCode != null and paramPo.orgCode != ''"> and ORG_CODE = #{paramPo.orgCode} </if>
+		<if test="paramPo.userCode != null and paramPo.userCode != ''"> and USER_CODE = #{paramPo.userCode} </if>
+		<if test="paramPo.userName != null and paramPo.userName != ''"> and USER_NAME = #{paramPo.userName} </if>
 		
 		<!-- 非model属性：in条件处理拼写，要求List集合中的值能转换成key-value形式，例如map、自定义model对象等 -->
-		<if test="idList != null and idList.size()>0">
-		and ID in <foreach item="item" index="index" collection="idList" open="(" separator="," close=")">#{item}</foreach>
+		<if test="paramMap.idList != null and paramMap.idList.size()>0">
+		and ID in <foreach item="item" index="index" collection="paramMap.idList" open="(" separator="," close=")">#{item}</foreach>
 		</if>
-		<if test="loginIdList != null and loginIdList.size()>0">
-		and LOGIN_ID in <foreach item="item" index="index" collection="loginIdList" open="(" separator="," close=")">#{item}</foreach>
+		<if test="paramMap.tenantCodeList != null and paramMap.tenantCodeList.size()>0">
+		and TENANT_CODE in <foreach item="item" index="index" collection="paramMap.tenantCodeList" open="(" separator="," close=")">#{item}</foreach>
 		</if>
-		<if test="loginPwdList != null and loginPwdList.size()>0">
-		and LOGIN_PWD in <foreach item="item" index="index" collection="loginPwdList" open="(" separator="," close=")">#{item}</foreach>
+		<if test="paramMap.orgCodeList != null and paramMap.orgCodeList.size()>0">
+		and ORG_CODE in <foreach item="item" index="index" collection="paramMap.orgCodeList" open="(" separator="," close=")">#{item}</foreach>
 		</if>
-		<if test="loginStatusList != null and loginStatusList.size()>0">
-		and LOGIN_STATUS in <foreach item="item" index="index" collection="loginStatusList" open="(" separator="," close=")">#{item}</foreach>
+		<if test="paramMap.userCodeList != null and paramMap.userCodeList.size()>0">
+		and USER_CODE in <foreach item="item" index="index" collection="paramMap.userCodeList" open="(" separator="," close=")">#{item}</foreach>
 		</if>
-		<if test="tenantCodeList != null and tenantCodeList.size()>0">
-		and TENANT_CODE in <foreach item="item" index="index" collection="tenantCodeList" open="(" separator="," close=")">#{item}</foreach>
+		<if test="paramMap.userNameList != null and paramMap.userNameList.size()>0">
+		and USER_NAME in <foreach item="item" index="index" collection="paramMap.userNameList" open="(" separator="," close=")">#{item}</foreach>
 		</if>
-		<if test="userCodeList != null and userCodeList.size()>0">
-		and USER_CODE in <foreach item="item" index="index" collection="userCodeList" open="(" separator="," close=")">#{item}</foreach>
-		</if>
-		<if test="userNameList != null and userNameList.size()>0">
-		and USER_NAME in <foreach item="item" index="index" collection="userNameList" open="(" separator="," close=")">#{item}</foreach>
-		</if>
-		<if test="userTypeList != null and userTypeList.size()>0">
-		and USER_TYPE in <foreach item="item" index="index" collection="userTypeList" open="(" separator="," close=")">#{item}</foreach>
-		</if>
-		
 		<!-- 防止没有参数传递，导致全部删除 -->
 		or 1=2
 		</where>

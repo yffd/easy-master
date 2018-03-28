@@ -8,7 +8,7 @@ package com.yffd.easy.uupm.api.model;
 
 import java.util.Date;
 
-import com.yffd.easy.framework.domain.GenericPO;
+import com.yffd.easy.framework.domain.CustomPo;
 
 /**
  * 
@@ -19,9 +19,10 @@ import com.yffd.easy.framework.domain.GenericPO;
  * @since		 JDK 1.7+
  * @see
  */
-public class UupmTenantModel extends GenericPO {
+public class UupmTenantModel extends CustomPo {
 	
 	private static final long serialVersionUID = -1757336898289794470L;
+	
 	private String tenantCode;		//租户编号
 	private String tenantName;		//租户名称
 	private String tenantType;		//租户类型：1=运营中心、2=企业、3=个人、4=其它
@@ -29,6 +30,7 @@ public class UupmTenantModel extends GenericPO {
 	private String serveType;		//服务方式：1=收费、0=免费
 	private Date startTime;			//租赁服务开始时间
 	private Date endTime;			//租赁服务结束时间
+	
 	public String getTenantCode() {
 		return tenantCode;
 	}

@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 
 import com.yffd.easy.framework.base.dao.GenericDao;
 import com.yffd.easy.framework.base.service.GenericService;
-import com.yffd.easy.uupm.dao.UupmApplicationDao;
 import com.yffd.easy.uupm.api.model.UupmApplicationModel;
+import com.yffd.easy.uupm.dao.UupmApplicationDao;
 
 /**
  * @Description	简单描述该类的功能（可选）.

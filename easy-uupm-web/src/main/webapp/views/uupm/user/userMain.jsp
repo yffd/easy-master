@@ -13,28 +13,26 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <jsp:include page="/common/layout/script.jsp"></jsp:include>
 
 <script type="text/javascript">
-	var $json_loginStatus = [];
-
+	var $json_activeStatus = [{id:"", text:"全部", "selected": true}];
 	var $openWindow = this;// 当前窗口
 	var $dg;
 	$(function() {
 		$dg = $('#dg_id');
 		// 初始化控件数据
 		$.post('/uupm/combox/findComboByDict', 
-				{'comboxKeys':'func-status,'}, 
+				{'comboxKeys':'active-status,'},  
 				function(result) {
 					if("OK"==result.status) {
 						var jsonData = result.data;
-						$json_loginStatus = $json_loginStatus.concat(jsonData['func-status']);
-						
+						$json_activeStatus = $json_activeStatus.concat(jsonData['active-status']);
 						initDatagrid();	// 初始化datagrid组件
-						$json_loginStatus[0]['selected']=true;
-						$('#loginStatus_id').combobox({
+						$json_activeStatus[0]['selected']=true;
+						$('#accountStatus_id').combobox({
 							editable:false,
 							panelHeight: 120,
 						    valueField:'id',
 						    textField:'text',
-						    data: $json_loginStatus
+						    data: $json_activeStatus
 						});
 						
 					}
@@ -70,15 +68,30 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    		}
 	    	},
 	    	frozenColumns: [[
-	    	                 {field: 'userName', title: '名称', width: 200, align: 'left'}
+							 {field: 'operate', title: '操作', width: 100, align: 'center',
+								 formatter: function(value, row) {
+									 var text = " 激活账号 ";
+									 var style = "color: green";
+									 if('A'==row.accountStatus) {
+										 text = " 冻结账号 ";
+										 style = "color: red";
+									 }
+									 var accountId = row.accountId;
+									 var a1 = '[<a href="javascript:void(0);" onClick="updateStatus(\''+accountId+'\',\''+row.accountStatus+'\');" width="100" style="'+style+'">'+text+'</a>]';
+									 return a1 + '&nbsp;';
+								 }	
+							 }
 	    	                 ]],
 	        columns: [[
+						{field: 'userName', title: '名称', width: 100, align: 'left'},
 						{field: 'userCode', title: '编号', width: 100, align: 'left'},
-						{field: 'loginId', title: '账户ID', width: 100, align: 'left'},
-						{field: 'loginStatus', title: '账户状态', width: 100, align: 'left',
+						{field: 'orgName', title: '机构名称', width: 100, align: 'left'},
+						{field: 'orgCode', title: '机构编号', width: 100, align: 'left'},
+						{field: 'accountId', title: '账户ID', width: 100, align: 'left'},
+						{field: 'accountStatus', title: '账户状态', width: 100, align: 'left',
 							formatter: function(value, row) {
-								return utils.fmtDict($json_loginStatus, value);
-							}
+								return utils.fmtDict($json_activeStatus, value);
+							}	
 						},
 						{field: 'createTime', title: '创建时间', width: 100, align: 'center',
 							formatter: function(value, row) {
@@ -151,9 +164,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				href: 'views/uupm/user/userEditDlg.jsp',
 				onLoad:function(){
 					var editForm = parent.$.modalDialog.handler.find("#form_id");
-					setComboForSelected(editForm);
 					editForm.form("load", row);
-					editForm.find("#userCode_id").attr('readonly',true);
+					setComboForSelected(editForm);
+					editForm.find("input[name='userCode']").attr('readonly',true);
 				},
 				buttons: [{
 					text: '确定',
@@ -189,7 +202,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		if(row) {
 			parent.$.messager.confirm("提示","确定要删除记录吗?",function(r){  
 			    if(r) {
-			    	$.post("uupm/user/del", {id:row.id}, function(result) {
+			    	$.post("uupm/user/delById", {id:row.id}, function(result) {
 						if(result.status=='OK') {
 							var rowIndex = $dg.datagrid('getRowIndex', row);
 							$dg.datagrid('deleteRow', rowIndex);
@@ -216,16 +229,37 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			});
 		}
 	}
+	// 修改账户状态
+	function updateStatus(accountId, accountStatus) {
+		var tmp='A';
+		if('A'==accountStatus) tmp='I';
+		$.post("uupm/account/updateStatus", {'accountId':accountId, 'accountStatus':tmp}, function(result) {
+			if(result.status=='OK') {
+				$dg.datagrid('reload');
+			}
+			$.messager.show({
+				title :commonui.msg_title,
+				timeout : commonui.msg_timeout,
+				msg : result.msg
+			});
+		}, "JSON").error(function() {
+			$.messager.show({
+				title :commonui.msg_title,
+				timeout : commonui.msg_timeout,
+				msg : commonui.msg
+			});
+		});
+	}
 	// 设置控件选中
 	function setComboForSelected(selectForm) {
-		selectForm.find('#loginStatus_id').combobox({
+		selectForm.find('input[name="accountStatus"]').combobox({
 			editable:false,
 			panelHeight: 120,
 			valueField:'id',
 		    textField:'text',
-		    data: $.grep($json_loginStatus, function(n,i){
-		    	if(i==0) n['selected']=true;
-		    	return i == 0;
+		    data: $.grep($json_activeStatus, function(n,i){
+		    	if(i==1) n['selected']=true;
+		    	return i > 0;	//返回true，进行选取
 		    })
 		});
 	}	
@@ -250,12 +284,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<td>
 						<input name="userCode" type="text" />
 					</td>
-				</tr>
-				<tr>
-					<th>账户状态：</th>
-					<td>
-						<input id="loginStatus_id" name="loginStatus" type="text" />
-					</td>
 					<th>创建时间：</th><td>
 						<input type="text" name="sCreateTime" id="sStartTime_id" class="Wdate" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:'#F{$dp.$D(\'eStartTime_id\',{d:0});}'})"/>
 						~
@@ -263,7 +291,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					</td>
 				</tr>
 				<tr>
-					<td colspan="3"></td>
+					<td colspan="5"></td>
 					<td style="text-align:right;padding-right:20px;">
 						<a href="javascript:void(0);" class="easyui-linkbutton" onclick="_search();">查询</a> 
 						<a href="javascript:void(0);" class="easyui-linkbutton" onclick="cleanSearch();">重置</a>
@@ -278,7 +306,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<table id="dg_id" title="查询列表"></table>
 	</div>
 	
-	<div id="tb_id" style="display:none;padding:10px;height:auto">
+	<div id="tb_id" style="display:none;padding:5px;height:auto">
 		<table cellpadding="0" cellspacing="0">
 			<tr>
 				<td style="padding-left:2px;padding-bottom:2px;">

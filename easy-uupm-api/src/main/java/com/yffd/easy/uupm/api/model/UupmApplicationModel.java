@@ -6,7 +6,7 @@
 
 package com.yffd.easy.uupm.api.model;
 
-import com.yffd.easy.framework.domain.GenericPO;
+import com.yffd.easy.framework.domain.CustomPo;
 
 /**
  * 
@@ -17,7 +17,7 @@ import com.yffd.easy.framework.domain.GenericPO;
  * @since		 JDK 1.7+
  * @see
  */
-public class UupmApplicationModel extends GenericPO {
+public class UupmApplicationModel extends CustomPo {
 	
 	private static final long serialVersionUID = -3316333314800573791L;
 	

@@ -10,14 +10,14 @@ import java.io.Serializable;
  * @since		 JDK 1.7+
  * @see 	 
  */
-public class LoginInfo implements Serializable {
+public class LoginInfo implements CustomObj, Serializable {
 
 	/**
 	 * serialVersionUID:TODO(用一句话描述这个变量表示什么).
 	 * @since JDK 1.7+
 	 */
 	private static final long serialVersionUID = -963343316238514415L;
-	private String tenantCode;
+	private String tenantCode;		//租户编号
 	private String userCode;
 	private String userName;
 	private String orgCode;

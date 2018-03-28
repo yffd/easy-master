@@ -3,7 +3,7 @@ package com.yffd.easy.framework.support.code.generator;
 import java.io.File;
 import java.util.Date;
 
-import com.yffd.easy.framework.domain.GenericPO;
+import com.yffd.easy.framework.domain.CustomPo;
 
 /**
  * @Description  service代码生成器.
@@ -144,7 +144,7 @@ public class ServiceCodeGenerator extends CodeGenerator {
 	
 	public static void main(String[] args) throws Exception {
 		ServiceCodeGenerator generator = new ServiceCodeGenerator();
-		Class<?> modelClazz = GenericPO.class;
+		Class<?> modelClazz = CustomPo.class;
 		Class<?> baseServiceClazz = null;
 		String servicePackageName = "com.yffd.easy.xxx.service";
 		String daoPackageName = "com.yffd.easy.xxx.dao";

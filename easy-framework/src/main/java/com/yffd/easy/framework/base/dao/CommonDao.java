@@ -59,7 +59,7 @@ public class CommonDao extends BaseDaoAbstract {
 	 * @return
 	 */
 	public PageResult<?> selectPage(Map<String, Object> paramMap, PageParam pageParam) {
-		List<Object> recordList = this.selectList(paramMap, pageParam);
+		List<Object> recordList = this.selectRangeList(paramMap, pageParam, getStatement(SQL_SELECT_LIST_BY), getStatement(SQL_SELECT_COUNT_BY));
 		return new PageResult<Object>(pageParam, recordList);
 	}
 
@@ -72,7 +72,7 @@ public class CommonDao extends BaseDaoAbstract {
 	 * @return
 	 */
 	public List<?> selectListBy(Map<String, Object> paramMap) {
-		return this.selectList(paramMap, null);
+		return this.selectRangeList(paramMap, null, getStatement(SQL_SELECT_LIST_BY), null);
 	}
 	
 	/**
@@ -433,41 +433,6 @@ public class CommonDao extends BaseDaoAbstract {
 		}
 		if(null==paramMap || paramMap.size()==0) throw EasyDaoException.DB_DELETE_NULL(getStatement(SQL_DELETE_BY));
 		return super.deleteBy_(paramMap);
-	}
-	
-	
-	private List<Object> selectList(Map<String, Object> paramMap, PageParam pageParam) {
-		if (null==paramMap) paramMap = new HashMap<String, Object>();
-		paramMap.remove("pageParam"); // 与 listRange区分，保证越过分页拦截器
-		
-		if(null!=pageParam) {
-			// 统计总记录数
-	        Long totalRecord = super.selectCountBy_(paramMap);
-	        pageParam.setTotalRecord(totalRecord);
-	        
-			Long pageNum = pageParam.getPageNum();
-			Long pageLimit = pageParam.getPageLimit();
-			
-			// 校验当前页码值的有效范围
-			pageNum = pageParam.countPageNum(pageNum);
-			pageNum = pageParam.countPageNum(pageNum, pageLimit, totalRecord);
-			pageParam.setPageNum(pageNum); // 重新设值
-			
-			// 校验每页码值的有效范围
-			pageLimit = pageParam.countPageLimit(pageLimit);
-			pageParam.setPageLimit(pageLimit); // 重新设值
-			
-			pageParam.setPageStartRow(pageParam.countPageStartRow(pageNum, pageLimit));
-			pageParam.setPageEndRow(pageParam.countPageEndRow(pageNum, pageLimit));
-			
-			// 根据页面传来的分页参数构造SQL分页参数
-			paramMap.put("pageParam", pageParam);
-		} else {
-			paramMap.put("pageParam", null);
-		}
-		// 获取分页数据集
-		List<Object> recordList = super.selectListBy_(paramMap);
-		return recordList;
 	}
 	
 }

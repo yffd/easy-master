@@ -42,29 +42,17 @@ public class UupmComboController extends UupmBaseController {
 	public RespModel findComboByDict(@RequestParam Map<String, Object> paramMap) {
 		String comboxKeys = (String) paramMap.get("comboxKeys");
 		if(null==comboxKeys || EasyStringCheckUtils.isEmpty(comboxKeys)) return this.error("参数无效");
-		if(comboxKeys.indexOf(",")==-1) {
-			List<UupmDictionaryModel> result = this.uupmDictionaryService.findChildrenListForDict(comboxKeys);
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		String[] keys = comboxKeys.split(",");
+		for(String key : keys) {
+			List<UupmDictionaryModel> result = this.uupmDictionaryService.findChildrenListForDict(key);
 			if(null!=result && !result.isEmpty()) {
 				List<ComboTreeVO> voList = this.dict2VO(result);
-				List<ComboTreeVO> treeList = treeBuilder.buildByRecursive(voList, comboxKeys);
-				Map<String, Object> resultMap = new HashMap<String, Object>();
-				resultMap.put(comboxKeys, treeList);
-				return this.successAjax(resultMap);
+				List<ComboTreeVO> treeList = treeBuilder.buildByRecursive(voList, key);
+				resultMap.put(key, treeList);
 			}
-		} else {
-			Map<String, Object> resultMap = new HashMap<String, Object>();
-			String[] keys = comboxKeys.split(",");
-			for(String key : keys) {
-				List<UupmDictionaryModel> result = this.uupmDictionaryService.findChildrenListForDict(key);
-				if(null!=result && !result.isEmpty()) {
-					List<ComboTreeVO> voList = this.dict2VO(result);
-					List<ComboTreeVO> treeList = treeBuilder.buildByRecursive(voList, key);
-					resultMap.put(key, treeList);
-				}
-			}
-			return this.successAjax(resultMap);
 		}
-		return null;
+		return this.successAjax(resultMap);
 	}
 	
 	@RequestMapping(value="/findComboByResource", method=RequestMethod.POST)

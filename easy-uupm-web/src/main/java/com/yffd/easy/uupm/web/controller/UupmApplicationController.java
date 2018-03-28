@@ -1,10 +1,7 @@
 package com.yffd.easy.uupm.web.controller;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -62,9 +59,9 @@ public class UupmApplicationController extends UupmBaseController {
 	public RespModel add(UupmApplicationModel model) {
 		if(null==model || EasyStringCheckUtils.isEmpty(model.getAppCode())) return this.error("参数无效");
 		// 存在判断
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("appCode", model.getAppCode());
-		UupmApplicationModel result = this.uupmApplicationService.findOne(paramMap);
+		UupmApplicationModel paramModel = new UupmApplicationModel();
+		paramModel.setAppCode(model.getAppCode());
+		UupmApplicationModel result = this.uupmApplicationService.findOne(paramModel);
 		if(null!=result) return this.error("编号已存在");
 				
 		this.uupmApplicationService.addOne(model, null);

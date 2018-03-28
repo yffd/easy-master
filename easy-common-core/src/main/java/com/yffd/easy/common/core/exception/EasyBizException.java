@@ -31,5 +31,25 @@ public class EasyBizException extends EasySysException {
 		return new EasySysException("5D0201", "业务参数为空.");
 	}
 	
+	/**
+	 * 业务参数错误
+	 * @Date	2018年3月19日 下午2:02:20 <br/>
+	 * @author  zhangST
+	 * @return
+	 */
+	public static final EasySysException BIZ_PARAMS_ERROR() {
+		return new EasySysException("5D0202", "业务参数错误.");
+	}
+	
+	/**
+	 *租户为空
+	 * @Date	2018年3月19日 下午2:02:20 <br/>
+	 * @author  zhangST
+	 * @return
+	 */
+	public static final EasySysException BIZ_TENANT_ISNULL() {
+		return new EasySysException("5D0203", "租户为空.");
+	}
+	
 }
 

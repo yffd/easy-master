@@ -5,8 +5,8 @@ import java.util.List;
 
 import com.yffd.easy.framework.support.code.generator.CodeGenerator;
 import com.yffd.easy.framework.support.code.generator.ControllerCodeGenerator;
-import com.yffd.easy.uupm.api.model.UupmRoleModel;
-import com.yffd.easy.uupm.service.UupmRoleService;
+import com.yffd.easy.uupm.api.model.UupmAccountModel;
+import com.yffd.easy.uupm.service.UupmAccountService;
 import com.yffd.easy.uupm.web.controller.UupmBaseController;
 
 /**
@@ -25,8 +25,8 @@ public class ControllerFileHelper extends CodeGenerator {
 	private static String outRootDirPath = "D:\\java\\git-easy\\easy-master\\easy-uupm-web\\src\\main\\java";;
 	private static Class<?> baseControllerClazz = UupmBaseController.class;
 	private static String controllerPackageName = "com.yffd.easy.uupm.web.controller";
-	private static Class<?> modelClazz = UupmRoleModel.class;
-	private static Class<?> serviceClazz = UupmRoleService.class;
+	private static Class<?> modelClazz = UupmAccountModel.class;
+	private static Class<?> serviceClazz = UupmAccountService.class;
 	
 	List<String> skipModelNamesLike = new ArrayList<String>();
 	{

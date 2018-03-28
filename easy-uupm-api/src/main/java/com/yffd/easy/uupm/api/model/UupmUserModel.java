@@ -6,7 +6,7 @@
 
 package com.yffd.easy.uupm.api.model;
 
-import com.yffd.easy.framework.domain.GenericPO;
+import com.yffd.easy.framework.domain.CustomPo;
 
 /**
  * 
@@ -17,16 +17,15 @@ import com.yffd.easy.framework.domain.GenericPO;
  * @since		 JDK 1.7+
  * @see
  */
-public class UupmUserModel extends GenericPO {
+public class UupmUserModel extends CustomPo {
 	
 	private static final long serialVersionUID = 7097872211031842341L;
+	
 	private String tenantCode;		//租户编号
 	private String userCode;		//用户编号
 	private String userName;		//用户名称
-	private String userType;		//用户类型：1=内部用户、2=外部用户
-	private String loginId;			//账户ID
-	private String loginPwd;		//账户密码
-	private String loginStatus;		//账户状态：1=激活、0=冻结
+	private String orgCode;			//机构编号
+	
 	public String getTenantCode() {
 		return tenantCode;
 	}
@@ -45,29 +44,11 @@ public class UupmUserModel extends GenericPO {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-	public String getUserType() {
-		return userType;
+	public String getOrgCode() {
+		return orgCode;
 	}
-	public void setUserType(String userType) {
-		this.userType = userType;
+	public void setOrgCode(String orgCode) {
+		this.orgCode = orgCode;
 	}
-	public String getLoginId() {
-		return loginId;
-	}
-	public void setLoginId(String loginId) {
-		this.loginId = loginId;
-	}
-	public String getLoginPwd() {
-		return loginPwd;
-	}
-	public void setLoginPwd(String loginPwd) {
-		this.loginPwd = loginPwd;
-	}
-	public String getLoginStatus() {
-		return loginStatus;
-	}
-	public void setLoginStatus(String loginStatus) {
-		this.loginStatus = loginStatus;
-	}
-   
+	
 }

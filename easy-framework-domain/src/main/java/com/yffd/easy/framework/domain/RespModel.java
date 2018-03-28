@@ -11,7 +11,7 @@ import java.io.Serializable;
  * @since		 JDK 1.7+
  * @see
  */
-public class RespModel implements Serializable {
+public class RespModel implements CustomObj, Serializable {
 	
 	/**
 	 * serialVersionUID:TODO(用一句话描述这个变量表示什么).

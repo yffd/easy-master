@@ -120,4 +120,14 @@ public class UupmDictionaryService extends GenericService<UupmDictionaryModel> {
 		List<UupmDictionaryModel> result = (List<UupmDictionaryModel>) this.uupmDictionaryDao.selectListBy(paramMap);
 		return result;
 	}
+	
+	public UupmDictionaryModel findByItemCode(String itemCode, LoginInfo loginInfo) {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("itemCode", itemCode);
+		return this.uupmDictionaryDao.selectOne(paramMap);
+	}
+	
+	public int delByItemCodes(String itermCodes, LoginInfo loginInfo) {
+		return this.delWithInBy("itemCode", itermCodes, ",", loginInfo);
+	}
 }

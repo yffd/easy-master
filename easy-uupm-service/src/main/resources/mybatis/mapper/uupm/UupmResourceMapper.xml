@@ -32,7 +32,7 @@
 	</sql>
 
 	<!-- 分页条件 -->
-	<sql id="conditions_limit"><if test="pageParam != null"> limit #{pageParam.pageStartRow}, #{pageParam.pageLimit} </if></sql>
+	<sql id="conditions_limit"><if test="pageParam != null"> limit #{pageParam.startIndex}, #{pageParam.pageLimit} </if></sql>
 
 	<!-- 排序条件 -->
 	<sql id="conditions_orderby"> ORDER BY t.CREATE_TIME desc </sql>
@@ -93,6 +93,7 @@
 			<include refid="conditions_where" />
 		</where>
 		<include refid="conditions_orderby" />
+		<include refid="conditions_limit" />
 	</select>
 
 	<!-- 统计查询 -->
@@ -269,12 +270,12 @@
 	<!-- ######################################################################### -->
 
 	<select id="selectResWithApp" parameterType="java.util.Map" resultType="java.util.Map">
-		select APP_NAME as rsName, APP_CODE as rsCode,  '-1' parentCode from uupm_application
+		select APP_CODE, APP_NAME as RS_NAME, APP_CODE as RS_CODE,  '-1' PARENT_CODE, APP_STATUS as RS_STATUS, 'A' as RS_TYPE, '' RS_PATH, REMARK from uupm_application
 		<where>
 		<if test="appCode != null and appCode != ''"> and APP_CODE = #{appCode} </if>
 		</where>
 		union all
-		select RS_NAME as rsName, RS_CODE as rsCode, PARENT_CODE as parentCode from uupm_resource
+		select APP_CODE, RS_NAME, RS_CODE, PARENT_CODE, RS_STATUS, RS_TYPE, RS_PATH, REMARK from uupm_resource
 		<where>
 		<if test="rsType != null and rsType != ''"> and RS_TYPE = #{rsType} </if>
 		<if test="appCode != null and appCode != ''"> and APP_CODE = #{appCode} </if>

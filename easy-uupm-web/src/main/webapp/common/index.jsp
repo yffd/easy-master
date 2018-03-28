@@ -102,18 +102,10 @@ function initMenuLocal() {
         },{
         	"id": "sys-102",
             "pid": "sys",
-            "text": "应用资源管理",
+            "text": "系统资源管理",
             "state": "open",
             "iconCls": "icon-sys",
             "inUrl": "views/uupm/resource/resourceMain.jsp",
-            "rsType": "M"
-        },{
-        	"id": "sys-103",
-            "pid": "sys",
-            "text": "资源授权管理",
-            "state": "open",
-            "iconCls": "icon-sys",
-            "inUrl": "views/uupm/tenant/tenantMain.jsp",
             "rsType": "M"
         }]
 	},{
@@ -139,10 +131,18 @@ function initMenuLocal() {
         },{
         	"id": "sys-113",
             "pid": "sys",
-            "text": "租户功能授权管理",
+            "text": "租户资源定制管理",
             "state": "open",
             "iconCls": "icon-sys",
-            "inUrl": "views/uupm/tenant/tenantMain.jsp",
+            "inUrl": "views/uupm/tenant/tenantResourceCfg.jsp",
+            "rsType": "M"
+        },{
+        	"id": "sys-114",
+            "pid": "sys",
+            "text": "租户账号管理",
+            "state": "open",
+            "iconCls": "icon-sys",
+            "inUrl": "views/uupm/tenantAccount/tenantAccount.jsp",
             "rsType": "M"
         }]
 	},{
@@ -195,20 +195,12 @@ function initMenuLocal() {
             "inUrl": "views/uupm/user/userMain.jsp",
             "rsType": "M"
         },{
-        	"id": "sys-183",
-            "pid": "sys",
-            "text": "账号管理",
-            "state": "open",
-            "iconCls": "icon-sys",
-            "inUrl": "views/uupm/dictionary/dictionaryMain.jsp",
-            "rsType": "M"
-        },{
         	"id": "sys-182",
             "pid": "sys",
             "text": "用户授权管理",
             "state": "open",
             "iconCls": "icon-sys",
-            "inUrl": "views/uupm/dictionary/dictionaryMain.jsp",
+            "inUrl": "views/uupm/user/userAuth.jsp",
             "rsType": "M"
         }]
 	},{
@@ -230,6 +222,19 @@ function initMenuLocal() {
             "state": "open",
             "iconCls": "icon-sys",
             "inUrl": "views/uupm/role/roleAuth.jsp",
+            "rsType": "M"
+        }]
+	},{
+		"id": "20",
+        "pid": "-1",
+        "text": "组织信息管理",
+        "children": [{
+        	"id": "sys-211",
+            "pid": "20",
+            "text": "机构管理",
+            "state": "open",
+            "iconCls": "icon-sys",
+            "inUrl": "views/uupm/organization/organizationMain.jsp",
             "rsType": "M"
         }]
 	}];

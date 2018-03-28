@@ -2,7 +2,7 @@ package com.yffd.easy.framework.support.code.generator;
 
 import java.io.File;
 
-import com.yffd.easy.framework.domain.GenericPO;
+import com.yffd.easy.framework.domain.CustomPo;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -88,8 +88,8 @@ public class MapperFileCodeGenerator extends CodeGenerator {
 		sb.append("\t").append("<!-- ######################################################################### -->").append("\r\n");
 		sb.append("\t").append("\r\n");
 		
-		String resultMapStr = this.mapperGenerator.resultMap(modelClazz);
-		sb.append(this.mapperGenerator.strFmt(resultMapStr, "\t")).append("\r\n");
+//		String resultMapStr = this.mapperGenerator.resultMap(modelClazz);
+//		sb.append(this.mapperGenerator.strFmt(resultMapStr, "\t")).append("\r\n");
 		
 		String tableNameStr = this.mapperGenerator.tableName(modelClazz);
 		sb.append(this.mapperGenerator.strFmt(tableNameStr, "\t")).append("\r\n");
@@ -109,7 +109,7 @@ public class MapperFileCodeGenerator extends CodeGenerator {
 //		String selectRangeByStr = this.mapperGenerator.selectRangeBy(tableAliasName);
 //		sb.append(this.mapperGenerator.strFmt(selectRangeByStr, "\t")).append("\r\n");
 		
-		String selectListByStr = this.mapperGenerator.selectListBy(tableAliasName);
+		String selectListByStr = this.mapperGenerator.selectListBy(tableAliasName, modelClazz);
 		sb.append(this.mapperGenerator.strFmt(selectListByStr, "\t")).append("\r\n");
 		
 		String selectCountByStr = this.mapperGenerator.selectCountBy(tableAliasName);
@@ -118,7 +118,7 @@ public class MapperFileCodeGenerator extends CodeGenerator {
 //		String selectListByIdsStr = this.mapperGenerator.selectListByIds(tableAliasName);
 //		sb.append(this.mapperGenerator.strFmt(selectListByIdsStr, "\t")).append("\r\n");
 		
-		String selectOneByStr = this.mapperGenerator.selectOneBy(tableAliasName);
+		String selectOneByStr = this.mapperGenerator.selectOneBy(tableAliasName, modelClazz);
 		sb.append(this.mapperGenerator.strFmt(selectOneByStr, "\t")).append("\r\n");
 		
 		String insertOneStr = this.mapperGenerator.insertOne(modelClazz);
@@ -156,7 +156,7 @@ public class MapperFileCodeGenerator extends CodeGenerator {
 	
 	public static void main(String[] args) {
 		MapperFileCodeGenerator mapperFileGenerator = new MapperFileCodeGenerator();
-		Class<?> modelClazz = GenericPO.class;
+		Class<?> modelClazz = CustomPo.class;
 		String daoPackageName = "com.yffd.easy.uupm.dao.EasyPersistDao";
 		String outRootDirPath = "D:\\ddd\\code";
 		

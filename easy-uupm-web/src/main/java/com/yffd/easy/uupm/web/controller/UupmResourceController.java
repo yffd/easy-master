@@ -40,6 +40,16 @@ public class UupmResourceController extends UupmBaseController {
 	@Autowired
 	private UupmResourceService uupmResourceService;
 	
+	@RequestMapping(value="/findResWithAppTree", method=RequestMethod.POST)
+	public RespModel findResWithAppTree() {
+		List<UupmResourceModel> listResult = this.uupmResourceService.findResWithAppList();
+		if(null!=listResult && !listResult.isEmpty()) {
+			List<UupmResourceComboTreeVO> treeList = this.uupmComboTreeSupport.toSyncTreeVO(listResult, "-1");
+			return this.successAjax(treeList);
+		}
+		return this.successAjax();
+	}
+	
 	@RequestMapping(value="/findTree", method=RequestMethod.POST)
 	public RespModel findList(@RequestParam Map<String, Object> paramMap) {
 		String appCode = (String) paramMap.get("appCode");

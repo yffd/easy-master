@@ -1,6 +1,5 @@
 package com.yffd.easy.uupm.web.controller;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -68,9 +67,8 @@ public class UupmDictionaryController extends UupmBaseController {
 	@RequestMapping(value="/addCategory", method=RequestMethod.POST)
 	public RespModel addCategory(UupmDictionaryModel model) {
 		if(null==model || EasyStringCheckUtils.isEmpty(model.getItemCode())) return this.error("参数无效");
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("itemCode", model.getItemCode());
-		UupmDictionaryModel result = this.uupmDictionaryService.findOne(paramMap);
+		// 存在判断
+		UupmDictionaryModel result = this.uupmDictionaryService.findByItemCode(model.getItemCode(), null);
 		if(null!=result) return this.error("编号已存在");
 		this.uupmDictionaryService.addCategory(model, null);
 		return this.successAjax();
@@ -79,9 +77,8 @@ public class UupmDictionaryController extends UupmBaseController {
 	@RequestMapping(value="/addDict", method=RequestMethod.POST)
 	public RespModel addDict(UupmDictionaryModel model) {
 		if(null==model || EasyStringCheckUtils.isEmpty(model.getItemCode())) return this.error("参数无效");
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("itemCode", model.getItemCode());
-		UupmDictionaryModel result = this.uupmDictionaryService.findOne(paramMap);
+		// 存在判断
+		UupmDictionaryModel result = this.uupmDictionaryService.findByItemCode(model.getItemCode(), null);
 		if(null!=result) return this.error("编号已存在");
 		this.uupmDictionaryService.addDict(model, null);
 		return this.successAjax();
@@ -90,9 +87,8 @@ public class UupmDictionaryController extends UupmBaseController {
 	@RequestMapping(value="/addChildDict", method=RequestMethod.POST)
 	public RespModel addChildDict(UupmDictionaryModel model) {
 		if(null==model || EasyStringCheckUtils.isEmpty(model.getItemCode())) return this.error("参数无效");
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("itemCode", model.getItemCode());
-		UupmDictionaryModel result = this.uupmDictionaryService.findOne(paramMap);
+		// 存在判断
+		UupmDictionaryModel result = this.uupmDictionaryService.findByItemCode(model.getItemCode(), null);
 		if(null!=result) return this.error("编号已存在");
 		this.uupmDictionaryService.addChildDict(model, null);
 		return this.successAjax();
@@ -118,7 +114,7 @@ public class UupmDictionaryController extends UupmBaseController {
 	public RespModel delBatch(HttpServletRequest req) {
 		String itemCodes = req.getParameter("itemCodes");
 		if(EasyStringCheckUtils.isEmpty(itemCodes)) return this.error("参数无效");
-		int result = this.uupmDictionaryService.delWithInBy("itemCode", itemCodes, null);
+		int result = this.uupmDictionaryService.delByItemCodes(itemCodes, null);
 		if(result==-1) return this.error("参数无效");
 		return this.successAjax();
 	}
