@@ -59,12 +59,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			toolbar: '#tb_id',
 			loadFilter: function(result) {
 		    	if("OK"==result.status) {
-		    		return result.data || [];
+		    		return result.data || {'total':0, 'rows':[]};
 		    	} else {
 		    		$.messager.show({
 						title :commonui.msg_title,
-						msg : result.msg,
-						timeout : commonui.msg_timeout
+						timeout : commonui.msg_timeout,
+						msg : result.msg
 					});
 		    		return [];
 	    		}
