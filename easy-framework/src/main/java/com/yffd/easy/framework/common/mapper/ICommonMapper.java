@@ -18,20 +18,19 @@ import com.yffd.easy.framework.domain.CustomPo;
  */
 public interface ICommonMapper<PO extends CustomPo> {
 	
-	public List<PO> selectListBy(@Param("paramPo") PO paramPo, @Param("paramMap") Map<String, Object> paramMap, 
-			@Param("paramPage") PageParam paramPage);
+	public List<PO> selectListBy(@Param("model") PO model, @Param("map") Map<String, Object> map, @Param("page") PageParam page);
 	
-	public Long selectCountBy(@Param("paramPo") PO paramPo, @Param("paramMap") Map<String, Object> paramMap);
+	public Long selectCountBy(@Param("model") PO model, @Param("map") Map<String, Object> map);
 	
-	public PO selectOneBy(@Param("paramPo") PO paramPo, @Param("paramMap") Map<String, Object> paramMap);
+	public PO selectOneBy(@Param("model") PO model, @Param("map") Map<String, Object> map);
 	
-	public int insertOne(PO paramPo);
+	public int insertOne(PO model);
 	
-	public int insertList(List<PO> paramPos);
+	public int insertList(List<PO> modelList);
 	
-	public int updateBy(@Param("paramPoNew") PO paramPoNew, @Param("paramPoOld") PO paramPoOld, @Param("paramMap") Map<String, ?> paramMap);
+	public int updateBy(@Param("model") PO model, @Param("old") PO old, @Param("map") Map<String, ?> map);
 	
-	public int deleteBy(@Param("paramPo") PO paramPo, @Param("paramMap") Map<String, Object> paramMap);
+	public int deleteBy(@Param("model") PO model, @Param("map") Map<String, Object> map);
 	
 }
 

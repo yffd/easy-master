@@ -3,29 +3,33 @@ package com.yffd.easy.uupm.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.yffd.easy.framework.base.dao.GenericDao;
-import com.yffd.easy.framework.base.service.GenericService;
-import com.yffd.easy.uupm.dao.UupmTenantDao;
+import com.yffd.easy.framework.common.mapper.ICommonMapper;
+import com.yffd.easy.framework.common.service.CommonServiceAbstract;
+import com.yffd.easy.uupm.mapper.IUupmTenantMapper;
 import com.yffd.easy.uupm.api.model.UupmTenantModel;
 
 /**
- * @Description	简单描述该类的功能（可选）.
- * @Date		2018年03月14日 18时15分23秒 <br/>
+ * @Description  简单描述该类的功能（可选）.
+ * @Date		2018年04月04日 17时31分10秒 <br/>
  * @author		ZhangST
- * @version		1.0
- * @since		JDK 1.7+
- * @see
+ * @version		 1.0
+ * @since		 JDK 1.7+
+ * @see 	 
  */
-
 @Service
-public class UupmTenantService extends GenericService<UupmTenantModel> {
+public class UupmTenantService extends CommonServiceAbstract<UupmTenantModel> {
 
 	@Autowired
-	private UupmTenantDao uupmTenantDao;
+	private IUupmTenantMapper uupmTenantMapper;
 	
 	@Override
-	public GenericDao<UupmTenantModel> getBindDao() {
-		return this.uupmTenantDao;
+	public ICommonMapper<UupmTenantModel> getMapper() {
+		return this.uupmTenantMapper;
+	}
+
+	@Override
+	public Class<?> getMapperClass() {
+		return IUupmTenantMapper.class;
 	}
 
 }

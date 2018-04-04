@@ -13,45 +13,45 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <jsp:include page="/common/layout/script.jsp"></jsp:include>
 
 <script type="text/javascript">
-	var $json_activeStatus = [ {id:"", text:"全部", "selected": true} ];
+	var $json_status = [ {id:"", text:"全部", "selected": true} ];
 	var $json_rsType = [ {id:"", text:"全部", "selected": true} ];
 	var $openWindow = this;// 当前窗口
-	var $dg_role;
-	var $dg_rs;
+	var $dg_left;
+	var $dg_right;
 	$(function() {
-		$dg_role = $('#dg_id_role');
+		$dg_left = $('#dg_id_left');
 		// 初始化控件数据
 		$.post('/uupm/combox/findComboByDict', 
-				{'comboxKeys':'active-status,rs-type'}, 
+				{'combo':'status,rs-type'}, 
 				function(result) {
 					if("OK"==result.status) {
 						var jsonData = result.data;
-						$json_activeStatus = $json_activeStatus.concat(jsonData['active-status']);
-						$json_rsType = $json_rsType.concat(jsonData['rs-type']);
+						$json_status = $json_status.concat(jsonData['combo']['status'][0]['children']);
+						$json_rsType = $json_rsType.concat(jsonData['combo']['rs-type'][0]['children']);
 						
-						initDatagrid_role();	// 初始化datagrid组件
-						initTreegrid_rs();
+						makeGrid_left();	// 初始化datagrid组件
+						makeGrid_right();
 					}
 				}, 'json');
 		//搜索框
 		$("#searchbox_id").searchbox({
-			menu:"#mm_id_role",
+			menu:"#mm_id_left",
 			prompt :'请输入',
 // 			height: 28,
 // 			width:200,
 			searcher:function(value, name) {
 				var obj = {};
 				obj[name] = value;
-				$dg_role.datagrid('reload', obj); 
+				$dg_left.datagrid('reload', obj); 
 		    }
 		});
 	});
-	// 初始化datagrid组件
-	function initDatagrid_role() {
-		$dg_role.datagrid({
+	// 初始化组件
+	function makeGrid_left() {
+		$dg_left.datagrid({
 		    url:'uupm/role/findPage',
 		    width: 'auto',
-		    height: $(this).height()-commonui.remainHeight-20-$('#tb_id_role').height(),
+		    height: $(this).height()-commonui.remainHeight-20-$('#tb_id_left').height(),
 			pagination: true,
 			pageSize: commonui.pageSize,
 			rownumbers: true,
@@ -81,17 +81,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						{field: 'roleCode', title: '编号', width: 100, align: 'left'},
 						{field: 'roleStatus', title: '状态', width: 100, align: 'left',
 							formatter: function(value, row) {
-								return utils.fmtDict($json_activeStatus, value);
+								return utils.fmtDict($json_status, value);
 							}
 						},
 						{field: 'remark', title: '备注', width: 100, align: 'left'}
 	                   ]]
 		});
 	}
-	function initTreegrid_rs() {
-		$dg_rs = $('#dg_id_rs');
-		$dg_rs.treegrid({
-		    url:'uupm/tenant/resource/findTenantResWithAppTree',
+	function makeGrid_right() {
+		$dg_right = $('#dg_id_right');
+		$dg_right.treegrid({
+		    url:'uupm/tenant/resource/listRoot',
 		    width: 'auto',
 		    height: $(this).height()-commonui.remainHeight-20,
 			rownumbers: true,
@@ -126,36 +126,39 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    	},
 	    	onContextMenu: function(e, node){
 				e.preventDefault();
-				$dg_rs.treegrid('select', node.id_);
-				$('#mm_id_rs').menu('show', {
+				$dg_right.treegrid('select', node.id_);
+				$('#mm_id_right').menu('show', {
 					left: e.pageX,
 					top: e.pageY
 				});
 			},
 	        columns: [[
 						{field: 'ck', checkbox: true},
-						{field: 'rsName', title: '名称', width: 200, align: 'left'},
-						{field: 'rsCode', title: '编号', width: 100, align: 'left'},
-						{field: 'parentCode', title: '父编号', width: 100, align: 'left'},
-						{field: 'rsPath', title: '路径', width: 100, align: 'left'},
-						{field: 'rsType', title: '类型', width: 100, align: 'left',
+						{field: 'nodeName', title: '名称', width:200,align: 'left'},
+						{field: 'nodeCode', title: '编号', width: 100, align: 'left'},
+						{field: 'nodeLabel', title: '节点标签', width: 100, align: 'left'},
+						{field: 'parentNodeCode', title: '父编号', width: 100, align: 'left'},
+						{field: 'parentNodeName', title: '父名称', width: 100, align: 'left'},
+						{field: 'nodeStatus', title: '状态', width: 100, align: 'left',
+							formatter: function(value, row) {
+								return utils.fmtDict($json_status, value);
+							}
+						},
+						{field: 'nodeValueType', title: '类型', width: 100, align: 'left',
 							formatter: function(value, row) {
 								return utils.fmtDict($json_rsType, value);
 							}	
 						},
-						{field: 'rsStatus', title: '状态', width: 100, align: 'left',
-							formatter: function(value, row) {
-								return utils.fmtDict($json_activeStatus, value);
-							}	
-						},
-						{field: 'remark', title: '备注', width: 100, align: 'left'},
+						{field: 'seqNo', title: '序号', width: 100, align: 'left'},
+						{field: 'nodeValue', title: '值', width: 200, align: 'left'},
+						{field: 'remark', title: '描述', width: 100, align: 'left'}
 	                   ]]
 		});
 	}
 	
 	// 为角色分配功能
 	function saveRoleRes() {
-		var rows_rs = $dg_rs.treegrid('getSelections');//获取选中的行-多行
+		var rows_rs = $dg_right.treegrid('getSelections');//获取选中的行-多行
 		var rsCodeArr = [];
 		if(rows_rs) {
 			$.each(rows_rs, function(i, obj) {
@@ -173,7 +176,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			});
 			return;
 		}
-		var row_role = $dg_role.datagrid('getSelected');//获取选中的行-单行
+		var row_role = $dg_left.datagrid('getSelected');//获取选中的行-单行
 		if(row_role) {
 			var role_code = row_role.roleCode;
 			var data={"roleCode":role_code, "rsCodes": JSON.stringify(rsCodeArr)};
@@ -202,12 +205,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	function findResByRole(rowIndex, rowData) {
 		$.post("uupm/auth/findResourceByRoleCode", {roleCode:rowData.roleCode}, function(result) {
 			if(result.status=='OK') {
-				$dg_rs.treegrid('unselectAll');
+				$dg_right.treegrid('unselectAll');
 				var data = result.data;
 				if(data.length>0) {
-					if(data[0].appCode) $dg_rs.treegrid('select', data[0].appCode);
+					if(data[0].appCode) $dg_right.treegrid('select', data[0].appCode);
 					$.each(data, function(i, n) {
-						$dg_rs.treegrid('select', n.rsCode);
+						$dg_right.treegrid('select', n.rsCode);
 					});
 				} else {
 					$.messager.show({
@@ -233,24 +236,24 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	}
 	// 刷新资源列表
 	function reloadRs() {
-		$dg_rs.treegrid('reload', {});
+		$dg_right.treegrid('reload', {});
 	}
 	// 展开
 	function expandAll() {
-		var node = $dg_rs.treegrid('getSelected');
+		var node = $dg_right.treegrid('getSelected');
 		if(node) {
-			$dg_rs.treegrid('expandAll', node.rsCode);
+			$dg_right.treegrid('expandAll', node.rsCode);
 		} else {
-			$dg_rs.treegrid('expandAll');
+			$dg_right.treegrid('expandAll');
 		}
 	}
 	// 收缩
 	function collapseAll() {
-		var node = $dg_rs.treegrid('getSelected');
+		var node = $dg_right.treegrid('getSelected');
 		if(node) {
-			$dg_rs.treegrid('collapseAll', node.rsCode);
+			$dg_right.treegrid('collapseAll', node.rsCode);
 		} else {
-			$dg_rs.treegrid('collapseAll');
+			$dg_right.treegrid('collapseAll');
 		}
 	}
 		
@@ -267,7 +270,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <!-- 		</div> -->
 <!-- 	</div> -->
     <div data-options="region:'west',title:'角色列表',split:true,border:true" style="width:500px;">
-	    <div id="tb_id_role" style="background-color: #F5F5F5;padding-left:25px;">
+	    <div id="tb_id_left" style="background-color: #F5F5F5;padding-left:25px;">
 	    	<table cellpadding="0" cellspacing="0">
 				<tr>
 					<td style="padding-left:2px;padding-bottom:2px;">
@@ -282,26 +285,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</tr>
 			</table>
 		</div>
-		<table id="dg_id_role"></table>
+		<table id="dg_id_left"></table>
 		
-		<div id="mm_id_role">
+		<div id="mm_id_left">
 			<div name="roleName">&nbsp;&nbsp;名称&nbsp;&nbsp;&nbsp;&nbsp;</div>
 			<div name="roleCode">&nbsp;&nbsp;编号&nbsp;&nbsp;&nbsp;&nbsp;</div>
-			<div class="menu-sep"></div>
-			<div name="roleStatus">
-				<span>&nbsp;&nbsp;状态&nbsp;&nbsp;&nbsp;&nbsp;</span>
-				<div>
-					<div>&nbsp;&nbsp;有效&nbsp;&nbsp;&nbsp;&nbsp;</div>
-					<div>&nbsp;&nbsp;无效&nbsp;&nbsp;&nbsp;&nbsp;</div>
-				</div>
-			</div>
 		</div>
     </div>
 
     <div data-options="region:'center',title:'资源列表'" style="padding:5px;">
-	    <table id="dg_id_rs"></table>
+	    <table id="dg_id_right"></table>
 		
-		<div id="mm_id_rs" class="easyui-menu" style="width:120px;">
+		<div id="mm_id_right" class="easyui-menu" style="width:120px;">
 	        <div onclick="expandAll()" data-options="iconCls:'icon-undo'">展开</div>
 	        <div onclick="collapseAll()" data-options="iconCls:'icon-redo'">收缩</div>
 	        <div class="menu-sep"></div>

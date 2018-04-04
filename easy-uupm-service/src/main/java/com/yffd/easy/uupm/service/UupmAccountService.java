@@ -3,29 +3,33 @@ package com.yffd.easy.uupm.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.yffd.easy.framework.base.dao.GenericDao;
-import com.yffd.easy.framework.base.service.GenericService;
+import com.yffd.easy.framework.common.mapper.ICommonMapper;
+import com.yffd.easy.framework.common.service.CommonServiceAbstract;
+import com.yffd.easy.uupm.mapper.IUupmAccountMapper;
 import com.yffd.easy.uupm.api.model.UupmAccountModel;
-import com.yffd.easy.uupm.dao.UupmAccountDao;
 
 /**
- * @Description	简单描述该类的功能（可选）.
- * @Date		2018年03月23日 17时37分15秒 <br/>
+ * @Description  简单描述该类的功能（可选）.
+ * @Date		2018年03月30日 10时32分32秒 <br/>
  * @author		ZhangST
- * @version		1.0
- * @since		JDK 1.7+
- * @see
+ * @version		 1.0
+ * @since		 JDK 1.7+
+ * @see 	 
  */
-
 @Service
-public class UupmAccountService extends GenericService<UupmAccountModel> {
+public class UupmAccountService extends CommonServiceAbstract<UupmAccountModel> {
 
 	@Autowired
-	private UupmAccountDao uupmAccountDao;
+	private IUupmAccountMapper uupmAccountMapper;
 	
 	@Override
-	public GenericDao<UupmAccountModel> getBindDao() {
-		return this.uupmAccountDao;
+	public ICommonMapper<UupmAccountModel> getMapper() {
+		return this.uupmAccountMapper;
+	}
+
+	@Override
+	public Class<?> getMapperClass() {
+		return IUupmAccountMapper.class;
 	}
 
 }

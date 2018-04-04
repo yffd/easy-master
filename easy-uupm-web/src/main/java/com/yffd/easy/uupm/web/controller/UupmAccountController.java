@@ -1,5 +1,7 @@
 package com.yffd.easy.uupm.web.controller;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,11 +19,11 @@ import com.yffd.easy.framework.domain.RespModel;
 import com.yffd.easy.framework.web.view.vo.DataGridVO;
 import com.yffd.easy.uupm.api.model.UupmAccountModel;
 import com.yffd.easy.uupm.service.UupmAccountService;
-
+import com.yffd.easy.uupm.web.common.UupmCommonController;
 
 /**
  * @Description  简单描述该类的功能（可选）.
- * @Date		 2018年03月23日 17时47分21秒 <br/>
+ * @Date		 2018年03月30日 11时09分45秒 <br/>
  * @author		 ZhangST
  * @version		 1.0
  * @since		 JDK 1.7+
@@ -29,17 +31,16 @@ import com.yffd.easy.uupm.service.UupmAccountService;
  */
 @RestController
 @RequestMapping("/uupm/account")
-public class UupmAccountController extends UupmBaseController {
+public class UupmAccountController extends UupmCommonController {
 
 	@Autowired
 	private UupmAccountService uupmAccountService;
 	
 	@RequestMapping(value="/findPage", method=RequestMethod.POST)
 	public RespModel findPage(@RequestParam Map<String, Object> paramMap) {
-		if(EasyStringCheckUtils.isEmpty((String) paramMap.get("tenantCode"))) return this.error("参数无效"); 
-		PageParam pageParam = this.getPageParam(paramMap);
+		PageParam paramPage = this.getPageParam(paramMap);
 		paramMap.put("accountType", "admin");
-		PageResult<UupmAccountModel> pageResult = this.uupmAccountService.findPage(paramMap, pageParam);
+		PageResult<UupmAccountModel> pageResult = this.uupmAccountService.findPage(null, paramMap, paramPage, null);
 		DataGridVO dataGridVO = this.toDataGrid(pageResult);
 		return this.successAjax(dataGridVO);
 	}
@@ -47,22 +48,20 @@ public class UupmAccountController extends UupmBaseController {
 	@RequestMapping(value="/findOne", method=RequestMethod.POST)
 	public RespModel findOne(UupmAccountModel model) {
 		if(null==model || EasyStringCheckUtils.isEmpty(model.getId())) return this.error("参数无效");
-		UupmAccountModel result = this.uupmAccountService.findById(model.getId());
+		UupmAccountModel result = this.uupmAccountService.findOne(model, null);
 		return this.successAjax(result);
 	}
 	
 	@RequestMapping(value="/add", method=RequestMethod.POST)
 	public RespModel add(UupmAccountModel model) {
-		if(null==model || EasyStringCheckUtils.isEmpty(model.getTenantCode())
-				|| EasyStringCheckUtils.isEmpty(model.getAccountId())) return this.error("参数无效");
+		if(null==model) return this.error("参数无效");
 		// 存在校验
 		UupmAccountModel paramModel = new UupmAccountModel();
 		paramModel.setTenantCode(model.getTenantCode());
 		paramModel.setAccountId(model.getAccountId());
-		UupmAccountModel result = this.uupmAccountService.findOne(paramModel);
-		if(null!=result) return this.error("账号已存在");
-		model.setAccountType("admin");
-		this.uupmAccountService.addOne(model, null); // 添加账号
+		UupmAccountModel result = this.uupmAccountService.findOne(paramModel, null);
+		if(null!=result) return this.error("添加数据已存在");
+		this.uupmAccountService.addOne(model, null);
 		return this.successAjax();
 	}
 	
@@ -71,14 +70,16 @@ public class UupmAccountController extends UupmBaseController {
 		if(null==model || EasyStringCheckUtils.isEmpty(model.getId())) {
 			return this.error("参数无效");
 		}
-		this.uupmAccountService.updateById(model, null);
+		UupmAccountModel paramOld = new UupmAccountModel();
+		paramOld.setId(model.getId());
+		this.uupmAccountService.update(model, paramOld, null, null);
 		return this.successAjax();
 	}
 	
 	@RequestMapping(value="/delById", method=RequestMethod.POST)
 	public RespModel delById(String id) {
 		if(EasyStringCheckUtils.isEmpty(id)) return this.errorAjax("参数无效");
-		this.uupmAccountService.delById(id, null);
+		this.uupmAccountService.deleteBy("id", id);
 		return this.successAjax();
 	}
 	
@@ -86,8 +87,10 @@ public class UupmAccountController extends UupmBaseController {
 	public RespModel delBatch(HttpServletRequest req) {
 		String ids = req.getParameter("ids");
 		if(EasyStringCheckUtils.isEmpty(ids)) return this.error("参数无效");
-		int result = this.uupmAccountService.delByIds(ids, null);
-		if(result==-1) return this.error("参数无效");
+		String[] idsArr = ids.split(",");
+		List<String> idsList = Arrays.asList(idsArr);
+		int result = this.uupmAccountService.delete("id", idsList);
+		if(result==0) return this.error("删除失败");
 		return this.successAjax();
 	}
 	
@@ -95,10 +98,8 @@ public class UupmAccountController extends UupmBaseController {
 	public RespModel updateStatus(String accountId, String accountStatus) {
 		if(EasyStringCheckUtils.isEmpty(accountId) || EasyStringCheckUtils.isEmpty(accountStatus)) return this.errorAjax("参数无效");
 		UupmAccountModel model = new UupmAccountModel();
-		model.setAccountId(accountId);
 		model.setAccountStatus(accountStatus);
-		this.uupmAccountService.updateBy(model, "accountId", null);
+		this.uupmAccountService.updateBy(model, "accountId", accountId, null);
 		return this.successAjax();
 	}
-	
 }

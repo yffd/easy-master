@@ -2,12 +2,13 @@ package com.yffd.easy.uupm.code;
 
 import org.junit.Test;
 
-import com.yffd.easy.framework.support.code.generator.DaoCodeGenerator;
-import com.yffd.easy.framework.support.code.generator.DaoTestCodeGenerator;
-import com.yffd.easy.framework.support.code.generator.MapperFileCodeGenerator;
-import com.yffd.easy.framework.support.code.generator.ServiceCodeGenerator;
-import com.yffd.easy.framework.support.code.generator.ServiceTestCodeGenerator;
-import com.yffd.easy.uupm.api.model.UupmUserModel;
+import com.yffd.easy.framework.support.code.generator.CodeMapperFileGenerator;
+import com.yffd.easy.framework.support.code.generator.CodeMapperInterfaceGenerator;
+import com.yffd.easy.framework.support.code.generator.CodeMapperSqlGenerator;
+import com.yffd.easy.framework.support.code.generator.CodeServiceGenerator;
+import com.yffd.easy.framework.support.code.generator.CodeServiceTestGenerator;
+import com.yffd.easy.uupm.api.model.UupmTenantModel;
+import com.yffd.easy.uupm.api.model.UupmTreeDictionaryModel;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -18,13 +19,13 @@ import com.yffd.easy.uupm.api.model.UupmUserModel;
  * @see 	 
  */
 public class WriteOneTest extends LocalProjectConfigTest {
-	private MapperFileCodeGenerator mapperGenerator = new MapperFileCodeGenerator();
-	private DaoCodeGenerator daoGenerator = new DaoCodeGenerator();
-	private DaoTestCodeGenerator daoTestGenerator = new DaoTestCodeGenerator();
-	private ServiceCodeGenerator serviceGenerator = new ServiceCodeGenerator();
-	private ServiceTestCodeGenerator serviceTestGenerator = new ServiceTestCodeGenerator();
+	private CodeMapperInterfaceGenerator mapperInterfaceGenerator = new CodeMapperInterfaceGenerator();
+	private CodeMapperFileGenerator mapperFileGenerator = new CodeMapperFileGenerator();
+	private CodeMapperSqlGenerator mapperSqlGenerator = new CodeMapperSqlGenerator();
+	private CodeServiceGenerator serviceGenerator = new CodeServiceGenerator();
+	private CodeServiceTestGenerator serviceTestGenerator = new CodeServiceTestGenerator();
 	
-	private Class<?> modelClazz = UupmUserModel.class;
+	private Class<?> modelClazz = UupmTenantModel.class;
 	
 	/**
 	 * 所有--文件
@@ -33,11 +34,10 @@ public class WriteOneTest extends LocalProjectConfigTest {
 	 */
 	@Test
 	public void writeAllOfOneToFileTest() {
-		mapperGenerator.writeToFile(modelClazz, daoPackageName, outRootDirPath_mapper, covered);
-		daoGenerator.writeToFile(modelClazz, baseDaoClazz, daoPackageName, author, outRootDirPath_dao, true);
-		daoTestGenerator.writeToFile(modelClazz, baseDaoTestClazz, daoTestPackageName, author, outRootDirPath_dao_test, true);
-		serviceGenerator.writeToFile(modelClazz, baseServiceClazz, servicePackageName, daoPackageName, author, outRootDirPath_service, true);
-		serviceTestGenerator.writeToFile(modelClazz, baseServiceTestClazz, serviceTestPackageName, author, outRootDirPath_service_test, true);
+		mapperInterfaceGenerator.writeToFile(modelClazz, superMapperClazz, mapperPackageName, author, outRootDirPath_mapper_interface, true);
+		mapperFileGenerator.writeToFile(modelClazz, mapperPackageName, outRootDirPath_mapper_xml, covered);
+		serviceGenerator.writeToFile(modelClazz, superServiceClazz, servicePackageName, mapperPackageName, author, outRootDirPath_service, true);
+		serviceTestGenerator.writeToFile(modelClazz, superServiceTestClazz, serviceTestPackageName, author, outRootDirPath_service_test, true);
 	}
 	
 	/**
@@ -47,17 +47,7 @@ public class WriteOneTest extends LocalProjectConfigTest {
 	 */
 	@Test
 	public void writeServiceTestToFile() {
-		serviceTestGenerator.writeToFile(modelClazz, baseServiceTestClazz, serviceTestPackageName, author, outRootDirPath_service_test, true);
-	}
-	
-	/**
-	 * dao--test--文件
-	 * @Date	2018年2月8日 下午5:47:35 <br/>
-	 * @author  zhangST
-	 */
-	@Test
-	public void writeDaoTestToFile() {
-		daoTestGenerator.writeToFile(modelClazz, baseDaoTestClazz, daoTestPackageName, author, outRootDirPath_dao_test, true);
+		serviceTestGenerator.writeToFile(modelClazz, superServiceTestClazz, serviceTestPackageName, author, outRootDirPath_service_test, true);
 	}
 	
 	/**
@@ -67,17 +57,17 @@ public class WriteOneTest extends LocalProjectConfigTest {
 	 */
 	@Test
 	public void writeServiceToFile() {
-		serviceGenerator.writeToFile(modelClazz, baseServiceClazz, servicePackageName, daoPackageName, author, outRootDirPath_service, true);
+		serviceGenerator.writeToFile(modelClazz, superServiceClazz, servicePackageName, mapperPackageName, author, outRootDirPath_service, true);
 	}
 	
 	/**
-	 * dao--文件
-	 * @Date	2018年2月8日 下午5:46:59 <br/>
+	 * mapper interface--test--文件
+	 * @Date	2018年2月8日 下午5:47:35 <br/>
 	 * @author  zhangST
 	 */
 	@Test
-	public void writeDaoToFile() {
-		daoGenerator.writeToFile(modelClazz, baseDaoClazz, daoPackageName, author, outRootDirPath_dao, true);
+	public void writeMapperInterfaceToFile() {
+		mapperInterfaceGenerator.writeToFile(modelClazz, superMapperClazz, mapperPackageName, author, outRootDirPath_mapper_interface, true);
 	}
 	
 	/**
@@ -87,7 +77,7 @@ public class WriteOneTest extends LocalProjectConfigTest {
 	 */
 	@Test
 	public void writeMapperToFile() {
-		mapperGenerator.writeToFile(modelClazz, daoPackageName, outRootDirPath_mapper, covered);
+		mapperFileGenerator.writeToFile(modelClazz, mapperPackageName, outRootDirPath_mapper_xml, covered);
 	}
 	
 	/*****************************************************************************/
@@ -100,17 +90,7 @@ public class WriteOneTest extends LocalProjectConfigTest {
 	 */
 	@Test
 	public void writeServiceTestToConsole() {
-		serviceTestGenerator.writeToConsole(modelClazz, baseServiceTestClazz, serviceTestPackageName, author);
-	}
-	
-	/**
-	 * dao--test--控制台
-	 * @Date	2018年2月8日 下午5:47:21 <br/>
-	 * @author  zhangST
-	 */
-	@Test
-	public void writeDaoTestToConsole() {
-		daoTestGenerator.writeToConsole(modelClazz, baseDaoTestClazz, daoTestPackageName, author);
+		serviceTestGenerator.writeToConsole(modelClazz, superServiceTestClazz, serviceTestPackageName, author);
 	}
 	
 	/**
@@ -120,17 +100,17 @@ public class WriteOneTest extends LocalProjectConfigTest {
 	 */
 	@Test
 	public void writeServiceToConsole() {
-		serviceGenerator.writeToConsole(modelClazz, baseServiceClazz, servicePackageName, daoPackageName, author);
+		serviceGenerator.writeToConsole(modelClazz, superServiceClazz, servicePackageName, mapperPackageName, author);
 	}
 	
 	/**
-	 * dao--控制台
-	 * @Date	2018年2月8日 下午5:46:48 <br/>
+	 * mapper interface--test--文件
+	 * @Date	2018年2月8日 下午5:47:35 <br/>
 	 * @author  zhangST
 	 */
 	@Test
-	public void writeDaoToConsoleTest() {
-		daoGenerator.writeToConsole(modelClazz, baseDaoClazz, daoPackageName, author);
+	public void writeMapperInterfaceToConsoleTest() {
+		mapperInterfaceGenerator.writeToConsole(modelClazz, superMapperClazz, mapperPackageName, author);
 	}
 	
 	/**
@@ -140,7 +120,28 @@ public class WriteOneTest extends LocalProjectConfigTest {
 	 */
 	@Test
 	public void writeMapperToConsoleTest() {
-		mapperGenerator.writeToConsole(modelClazz, daoPackageName);
+		mapperFileGenerator.writeToConsole(modelClazz, mapperPackageName);
+	}
+	
+	/**
+	 * mapper sql--控制台
+	 * @Date	2018年2月8日 下午5:46:21 <br/>
+	 * @author  zhangST
+	 */
+	@Test
+	public void writeMapperSqlToConsoleTest() {
+//		String tableAliasName = "";
+//		String modelAliasName = "";
+//		String oldAliasName = "";
+//		String mapAliasName = "";
+		
+		String tableAliasName = "t";
+		String modelAliasName = "model";
+		String oldAliasName = "old";
+		String mapAliasName = "map";
+		
+		Class<?> modelClazz = UupmTreeDictionaryModel.class;
+		mapperSqlGenerator.writeToConsole(tableAliasName, modelAliasName, oldAliasName, mapAliasName, modelClazz);
 	}
 	
 	

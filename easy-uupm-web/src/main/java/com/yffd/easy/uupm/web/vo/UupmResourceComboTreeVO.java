@@ -11,55 +11,90 @@ import com.yffd.easy.framework.web.view.vo.ComboTreeVO;
  * @see 	 
  */
 public class UupmResourceComboTreeVO extends ComboTreeVO {
-	private String appCode;		//应用系统编号
-	private String rsName;		//资源名称
-	private String rsCode;		//资源编号
-	private String parentCode;	//父资源名称
-	private String rsPath;		//资源路径
-	private String rsType;		//资源类型：M=菜单、O=操作
-	private String rsStatus;	//资源状态：1=激活、0=冻结
-	private String remark;		//备注
-	public String getAppCode() {
-		return appCode;
+	private String nodeLabel;		// 节点标签，目前主要用于多棵树的区分
+	private Integer nodeLayer;		// 节点层号
+	private Integer nodeLeft;		// 节点左编号，主要用于偏序遍历子节点
+	private Integer nodeRight;		// 节点右编号，主要用于偏序遍历子节点
+	private String nodeCode;		// 节点编号
+	private String nodeName;		// 节点名称
+	private String parentNodeCode;	// 父节点编号
+	private String parentNodeName;	// 父节点名称
+	private String nodeValue;		// 节点值
+	private String nodeValueType;	// 节点值类型
+	private String nodeStatus;		// 节点状态：A=激活、I=冻结
+	private Integer seqNo;			// 序号
+	private String remark;			// 备注
+	public String getNodeLabel() {
+		return nodeLabel;
 	}
-	public void setAppCode(String appCode) {
-		this.appCode = appCode;
+	public void setNodeLabel(String nodeLabel) {
+		this.nodeLabel = nodeLabel;
 	}
-	public String getRsName() {
-		return rsName;
+	public Integer getNodeLayer() {
+		return nodeLayer;
 	}
-	public void setRsName(String rsName) {
-		this.rsName = rsName;
+	public void setNodeLayer(Integer nodeLayer) {
+		this.nodeLayer = nodeLayer;
 	}
-	public String getRsCode() {
-		return rsCode;
+	public Integer getNodeLeft() {
+		return nodeLeft;
 	}
-	public void setRsCode(String rsCode) {
-		this.rsCode = rsCode;
+	public void setNodeLeft(Integer nodeLeft) {
+		this.nodeLeft = nodeLeft;
 	}
-	public String getParentCode() {
-		return parentCode;
+	public Integer getNodeRight() {
+		return nodeRight;
 	}
-	public void setParentCode(String parentCode) {
-		this.parentCode = parentCode;
+	public void setNodeRight(Integer nodeRight) {
+		this.nodeRight = nodeRight;
 	}
-	public String getRsPath() {
-		return rsPath;
+	public String getNodeCode() {
+		return nodeCode;
 	}
-	public void setRsPath(String rsPath) {
-		this.rsPath = rsPath;
+	public void setNodeCode(String nodeCode) {
+		this.nodeCode = nodeCode;
 	}
-	public String getRsType() {
-		return rsType;
+	public String getNodeName() {
+		return nodeName;
 	}
-	public void setRsType(String rsType) {
-		this.rsType = rsType;
+	public void setNodeName(String nodeName) {
+		this.nodeName = nodeName;
 	}
-	public String getRsStatus() {
-		return rsStatus;
+	public String getParentNodeCode() {
+		return parentNodeCode;
 	}
-	public void setRsStatus(String rsStatus) {
-		this.rsStatus = rsStatus;
+	public void setParentNodeCode(String parentNodeCode) {
+		this.parentNodeCode = parentNodeCode;
+	}
+	public String getParentNodeName() {
+		return parentNodeName;
+	}
+	public void setParentNodeName(String parentNodeName) {
+		this.parentNodeName = parentNodeName;
+	}
+	public String getNodeValue() {
+		return nodeValue;
+	}
+	public void setNodeValue(String nodeValue) {
+		this.nodeValue = nodeValue;
+	}
+	public String getNodeValueType() {
+		return nodeValueType;
+	}
+	public void setNodeValueType(String nodeValueType) {
+		this.nodeValueType = nodeValueType;
+	}
+	public String getNodeStatus() {
+		return nodeStatus;
+	}
+	public void setNodeStatus(String nodeStatus) {
+		this.nodeStatus = nodeStatus;
+	}
+	public Integer getSeqNo() {
+		return seqNo;
+	}
+	public void setSeqNo(Integer seqNo) {
+		this.seqNo = seqNo;
 	}
 	public String getRemark() {
 		return remark;

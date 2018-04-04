@@ -1,7 +1,6 @@
 package ##service_package_name##;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,9 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.yffd.easy.common.core.page.PageParam;
 import com.yffd.easy.common.core.page.PageResult;
-import com.yffd.easy.framework.domain.LoginInfo;
 import ##import_model_full_name##;
-import ##import_test_base_service_full_name##;
+import ##import_test_super_service_full_name##;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -29,296 +27,116 @@ public class ##test_service_name## ##test_base_service_name##{
 	@Autowired
 	private ##service_name## ##service_alias_name##;
 	
-	private LoginInfo loginInfo = null;
-	
-	{
-		loginInfo = new LoginInfo();
-		loginInfo.setUserCode("tester");
-		loginInfo.setUserName("测试");
-	}
-	
-	
-	/*********************** 查询 BEGIN ***********************************/
-	
 	@Test
 	public void findPageTest() {
 		PageParam pageParam = new PageParam(1L, 10L);
-		##model_simple_name## model = new ##model_simple_name##();
-		model.setId("2010");
-		PageResult<##model_simple_name##> result1 = this.##service_alias_name##.findPage(model, pageParam);
-		Assert.assertNotNull(result1);
-		System.out.println(result1.getPageParam());
-		System.out.println(result1.getRecordList());
-		
-		/*******************************/
-		
+		##model_simple_name## paramModel = new ##model_simple_name##();
+		paramModel.setTenantCode("default");
 		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("id", "2010");
-		PageResult<##model_simple_name##> result2 = this.##service_alias_name##.findPage(paramMap, pageParam);
-		Assert.assertNotNull(result2);
-		System.out.println(result2.getPageParam());
-		System.out.println(result2.getRecordList());
+		List<String> idList = new ArrayList<String>();
+		idList.add("2000");
+		idList.add("2001");
+		paramMap.put("idList", idList);
+		PageResult<##model_simple_name##> pageResult = this.##service_alias_name##.findPage(paramModel, paramMap, pageParam, null);
+		Assert.assertNotNull(pageResult);
+		Assert.assertNotNull(pageResult.getRecordList());
+		System.out.println(pageResult.getRecordList().size());
+		for(Object obj : pageResult.getRecordList()) {
+			System.out.println(obj);
+		}
 	}
 	
 	@Test
 	public void findListTest() {
-		##model_simple_name## model = new ##model_simple_name##();
-		model.setId("2010");
-		List<##model_simple_name##> result1 = this.##service_alias_name##.findList(model);
-		Assert.assertNotNull(result1);
-		System.out.println(result1.size());
-		
-		/*******************************/
-		
+		##model_simple_name## paramModel = new ##model_simple_name##();
+		paramModel.setTenantCode("default");
 		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("id", "2010");
-		List<##model_simple_name##> result2 = this.##service_alias_name##.findList(paramMap);
-		Assert.assertNotNull(result2);
-		System.out.println(result2.size());
+		List<String> idList = new ArrayList<String>();
+		idList.add("2000");
+		idList.add("2001");
+		paramMap.put("idList", idList);
+		List<##model_simple_name##> result = this.##service_alias_name##.findList(paramModel, paramMap, null);
+		System.out.println(result);
+	}
+	
+	@Test
+	public void findCountTest() {
+		##model_simple_name## paramModel = new ##model_simple_name##();
+		paramModel.setTenantCode("default");
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		List<String> idList = new ArrayList<String>();
+		idList.add("2000");
+		idList.add("2001");
+		paramMap.put("idList", idList);
+		Long result = this.##service_alias_name##.findCount(paramModel, paramMap, null);
+		System.out.println(result);
 	}
 	
 	@Test
 	public void findOneTest() {
-		##model_simple_name## model = new ##model_simple_name##();
-		model.setId("2010");
-		##model_simple_name## result1 = this.##service_alias_name##.findOne(model);
-		Assert.assertNotNull(result1);
-		System.out.println(result1.getCreateTime());
-		
-		/*******************************/
-		
+		##model_simple_name## paramModel = new ##model_simple_name##();
+		paramModel.setTenantCode("default");
 		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("id", "2010");
-		##model_simple_name## result2 = this.##service_alias_name##.findOne(paramMap);
-		Assert.assertNotNull(result2);
-		System.out.println(result2.getCreateTime());
+		List<String> idList = new ArrayList<String>();
+		idList.add("2000");
+		idList.add("2001");
+		paramMap.put("idList", idList);
+		##model_simple_name## result = this.##service_alias_name##.findOne(paramModel, paramMap, null);
+		System.out.println(result);
 	}
-	
-	@Test
-	public void findByIdTest() {
-		String id = "2010";
-		##model_simple_name## model = this.##service_alias_name##.findById(id);
-		Assert.assertNotNull(model);
-		System.out.println(model.getCreateTime());
-	}
-	
-	@Test
-	public void findByIdsTest() {
-		List<String> ids = new ArrayList<String>();
-		ids.add("2010");
-		ids.add("2111");
-		List<##model_simple_name##> result1 = this.##service_alias_name##.findByIds(ids);
-		Assert.assertNotNull(result1);
-		System.out.println(result1.size());
-		
-		/*******************************/
-		
-		String idsStr = "2010,2111";
-		List<##model_simple_name##> result2 = this.##service_alias_name##.findByIds(idsStr);
-		Assert.assertNotNull(result2);
-		System.out.println(result2.size());
-	}
-	
-	@Test
-	public void findAllTest() {
-		List<##model_simple_name##> result1 = this.##service_alias_name##.findAll();
-		Assert.assertNotNull(result1);
-		System.out.println(result1.size());
-	}
-	
-	/*********************** 查询 END *************************************/
-	/*********************** 添加 BEGIN ***********************************/
 	
 	@Test
 	public void addOneTest() {
-		##model_simple_name## model = new ##model_simple_name##();
-		model.setId("2000");
-		this.##service_alias_name##.addOne(model, loginInfo);
-		
-		/*******************************/
-		
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("id", "2001");
-		this.##service_alias_name##.addOne(paramMap, loginInfo);
+		##model_simple_name## paramModel = new ##model_simple_name##();
+		paramModel.setTenantCode("default");
+		int result = this.##service_alias_name##.addOne(paramModel, null);
+		System.out.println(result);
+		System.out.println(paramModel.getId());
 	}
 	
 	@Test
-	public void addBatchTest() {
+	public void addListTest() {
 		List<##model_simple_name##> list = new ArrayList<##model_simple_name##>();
-		for(int i=10;i<15;i++) {
-			##model_simple_name## model = new ##model_simple_name##();
-			model.setId("20"+i);
-			list.add(model);
+		for(int i=0;i<5;i++) {
+			##model_simple_name## paramModel = new ##model_simple_name##();
+			paramModel.setTenantCode("default_" + i);
+			list.add(paramModel);
 		}
-		this.##service_alias_name##.addBatch(list, loginInfo);
-		
-		/*******************************/
-		
-		List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
-		for(int i=10;i<12;i++) {
-			Map<String, Object> paramMap = new HashMap<String, Object>();
-			paramMap.put("id", "21"+i);
-			listMap.add(paramMap);
+		int result = this.##service_alias_name##.addList(list, null);
+		System.out.println(result);
+		for(##model_simple_name## model : list) {
+			System.out.println(model.getId());
 		}
-		this.##service_alias_name##.addBatch(listMap, loginInfo);
 	}
 	
-	/*********************** 插入 END *************************************/
-	/*********************** 更新 BEGIN ***********************************/
-	
 	@Test
-	public void updateByTest() {
-		Map<String, Object> newMap = new HashMap<String, Object>();
-		newMap.put("updateTime", new Date());
-		newMap.put("updateBy", "tester");
-		Map<String, Object> oldMap = new HashMap<String, Object>();
-		oldMap.put("id", "2005");
-		int result = this.##service_alias_name##.updateBy(newMap, oldMap, null);
-		System.out.println(result);
-		
+	public void updateTest() {
+		##model_simple_name## newModel = new ##model_simple_name##();
+		newModel.setTenantCode("default-new");
+		##model_simple_name## oldModel = new ##model_simple_name##();
+		oldModel.setTenantCode("default");
 		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("updateTime", new Date());
-		paramMap.put("updateBy", "tester");
-		paramMap.put("id", "2006");
-		int result2 = this.##service_alias_name##.updateBy(paramMap, "id", null);
-		System.out.println(result2);
-		
-		int result3 = this.##service_alias_name##.updateBy(paramMap, null, "id", "updateBy");
-		System.out.println(result3);
-		
-		##model_simple_name## model = new ##model_simple_name##();
-		model.setId(2007+"");
-		model.setUpdateBy("tester");
-		int result4 = this.##service_alias_name##.updateBy(model, "id", null);
-		System.out.println(result4);
-		
-		int result5 = this.##service_alias_name##.updateById(model, null);
-		System.out.println(result5);
-	}
-	
-	@Test
-	public void updateByIdTest() {
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("updateBy", "tester");
-		paramMap.put("id", "2005");
-		int result = this.##service_alias_name##.updateById(paramMap, null);
-		System.out.println(result);
-		
-		##model_simple_name## model = new ##model_simple_name##();
-		model.setId(2006+"");
-		int result2 = this.##service_alias_name##.updateById(model, null);
-		System.out.println(result2);
-	}
-	
-	@Test
-	public void updateByIdsTest() {
-		Map<String, Object> newMap = new HashMap<String, Object>();
-		newMap.put("updateBy", "tester");
-		
 		List<String> idList = new ArrayList<String>();
-		for(int i=0;i<5;i++) {
-			idList.add("200"+i);
-		}
-		int result = this.##service_alias_name##.updateByIds(newMap, idList, null);
+		idList.add("2000");
+		idList.add("2001");
+		paramMap.put("idList", idList);
+		
+		int result = this.##service_alias_name##.update(newModel, oldModel, paramMap, null);
 		System.out.println(result);
 	}
 	
 	@Test
-	public void updateWithInByTest() {
-		String inName = "id";
-		Map<String, Object> newMap = new HashMap<String, Object>();
-		newMap.put("updateBy", "tester");
-		Map<String, Object> oldMap = new HashMap<String, Object>();
-		oldMap.put("id", "2005");
-		
-		List<String> inValueList = new ArrayList<String>();
-		for(int i=0;i<5;i++) {
-			inValueList.add("200"+i);
-		}
-		
-		int result = this.##service_alias_name##.updateWithInBy(newMap, inName, inValueList, null);
-		System.out.println(result);
-		
-		int result2 = this.##service_alias_name##.updateWithInBy(newMap, oldMap, inName, inValueList, null);
-		System.out.println(result2);
-		
-		Map<String, Object> oldInMap = new HashMap<String, Object>();
-		oldInMap.put("id", inValueList);
-		
-		int result3 = this.##service_alias_name##.updateWithInBy(newMap, oldMap, oldInMap, null);
-		System.out.println(result3);
-	}
-	
-	/*********************** 更新 END *************************************/
-	/*********************** 物理删除 BEGIN ********************************/
-	
-	@Test
-	public void delByTest() {
-		##model_simple_name## model = new ##model_simple_name##();
-		model.setId(2000+"");
-		int result = this.##service_alias_name##.delBy(model, null);
-		System.out.println(result);
-		
-		Map<String, Object> paramMap = this.##service_alias_name##.model2map(model, null);
-		int result2 = this.##service_alias_name##.delBy(paramMap, null);
-		System.out.println(result2);
-	}
-	
-	@Test
-	public void delByIdTest() {
-		String id = "2001";
-		int result = this.##service_alias_name##.delById(id, null);
-		System.out.println(result);
-	}
-
-	@Test
-	public void delByIdsTest() {
-		List<String> list = new ArrayList<String>();
-		String idsStr = "";
-		for(int i=2002;i<2005;i++) {
-			list.add("" + i);
-			idsStr += i + ",";
-		}
-		int result = this.##service_alias_name##.delByIds(list, null);
-		System.out.println(result);
-		
-		idsStr = idsStr.substring(0, idsStr.length()-1);
-		int result2 = this.##service_alias_name##.delByIds(idsStr, null);
-		System.out.println(result2);
-	}
-	
-	@Test
-	public void delWithInByTest() {
-		String arributeName = "id";
-		String delimiter = ",";
-		String values = "";
-		List<String> inValueList = new ArrayList<String>();
-		for(int i=0;i<5;i++) {
-			inValueList.add("200"+i);
-			values += i + ",";
-		}
-		values = values.substring(0, values.length()-1);
-		
-		int result = this.##service_alias_name##.delWithInBy(arributeName, values, delimiter, null);
-		System.out.println(result);
-		
-		int result2 = this.##service_alias_name##.delWithInBy(arributeName, inValueList, null);
-		System.out.println(result2);
-		
-		
+	public void deleteTest() {
+		##model_simple_name## paramModel = new ##model_simple_name##();
+		paramModel.setTenantCode("default_0");
 		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("id", "2000");
-		Map<String, List<?>> inMap = new HashMap<String, List<?>>();
-		inMap.put(arributeName, inValueList);
-		
-		int result3 = this.##service_alias_name##.delWithInBy(paramMap, inMap, null);
-		System.out.println(result3);
-		
+		List<String> idList = new ArrayList<String>();
+		idList.add("2000");
+		idList.add("2001");
+		paramMap.put("idList", idList);
+
+		int result = this.##service_alias_name##.delete(paramModel, paramMap);
+		System.out.println(result);
 	}
-	
-	/*********************** 物理删除 END **********************************/
-	
-	/*********************** 逻辑删除 BEGIN ********************************/
-	/*********************** 逻辑删除 END **********************************/
 	
 }

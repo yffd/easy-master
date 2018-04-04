@@ -1,132 +1,115 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.yffd.easy.uupm.dao.UupmApplicationDao">
+<mapper namespace="com.yffd.easy.uupm.mapper.IUupmApplicationMapper">
+
+
 	<!-- ######################################################################### -->
-	<!-- ##############################   基础sql开始    ############################## -->
+	<!-- #########################   common sql begin    ######################### -->
 	<!-- ######################################################################### -->
 	
-	<resultMap id="resutlId" type="com.yffd.easy.uupm.api.model.UupmApplicationModel">
-		<id column="ID" property="id" />
-		<result column="VERSION" property="version" />
-		<result column="DEL_FLAG" property="delFlag" />
-		<result column="CREATE_BY" property="createBy" />
-		<result column="CREATE_TIME" property="createTime" />
-		<result column="UPDATE_BY" property="updateBy" />
-		<result column="UPDATE_TIME" property="updateTime" />
-		<result column="APP_CODE" property="appCode" />
-		<result column="APP_CONTEXT_PATH" property="appContextPath" />
-		<result column="APP_DOMAIN" property="appDomain" />
-		<result column="APP_NAME" property="appName" />
-		<result column="APP_PORT" property="appPort" />
-		<result column="APP_STATUS" property="appStatus" />
-		<result column="APP_TYPE" property="appType" />
-		<result column="REMARK" property="remark" />
-	</resultMap>
-
 	<!-- 表名 -->
 	<sql id="table_name"> uupm_application </sql>
-
 	<!-- 列名 -->
 	<sql id="table_columns">
-		t.VERSION, t.DEL_FLAG, t.CREATE_BY, t.CREATE_TIME, t.UPDATE_BY, t.UPDATE_TIME, t.ID, t.APP_CODE, t.APP_CONTEXT_PATH, t.APP_DOMAIN, t.APP_NAME, t.APP_PORT, t.APP_STATUS, t.APP_TYPE, t.REMARK
+		t.VERSION as version, t.DEL_FLAG as delFlag, t.CREATE_BY as createBy, t.CREATE_TIME as createTime, t.UPDATE_BY as updateBy, 
+		t.UPDATE_TIME as updateTime, t.ID as id, t.TENANT_CODE as tenantCode, t.APP_CODE as appCode, t.APP_CONTEXT_PATH as appContextPath, 
+		t.APP_DOMAIN as appDomain, t.APP_NAME as appName, t.APP_PORT as appPort, t.APP_STATUS as appStatus, t.APP_TYPE as appType, 
+		t.REMARK as remark
 	</sql>
-
 	<!-- 分页条件 -->
-	<sql id="conditions_limit"><if test="pageParam != null"> limit #{pageParam.startIndex}, #{pageParam.pageLimit} </if></sql>
-
+	<sql id="conditions_limit"><if test="paramPage != null"> limit #{paramPage.startIndex}, #{paramPage.pageLimit} </if></sql>
 	<!-- 排序条件 -->
 	<sql id="conditions_orderby"> ORDER BY t.CREATE_TIME desc </sql>
-
 	<!-- 动态组装复合查询条件 -->
 	<sql id="conditions_where">
-		<!-- Equal query -->
-		<if test="version != null "> and t.VERSION = #{version} </if>
-		<if test="delFlag != null and delFlag != ''"> and t.DEL_FLAG = #{delFlag} </if>
-		<if test="createBy != null and createBy != ''"> and t.CREATE_BY = #{createBy} </if>
-		<if test="createTime != null "><![CDATA[ and t.CREATE_TIME = #{createTime}]]> </if>
-		<if test="updateBy != null and updateBy != ''"> and t.UPDATE_BY = #{updateBy} </if>
-		<if test="updateTime != null "><![CDATA[ and t.UPDATE_TIME = #{updateTime}]]> </if>
-		<if test="id != null and id != ''"> and t.ID = #{id} </if>
-		<if test="appCode != null and appCode != ''"> and t.APP_CODE = #{appCode} </if>
-		<if test="appContextPath != null and appContextPath != ''"> and t.APP_CONTEXT_PATH = #{appContextPath} </if>
-		<if test="appDomain != null and appDomain != ''"> and t.APP_DOMAIN = #{appDomain} </if>
-		<if test="appPort != null and appPort != ''"> and t.APP_PORT = #{appPort} </if>
-		<if test="appStatus != null and appStatus != ''"> and t.APP_STATUS = #{appStatus} </if>
-		<if test="appType != null and appType != ''"> and t.APP_TYPE = #{appType} </if>
-		<if test="remark != null and remark != ''"> and t.REMARK = #{remark} </if>
-		<!-- Like query -->
-		<if test="appName != null and appName != ''"> and t.APP_NAME like CONCAT(CONCAT('%', #{appName}), '%') </if>
-	
-		<!-- 非model属性：in条件处理拼写，要求List集合中的值能转换成key-value形式，例如map、自定义model对象等 -->
-		<if test="idList != null and idList.size()>0">
-		and ID in <foreach item="item" index="index" collection="idList" open="(" separator="," close=")">#{item}</foreach>
+		<if test="paramPo != null">
+			<!-- Equal query -->
+			<if test="paramPo.version != null "> and t.VERSION = #{paramPo.version} </if>
+			<if test="paramPo.delFlag != null and paramPo.delFlag != ''"> and t.DEL_FLAG = #{paramPo.delFlag} </if>
+			<if test="paramPo.createBy != null and paramPo.createBy != ''"> and t.CREATE_BY = #{paramPo.createBy} </if>
+			<if test="paramPo.createTime != null "><![CDATA[ and t.CREATE_TIME = #{paramPo.createTime}]]> </if>
+			<if test="paramPo.updateBy != null and paramPo.updateBy != ''"> and t.UPDATE_BY = #{paramPo.updateBy} </if>
+			<if test="paramPo.updateTime != null "><![CDATA[ and t.UPDATE_TIME = #{paramPo.updateTime}]]> </if>
+			<if test="paramPo.id != null and paramPo.id != ''"> and t.ID = #{paramPo.id} </if>
+			<if test="paramPo.tenantCode != null and paramPo.tenantCode != ''"> and t.TENANT_CODE = #{paramPo.tenantCode} </if>
+			<if test="paramPo.appCode != null and paramPo.appCode != ''"> and t.APP_CODE = #{paramPo.appCode} </if>
+			<if test="paramPo.appContextPath != null and paramPo.appContextPath != ''"> and t.APP_CONTEXT_PATH = #{paramPo.appContextPath} </if>
+			<if test="paramPo.appDomain != null and paramPo.appDomain != ''"> and t.APP_DOMAIN = #{paramPo.appDomain} </if>
+			<if test="paramPo.appPort != null and paramPo.appPort != ''"> and t.APP_PORT = #{paramPo.appPort} </if>
+			<if test="paramPo.appStatus != null and paramPo.appStatus != ''"> and t.APP_STATUS = #{paramPo.appStatus} </if>
+			<if test="paramPo.appType != null and paramPo.appType != ''"> and t.APP_TYPE = #{paramPo.appType} </if>
+			<!-- Like query -->
+			<if test="paramPo.appName != null and paramPo.appName != ''"> and t.APP_NAME like CONCAT(CONCAT('%', #{paramPo.appName}), '%') </if>
 		</if>
-		<if test="appCodeList != null and appCodeList.size()>0">
-		and APP_CODE in <foreach item="item" index="index" collection="appCodeList" open="(" separator="," close=")">#{item}</foreach>
+		<!-- 非model属性：in条件处理拼写 -->
+		<if test="paramMap != null">
+			<if test="paramMap.appCodeList != null and paramMap.appCodeList.size()>0">
+			and t.APP_CODE in <foreach item="item" index="index" collection="paramMap.appCodeList" open="(" separator="," close=") ">#{item}</foreach>
+			</if>
+			<if test="paramMap.appContextPathList != null and paramMap.appContextPathList.size()>0">
+			and t.APP_CONTEXT_PATH in <foreach item="item" index="index" collection="paramMap.appContextPathList" open="(" separator="," close=") ">#{item}</foreach>
+			</if>
+			<if test="paramMap.appDomainList != null and paramMap.appDomainList.size()>0">
+			and t.APP_DOMAIN in <foreach item="item" index="index" collection="paramMap.appDomainList" open="(" separator="," close=") ">#{item}</foreach>
+			</if>
+			<if test="paramMap.appNameList != null and paramMap.appNameList.size()>0">
+			and t.APP_NAME in <foreach item="item" index="index" collection="paramMap.appNameList" open="(" separator="," close=") ">#{item}</foreach>
+			</if>
+			<if test="paramMap.appPortList != null and paramMap.appPortList.size()>0">
+			and t.APP_PORT in <foreach item="item" index="index" collection="paramMap.appPortList" open="(" separator="," close=") ">#{item}</foreach>
+			</if>
+			<if test="paramMap.appStatusList != null and paramMap.appStatusList.size()>0">
+			and t.APP_STATUS in <foreach item="item" index="index" collection="paramMap.appStatusList" open="(" separator="," close=") ">#{item}</foreach>
+			</if>
+			<if test="paramMap.appTypeList != null and paramMap.appTypeList.size()>0">
+			and t.APP_TYPE in <foreach item="item" index="index" collection="paramMap.appTypeList" open="(" separator="," close=") ">#{item}</foreach>
+			</if>
+			<if test="paramMap.idList != null and paramMap.idList.size()>0">
+			and t.ID in <foreach item="item" index="index" collection="paramMap.idList" open="(" separator="," close=") ">#{item}</foreach>
+			</if>
+			<if test="paramMap.tenantCodeList != null and paramMap.tenantCodeList.size()>0">
+			and t.TENANT_CODE in <foreach item="item" index="index" collection="paramMap.tenantCodeList" open="(" separator="," close=") ">#{item}</foreach>
+			</if>
 		</if>
-		<if test="appContextPathList != null and appContextPathList.size()>0">
-		and APP_CONTEXT_PATH in <foreach item="item" index="index" collection="appContextPathList" open="(" separator="," close=")">#{item}</foreach>
-		</if>
-		<if test="appDomainList != null and appDomainList.size()>0">
-		and APP_DOMAIN in <foreach item="item" index="index" collection="appDomainList" open="(" separator="," close=")">#{item}</foreach>
-		</if>
-		<if test="appNameList != null and appNameList.size()>0">
-		and APP_NAME in <foreach item="item" index="index" collection="appNameList" open="(" separator="," close=")">#{item}</foreach>
-		</if>
-		<if test="appPortList != null and appPortList.size()>0">
-		and APP_PORT in <foreach item="item" index="index" collection="appPortList" open="(" separator="," close=")">#{item}</foreach>
-		</if>
-		<if test="appStatusList != null and appStatusList.size()>0">
-		and APP_STATUS in <foreach item="item" index="index" collection="appStatusList" open="(" separator="," close=")">#{item}</foreach>
-		</if>
-		<if test="appTypeList != null and appTypeList.size()>0">
-		and APP_TYPE in <foreach item="item" index="index" collection="appTypeList" open="(" separator="," close=")">#{item}</foreach>
-		</if>
-	
 	</sql>
-
 	<!-- 条件查询 -->
-	<select id="selectListBy" parameterType="java.util.Map" resultMap="resutlId">
+	<select id="selectListBy" parameterType="java.util.Map" resultType="com.yffd.easy.uupm.api.model.UupmApplicationModel">
 		select <include refid="table_columns" />
-		from <include refid="table_name"/>  as t 
+		from <include refid="table_name"/> as t 
 		<where>
 			<include refid="conditions_where" />
 		</where>
 		<include refid="conditions_orderby" />
 		<include refid="conditions_limit" />
 	</select>
-
 	<!-- 统计查询 -->
 	<select id="selectCountBy" parameterType="java.util.Map" resultType="long">
 		select count(1) from 
-		<include refid="table_name"/>  as t 
+		<include refid="table_name"/> as t 
 		<where>
 			<include refid="conditions_where" />
 		</where>
 	</select>
-
 	<!-- 单条查询 -->
-	<select id="selectOneBy" parameterType="java.util.Map" resultMap="resutlId">
+	<select id="selectOneBy" parameterType="java.util.Map" resultType="com.yffd.easy.uupm.api.model.UupmApplicationModel">
 		select <include refid="table_columns" /> 
-		from <include refid="table_name"/>  as t 
+		from <include refid="table_name"/> as t 
 		<where>
 			<include refid="conditions_where" />
 		</where>
 	</select>
-
 	<!-- 单条插入 -->
 	<insert id="insertOne" parameterType="java.util.Map" keyProperty="id" useGeneratedKeys="true">
 		insert into
 		<include refid="table_name" />
-		(VERSION, DEL_FLAG, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME, APP_CODE, APP_CONTEXT_PATH, APP_DOMAIN, APP_NAME, APP_PORT, APP_STATUS, APP_TYPE, REMARK)
+		(VERSION, DEL_FLAG, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME, TENANT_CODE, APP_CODE, APP_CONTEXT_PATH, APP_DOMAIN, APP_NAME, APP_PORT, APP_STATUS, APP_TYPE, REMARK)
 		values
-		(#{version}, #{delFlag}, #{createBy}, #{createTime}, #{updateBy}, #{updateTime}, #{appCode}, #{appContextPath}, #{appDomain}, #{appName}, #{appPort}, #{appStatus}, #{appType}, #{remark})
+		(#{version}, #{delFlag}, #{createBy}, #{createTime}, #{updateBy}, #{updateTime}, #{tenantCode}, #{appCode}, #{appContextPath}, #{appDomain}, #{appName}, #{appPort}, #{appStatus}, #{appType}, #{remark})
 	</insert>
-
 	<!-- 批量插入 -->
-	<insert id="insertBatch" parameterType="java.util.Map" keyProperty="id" useGeneratedKeys="true">
+	<insert id="insertList" parameterType="java.util.Map" keyProperty="id" useGeneratedKeys="true">
 		insert into <include refid="table_name" />
-		(VERSION, DEL_FLAG, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME, APP_CODE, APP_CONTEXT_PATH, APP_DOMAIN, APP_NAME, APP_PORT, APP_STATUS, APP_TYPE, REMARK)
+		(VERSION, DEL_FLAG, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME, TENANT_CODE, APP_CODE, APP_CONTEXT_PATH, APP_DOMAIN, APP_NAME, APP_PORT, APP_STATUS, APP_TYPE, REMARK)
 		values
 		<foreach collection="list" item="item" index="index" separator=",">
 		(#{item.version},
@@ -135,6 +118,7 @@
 		#{item.createTime},
 		#{item.updateBy},
 		#{item.updateTime},
+		#{item.tenantCode},
 		#{item.appCode},
 		#{item.appContextPath},
 		#{item.appDomain},
@@ -145,128 +129,133 @@
 		#{item.remark})
 		</foreach>
 	</insert>
-
 	<!-- 更新 -->
 	<update id="updateBy" parameterType="java.util.Map">
 		update <include refid="table_name" />
 		<set>
-		<if test="newParam != null">
+		<if test="paramPo != null">
 			VERSION = VERSION + 1, 
-			<if test="newParam.delFlag != null and newParam.delFlag != ''"> DEL_FLAG = #{newParam.delFlag},  </if>
-			<if test="newParam.updateBy != null and newParam.updateBy != ''"> UPDATE_BY = #{newParam.updateBy},  </if>
-			<if test="newParam.updateTime != null"> UPDATE_TIME = #{newParam.updateTime},  </if>
-			<if test="newParam.appCode != null and newParam.appCode != ''"> APP_CODE = #{newParam.appCode},  </if>
-			<if test="newParam.appContextPath != null and newParam.appContextPath != ''"> APP_CONTEXT_PATH = #{newParam.appContextPath},  </if>
-			<if test="newParam.appDomain != null and newParam.appDomain != ''"> APP_DOMAIN = #{newParam.appDomain},  </if>
-			<if test="newParam.appName != null and newParam.appName != ''"> APP_NAME = #{newParam.appName},  </if>
-			<if test="newParam.appPort != null and newParam.appPort != ''"> APP_PORT = #{newParam.appPort},  </if>
-			<if test="newParam.appStatus != null and newParam.appStatus != ''"> APP_STATUS = #{newParam.appStatus},  </if>
-			<if test="newParam.appType != null and newParam.appType != ''"> APP_TYPE = #{newParam.appType},  </if>
-			<if test="newParam.remark != null and newParam.remark != ''"> REMARK = #{newParam.remark},  </if>
+			<if test="paramPo.delFlag != null and paramPo.delFlag != ''"> DEL_FLAG = #{paramPo.delFlag},  </if>
+			<if test="paramPo.updateBy != null and paramPo.updateBy != ''"> UPDATE_BY = #{paramPo.updateBy},  </if>
+			<if test="paramPo.updateTime != null"> UPDATE_TIME = #{paramPo.updateTime},  </if>
+			<if test="paramPo.tenantCode != null and paramPo.tenantCode != ''"> TENANT_CODE = #{paramPo.tenantCode},  </if>
+			<if test="paramPo.appCode != null and paramPo.appCode != ''"> APP_CODE = #{paramPo.appCode},  </if>
+			<if test="paramPo.appContextPath != null and paramPo.appContextPath != ''"> APP_CONTEXT_PATH = #{paramPo.appContextPath},  </if>
+			<if test="paramPo.appDomain != null and paramPo.appDomain != ''"> APP_DOMAIN = #{paramPo.appDomain},  </if>
+			<if test="paramPo.appName != null and paramPo.appName != ''"> APP_NAME = #{paramPo.appName},  </if>
+			<if test="paramPo.appPort != null and paramPo.appPort != ''"> APP_PORT = #{paramPo.appPort},  </if>
+			<if test="paramPo.appStatus != null and paramPo.appStatus != ''"> APP_STATUS = #{paramPo.appStatus},  </if>
+			<if test="paramPo.appType != null and paramPo.appType != ''"> APP_TYPE = #{paramPo.appType},  </if>
+			<if test="paramPo.remark != null and paramPo.remark != ''"> REMARK = #{paramPo.remark},  </if>
 		</if>
 		</set>
 		<where>
-		<if test="oldParam != null">
-			<if test="oldParam.version != null"> and VERSION = #{oldParam.version}  </if>
-			<if test="oldParam.delFlag != null and oldParam.delFlag != ''"> and DEL_FLAG = #{oldParam.delFlag}  </if>
-			<if test="oldParam.createBy != null and oldParam.createBy != ''"> and CREATE_BY = #{oldParam.createBy}  </if>
-			<if test="oldParam.createTime != null"><![CDATA[ and CREATE_TIME = #{oldParam.createTime} ]]> </if>
-			<if test="oldParam.id != null and oldParam.id != ''"> and ID = #{oldParam.id}  </if>
-			<if test="oldParam.appCode != null and oldParam.appCode != ''"> and APP_CODE = #{oldParam.appCode}  </if>
-			<if test="oldParam.appContextPath != null and oldParam.appContextPath != ''"> and APP_CONTEXT_PATH = #{oldParam.appContextPath}  </if>
-			<if test="oldParam.appDomain != null and oldParam.appDomain != ''"> and APP_DOMAIN = #{oldParam.appDomain}  </if>
-			<if test="oldParam.appName != null and oldParam.appName != ''"> and APP_NAME = #{oldParam.appName}  </if>
-			<if test="oldParam.appPort != null and oldParam.appPort != ''"> and APP_PORT = #{oldParam.appPort}  </if>
-			<if test="oldParam.appStatus != null and oldParam.appStatus != ''"> and APP_STATUS = #{oldParam.appStatus}  </if>
-			<if test="oldParam.appType != null and oldParam.appType != ''"> and APP_TYPE = #{oldParam.appType}  </if>
-			<if test="oldParam.remark != null and oldParam.remark != ''"> and REMARK = #{oldParam.remark}  </if>
+		<if test="paramPoOld != null">
+			<if test="paramPoOld.version != null"> and VERSION = #{paramPoOld.version}  </if>
+			<if test="paramPoOld.delFlag != null and paramPoOld.delFlag != ''"> and DEL_FLAG = #{paramPoOld.delFlag}  </if>
+			<if test="paramPoOld.createBy != null and paramPoOld.createBy != ''"> and CREATE_BY = #{paramPoOld.createBy}  </if>
+			<if test="paramPoOld.createTime != null"><![CDATA[ and CREATE_TIME = #{paramPoOld.createTime} ]]> </if>
+			<if test="paramPoOld.id != null and paramPoOld.id != ''"> and ID = #{paramPoOld.id}  </if>
+			<if test="paramPoOld.tenantCode != null and paramPoOld.tenantCode != ''"> and TENANT_CODE = #{paramPoOld.tenantCode}  </if>
+			<if test="paramPoOld.appCode != null and paramPoOld.appCode != ''"> and APP_CODE = #{paramPoOld.appCode}  </if>
+			<if test="paramPoOld.appContextPath != null and paramPoOld.appContextPath != ''"> and APP_CONTEXT_PATH = #{paramPoOld.appContextPath}  </if>
+			<if test="paramPoOld.appDomain != null and paramPoOld.appDomain != ''"> and APP_DOMAIN = #{paramPoOld.appDomain}  </if>
+			<if test="paramPoOld.appName != null and paramPoOld.appName != ''"> and APP_NAME = #{paramPoOld.appName}  </if>
+			<if test="paramPoOld.appPort != null and paramPoOld.appPort != ''"> and APP_PORT = #{paramPoOld.appPort}  </if>
+			<if test="paramPoOld.appStatus != null and paramPoOld.appStatus != ''"> and APP_STATUS = #{paramPoOld.appStatus}  </if>
+			<if test="paramPoOld.appType != null and paramPoOld.appType != ''"> and APP_TYPE = #{paramPoOld.appType}  </if>
 		</if>
-		<if test="oldInParam != null">
-			<!-- 非model属性：in条件处理拼写，要求List集合中的值能转换成key-value形式，例如map、自定义model对象等 -->
-			<if test="oldInParam.idList != null and oldInParam.idList.size()>0">
-			and ID in <foreach item="item" index="index" collection="oldInParam.idList" open="(" separator="," close=")">#{item}</foreach>
+		<!-- 非model属性：in条件处理拼写 -->
+		<if test="paramMap != null">
+			<if test="paramMap.appCodeList != null and paramMap.appCodeList.size()>0">
+			and APP_CODE in <foreach item="item" index="index" collection="paramMap.appCodeList" open="(" separator="," close=") ">#{item}</foreach>
 			</if>
-			<if test="oldInParam.appCodeList != null and oldInParam.appCodeList.size()>0">
-			and APP_CODE in <foreach item="item" index="index" collection="oldInParam.appCodeList" open="(" separator="," close=")">#{item}</foreach>
+			<if test="paramMap.appContextPathList != null and paramMap.appContextPathList.size()>0">
+			and APP_CONTEXT_PATH in <foreach item="item" index="index" collection="paramMap.appContextPathList" open="(" separator="," close=") ">#{item}</foreach>
 			</if>
-			<if test="oldInParam.appContextPathList != null and oldInParam.appContextPathList.size()>0">
-			and APP_CONTEXT_PATH in <foreach item="item" index="index" collection="oldInParam.appContextPathList" open="(" separator="," close=")">#{item}</foreach>
+			<if test="paramMap.appDomainList != null and paramMap.appDomainList.size()>0">
+			and APP_DOMAIN in <foreach item="item" index="index" collection="paramMap.appDomainList" open="(" separator="," close=") ">#{item}</foreach>
 			</if>
-			<if test="oldInParam.appDomainList != null and oldInParam.appDomainList.size()>0">
-			and APP_DOMAIN in <foreach item="item" index="index" collection="oldInParam.appDomainList" open="(" separator="," close=")">#{item}</foreach>
+			<if test="paramMap.appNameList != null and paramMap.appNameList.size()>0">
+			and APP_NAME in <foreach item="item" index="index" collection="paramMap.appNameList" open="(" separator="," close=") ">#{item}</foreach>
 			</if>
-			<if test="oldInParam.appNameList != null and oldInParam.appNameList.size()>0">
-			and APP_NAME in <foreach item="item" index="index" collection="oldInParam.appNameList" open="(" separator="," close=")">#{item}</foreach>
+			<if test="paramMap.appPortList != null and paramMap.appPortList.size()>0">
+			and APP_PORT in <foreach item="item" index="index" collection="paramMap.appPortList" open="(" separator="," close=") ">#{item}</foreach>
 			</if>
-			<if test="oldInParam.appPortList != null and oldInParam.appPortList.size()>0">
-			and APP_PORT in <foreach item="item" index="index" collection="oldInParam.appPortList" open="(" separator="," close=")">#{item}</foreach>
+			<if test="paramMap.appStatusList != null and paramMap.appStatusList.size()>0">
+			and APP_STATUS in <foreach item="item" index="index" collection="paramMap.appStatusList" open="(" separator="," close=") ">#{item}</foreach>
 			</if>
-			<if test="oldInParam.appStatusList != null and oldInParam.appStatusList.size()>0">
-			and APP_STATUS in <foreach item="item" index="index" collection="oldInParam.appStatusList" open="(" separator="," close=")">#{item}</foreach>
+			<if test="paramMap.appTypeList != null and paramMap.appTypeList.size()>0">
+			and APP_TYPE in <foreach item="item" index="index" collection="paramMap.appTypeList" open="(" separator="," close=") ">#{item}</foreach>
 			</if>
-			<if test="oldInParam.appTypeList != null and oldInParam.appTypeList.size()>0">
-			and APP_TYPE in <foreach item="item" index="index" collection="oldInParam.appTypeList" open="(" separator="," close=")">#{item}</foreach>
+			<if test="paramMap.idList != null and paramMap.idList.size()>0">
+			and ID in <foreach item="item" index="index" collection="paramMap.idList" open="(" separator="," close=") ">#{item}</foreach>
+			</if>
+			<if test="paramMap.tenantCodeList != null and paramMap.tenantCodeList.size()>0">
+			and TENANT_CODE in <foreach item="item" index="index" collection="paramMap.tenantCodeList" open="(" separator="," close=") ">#{item}</foreach>
 			</if>
 		</if>
 		<!-- 防止没有参数传递，导致全部更新 -->
 		or 1=2
 		</where>
 	</update>
-
 	<!-- 删除 -->
 	<delete id="deleteBy" parameterType="java.util.Map">
 		delete from <include refid="table_name" />
 		<where>
-		<!-- model属性： -->
-		<if test="version != null "> and VERSION = #{version} </if>
-		<if test="delFlag != null and delFlag != ''"> and DEL_FLAG = #{delFlag} </if>
-		<if test="createBy != null and createBy != ''"> and CREATE_BY = #{createBy} </if>
-		<if test="createTime != null "><![CDATA[ and CREATE_TIME = #{createTime}]]> </if>
-		<if test="updateBy != null and updateBy != ''"> and UPDATE_BY = #{updateBy} </if>
-		<if test="updateTime != null "><![CDATA[ and UPDATE_TIME = #{updateTime}]]> </if>
-		<if test="id != null and id != ''"> and ID = #{id} </if>
-		<if test="appCode != null and appCode != ''"> and APP_CODE = #{appCode} </if>
-		<if test="appContextPath != null and appContextPath != ''"> and APP_CONTEXT_PATH = #{appContextPath} </if>
-		<if test="appDomain != null and appDomain != ''"> and APP_DOMAIN = #{appDomain} </if>
-		<if test="appName != null and appName != ''"> and APP_NAME = #{appName} </if>
-		<if test="appPort != null and appPort != ''"> and APP_PORT = #{appPort} </if>
-		<if test="appStatus != null and appStatus != ''"> and APP_STATUS = #{appStatus} </if>
-		<if test="appType != null and appType != ''"> and APP_TYPE = #{appType} </if>
-		<if test="remark != null and remark != ''"> and REMARK = #{remark} </if>
-		
-		<!-- 非model属性：in条件处理拼写，要求List集合中的值能转换成key-value形式，例如map、自定义model对象等 -->
-		<if test="idList != null and idList.size()>0">
-		and ID in <foreach item="item" index="index" collection="idList" open="(" separator="," close=")">#{item}</foreach>
+		<if test="paramPo != null">
+			<if test="paramPo.version != null "> and VERSION = #{paramPo.version} </if>
+			<if test="paramPo.delFlag != null and paramPo.delFlag != ''"> and DEL_FLAG = #{paramPo.delFlag} </if>
+			<if test="paramPo.createBy != null and paramPo.createBy != ''"> and CREATE_BY = #{paramPo.createBy} </if>
+			<if test="paramPo.createTime != null "><![CDATA[ and CREATE_TIME = #{paramPo.createTime}]]> </if>
+			<if test="paramPo.updateBy != null and paramPo.updateBy != ''"> and UPDATE_BY = #{paramPo.updateBy} </if>
+			<if test="paramPo.updateTime != null "><![CDATA[ and UPDATE_TIME = #{paramPo.updateTime}]]> </if>
+			<if test="paramPo.id != null and paramPo.id != ''"> and ID = #{paramPo.id} </if>
+			<if test="paramPo.tenantCode != null and paramPo.tenantCode != ''"> and TENANT_CODE = #{paramPo.tenantCode} </if>
+			<if test="paramPo.appCode != null and paramPo.appCode != ''"> and APP_CODE = #{paramPo.appCode} </if>
+			<if test="paramPo.appContextPath != null and paramPo.appContextPath != ''"> and APP_CONTEXT_PATH = #{paramPo.appContextPath} </if>
+			<if test="paramPo.appDomain != null and paramPo.appDomain != ''"> and APP_DOMAIN = #{paramPo.appDomain} </if>
+			<if test="paramPo.appName != null and paramPo.appName != ''"> and APP_NAME = #{paramPo.appName} </if>
+			<if test="paramPo.appPort != null and paramPo.appPort != ''"> and APP_PORT = #{paramPo.appPort} </if>
+			<if test="paramPo.appStatus != null and paramPo.appStatus != ''"> and APP_STATUS = #{paramPo.appStatus} </if>
+			<if test="paramPo.appType != null and paramPo.appType != ''"> and APP_TYPE = #{paramPo.appType} </if>
 		</if>
-		<if test="appCodeList != null and appCodeList.size()>0">
-		and APP_CODE in <foreach item="item" index="index" collection="appCodeList" open="(" separator="," close=")">#{item}</foreach>
+		<!-- 非model属性：in条件处理拼写 -->
+		<if test="paramMap != null">
+			<if test="paramMap.appCodeList != null and paramMap.appCodeList.size()>0">
+			and APP_CODE in <foreach item="item" index="index" collection="paramMap.appCodeList" open="(" separator="," close=") ">#{item}</foreach>
+			</if>
+			<if test="paramMap.appContextPathList != null and paramMap.appContextPathList.size()>0">
+			and APP_CONTEXT_PATH in <foreach item="item" index="index" collection="paramMap.appContextPathList" open="(" separator="," close=") ">#{item}</foreach>
+			</if>
+			<if test="paramMap.appDomainList != null and paramMap.appDomainList.size()>0">
+			and APP_DOMAIN in <foreach item="item" index="index" collection="paramMap.appDomainList" open="(" separator="," close=") ">#{item}</foreach>
+			</if>
+			<if test="paramMap.appNameList != null and paramMap.appNameList.size()>0">
+			and APP_NAME in <foreach item="item" index="index" collection="paramMap.appNameList" open="(" separator="," close=") ">#{item}</foreach>
+			</if>
+			<if test="paramMap.appPortList != null and paramMap.appPortList.size()>0">
+			and APP_PORT in <foreach item="item" index="index" collection="paramMap.appPortList" open="(" separator="," close=") ">#{item}</foreach>
+			</if>
+			<if test="paramMap.appStatusList != null and paramMap.appStatusList.size()>0">
+			and APP_STATUS in <foreach item="item" index="index" collection="paramMap.appStatusList" open="(" separator="," close=") ">#{item}</foreach>
+			</if>
+			<if test="paramMap.appTypeList != null and paramMap.appTypeList.size()>0">
+			and APP_TYPE in <foreach item="item" index="index" collection="paramMap.appTypeList" open="(" separator="," close=") ">#{item}</foreach>
+			</if>
+			<if test="paramMap.idList != null and paramMap.idList.size()>0">
+			and ID in <foreach item="item" index="index" collection="paramMap.idList" open="(" separator="," close=") ">#{item}</foreach>
+			</if>
+			<if test="paramMap.tenantCodeList != null and paramMap.tenantCodeList.size()>0">
+			and TENANT_CODE in <foreach item="item" index="index" collection="paramMap.tenantCodeList" open="(" separator="," close=") ">#{item}</foreach>
+			</if>
 		</if>
-		<if test="appContextPathList != null and appContextPathList.size()>0">
-		and APP_CONTEXT_PATH in <foreach item="item" index="index" collection="appContextPathList" open="(" separator="," close=")">#{item}</foreach>
-		</if>
-		<if test="appDomainList != null and appDomainList.size()>0">
-		and APP_DOMAIN in <foreach item="item" index="index" collection="appDomainList" open="(" separator="," close=")">#{item}</foreach>
-		</if>
-		<if test="appNameList != null and appNameList.size()>0">
-		and APP_NAME in <foreach item="item" index="index" collection="appNameList" open="(" separator="," close=")">#{item}</foreach>
-		</if>
-		<if test="appPortList != null and appPortList.size()>0">
-		and APP_PORT in <foreach item="item" index="index" collection="appPortList" open="(" separator="," close=")">#{item}</foreach>
-		</if>
-		<if test="appStatusList != null and appStatusList.size()>0">
-		and APP_STATUS in <foreach item="item" index="index" collection="appStatusList" open="(" separator="," close=")">#{item}</foreach>
-		</if>
-		<if test="appTypeList != null and appTypeList.size()>0">
-		and APP_TYPE in <foreach item="item" index="index" collection="appTypeList" open="(" separator="," close=")">#{item}</foreach>
-		</if>
-		
 		<!-- 防止没有参数传递，导致全部删除 -->
 		or 1=2
 		</where>
 	</delete>
-
 	<!-- ######################################################################### -->
-	<!-- ##############################   基础sql结束    ############################## -->
+	<!-- ##########################   common sql end    ########################## -->
 	<!-- ######################################################################### -->
 
 </mapper>

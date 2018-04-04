@@ -1,7 +1,10 @@
 package com.yffd.easy.uupm.web.controller;
 
-import java.util.HashMap;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +19,7 @@ import com.yffd.easy.framework.domain.RespModel;
 import com.yffd.easy.framework.web.view.vo.DataGridVO;
 import com.yffd.easy.uupm.api.model.UupmTenantModel;
 import com.yffd.easy.uupm.service.UupmTenantService;
+import com.yffd.easy.uupm.web.common.UupmCommonController;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -27,7 +31,7 @@ import com.yffd.easy.uupm.service.UupmTenantService;
  */
 @RestController
 @RequestMapping("/uupm/tenant")
-public class UupmTenantController extends UupmBaseController {
+public class UupmTenantController extends UupmCommonController {
 
 	@Autowired
 	private UupmTenantService uupmTenantService;
@@ -35,7 +39,7 @@ public class UupmTenantController extends UupmBaseController {
 	@RequestMapping(value="/findPage", method=RequestMethod.POST)
 	public RespModel findPage(@RequestParam Map<String, Object> paramMap) {
 		PageParam pageParam = this.getPageParam(paramMap);
-		PageResult<UupmTenantModel> pageResult = this.uupmTenantService.findPage(paramMap, pageParam);
+		PageResult<UupmTenantModel> pageResult = this.uupmTenantService.findPage(null, paramMap, pageParam, null);
 		DataGridVO dataGridVO = this.toDataGrid(pageResult);
 		return this.successAjax(dataGridVO);
 	}
@@ -43,9 +47,9 @@ public class UupmTenantController extends UupmBaseController {
 	@RequestMapping(value="/add", method=RequestMethod.POST)
 	public RespModel add(UupmTenantModel model) {
 		if(null==model || EasyStringCheckUtils.isEmpty(model.getTenantCode())) return this.error("参数无效");
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("tenantCode", model.getTenantCode());
-		UupmTenantModel hasModel = (UupmTenantModel) this.uupmTenantService.findOne(paramMap);
+		UupmTenantModel paramModel = new UupmTenantModel();
+		paramModel.setTenantCode(model.getTenantCode());
+		UupmTenantModel hasModel = (UupmTenantModel) this.uupmTenantService.findOne(paramModel, null);
 		if(null!=hasModel) return this.errorAjax("租户编号已存在");
 		this.uupmTenantService.addOne(model, null);
 		return this.successAjax();
@@ -56,14 +60,29 @@ public class UupmTenantController extends UupmBaseController {
 		if(null==model || EasyStringCheckUtils.isEmpty(model.getId())) {
 			return this.error("参数无效");
 		}
-		this.uupmTenantService.updateById(model, null);
+		UupmTenantModel old = new UupmTenantModel();
+		old.setId(model.getId());
+		int result = this.uupmTenantService.update(model, old, null, null);
+		if(result==0) return this.error("更新失败");
 		return this.successAjax();
 	}
 	
 	@RequestMapping(value="/delById", method=RequestMethod.POST)
 	public RespModel delById(String id) {
 		if(EasyStringCheckUtils.isEmpty(id)) return this.errorAjax("参数无效");
-		this.uupmTenantService.delById(id, null);
+		int result = this.uupmTenantService.deleteBy("id", id);
+		if(result==0) return this.error("删除失败");
+		return this.successAjax();
+	}
+	
+	@RequestMapping(value="/delBatch", method=RequestMethod.POST)
+	public RespModel delBatch(HttpServletRequest req) {
+		String ids = req.getParameter("ids");
+		if(EasyStringCheckUtils.isEmpty(ids)) return this.error("参数无效");
+		String[] idsArr = ids.split(",");
+		List<String> idsList = Arrays.asList(idsArr);
+		int result = this.uupmTenantService.delete("idList", idsList);
+		if(result==0) return this.error("删除失败");
 		return this.successAjax();
 	}
 }

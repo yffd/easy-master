@@ -3,8 +3,6 @@ package com.yffd.easy.uupm.web.controller;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -13,10 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.yffd.easy.common.core.util.EasyStringCheckUtils;
 import com.yffd.easy.framework.domain.RespModel;
-import com.yffd.easy.uupm.api.model.UupmDictionaryModel;
-import com.yffd.easy.uupm.service.UupmDictionaryService;
-import com.yffd.easy.uupm.web.support.UupmDictionarySupport;
-import com.yffd.easy.uupm.web.vo.UupmDictionaryComboTreeVO;
+import com.yffd.easy.uupm.api.model.UupmTreeDictionaryModel;
+import com.yffd.easy.uupm.service.UupmTreeDictionaryService;
+import com.yffd.easy.uupm.web.common.UupmCommonController;
+import com.yffd.easy.uupm.web.support.UupmTreeNodeSupport;
+import com.yffd.easy.uupm.web.vo.UupmTreeNodeComboTreeVO;
 
 
 /**
@@ -29,93 +28,77 @@ import com.yffd.easy.uupm.web.vo.UupmDictionaryComboTreeVO;
  */
 @RestController
 @RequestMapping("/uupm/dictionary")
-public class UupmDictionaryController extends UupmBaseController {
+public class UupmDictionaryController extends UupmCommonController {
 	@Autowired
-	private UupmDictionaryService uupmDictionaryService;
+	private UupmTreeDictionaryService uupmTreeDictionaryService;
 	@Autowired
-	private UupmDictionarySupport uupmDictionarySupport;
+	private UupmTreeNodeSupport uupmTreeNodeSupport;
 	
-	@RequestMapping(value="/listCategory", method=RequestMethod.POST)
-	public RespModel listCategory(@RequestParam Map<String, Object> paramMap) {
-		List<UupmDictionaryModel> result = this.uupmDictionaryService.findChildrenListForCategory("CATEGORY");
+	@RequestMapping(value="/listRoot", method=RequestMethod.POST)
+	public RespModel listRoot(@RequestParam Map<String, Object> paramMap) {
+		String nodeStatus = null;
+		List<UupmTreeDictionaryModel> result = this.uupmTreeDictionaryService.findRootNodeList(nodeStatus, null);
 		if(null!=result && !result.isEmpty()) {
-			List<UupmDictionaryComboTreeVO> treeList = this.uupmDictionarySupport.toSyncTreeVO(result, null);
+			List<UupmTreeNodeComboTreeVO> treeList = this.uupmTreeNodeSupport.toSyncTreeVO(result, "root");
 			return this.successAjax(treeList);
 		}
 		return this.successAjax();
 	}
 	
-	@RequestMapping(value="/listDictTree", method=RequestMethod.POST)
-	public RespModel listDictTree(@RequestParam Map<String, Object> paramMap) {
-		String parentCode = (String) paramMap.get("parentCode");
-		if(null==parentCode || EasyStringCheckUtils.isEmpty(parentCode)) return this.error("参数无效");
-		List<UupmDictionaryModel> result = this.uupmDictionaryService.findChildrenListForDict(parentCode);
+	@RequestMapping(value="/listChildren", method=RequestMethod.POST)
+	public RespModel listChildren(@RequestParam Map<String, Object> paramMap) {
+		String nodeLabel = (String) paramMap.get("nodeLabel");
+		String nodeCode = (String) paramMap.get("nodeCode");
+		if(null==nodeLabel || EasyStringCheckUtils.isEmpty(nodeLabel)
+				|| null==nodeCode || EasyStringCheckUtils.isEmpty(nodeCode)) return this.error("参数无效");
+		List<UupmTreeDictionaryModel> result = this.uupmTreeDictionaryService.findChildrenNodeList(nodeLabel, nodeCode, null);
 		if(null!=result && !result.isEmpty()) {
-			List<UupmDictionaryComboTreeVO> treeList = this.uupmDictionarySupport.toSyncTreeVO(result, parentCode);
+			List<UupmTreeNodeComboTreeVO> treeList = this.uupmTreeNodeSupport.toSyncTreeVO(result, nodeCode);
 			return this.successAjax(treeList);
 		}
 		return this.successAjax();
 	}
 	
-	@RequestMapping(value="/findOne", method=RequestMethod.POST)
-	public RespModel findOne(UupmDictionaryModel model) {
-		if(null==model || EasyStringCheckUtils.isEmpty(model.getId())) return this.error("参数无效");
-		UupmDictionaryModel result = this.uupmDictionaryService.findOne(model);
-		return this.successAjax(result);
-	}
-	
-	@RequestMapping(value="/addCategory", method=RequestMethod.POST)
-	public RespModel addCategory(UupmDictionaryModel model) {
-		if(null==model || EasyStringCheckUtils.isEmpty(model.getItemCode())) return this.error("参数无效");
+	@RequestMapping(value="/addRoot", method=RequestMethod.POST)
+	public RespModel addRoot(UupmTreeDictionaryModel model) {
+		if(null==model || EasyStringCheckUtils.isEmpty(model.getNodeCode())) return this.error("参数无效");
+		model.setNodeLabel(model.getNodeCode());
 		// 存在判断
-		UupmDictionaryModel result = this.uupmDictionaryService.findByItemCode(model.getItemCode(), null);
+		UupmTreeDictionaryModel result = this.uupmTreeDictionaryService.findNode(model.getNodeLabel(), null);
 		if(null!=result) return this.error("编号已存在");
-		this.uupmDictionaryService.addCategory(model, null);
+		this.uupmTreeDictionaryService.addRootNode(model, null);
 		return this.successAjax();
 	}
 	
-	@RequestMapping(value="/addDict", method=RequestMethod.POST)
-	public RespModel addDict(UupmDictionaryModel model) {
-		if(null==model || EasyStringCheckUtils.isEmpty(model.getItemCode())) return this.error("参数无效");
+	@RequestMapping(value="/addChild", method=RequestMethod.POST)
+	public RespModel addChild(UupmTreeDictionaryModel model) {
+		if(null==model || EasyStringCheckUtils.isEmpty(model.getNodeLabel()) 
+				|| EasyStringCheckUtils.isEmpty(model.getNodeCode())
+				|| EasyStringCheckUtils.isEmpty(model.getParentNodeCode())) return this.error("参数无效");
 		// 存在判断
-		UupmDictionaryModel result = this.uupmDictionaryService.findByItemCode(model.getItemCode(), null);
+		UupmTreeDictionaryModel result = this.uupmTreeDictionaryService.findNode(model.getNodeLabel(), model.getNodeCode(), null);
 		if(null!=result) return this.error("编号已存在");
-		this.uupmDictionaryService.addDict(model, null);
-		return this.successAjax();
-	}
-	
-	@RequestMapping(value="/addChildDict", method=RequestMethod.POST)
-	public RespModel addChildDict(UupmDictionaryModel model) {
-		if(null==model || EasyStringCheckUtils.isEmpty(model.getItemCode())) return this.error("参数无效");
-		// 存在判断
-		UupmDictionaryModel result = this.uupmDictionaryService.findByItemCode(model.getItemCode(), null);
-		if(null!=result) return this.error("编号已存在");
-		this.uupmDictionaryService.addChildDict(model, null);
+		this.uupmTreeDictionaryService.addChildNode(model.getNodeLabel(), model.getParentNodeCode(), model, null);
 		return this.successAjax();
 	}
 	
 	@RequestMapping(value="/edit", method=RequestMethod.POST)
-	public RespModel edit(UupmDictionaryModel model) {
-		if(null==model || EasyStringCheckUtils.isEmpty(model.getId())) {
-			return this.error("参数无效");
-		}
-		this.uupmDictionaryService.updateById(model, null);
+	public RespModel edit(UupmTreeDictionaryModel model) {
+		if(null==model || EasyStringCheckUtils.isEmpty(model.getNodeLabel()) 
+				|| EasyStringCheckUtils.isEmpty(model.getNodeCode())) return this.error("参数无效");
+		UupmTreeDictionaryModel oldNode = new UupmTreeDictionaryModel();
+		oldNode.setNodeLabel(model.getNodeLabel());
+		oldNode.setNodeCode(model.getNodeCode());
+		this.uupmTreeDictionaryService.updateNode(model, oldNode, null);
 		return this.successAjax();
 	}
 	
-	@RequestMapping(value="/delById", method=RequestMethod.POST)
-	public RespModel delById(String id) {
-		if(null==id || EasyStringCheckUtils.isEmpty(id)) return this.error("参数无效");
-		this.uupmDictionaryService.delById(id, null);
+	@RequestMapping(value="/del", method=RequestMethod.POST)
+	public RespModel delById(UupmTreeDictionaryModel model) {
+		if(null==model || EasyStringCheckUtils.isEmpty(model.getNodeLabel()) 
+				|| EasyStringCheckUtils.isEmpty(model.getNodeCode())) return this.error("参数无效");
+		this.uupmTreeDictionaryService.delNodes(model.getNodeLabel(), model.getNodeCode(), null);
 		return this.successAjax();
 	}
 	
-	@RequestMapping(value="/delBatch", method=RequestMethod.POST)
-	public RespModel delBatch(HttpServletRequest req) {
-		String itemCodes = req.getParameter("itemCodes");
-		if(EasyStringCheckUtils.isEmpty(itemCodes)) return this.error("参数无效");
-		int result = this.uupmDictionaryService.delByItemCodes(itemCodes, null);
-		if(result==-1) return this.error("参数无效");
-		return this.successAjax();
-	}
 }

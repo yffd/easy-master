@@ -22,6 +22,7 @@ import com.yffd.easy.uupm.api.model.UupmUserRoleModel;
 import com.yffd.easy.uupm.service.UupmRoleResourceService;
 import com.yffd.easy.uupm.service.UupmTenantResourceService;
 import com.yffd.easy.uupm.service.UupmUserRoleService;
+import com.yffd.easy.uupm.web.common.UupmCommonController;
 
 
 /**
@@ -34,7 +35,7 @@ import com.yffd.easy.uupm.service.UupmUserRoleService;
  */
 @RestController
 @RequestMapping("/uupm/auth")
-public class UupmAuthController extends UupmBaseController {
+public class UupmAuthController extends UupmCommonController {
 
 	@Autowired
 	private UupmRoleResourceService uupmRoleResourceService;
@@ -111,40 +112,40 @@ public class UupmAuthController extends UupmBaseController {
 	}
 	
 	// 租户授权
-	@RequestMapping(value="/saveTenantResource", method=RequestMethod.POST)
-	public RespModel saveTenantResource(HttpServletRequest req) {
-		String tenantCode = req.getParameter("tenantCode");
-		String rsCodes = req.getParameter("rsCodes");
-		if(EasyStringCheckUtils.isEmpty(tenantCode) || EasyStringCheckUtils.isEmpty(rsCodes)) return this.errorAjax("参数错误");
-		ArrayList<Map<String, String>> list = JSON.parseObject(rsCodes, new TypeReference<ArrayList<Map<String, String>>>(){});
-		if(null==list || list.size()==0) return this.errorAjax("参数错误");
-		List<UupmTenantResourceModel> modelList = new ArrayList<UupmTenantResourceModel>();
-		for(Map<String, String> map : list) {
-			String rsType = map.get("rsType");
-			// 只对菜单（M）、操作（O）类型的资源处理，跳过资源为 应用系统（A）
-			if("A".equals(rsType)) continue;
-			String appCode = map.get("appCode");
-			String rsCode = map.get("rsCode");
-			UupmTenantResourceModel model = new UupmTenantResourceModel();
-			model.setTenantCode(tenantCode);
-			model.setAppCode(appCode);
-			model.setRsCode(rsCode);
-			modelList.add(model);
-		}
-		if(modelList.size()==0) return this.errorAjax("参数错误");
-		
-		this.uupmTenantResourceService.saveTenantResource(tenantCode, modelList, null);
-		return this.successAjax();
-	}
+//	@RequestMapping(value="/saveTenantResource", method=RequestMethod.POST)
+//	public RespModel saveTenantResource(HttpServletRequest req) {
+//		String tenantCode = req.getParameter("tenantCode");
+//		String rsCodes = req.getParameter("rsCodes");
+//		if(EasyStringCheckUtils.isEmpty(tenantCode) || EasyStringCheckUtils.isEmpty(rsCodes)) return this.errorAjax("参数错误");
+//		ArrayList<Map<String, String>> list = JSON.parseObject(rsCodes, new TypeReference<ArrayList<Map<String, String>>>(){});
+//		if(null==list || list.size()==0) return this.errorAjax("参数错误");
+//		List<UupmTenantResourceModel> modelList = new ArrayList<UupmTenantResourceModel>();
+//		for(Map<String, String> map : list) {
+//			String rsType = map.get("rsType");
+//			// 只对菜单（M）、操作（O）类型的资源处理，跳过资源为 应用系统（A）
+//			if("A".equals(rsType)) continue;
+//			String appCode = map.get("appCode");
+//			String rsCode = map.get("rsCode");
+//			UupmTenantResourceModel model = new UupmTenantResourceModel();
+//			model.setTenantCode(tenantCode);
+//			model.setAppCode(appCode);
+//			model.setRsCode(rsCode);
+//			modelList.add(model);
+//		}
+//		if(modelList.size()==0) return this.errorAjax("参数错误");
+//		
+//		this.uupmTenantResourceService.saveTenantResource(tenantCode, modelList, null);
+//		return this.successAjax();
+//	}
 	
 	// 租户授权
-	@RequestMapping(value="/findResourceByTenantCode", method=RequestMethod.POST)
-	public RespModel findResourceByTenantCode(String tenantCode) {
-		if(EasyStringCheckUtils.isEmpty(tenantCode)) return this.errorAjax("参数错误");
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("tenantCode", tenantCode);
-		List<UupmTenantResourceModel> listResult = this.uupmTenantResourceService.findList(paramMap);
-		return this.successAjax(listResult);
-	}
+//	@RequestMapping(value="/findResourceByTenantCode", method=RequestMethod.POST)
+//	public RespModel findResourceByTenantCode(String tenantCode) {
+//		if(EasyStringCheckUtils.isEmpty(tenantCode)) return this.errorAjax("参数错误");
+//		Map<String, Object> paramMap = new HashMap<String, Object>();
+//		paramMap.put("tenantCode", tenantCode);
+//		List<UupmTenantResourceModel> listResult = this.uupmTenantResourceService.findList(paramMap);
+//		return this.successAjax(listResult);
+//	}
 	
 }

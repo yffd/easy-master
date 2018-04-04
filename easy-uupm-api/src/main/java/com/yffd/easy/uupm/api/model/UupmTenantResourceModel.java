@@ -21,7 +21,6 @@ public class UupmTenantResourceModel extends CustomPo {
 	
 	private static final long serialVersionUID = 4500908604698251160L;
 	private String tenantCode;	//租户编号
-	private String appCode;		//应用系统编号
 	private String rsCode;		//系统资源编号
 	
 	public String getTenantCode() {
@@ -29,12 +28,6 @@ public class UupmTenantResourceModel extends CustomPo {
 	}
 	public void setTenantCode(String tenantCode) {
 		this.tenantCode = tenantCode;
-	}
-	public String getAppCode() {
-		return appCode;
-	}
-	public void setAppCode(String appCode) {
-		this.appCode = appCode;
 	}
 	public String getRsCode() {
 		return rsCode;

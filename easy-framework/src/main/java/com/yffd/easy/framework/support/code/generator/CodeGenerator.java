@@ -27,18 +27,18 @@ import com.yffd.easy.common.core.converter.EasyModelConverter;
 public class CodeGenerator extends EasyModelConverter {
 	private static final SimpleDateFormat DATE_FMT = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分ss秒");
 	
-	private List<String> sortedPropsList = new ArrayList<String>();
+	private List<String> sortedAttributeNameList = new ArrayList<String>();
 	private List<String> skipModelNamesLike = new ArrayList<String>();
 	
 	{
-		sortedPropsList.add("version");
-		sortedPropsList.add("delFlag");
-		sortedPropsList.add("createBy");
-		sortedPropsList.add("createTime");
-		sortedPropsList.add("updateBy");
-		sortedPropsList.add("updateTime");
-		sortedPropsList.add("id");
-		sortedPropsList.add("tenantCode");
+		sortedAttributeNameList.add("version");
+		sortedAttributeNameList.add("delFlag");
+		sortedAttributeNameList.add("createBy");
+		sortedAttributeNameList.add("createTime");
+		sortedAttributeNameList.add("updateBy");
+		sortedAttributeNameList.add("updateTime");
+		sortedAttributeNameList.add("id");
+		sortedAttributeNameList.add("tenantCode");
 		
 		skipModelNamesLike.add("EasyPersistModel");
 		skipModelNamesLike.add("BaseModel");
@@ -50,8 +50,8 @@ public class CodeGenerator extends EasyModelConverter {
 	 * @author  zhangST
 	 * @return
 	 */
-	protected List<String> getSortedPropsList() {
-		return sortedPropsList;
+	protected List<String> getSortedAttributeNameList() {
+		return sortedAttributeNameList;
 	}
 	
 	/**
@@ -76,40 +76,27 @@ public class CodeGenerator extends EasyModelConverter {
 	}
 	
 	/**
-	 * 格式化DaoTest类名称，简短名称，非完整类名
+	 * 格式化Mapper类名称，简短名称，非完整类名
 	 * @Date	2018年2月6日 上午11:05:08 <br/>
 	 * @author  zhangST
 	 * @param modelClazz
 	 * @return
 	 */
-	protected String fmtDaoTestSimpleName(Class<?> modelClazz) {
-		return this.fmtModelName(modelClazz, null, "DaoTest");
+	protected String fmtMapperSimpleName(Class<?> modelClazz) {
+		return "I" + this.fmtModelName(modelClazz, null, "Mapper");
 	}
 	
 	/**
-	 * 格式化Dao类名称，简短名称，非完整类名
-	 * @Date	2018年2月6日 上午11:05:08 <br/>
+	 * 格式化mapper完整类名，即包名+类名
+	 * @Date	2018年2月6日 上午10:41:11 <br/>
 	 * @author  zhangST
 	 * @param modelClazz
+	 * @param mapperPackageName
 	 * @return
 	 */
-	protected String fmtDaoSimpleName(Class<?> modelClazz) {
-		return this.fmtModelName(modelClazz, null, "Dao");
-	}
-	
-	/**
-	 * 格式化ServiceTest类名称，简短名称，非完整类名
-	 * @Date	2018年2月6日 上午11:05:08 <br/>
-	 * @author  zhangST
-	 * @param modelClazz
-	 * @return
-	 */
-	protected String fmtServiceTestSimpleName(Class<?> modelClazz) {
-		return this.fmtModelName(modelClazz, null, "ServiceTest");
-	}
-	
-	protected String fmtControllerSimpleName(Class<?> modelClazz) {
-		return this.fmtModelName(modelClazz, null, "Controller");
+	protected String fmtMapperFullClassName(Class<?> modelClazz, String mapperPackageName) {
+		String mapperSimpleName = this.fmtModelName(modelClazz, "I", "Mapper");
+		return mapperPackageName + "." + mapperSimpleName;
 	}
 	
 	/**
@@ -124,29 +111,25 @@ public class CodeGenerator extends EasyModelConverter {
 	}
 	
 	/**
-	 * 格式化Dao完整类名，即包名+类名
-	 * @Date	2018年2月6日 上午10:41:11 <br/>
+	 * 格式化ServiceTest类名称，简短名称，非完整类名
+	 * @Date	2018年2月6日 上午11:05:08 <br/>
 	 * @author  zhangST
 	 * @param modelClazz
-	 * @param daoPackageName
 	 * @return
 	 */
-	protected String fmtDaoFullClassName(Class<?> modelClazz, String daoPackageName) {
-		String daoSimpleName = this.fmtModelName(modelClazz, null, "Dao");
-		return daoPackageName + "." + daoSimpleName;
+	protected String fmtServiceTestSimpleName(Class<?> modelClazz) {
+		return this.fmtModelName(modelClazz, null, "ServiceTest");
 	}
 	
 	/**
-	 * 格式化Service完整类名，即包名+类名
-	 * @Date	2018年2月6日 上午10:41:11 <br/>
+	 * 格式化Controller类名称，简短名称，非完整类名
+	 * @Date	2018年2月6日 上午11:05:08 <br/>
 	 * @author  zhangST
 	 * @param modelClazz
-	 * @param servicePackageName
 	 * @return
 	 */
-	protected String fmtServiceFullClassName(Class<?> modelClazz, String servicePackageName) {
-		String daoSimpleName = this.fmtModelName(modelClazz, null, "Service");
-		return servicePackageName + "." + daoSimpleName;
+	protected String fmtControllerSimpleName(Class<?> modelClazz) {
+		return this.fmtModelName(modelClazz, null, "Controller");
 	}
 	
 	/**

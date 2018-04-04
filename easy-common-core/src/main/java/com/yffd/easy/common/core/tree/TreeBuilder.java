@@ -63,13 +63,13 @@ public class TreeBuilder {
 	 * @Date	2017年9月25日 下午2:17:55 <br/>
 	 * @author  zhangST
 	 * @param treeNodes		传入的树节点列表
-	 * @param rootPid		根节点的父ID
+	 * @param rootId		指定的根节点ID
 	 * @return				返回递归树节点列表
 	 */
-	public <T extends TreeNode> List<T> buildByRecursive(List<T> treeNodes, String rootPid) {
+	public <T extends TreeNode> List<T> buildByRecursive(List<T> treeNodes, String rootId) {
 		List<TreeNode> trees = new ArrayList<TreeNode>();  
 		for (TreeNode treeNode : treeNodes) {
-			if (treeNode.getPid_().equals(rootPid)) {
+			if (treeNode.getPid_().equals(rootId)) {
 				trees.add(findChildren(treeNode, treeNodes));
 			}
 		}

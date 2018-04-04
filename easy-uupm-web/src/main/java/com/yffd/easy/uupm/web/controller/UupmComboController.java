@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,9 +16,9 @@ import com.yffd.easy.common.core.tree.TreeBuilder;
 import com.yffd.easy.common.core.util.EasyStringCheckUtils;
 import com.yffd.easy.framework.domain.RespModel;
 import com.yffd.easy.framework.web.view.vo.ComboTreeVO;
-import com.yffd.easy.uupm.api.model.UupmDictionaryModel;
-import com.yffd.easy.uupm.service.UupmDictionaryService;
-import com.yffd.easy.uupm.service.UupmResourceService;
+import com.yffd.easy.uupm.api.model.UupmTreeDictionaryModel;
+import com.yffd.easy.uupm.service.UupmTreeDictionaryService;
+import com.yffd.easy.uupm.web.common.UupmCommonController;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -29,66 +30,44 @@ import com.yffd.easy.uupm.service.UupmResourceService;
  */
 @RestController
 @RequestMapping("/uupm/combox")
-public class UupmComboController extends UupmBaseController {
+public class UupmComboController extends UupmCommonController {
 	
 	private TreeBuilder treeBuilder = new TreeBuilder();
 	
 	@Autowired
-	private UupmDictionaryService uupmDictionaryService;
-	@Autowired
-	private UupmResourceService uupmResourceService;
+	private UupmTreeDictionaryService uupmTreeDictionaryService;
 	
 	@RequestMapping(value="/findComboByDict", method=RequestMethod.POST)
-	public RespModel findComboByDict(@RequestParam Map<String, Object> paramMap) {
-		String comboxKeys = (String) paramMap.get("comboxKeys");
-		if(null==comboxKeys || EasyStringCheckUtils.isEmpty(comboxKeys)) return this.error("参数无效");
+	public RespModel findTreeByDict(@RequestParam Map<String, Object> paramMap) {
+		if(null==paramMap) return this.error("参数无效");
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		String[] keys = comboxKeys.split(",");
+		Set<String> keys = paramMap.keySet();
 		for(String key : keys) {
-			List<UupmDictionaryModel> result = this.uupmDictionaryService.findChildrenListForDict(key);
-			if(null!=result && !result.isEmpty()) {
-				List<ComboTreeVO> voList = this.dict2VO(result);
-				List<ComboTreeVO> treeList = treeBuilder.buildByRecursive(voList, key);
-				resultMap.put(key, treeList);
+			String value = (String) paramMap.get(key);
+			if(EasyStringCheckUtils.isEmpty(value)) continue;
+			String[] valueArr = value.split(",");
+			Map<String, Object> tmp = new HashMap<String, Object>();
+			for(String nodeCode : valueArr) {
+				List<UupmTreeDictionaryModel> result = this.uupmTreeDictionaryService.findChildrenNodeList(key, nodeCode, null);
+				if(null!=result && !result.isEmpty()) {
+					List<ComboTreeVO> voList = this.dict2VO(result);
+					List<ComboTreeVO> treeList = treeBuilder.buildByRecursive(voList, key);
+					tmp.put(nodeCode, treeList);
+				}
 			}
+			resultMap.put(key, tmp);
 		}
 		return this.successAjax(resultMap);
 	}
 	
-	@RequestMapping(value="/findComboByResource", method=RequestMethod.POST)
-	public RespModel findComboByResource(@RequestParam Map<String, Object> paramMap) {
-		List<Map<String, Object>> result = this.uupmResourceService.findResWithApp();
-		List<ComboTreeVO> voList = this.resource2VO(result);
-		List<ComboTreeVO> treeList = treeBuilder.buildByRecursive(voList, "-1");
-		return this.successAjax(treeList);
-	}
-	
-	
-	private List<ComboTreeVO> resource2VO(List<Map<String, Object>> list) {
+	private List<ComboTreeVO> dict2VO(List<UupmTreeDictionaryModel> list) {
 		List<ComboTreeVO> retList = new ArrayList<ComboTreeVO>();
-		for(Map<String, Object> map : list) {
+		for(UupmTreeDictionaryModel model : list) {
 			ComboTreeVO vo = new ComboTreeVO();
-			String rsName = (String) map.get("rsName");
-			String rsCode = (String) map.get("rsCode");
-			String parentCode = (String) map.get("parentCode");
-			vo.setId_(rsCode);
-			vo.setPid_(parentCode);
-			vo.setId(rsCode);
-			vo.setText(rsName);
-			vo.setState("open");
-			retList.add(vo);
-		}
-		return retList;
-	}
-	
-	private List<ComboTreeVO> dict2VO(List<UupmDictionaryModel> list) {
-		List<ComboTreeVO> retList = new ArrayList<ComboTreeVO>();
-		for(UupmDictionaryModel model : list) {
-			ComboTreeVO vo = new ComboTreeVO();
-			vo.setId_(model.getItemCode());
-			vo.setPid_(model.getParentCode());
-			vo.setId(model.getItemCode());
-			vo.setText(model.getItemName());
+			vo.setId_(model.getNodeCode());
+			vo.setPid_(model.getParentNodeCode());
+			vo.setId(model.getNodeValue());
+			vo.setText(model.getNodeName());
 			vo.setState("open");
 			retList.add(vo);
 		}

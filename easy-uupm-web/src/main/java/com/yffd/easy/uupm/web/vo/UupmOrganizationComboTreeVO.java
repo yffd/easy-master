@@ -14,6 +14,8 @@ public class UupmOrganizationComboTreeVO extends ComboTreeVO {
 	private String orgCode;			//机构编号
 	private String orgName;			//父机构编号
 	private String parentCode;		//父机构编号
+	private String parentName;		//父机构名称
+	private String dataPath;		//路径，用点（.）分隔
 	private int seqNo;				//序号
 	private String remark;			//备注
 	
@@ -34,6 +36,18 @@ public class UupmOrganizationComboTreeVO extends ComboTreeVO {
 	}
 	public void setParentCode(String parentCode) {
 		this.parentCode = parentCode;
+	}
+	public String getParentName() {
+		return parentName;
+	}
+	public void setParentName(String parentName) {
+		this.parentName = parentName;
+	}
+	public String getDataPath() {
+		return dataPath;
+	}
+	public void setDataPath(String dataPath) {
+		this.dataPath = dataPath;
 	}
 	public int getSeqNo() {
 		return seqNo;

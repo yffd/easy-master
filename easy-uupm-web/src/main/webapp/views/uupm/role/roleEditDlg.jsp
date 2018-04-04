@@ -42,12 +42,12 @@ $(function() {
 						<th>名称：</th>
 						<td><input name="roleName" class="easyui-textbox easyui-validatebox" required="required" placeholder="请输入名称" /></td>
 						<th>编号：</th>
-						<td><input id="roleCode_id" name="roleCode" class="easyui-textbox easyui-validatebox" required="required" placeholder="请输入编号"/></td>
+						<td><input name="roleCode" class="easyui-textbox easyui-validatebox" required="required" placeholder="请输入编号"/></td>
 					</tr>
 					<tr>
 						<th>状态：</th>
 						<td>
-							<input id="roleStatus_id" name="roleStatus" type="text" />
+							<input name="roleStatus" type="text" />
 						</td>
 						<th></th>
 						<td></td>

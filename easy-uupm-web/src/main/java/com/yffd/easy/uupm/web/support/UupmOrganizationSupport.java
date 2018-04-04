@@ -24,12 +24,13 @@ public class UupmOrganizationSupport {
 	
 	/**
 	 * 同步tree数据转换
-	 * @Date	2018年2月28日 下午5:12:45 <br/>
+	 * @Date	2018年4月4日 上午10:54:07 <br/>
 	 * @author  zhangST
 	 * @param list
+	 * @param rootId
 	 * @return
 	 */
-	public List<UupmOrganizationComboTreeVO> toSyncTreeVO(List<UupmOrganizationModel> list, String rootPid) {
+	public List<UupmOrganizationComboTreeVO> toSyncTreeVO(List<UupmOrganizationModel> list, String rootId) {
 		if(null==list || list.isEmpty()) return null;
 		List<UupmOrganizationComboTreeVO> voList = new ArrayList<UupmOrganizationComboTreeVO>();
 		for(UupmOrganizationModel model : list) {
@@ -42,12 +43,14 @@ public class UupmOrganizationSupport {
 			vo.setOrgName(model.getOrgName());
 			vo.setOrgCode(model.getOrgCode());
 			vo.setParentCode(model.getParentCode());
+			vo.setParentName(model.getParentName());
+			vo.setDataPath(model.getDataPath());
 			vo.setSeqNo(model.getSeqNo());
 			vo.setRemark(model.getRemark());
 			voList.add(vo);
 		}
-		if(null!=rootPid && !EasyStringCheckUtils.isEmpty(rootPid)) {
-			List<UupmOrganizationComboTreeVO> treeList = (List<UupmOrganizationComboTreeVO>) treeBuilder.buildByRecursive(voList, rootPid);
+		if(!EasyStringCheckUtils.isEmpty(rootId)) {
+			List<UupmOrganizationComboTreeVO> treeList = (List<UupmOrganizationComboTreeVO>) treeBuilder.buildByRecursive(voList, rootId);
 			return treeList;
 		}
 		List<UupmOrganizationComboTreeVO> treeList = (List<UupmOrganizationComboTreeVO>) treeBuilder.buildByRecursive(voList);

@@ -13,8 +13,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <jsp:include page="/common/layout/script.jsp"></jsp:include>
 
 <script type="text/javascript">
-	var $json_tenantType = [ {id:"", text:"全部", "selected": true} ];
 	var $json_tenantStatus = [ {id:"", text:"全部", "selected": true} ];
+	var $json_tenantType = [ {id:"", text:"全部", "selected": true} ];
 	var $json_serveType = [ {id:"", text:"全部", "selected": true} ];
 
 	var $openWindow = this;// 当前窗口
@@ -23,15 +23,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		$dg = $('#dg_id');
 		// 初始化控件数据
 		$.post('/uupm/combox/findComboByDict', 
-				{'comboxKeys':'tenant-type,tenant-status,serve-type'}, 
+				{'combo':'tenant-status,tenant-type,serve-type'}, 
 				function(result) {
 					if("OK"==result.status) {
 						var jsonData = result.data;
-						$json_tenantType = $json_tenantType.concat(jsonData['tenant-type']);
-						$json_tenantStatus = $json_tenantStatus.concat(jsonData['tenant-status']);
-						$json_serveType = $json_serveType.concat(jsonData['serve-type']);
-						
-						initDatagrid();	// 初始化datagrid组件
+						$json_tenantStatus = $json_tenantStatus.concat(jsonData['combo']['tenant-status'][0]['children']);
+						$json_tenantType = $json_tenantType.concat(jsonData['combo']['tenant-type'][0]['children']);
+						$json_serveType = $json_serveType.concat(jsonData['combo']['serve-type'][0]['children']);
+						// 初始化datagrid组件
+						makeGrid();	
 						
 						$('#tenantType_id').combobox({
 							editable:false,
@@ -60,7 +60,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		
 	});
 	// 初始化datagrid组件
-	function initDatagrid() {
+	function makeGrid() {
 		$dg.datagrid({
 		    url:'uupm/tenant/findPage',
 		    width: 'auto',
@@ -77,12 +77,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			toolbar: '#tb_id',
 			loadFilter: function(result) {
 		    	if("OK"==result.status) {
-		    		return result.data;
+		    		return result.data || [];
 		    	} else {
 		    		$.messager.show({
 						title :commonui.msg_title,
-						msg : result.msg,
-						timeout : commonui.msg_timeout
+						timeout : commonui.msg_timeout,
+						msg : result.msg
 					});
 		    		return [];
 	    		}

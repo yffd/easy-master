@@ -23,106 +23,117 @@ import com.yffd.easy.framework.domain.LoginInfo;
  * @since		 JDK 1.7+
  * @see 	 
  */
-public abstract class CommonServiceAbstract<PO extends CustomPo> {
+public abstract class CommonServiceAbstract<PO extends CustomPo> extends CommonServiceSupport {
 
 	public abstract ICommonMapper<PO> getMapper();
 
+	public abstract Class<?> getMapperClass();
+	
+	@Override
+	protected String getStatement(String sqlId) {
+		String namespace = this.getMapperClass().getName();
+		StringBuilder sb = new StringBuilder();
+		sb.append(namespace).append(".").append(sqlId);
+		return sb.toString();
+	}
+	
+	
 	/**************************************** 查询 ****************************************/
 	
 	/**
 	 * 分页查询.<br/>
 	 * @Date	2018年3月28日 下午2:23:16 <br/>
 	 * @author  zhangST
-	 * @param paramPo
+	 * @param model
 	 * @param paramMap
 	 * @param paramPage
 	 * @param loginInfo
 	 * @return
 	 */
-	public PageResult<PO> findPage(PO paramPo, Map<String, Object> paramMap, PageParam paramPage, LoginInfo loginInfo) {
+	public PageResult<PO> findPage(PO model, Map<String, Object> paramMap, PageParam paramPage, LoginInfo loginInfo) {
 		if(null==paramPage) return null;
-		Long totalRecord = this.findCount(paramPo, paramMap, loginInfo);
+		Long totalRecord = this.findCount(model, paramMap, loginInfo);
 		paramPage.setTotalRecord(totalRecord);
 		if(totalRecord==0) return null;
-		this.checkAndSetForQuery(paramPo, paramMap, loginInfo, true); // 检查和设置默认属性
-		List<PO> recordList = this.getMapper().selectListBy(paramPo, paramMap, paramPage);
+		this.checkAndSetForQuery(model, paramMap, loginInfo, true); // 检查和设置默认属性
+		List<PO> recordList = this.getMapper().selectListBy(model, paramMap, paramPage);
 		return new PageResult<PO>(paramPage, recordList);
 	}
 	
-	public PageResult<PO> findPage(PO paramPo, PageParam paramPage, LoginInfo loginInfo) {
+	public PageResult<PO> findPage(PO model, PageParam paramPage, LoginInfo loginInfo) {
 		if(null==paramPage) return null;
-		return this.findPage(paramPo, null, paramPage, loginInfo);
+		return this.findPage(model, null, paramPage, loginInfo);
 	}
 	
 	/**
 	 * 统计查询.<br/>
 	 * @Date	2018年3月28日 下午2:27:31 <br/>
 	 * @author  zhangST
-	 * @param paramPo
+	 * @param model
 	 * @param paramMap
 	 * @param loginInfo
 	 * @return
 	 */
-	public Long findCount(PO paramPo, Map<String, Object> paramMap, LoginInfo loginInfo) {
-		this.checkAndSetForQuery(paramPo, paramMap, loginInfo, true); // 检查和设置默认属性
-		return this.getMapper().selectCountBy(paramPo, paramMap);
+	public Long findCount(PO model, Map<String, Object> paramMap, LoginInfo loginInfo) {
+		this.checkAndSetForQuery(model, paramMap, loginInfo, true); // 检查和设置默认属性
+		return this.getMapper().selectCountBy(model, paramMap);
 	}
 	
-	public Long findCount(PO paramPo, LoginInfo loginInfo) {
-		return this.findCount(paramPo, null, loginInfo);
+	public Long findCount(PO model, LoginInfo loginInfo) {
+		return this.findCount(model, null, loginInfo);
 	}
 	
 	/**
 	 * 列表查询.<br/>
 	 * @Date	2018年3月28日 下午2:27:48 <br/>
 	 * @author  zhangST
-	 * @param paramPo
+	 * @param model
 	 * @param paramMap
 	 * @param loginInfo
 	 * @return
 	 */
-	public List<PO> findList(PO paramPo, Map<String, Object> paramMap, LoginInfo loginInfo) {
-		this.checkAndSetForQuery(paramPo, paramMap, loginInfo, true); // 检查和设置默认属性
-		return this.getMapper().selectListBy(paramPo, paramMap, null);
+	public List<PO> findList(PO model, Map<String, Object> paramMap, LoginInfo loginInfo) {
+		this.checkAndSetForQuery(model, paramMap, loginInfo, true); // 检查和设置默认属性
+		return this.getMapper().selectListBy(model, paramMap, null);
 	}
 	
-	public List<PO> findList(PO paramPo, LoginInfo loginInfo) {
-		return this.findList(paramPo, null, loginInfo);
+	public List<PO> findList(PO model, LoginInfo loginInfo) {
+		return this.findList(model, null, loginInfo);
 	}
 	
 	/**
 	 * 单条查询.<br/>
 	 * @Date	2018年3月28日 下午2:28:52 <br/>
 	 * @author  zhangST
-	 * @param paramPo
+	 * @param model
 	 * @param paramMap
 	 * @param loginInfo
 	 * @return
 	 */
-	public PO findOne(PO paramPo, Map<String, Object> paramMap, LoginInfo loginInfo) {
-		if(null==paramPo && (null==paramMap || paramMap.isEmpty())) return null;
-		this.checkAndSetForQuery(paramPo, paramMap, loginInfo, true); // 检查和设置默认属性
-		return this.getMapper().selectOneBy(paramPo, paramMap);
+	public PO findOne(PO model, Map<String, Object> paramMap, LoginInfo loginInfo) {
+		if(null==model && (null==paramMap || paramMap.isEmpty())) return null;
+		this.checkAndSetForQuery(model, paramMap, loginInfo, true); // 检查和设置默认属性
+		return this.getMapper().selectOneBy(model, paramMap);
 	}
 	
-	public PO findOne(PO paramPo, LoginInfo loginInfo) {
-		if(null==paramPo) return null;
-		return this.findOne(paramPo, null, loginInfo);
+	public PO findOne(PO model, LoginInfo loginInfo) {
+		if(null==model) return null;
+		return this.findOne(model, null, loginInfo);
 	}
 	
 	
 	/**************************************** 添加 ****************************************/
 	
-	public int addOne(PO paramPo, LoginInfo loginInfo) {
-		if(null==paramPo) return 0;
-		this.checkAndSetForAdd(paramPo, loginInfo, true); // 检查和设置默认属性
-		return this.getMapper().insertOne(paramPo);
+	public int addOne(PO model, LoginInfo loginInfo) {
+		if(null==model) return 0;
+		this.checkAndSetForAdd(model, loginInfo, true); // 检查和设置默认属性
+		return this.getMapper().insertOne(model);
 	}
 	
-	public int addList(List<PO> paramPos, LoginInfo loginInfo) {
-		if(null==paramPos || paramPos.isEmpty()) return 0;
-		this.checkAndSetForAdd(paramPos, loginInfo, true); // 检查和设置默认属性
-		return this.getMapper().insertList(paramPos);
+	public int addList(List<PO> models, LoginInfo loginInfo) {
+		if(null==models || models.isEmpty()) return 0;
+		this.checkAndSetForAdd(models, loginInfo, true); // 检查和设置默认属性
+		return this.getMapper().insertList(models);
 	}
 	
 	
@@ -132,28 +143,28 @@ public abstract class CommonServiceAbstract<PO extends CustomPo> {
 	 * 更新.<br/>
 	 * @Date	2018年3月28日 下午1:50:36 <br/>
 	 * @author  zhangST
-	 * @param paramPoNew		待更新“属性名-值”集合
-	 * @param paramPoOld		条件-旧对象“属性名-值”集合
+	 * @param model			待更新“属性名-值”集合
+	 * @param modelOld		条件-旧对象“属性名-值”集合
 	 * @param paramMap			条件-指定“属性名-值”对集合
 	 * @return
 	 */
-	public int update(PO paramPoNew, PO paramPoOld, Map<String, Object> paramMap, LoginInfo loginInfo) {
-		if(null==paramPoNew) return 0;
-		if(null==paramPoOld && (null==paramMap || paramMap.isEmpty())) return 0;
-		this.checkAndSetForUpdate(paramPoNew, paramPoOld, paramMap, loginInfo, true); // 检查和设置默认属性
-		return this.getMapper().updateBy(paramPoNew, paramPoOld, paramMap);
+	public int update(PO model, PO modelOld, Map<String, Object> paramMap, LoginInfo loginInfo) {
+		if(null==model) return 0;
+		if(null==modelOld && (null==paramMap || paramMap.isEmpty())) return 0;
+		this.checkAndSetForUpdate(model, modelOld, paramMap, loginInfo, true); // 检查和设置默认属性
+		return this.getMapper().updateBy(model, modelOld, paramMap);
 	}
 	
-	public int update(PO paramPoNew, Map<String, Object> paramMap, LoginInfo loginInfo) {
-		return this.update(paramPoNew, null, paramMap, loginInfo);
+	public int update(PO model, Map<String, Object> paramMap, LoginInfo loginInfo) {
+		return this.update(model, null, paramMap, loginInfo);
 	}
 	
-	public int updateBy(PO paramPoNew, String attributeName, Object value, LoginInfo loginInfo) {
-		if(null==paramPoNew) return 0;
+	public int updateBy(PO model, String attributeName, Object value, LoginInfo loginInfo) {
+		if(null==model) return 0;
 		if(EasyStringCheckUtils.isEmpty(attributeName) && null==value) return 0;
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put(attributeName, value);
-		return this.update(paramPoNew, null, paramMap, loginInfo);
+		return this.update(model, null, paramMap, loginInfo);
 	}
 	
 	
@@ -163,24 +174,25 @@ public abstract class CommonServiceAbstract<PO extends CustomPo> {
 	 * 删除.<br/>
 	 * @Date	2018年3月28日 下午1:55:44 <br/>
 	 * @author  zhangST
-	 * @param paramPo
+	 * @param model
 	 * @param paramMap
 	 * @return
 	 */
-	public int delete(PO paramPo, Map<String, Object> paramMap) {
-		if(null==paramPo && (null==paramMap || paramMap.isEmpty())) return 0;
-		return this.getMapper().deleteBy(paramPo, paramMap);
+	public int delete(PO model, Map<String, Object> paramMap) {
+		if(null==model && (null==paramMap || paramMap.isEmpty())) return 0;
+		return this.getMapper().deleteBy(model, paramMap);
 	}
 	
-	public int delete(PO paramPo) {
-		if(null==paramPo) return 0;
-		return this.delete(paramPo, null);
+	public int delete(PO model) {
+		if(null==model) return 0;
+		return this.delete(model, null);
 	}
 	
 	public int delete(Map<String, Object> paramMap) {
 		if(null==paramMap || paramMap.isEmpty()) return 0;
 		return this.delete(null, paramMap);
 	}
+	
 	
 	public int delete(String attributeName, List<?> valueList) {
 		if(EasyStringCheckUtils.isEmpty(attributeName) && (null==valueList || valueList.isEmpty())) return 0;
@@ -189,6 +201,12 @@ public abstract class CommonServiceAbstract<PO extends CustomPo> {
 		return this.delete(null, paramMap);
 	}
 	
+	public int deleteBy(String attributeName, Object value) {
+		if(EasyStringCheckUtils.isEmpty(attributeName) && null==value) return 0;
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put(attributeName, value);
+		return this.delete(null, paramMap);
+	}
 	
 	/************************************* 默认属性值设置 ************************************/
 	
@@ -213,7 +231,7 @@ public abstract class CommonServiceAbstract<PO extends CustomPo> {
 		if(EasyStringCheckUtils.isEmpty(po.getTenantCode())) return;
 		if(setDefaultTenant && null!=loginInfo) po.setTenantCode(loginInfo.getTenantCode());
 		if(EasyStringCheckUtils.isEmpty(po.getTenantCode())) {
-			LOG.warn("【添加】未指定【租户】警告，mapper为：【" + this.getMapper().getClass() + "】， 持久化对象为：【" + po.getClass() + "】");
+			LOG.warn("【添加】未指定【租户】警告，mapper为：【" + this.getMapperClass().getName() + "】， 持久化对象为：【" + po.getClass() + "】");
 		}
 	}
 	
@@ -240,26 +258,26 @@ public abstract class CommonServiceAbstract<PO extends CustomPo> {
 	 * @param loginInfo
 	 * @param setDefaultTenant
 	 */
-	protected void checkAndSetForUpdate(PO paramPoNew, PO paramPoOld, Map<String, Object> paramMap, LoginInfo loginInfo, boolean setDefaultTenant) {
-		if(null==paramPoNew.getUpdateTime()) paramPoNew.setUpdateTime(new Date()); 
-		if(null==paramPoNew.getUpdateBy()) {
-			if(null!=loginInfo) paramPoNew.setUpdateBy(loginInfo.getUserCode());
+	protected void checkAndSetForUpdate(PO modelNew, PO modelOld, Map<String, Object> paramMap, LoginInfo loginInfo, boolean setDefaultTenant) {
+		if(null==modelNew.getUpdateTime()) modelNew.setUpdateTime(new Date()); 
+		if(null==modelNew.getUpdateBy()) {
+			if(null!=loginInfo) modelNew.setUpdateBy(loginInfo.getUserCode());
 		}
 		// 租户检查
 		boolean exist = false;
-		if(!exist && null!=paramPoOld && !EasyStringCheckUtils.isEmpty(paramPoOld.getTenantCode())) exist = true;
+		if(!exist && null!=modelOld && !EasyStringCheckUtils.isEmpty(modelOld.getTenantCode())) exist = true;
 		if(!exist && null!=paramMap && null!=paramMap.get(KEY_NAME_TENANT_CODE)) exist = true;
 		
 		if(!exist && setDefaultTenant) {
-			if(null!=loginInfo && null!=paramPoOld) {
-				paramPoOld.setTenantCode(loginInfo.getTenantCode());
+			if(null!=loginInfo && null!=modelOld) {
+				modelOld.setTenantCode(loginInfo.getTenantCode());
 			} else if(null!=loginInfo && null!=paramMap) {
 				paramMap.put(KEY_NAME_TENANT_CODE, loginInfo.getTenantCode());
 			}
 		}
-		if((null==paramPoOld || EasyStringCheckUtils.isEmpty(paramPoOld.getTenantCode()))
-				&& (null==paramMap || null==paramMap.get(KEY_NAME_TENANT_CODE))) {
-			LOG.warn("【更新条件】未指定【租户】警告，mapper为：【" + this.getMapper().getClass() + "】， 持久化对象为：【" + paramPoNew.getClass() + "】");
+		if((null!=modelOld && !EasyStringCheckUtils.isEmpty(modelOld.getTenantCode()))
+				|| (null!=paramMap && null!=paramMap.get(KEY_NAME_TENANT_CODE))) {
+			LOG.warn("【更新条件】未指定【租户】警告，mapper为：【" + this.getMapperClass().getName() + "】， 持久化对象为：【" + modelNew.getClass() + "】");
 		}
 	}
 	
@@ -270,22 +288,22 @@ public abstract class CommonServiceAbstract<PO extends CustomPo> {
 	 * @param parameter
 	 * @param loginInfo
 	 */
-	protected void checkAndSetForQuery(PO paramPo, Map<String, Object> paramMap, LoginInfo loginInfo, boolean setDefaultTenant) {
+	protected void checkAndSetForQuery(PO model, Map<String, Object> paramMap, LoginInfo loginInfo, boolean setDefaultTenant) {
 		// 租户检查
 		boolean exist = false;
-		if(!exist && null!=paramPo && !EasyStringCheckUtils.isEmpty(paramPo.getTenantCode())) exist = true;
+		if(!exist && null!=model && !EasyStringCheckUtils.isEmpty(model.getTenantCode())) exist = true;
 		if(!exist && null!=paramMap && null!=paramMap.get(KEY_NAME_TENANT_CODE)) exist = true;
 		
 		if(!exist && setDefaultTenant) {
-			if(null!=loginInfo && null!=paramPo) {
-				paramPo.setTenantCode(loginInfo.getTenantCode());
+			if(null!=loginInfo && null!=model) {
+				model.setTenantCode(loginInfo.getTenantCode());
 			} else if(null!=loginInfo && null!=paramMap) {
 				paramMap.put(KEY_NAME_TENANT_CODE, loginInfo.getTenantCode());
 			}
 		}
-		if((null==paramPo || EasyStringCheckUtils.isEmpty(paramPo.getTenantCode()))
-				&& (null==paramMap || null==paramMap.get(KEY_NAME_TENANT_CODE))) {
-			LOG.warn("【查询条件】未指定【租户】警告，mapper为：【" + this.getMapper().getClass() + "】");
+		if((null!=model && !EasyStringCheckUtils.isEmpty(model.getTenantCode()))
+				|| (null!=paramMap && null!=paramMap.get(KEY_NAME_TENANT_CODE))) {
+			LOG.warn("【查询条件】未指定【租户】警告，mapper为：【" + this.getMapperClass().getName() + "】");
 		}
 	}
 }

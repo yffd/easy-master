@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.yffd.easy.uupm.dao.UupmAccountDao">
+<mapper namespace="com.yffd.easy.uupm.mapper.IUupmAccountMapper">
+
+
 	<!-- ######################################################################### -->
-	<!-- ##############################   基础sql开始    ############################## -->
+	<!-- #########################   common sql begin    ######################### -->
 	<!-- ######################################################################### -->
 	
 	<!-- 表名 -->
 	<sql id="table_name"> uupm_account </sql>
-
 	<!-- 列名 -->
 	<sql id="table_columns">
 		t.VERSION as version, t.DEL_FLAG as delFlag, t.CREATE_BY as createBy, t.CREATE_TIME as createTime, t.UPDATE_BY as updateBy, 
@@ -15,104 +16,99 @@
 		t.ACCOUNT_STATUS as accountStatus, t.ACCOUNT_TYPE as accountType, t.NICK_NAME as nickName, t.ONLINE as online, t.SALT as salt, 
 		t.VISIT_COUNT as visitCount, t.VISIT_FIRST as visitFirst, t.VISIT_IP as visitIp, t.VISIT_LAST as visitLast, t.VISIT_PREVIOUS as visitPrevious
 	</sql>
-
 	<!-- 分页条件 -->
-	<sql id="conditions_limit"><if test="pageParam != null"> limit #{pageParam.startIndex}, #{pageParam.pageLimit} </if></sql>
-
+	<sql id="conditions_limit"><if test="paramPage != null"> limit #{paramPage.startIndex}, #{paramPage.pageLimit} </if></sql>
 	<!-- 排序条件 -->
 	<sql id="conditions_orderby"> ORDER BY t.CREATE_TIME desc </sql>
-
 	<!-- 动态组装复合查询条件 -->
 	<sql id="conditions_where">
-		<!-- Equal query -->
-		<if test="version != null "> and t.VERSION = #{version} </if>
-		<if test="delFlag != null and delFlag != ''"> and t.DEL_FLAG = #{delFlag} </if>
-		<if test="createBy != null and createBy != ''"> and t.CREATE_BY = #{createBy} </if>
-		<if test="createTime != null "><![CDATA[ and t.CREATE_TIME = #{createTime}]]> </if>
-		<if test="updateBy != null and updateBy != ''"> and t.UPDATE_BY = #{updateBy} </if>
-		<if test="updateTime != null "><![CDATA[ and t.UPDATE_TIME = #{updateTime}]]> </if>
-		<if test="id != null and id != ''"> and t.ID = #{id} </if>
-		<if test="tenantCode != null and tenantCode != ''"> and t.TENANT_CODE = #{tenantCode} </if>
-		<if test="accountId != null and accountId != ''"> and t.ACCOUNT_ID = #{accountId} </if>
-		<if test="accountPwd != null and accountPwd != ''"> and t.ACCOUNT_PWD = #{accountPwd} </if>
-		<if test="accountStatus != null and accountStatus != ''"> and t.ACCOUNT_STATUS = #{accountStatus} </if>
-		<if test="accountType != null and accountType != ''"> and t.ACCOUNT_TYPE = #{accountType} </if>
-		<if test="online != null and online != ''"> and t.ONLINE = #{online} </if>
-		<if test="salt != null and salt != ''"> and t.SALT = #{salt} </if>
-		<if test="visitCount != null "> and t.VISIT_COUNT = #{visitCount} </if>
-		<if test="visitFirst != null "><![CDATA[ and t.VISIT_FIRST = #{visitFirst}]]> </if>
-		<if test="visitIp != null and visitIp != ''"> and t.VISIT_IP = #{visitIp} </if>
-		<if test="visitLast != null "><![CDATA[ and t.VISIT_LAST = #{visitLast}]]> </if>
-		<if test="visitPrevious != null "><![CDATA[ and t.VISIT_PREVIOUS = #{visitPrevious}]]> </if>
-		<!-- Like query -->
-		<if test="nickName != null and nickName != ''"> and t.NICK_NAME like CONCAT(CONCAT('%', #{nickName}), '%') </if>
-	
-		<!-- 非model属性：in条件处理拼写，要求List集合中的值能转换成key-value形式，例如map、自定义model对象等 -->
-		<if test="idList != null and idList.size()>0">
-		and ID in <foreach item="item" index="index" collection="idList" open="(" separator="," close=")">#{item}</foreach>
+		<if test="paramPo != null">
+			<!-- Equal query -->
+			<if test="paramPo.version != null "> and t.VERSION = #{paramPo.version} </if>
+			<if test="paramPo.delFlag != null and paramPo.delFlag != ''"> and t.DEL_FLAG = #{paramPo.delFlag} </if>
+			<if test="paramPo.createBy != null and paramPo.createBy != ''"> and t.CREATE_BY = #{paramPo.createBy} </if>
+			<if test="paramPo.createTime != null "><![CDATA[ and t.CREATE_TIME = #{paramPo.createTime}]]> </if>
+			<if test="paramPo.updateBy != null and paramPo.updateBy != ''"> and t.UPDATE_BY = #{paramPo.updateBy} </if>
+			<if test="paramPo.updateTime != null "><![CDATA[ and t.UPDATE_TIME = #{paramPo.updateTime}]]> </if>
+			<if test="paramPo.id != null and paramPo.id != ''"> and t.ID = #{paramPo.id} </if>
+			<if test="paramPo.tenantCode != null and paramPo.tenantCode != ''"> and t.TENANT_CODE = #{paramPo.tenantCode} </if>
+			<if test="paramPo.accountId != null and paramPo.accountId != ''"> and t.ACCOUNT_ID = #{paramPo.accountId} </if>
+			<if test="paramPo.accountPwd != null and paramPo.accountPwd != ''"> and t.ACCOUNT_PWD = #{paramPo.accountPwd} </if>
+			<if test="paramPo.accountStatus != null and paramPo.accountStatus != ''"> and t.ACCOUNT_STATUS = #{paramPo.accountStatus} </if>
+			<if test="paramPo.accountType != null and paramPo.accountType != ''"> and t.ACCOUNT_TYPE = #{paramPo.accountType} </if>
+			<if test="paramPo.online != null and paramPo.online != ''"> and t.ONLINE = #{paramPo.online} </if>
+			<if test="paramPo.salt != null and paramPo.salt != ''"> and t.SALT = #{paramPo.salt} </if>
+			<if test="paramPo.visitCount != null "> and t.VISIT_COUNT = #{paramPo.visitCount} </if>
+			<if test="paramPo.visitFirst != null "><![CDATA[ and t.VISIT_FIRST = #{paramPo.visitFirst}]]> </if>
+			<if test="paramPo.visitIp != null and paramPo.visitIp != ''"> and t.VISIT_IP = #{paramPo.visitIp} </if>
+			<if test="paramPo.visitLast != null "><![CDATA[ and t.VISIT_LAST = #{paramPo.visitLast}]]> </if>
+			<if test="paramPo.visitPrevious != null "><![CDATA[ and t.VISIT_PREVIOUS = #{paramPo.visitPrevious}]]> </if>
+			<!-- Like query -->
+			<if test="paramPo.nickName != null and paramPo.nickName != ''"> and t.NICK_NAME like CONCAT(CONCAT('%', #{paramPo.nickName}), '%') </if>
 		</if>
-		<if test="tenantCodeList != null and tenantCodeList.size()>0">
-		and TENANT_CODE in <foreach item="item" index="index" collection="tenantCodeList" open="(" separator="," close=")">#{item}</foreach>
+		<!-- 非model属性：in条件处理拼写 -->
+		<if test="paramMap != null">
+			<if test="paramMap.accountIdList != null and paramMap.accountIdList.size()>0">
+			and t.ACCOUNT_ID in <foreach item="item" index="index" collection="paramMap.accountIdList" open="(" separator="," close=") ">#{item}</foreach>
+			</if>
+			<if test="paramMap.accountPwdList != null and paramMap.accountPwdList.size()>0">
+			and t.ACCOUNT_PWD in <foreach item="item" index="index" collection="paramMap.accountPwdList" open="(" separator="," close=") ">#{item}</foreach>
+			</if>
+			<if test="paramMap.accountStatusList != null and paramMap.accountStatusList.size()>0">
+			and t.ACCOUNT_STATUS in <foreach item="item" index="index" collection="paramMap.accountStatusList" open="(" separator="," close=") ">#{item}</foreach>
+			</if>
+			<if test="paramMap.accountTypeList != null and paramMap.accountTypeList.size()>0">
+			and t.ACCOUNT_TYPE in <foreach item="item" index="index" collection="paramMap.accountTypeList" open="(" separator="," close=") ">#{item}</foreach>
+			</if>
+			<if test="paramMap.idList != null and paramMap.idList.size()>0">
+			and t.ID in <foreach item="item" index="index" collection="paramMap.idList" open="(" separator="," close=") ">#{item}</foreach>
+			</if>
+			<if test="paramMap.nickNameList != null and paramMap.nickNameList.size()>0">
+			and t.NICK_NAME in <foreach item="item" index="index" collection="paramMap.nickNameList" open="(" separator="," close=") ">#{item}</foreach>
+			</if>
+			<if test="paramMap.onlineList != null and paramMap.onlineList.size()>0">
+			and t.ONLINE in <foreach item="item" index="index" collection="paramMap.onlineList" open="(" separator="," close=") ">#{item}</foreach>
+			</if>
+			<if test="paramMap.saltList != null and paramMap.saltList.size()>0">
+			and t.SALT in <foreach item="item" index="index" collection="paramMap.saltList" open="(" separator="," close=") ">#{item}</foreach>
+			</if>
+			<if test="paramMap.tenantCodeList != null and paramMap.tenantCodeList.size()>0">
+			and t.TENANT_CODE in <foreach item="item" index="index" collection="paramMap.tenantCodeList" open="(" separator="," close=") ">#{item}</foreach>
+			</if>
+			<if test="paramMap.visitCountList != null and paramMap.visitCountList.size()>0">
+			and t.VISIT_COUNT in <foreach item="item" index="index" collection="paramMap.visitCountList" open="(" separator="," close=") ">#{item}</foreach>
+			</if>
+			<if test="paramMap.visitIpList != null and paramMap.visitIpList.size()>0">
+			and t.VISIT_IP in <foreach item="item" index="index" collection="paramMap.visitIpList" open="(" separator="," close=") ">#{item}</foreach>
+			</if>
 		</if>
-		<if test="accountIdList != null and accountIdList.size()>0">
-		and ACCOUNT_ID in <foreach item="item" index="index" collection="accountIdList" open="(" separator="," close=")">#{item}</foreach>
-		</if>
-		<if test="accountPwdList != null and accountPwdList.size()>0">
-		and ACCOUNT_PWD in <foreach item="item" index="index" collection="accountPwdList" open="(" separator="," close=")">#{item}</foreach>
-		</if>
-		<if test="accountStatusList != null and accountStatusList.size()>0">
-		and ACCOUNT_STATUS in <foreach item="item" index="index" collection="accountStatusList" open="(" separator="," close=")">#{item}</foreach>
-		</if>
-		<if test="accountTypeList != null and accountTypeList.size()>0">
-		and ACCOUNT_TYPE in <foreach item="item" index="index" collection="accountTypeList" open="(" separator="," close=")">#{item}</foreach>
-		</if>
-		<if test="nickNameList != null and nickNameList.size()>0">
-		and NICK_NAME in <foreach item="item" index="index" collection="nickNameList" open="(" separator="," close=")">#{item}</foreach>
-		</if>
-		<if test="onlineList != null and onlineList.size()>0">
-		and ONLINE in <foreach item="item" index="index" collection="onlineList" open="(" separator="," close=")">#{item}</foreach>
-		</if>
-		<if test="saltList != null and saltList.size()>0">
-		and SALT in <foreach item="item" index="index" collection="saltList" open="(" separator="," close=")">#{item}</foreach>
-		</if>
-		<if test="visitCountList != null and visitCountList.size()>0">
-		and VISIT_COUNT in <foreach item="item" index="index" collection="visitCountList" open="(" separator="," close=")">#{item}</foreach>
-		</if>
-		<if test="visitIpList != null and visitIpList.size()>0">
-		and VISIT_IP in <foreach item="item" index="index" collection="visitIpList" open="(" separator="," close=")">#{item}</foreach>
-		</if>
-	
 	</sql>
-
 	<!-- 条件查询 -->
 	<select id="selectListBy" parameterType="java.util.Map" resultType="com.yffd.easy.uupm.api.model.UupmAccountModel">
 		select <include refid="table_columns" />
-		from <include refid="table_name"/>  as t 
+		from <include refid="table_name"/> as t 
 		<where>
 			<include refid="conditions_where" />
 		</where>
 		<include refid="conditions_orderby" />
 		<include refid="conditions_limit" />
 	</select>
-
 	<!-- 统计查询 -->
 	<select id="selectCountBy" parameterType="java.util.Map" resultType="long">
 		select count(1) from 
-		<include refid="table_name"/>  as t 
+		<include refid="table_name"/> as t 
 		<where>
 			<include refid="conditions_where" />
 		</where>
 	</select>
-
 	<!-- 单条查询 -->
 	<select id="selectOneBy" parameterType="java.util.Map" resultType="com.yffd.easy.uupm.api.model.UupmAccountModel">
 		select <include refid="table_columns" /> 
-		from <include refid="table_name"/>  as t 
+		from <include refid="table_name"/> as t 
 		<where>
 			<include refid="conditions_where" />
 		</where>
 	</select>
-
 	<!-- 单条插入 -->
 	<insert id="insertOne" parameterType="java.util.Map" keyProperty="id" useGeneratedKeys="true">
 		insert into
@@ -121,9 +117,8 @@
 		values
 		(#{version}, #{delFlag}, #{createBy}, #{createTime}, #{updateBy}, #{updateTime}, #{tenantCode}, #{accountId}, #{accountPwd}, #{accountStatus}, #{accountType}, #{nickName}, #{online}, #{salt}, #{visitCount}, #{visitFirst}, #{visitIp}, #{visitLast}, #{visitPrevious})
 	</insert>
-
 	<!-- 批量插入 -->
-	<insert id="insertBatch" parameterType="java.util.Map" keyProperty="id" useGeneratedKeys="true">
+	<insert id="insertList" parameterType="java.util.Map" keyProperty="id" useGeneratedKeys="true">
 		insert into <include refid="table_name" />
 		(VERSION, DEL_FLAG, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME, TENANT_CODE, ACCOUNT_ID, ACCOUNT_PWD, ACCOUNT_STATUS, ACCOUNT_TYPE, NICK_NAME, ONLINE, SALT, VISIT_COUNT, VISIT_FIRST, VISIT_IP, VISIT_LAST, VISIT_PREVIOUS)
 		values
@@ -149,161 +144,159 @@
 		#{item.visitPrevious})
 		</foreach>
 	</insert>
-
 	<!-- 更新 -->
 	<update id="updateBy" parameterType="java.util.Map">
 		update <include refid="table_name" />
 		<set>
-		<if test="newParam != null">
+		<if test="paramPo != null">
 			VERSION = VERSION + 1, 
-			<if test="newParam.delFlag != null and newParam.delFlag != ''"> DEL_FLAG = #{newParam.delFlag},  </if>
-			<if test="newParam.updateBy != null and newParam.updateBy != ''"> UPDATE_BY = #{newParam.updateBy},  </if>
-			<if test="newParam.updateTime != null"> UPDATE_TIME = #{newParam.updateTime},  </if>
-			<if test="newParam.tenantCode != null and newParam.tenantCode != ''"> TENANT_CODE = #{newParam.tenantCode},  </if>
-			<if test="newParam.accountId != null and newParam.accountId != ''"> ACCOUNT_ID = #{newParam.accountId},  </if>
-			<if test="newParam.accountPwd != null and newParam.accountPwd != ''"> ACCOUNT_PWD = #{newParam.accountPwd},  </if>
-			<if test="newParam.accountStatus != null and newParam.accountStatus != ''"> ACCOUNT_STATUS = #{newParam.accountStatus},  </if>
-			<if test="newParam.accountType != null and newParam.accountType != ''"> ACCOUNT_TYPE = #{newParam.accountType},  </if>
-			<if test="newParam.nickName != null and newParam.nickName != ''"> NICK_NAME = #{newParam.nickName},  </if>
-			<if test="newParam.online != null and newParam.online != ''"> ONLINE = #{newParam.online},  </if>
-			<if test="newParam.salt != null and newParam.salt != ''"> SALT = #{newParam.salt},  </if>
-			<if test="newParam.visitCount != null"> VISIT_COUNT = #{newParam.visitCount},  </if>
-			<if test="newParam.visitFirst != null"> VISIT_FIRST = #{newParam.visitFirst},  </if>
-			<if test="newParam.visitIp != null and newParam.visitIp != ''"> VISIT_IP = #{newParam.visitIp},  </if>
-			<if test="newParam.visitLast != null"> VISIT_LAST = #{newParam.visitLast},  </if>
-			<if test="newParam.visitPrevious != null"> VISIT_PREVIOUS = #{newParam.visitPrevious},  </if>
+			<if test="paramPo.delFlag != null and paramPo.delFlag != ''"> DEL_FLAG = #{paramPo.delFlag},  </if>
+			<if test="paramPo.updateBy != null and paramPo.updateBy != ''"> UPDATE_BY = #{paramPo.updateBy},  </if>
+			<if test="paramPo.updateTime != null"> UPDATE_TIME = #{paramPo.updateTime},  </if>
+			<if test="paramPo.tenantCode != null and paramPo.tenantCode != ''"> TENANT_CODE = #{paramPo.tenantCode},  </if>
+			<if test="paramPo.accountId != null and paramPo.accountId != ''"> ACCOUNT_ID = #{paramPo.accountId},  </if>
+			<if test="paramPo.accountPwd != null and paramPo.accountPwd != ''"> ACCOUNT_PWD = #{paramPo.accountPwd},  </if>
+			<if test="paramPo.accountStatus != null and paramPo.accountStatus != ''"> ACCOUNT_STATUS = #{paramPo.accountStatus},  </if>
+			<if test="paramPo.accountType != null and paramPo.accountType != ''"> ACCOUNT_TYPE = #{paramPo.accountType},  </if>
+			<if test="paramPo.nickName != null and paramPo.nickName != ''"> NICK_NAME = #{paramPo.nickName},  </if>
+			<if test="paramPo.online != null and paramPo.online != ''"> ONLINE = #{paramPo.online},  </if>
+			<if test="paramPo.salt != null and paramPo.salt != ''"> SALT = #{paramPo.salt},  </if>
+			<if test="paramPo.visitCount != null"> VISIT_COUNT = #{paramPo.visitCount},  </if>
+			<if test="paramPo.visitFirst != null"> VISIT_FIRST = #{paramPo.visitFirst},  </if>
+			<if test="paramPo.visitIp != null and paramPo.visitIp != ''"> VISIT_IP = #{paramPo.visitIp},  </if>
+			<if test="paramPo.visitLast != null"> VISIT_LAST = #{paramPo.visitLast},  </if>
+			<if test="paramPo.visitPrevious != null"> VISIT_PREVIOUS = #{paramPo.visitPrevious},  </if>
 		</if>
 		</set>
 		<where>
-		<if test="oldParam != null">
-			<if test="oldParam.version != null"> and VERSION = #{oldParam.version}  </if>
-			<if test="oldParam.delFlag != null and oldParam.delFlag != ''"> and DEL_FLAG = #{oldParam.delFlag}  </if>
-			<if test="oldParam.createBy != null and oldParam.createBy != ''"> and CREATE_BY = #{oldParam.createBy}  </if>
-			<if test="oldParam.createTime != null"><![CDATA[ and CREATE_TIME = #{oldParam.createTime} ]]> </if>
-			<if test="oldParam.id != null and oldParam.id != ''"> and ID = #{oldParam.id}  </if>
-			<if test="oldParam.tenantCode != null and oldParam.tenantCode != ''"> and TENANT_CODE = #{oldParam.tenantCode}  </if>
-			<if test="oldParam.accountId != null and oldParam.accountId != ''"> and ACCOUNT_ID = #{oldParam.accountId}  </if>
-			<if test="oldParam.accountPwd != null and oldParam.accountPwd != ''"> and ACCOUNT_PWD = #{oldParam.accountPwd}  </if>
-			<if test="oldParam.accountStatus != null and oldParam.accountStatus != ''"> and ACCOUNT_STATUS = #{oldParam.accountStatus}  </if>
-			<if test="oldParam.accountType != null and oldParam.accountType != ''"> and ACCOUNT_TYPE = #{oldParam.accountType}  </if>
-			<if test="oldParam.nickName != null and oldParam.nickName != ''"> and NICK_NAME = #{oldParam.nickName}  </if>
-			<if test="oldParam.online != null and oldParam.online != ''"> and ONLINE = #{oldParam.online}  </if>
-			<if test="oldParam.salt != null and oldParam.salt != ''"> and SALT = #{oldParam.salt}  </if>
-			<if test="oldParam.visitCount != null"> and VISIT_COUNT = #{oldParam.visitCount}  </if>
-			<if test="oldParam.visitFirst != null"><![CDATA[ and VISIT_FIRST = #{oldParam.visitFirst} ]]> </if>
-			<if test="oldParam.visitIp != null and oldParam.visitIp != ''"> and VISIT_IP = #{oldParam.visitIp}  </if>
-			<if test="oldParam.visitLast != null"><![CDATA[ and VISIT_LAST = #{oldParam.visitLast} ]]> </if>
-			<if test="oldParam.visitPrevious != null"><![CDATA[ and VISIT_PREVIOUS = #{oldParam.visitPrevious} ]]> </if>
+		<if test="paramPoOld != null">
+			<if test="paramPoOld.version != null"> and VERSION = #{paramPoOld.version}  </if>
+			<if test="paramPoOld.delFlag != null and paramPoOld.delFlag != ''"> and DEL_FLAG = #{paramPoOld.delFlag}  </if>
+			<if test="paramPoOld.createBy != null and paramPoOld.createBy != ''"> and CREATE_BY = #{paramPoOld.createBy}  </if>
+			<if test="paramPoOld.createTime != null"><![CDATA[ and CREATE_TIME = #{paramPoOld.createTime} ]]> </if>
+			<if test="paramPoOld.id != null and paramPoOld.id != ''"> and ID = #{paramPoOld.id}  </if>
+			<if test="paramPoOld.tenantCode != null and paramPoOld.tenantCode != ''"> and TENANT_CODE = #{paramPoOld.tenantCode}  </if>
+			<if test="paramPoOld.accountId != null and paramPoOld.accountId != ''"> and ACCOUNT_ID = #{paramPoOld.accountId}  </if>
+			<if test="paramPoOld.accountPwd != null and paramPoOld.accountPwd != ''"> and ACCOUNT_PWD = #{paramPoOld.accountPwd}  </if>
+			<if test="paramPoOld.accountStatus != null and paramPoOld.accountStatus != ''"> and ACCOUNT_STATUS = #{paramPoOld.accountStatus}  </if>
+			<if test="paramPoOld.accountType != null and paramPoOld.accountType != ''"> and ACCOUNT_TYPE = #{paramPoOld.accountType}  </if>
+			<if test="paramPoOld.nickName != null and paramPoOld.nickName != ''"> and NICK_NAME = #{paramPoOld.nickName}  </if>
+			<if test="paramPoOld.online != null and paramPoOld.online != ''"> and ONLINE = #{paramPoOld.online}  </if>
+			<if test="paramPoOld.salt != null and paramPoOld.salt != ''"> and SALT = #{paramPoOld.salt}  </if>
+			<if test="paramPoOld.visitCount != null"> and VISIT_COUNT = #{paramPoOld.visitCount}  </if>
+			<if test="paramPoOld.visitFirst != null"><![CDATA[ and VISIT_FIRST = #{paramPoOld.visitFirst} ]]> </if>
+			<if test="paramPoOld.visitIp != null and paramPoOld.visitIp != ''"> and VISIT_IP = #{paramPoOld.visitIp}  </if>
+			<if test="paramPoOld.visitLast != null"><![CDATA[ and VISIT_LAST = #{paramPoOld.visitLast} ]]> </if>
+			<if test="paramPoOld.visitPrevious != null"><![CDATA[ and VISIT_PREVIOUS = #{paramPoOld.visitPrevious} ]]> </if>
 		</if>
-		<if test="oldInParam != null">
-			<!-- 非model属性：in条件处理拼写，要求List集合中的值能转换成key-value形式，例如map、自定义model对象等 -->
-			<if test="oldInParam.idList != null and oldInParam.idList.size()>0">
-			and ID in <foreach item="item" index="index" collection="oldInParam.idList" open="(" separator="," close=")">#{item}</foreach>
+		<!-- 非model属性：in条件处理拼写 -->
+		<if test="paramMap != null">
+			<if test="paramMap.accountIdList != null and paramMap.accountIdList.size()>0">
+			and ACCOUNT_ID in <foreach item="item" index="index" collection="paramMap.accountIdList" open="(" separator="," close=") ">#{item}</foreach>
 			</if>
-			<if test="oldInParam.tenantCodeList != null and oldInParam.tenantCodeList.size()>0">
-			and TENANT_CODE in <foreach item="item" index="index" collection="oldInParam.tenantCodeList" open="(" separator="," close=")">#{item}</foreach>
+			<if test="paramMap.accountPwdList != null and paramMap.accountPwdList.size()>0">
+			and ACCOUNT_PWD in <foreach item="item" index="index" collection="paramMap.accountPwdList" open="(" separator="," close=") ">#{item}</foreach>
 			</if>
-			<if test="oldInParam.accountIdList != null and oldInParam.accountIdList.size()>0">
-			and ACCOUNT_ID in <foreach item="item" index="index" collection="oldInParam.accountIdList" open="(" separator="," close=")">#{item}</foreach>
+			<if test="paramMap.accountStatusList != null and paramMap.accountStatusList.size()>0">
+			and ACCOUNT_STATUS in <foreach item="item" index="index" collection="paramMap.accountStatusList" open="(" separator="," close=") ">#{item}</foreach>
 			</if>
-			<if test="oldInParam.accountPwdList != null and oldInParam.accountPwdList.size()>0">
-			and ACCOUNT_PWD in <foreach item="item" index="index" collection="oldInParam.accountPwdList" open="(" separator="," close=")">#{item}</foreach>
+			<if test="paramMap.accountTypeList != null and paramMap.accountTypeList.size()>0">
+			and ACCOUNT_TYPE in <foreach item="item" index="index" collection="paramMap.accountTypeList" open="(" separator="," close=") ">#{item}</foreach>
 			</if>
-			<if test="oldInParam.accountStatusList != null and oldInParam.accountStatusList.size()>0">
-			and ACCOUNT_STATUS in <foreach item="item" index="index" collection="oldInParam.accountStatusList" open="(" separator="," close=")">#{item}</foreach>
+			<if test="paramMap.idList != null and paramMap.idList.size()>0">
+			and ID in <foreach item="item" index="index" collection="paramMap.idList" open="(" separator="," close=") ">#{item}</foreach>
 			</if>
-			<if test="oldInParam.accountTypeList != null and oldInParam.accountTypeList.size()>0">
-			and ACCOUNT_TYPE in <foreach item="item" index="index" collection="oldInParam.accountTypeList" open="(" separator="," close=")">#{item}</foreach>
+			<if test="paramMap.nickNameList != null and paramMap.nickNameList.size()>0">
+			and NICK_NAME in <foreach item="item" index="index" collection="paramMap.nickNameList" open="(" separator="," close=") ">#{item}</foreach>
 			</if>
-			<if test="oldInParam.nickNameList != null and oldInParam.nickNameList.size()>0">
-			and NICK_NAME in <foreach item="item" index="index" collection="oldInParam.nickNameList" open="(" separator="," close=")">#{item}</foreach>
+			<if test="paramMap.onlineList != null and paramMap.onlineList.size()>0">
+			and ONLINE in <foreach item="item" index="index" collection="paramMap.onlineList" open="(" separator="," close=") ">#{item}</foreach>
 			</if>
-			<if test="oldInParam.onlineList != null and oldInParam.onlineList.size()>0">
-			and ONLINE in <foreach item="item" index="index" collection="oldInParam.onlineList" open="(" separator="," close=")">#{item}</foreach>
+			<if test="paramMap.saltList != null and paramMap.saltList.size()>0">
+			and SALT in <foreach item="item" index="index" collection="paramMap.saltList" open="(" separator="," close=") ">#{item}</foreach>
 			</if>
-			<if test="oldInParam.saltList != null and oldInParam.saltList.size()>0">
-			and SALT in <foreach item="item" index="index" collection="oldInParam.saltList" open="(" separator="," close=")">#{item}</foreach>
+			<if test="paramMap.tenantCodeList != null and paramMap.tenantCodeList.size()>0">
+			and TENANT_CODE in <foreach item="item" index="index" collection="paramMap.tenantCodeList" open="(" separator="," close=") ">#{item}</foreach>
 			</if>
-			<if test="oldInParam.visitCountList != null and oldInParam.visitCountList.size()>0">
-			and VISIT_COUNT in <foreach item="item" index="index" collection="oldInParam.visitCountList" open="(" separator="," close=")">#{item}</foreach>
+			<if test="paramMap.visitCountList != null and paramMap.visitCountList.size()>0">
+			and VISIT_COUNT in <foreach item="item" index="index" collection="paramMap.visitCountList" open="(" separator="," close=") ">#{item}</foreach>
 			</if>
-			<if test="oldInParam.visitIpList != null and oldInParam.visitIpList.size()>0">
-			and VISIT_IP in <foreach item="item" index="index" collection="oldInParam.visitIpList" open="(" separator="," close=")">#{item}</foreach>
+			<if test="paramMap.visitIpList != null and paramMap.visitIpList.size()>0">
+			and VISIT_IP in <foreach item="item" index="index" collection="paramMap.visitIpList" open="(" separator="," close=") ">#{item}</foreach>
 			</if>
 		</if>
 		<!-- 防止没有参数传递，导致全部更新 -->
 		or 1=2
 		</where>
 	</update>
-
 	<!-- 删除 -->
 	<delete id="deleteBy" parameterType="java.util.Map">
 		delete from <include refid="table_name" />
 		<where>
-		<!-- model属性： -->
-		<if test="version != null "> and VERSION = #{version} </if>
-		<if test="delFlag != null and delFlag != ''"> and DEL_FLAG = #{delFlag} </if>
-		<if test="createBy != null and createBy != ''"> and CREATE_BY = #{createBy} </if>
-		<if test="createTime != null "><![CDATA[ and CREATE_TIME = #{createTime}]]> </if>
-		<if test="updateBy != null and updateBy != ''"> and UPDATE_BY = #{updateBy} </if>
-		<if test="updateTime != null "><![CDATA[ and UPDATE_TIME = #{updateTime}]]> </if>
-		<if test="id != null and id != ''"> and ID = #{id} </if>
-		<if test="tenantCode != null and tenantCode != ''"> and TENANT_CODE = #{tenantCode} </if>
-		<if test="accountId != null and accountId != ''"> and ACCOUNT_ID = #{accountId} </if>
-		<if test="accountPwd != null and accountPwd != ''"> and ACCOUNT_PWD = #{accountPwd} </if>
-		<if test="accountStatus != null and accountStatus != ''"> and ACCOUNT_STATUS = #{accountStatus} </if>
-		<if test="accountType != null and accountType != ''"> and ACCOUNT_TYPE = #{accountType} </if>
-		<if test="nickName != null and nickName != ''"> and NICK_NAME = #{nickName} </if>
-		<if test="online != null and online != ''"> and ONLINE = #{online} </if>
-		<if test="salt != null and salt != ''"> and SALT = #{salt} </if>
-		<if test="visitCount != null "> and VISIT_COUNT = #{visitCount} </if>
-		<if test="visitFirst != null "><![CDATA[ and VISIT_FIRST = #{visitFirst}]]> </if>
-		<if test="visitIp != null and visitIp != ''"> and VISIT_IP = #{visitIp} </if>
-		<if test="visitLast != null "><![CDATA[ and VISIT_LAST = #{visitLast}]]> </if>
-		<if test="visitPrevious != null "><![CDATA[ and VISIT_PREVIOUS = #{visitPrevious}]]> </if>
-		
-		<!-- 非model属性：in条件处理拼写，要求List集合中的值能转换成key-value形式，例如map、自定义model对象等 -->
-		<if test="idList != null and idList.size()>0">
-		and ID in <foreach item="item" index="index" collection="idList" open="(" separator="," close=")">#{item}</foreach>
+		<if test="paramPo != null">
+			<if test="paramPo.version != null "> and VERSION = #{paramPo.version} </if>
+			<if test="paramPo.delFlag != null and paramPo.delFlag != ''"> and DEL_FLAG = #{paramPo.delFlag} </if>
+			<if test="paramPo.createBy != null and paramPo.createBy != ''"> and CREATE_BY = #{paramPo.createBy} </if>
+			<if test="paramPo.createTime != null "><![CDATA[ and CREATE_TIME = #{paramPo.createTime}]]> </if>
+			<if test="paramPo.updateBy != null and paramPo.updateBy != ''"> and UPDATE_BY = #{paramPo.updateBy} </if>
+			<if test="paramPo.updateTime != null "><![CDATA[ and UPDATE_TIME = #{paramPo.updateTime}]]> </if>
+			<if test="paramPo.id != null and paramPo.id != ''"> and ID = #{paramPo.id} </if>
+			<if test="paramPo.tenantCode != null and paramPo.tenantCode != ''"> and TENANT_CODE = #{paramPo.tenantCode} </if>
+			<if test="paramPo.accountId != null and paramPo.accountId != ''"> and ACCOUNT_ID = #{paramPo.accountId} </if>
+			<if test="paramPo.accountPwd != null and paramPo.accountPwd != ''"> and ACCOUNT_PWD = #{paramPo.accountPwd} </if>
+			<if test="paramPo.accountStatus != null and paramPo.accountStatus != ''"> and ACCOUNT_STATUS = #{paramPo.accountStatus} </if>
+			<if test="paramPo.accountType != null and paramPo.accountType != ''"> and ACCOUNT_TYPE = #{paramPo.accountType} </if>
+			<if test="paramPo.nickName != null and paramPo.nickName != ''"> and NICK_NAME = #{paramPo.nickName} </if>
+			<if test="paramPo.online != null and paramPo.online != ''"> and ONLINE = #{paramPo.online} </if>
+			<if test="paramPo.salt != null and paramPo.salt != ''"> and SALT = #{paramPo.salt} </if>
+			<if test="paramPo.visitCount != null "> and VISIT_COUNT = #{paramPo.visitCount} </if>
+			<if test="paramPo.visitFirst != null "><![CDATA[ and VISIT_FIRST = #{paramPo.visitFirst}]]> </if>
+			<if test="paramPo.visitIp != null and paramPo.visitIp != ''"> and VISIT_IP = #{paramPo.visitIp} </if>
+			<if test="paramPo.visitLast != null "><![CDATA[ and VISIT_LAST = #{paramPo.visitLast}]]> </if>
+			<if test="paramPo.visitPrevious != null "><![CDATA[ and VISIT_PREVIOUS = #{paramPo.visitPrevious}]]> </if>
 		</if>
-		<if test="tenantCodeList != null and tenantCodeList.size()>0">
-		and TENANT_CODE in <foreach item="item" index="index" collection="tenantCodeList" open="(" separator="," close=")">#{item}</foreach>
+		<!-- 非model属性：in条件处理拼写 -->
+		<if test="paramMap != null">
+			<if test="paramMap.accountIdList != null and paramMap.accountIdList.size()>0">
+			and ACCOUNT_ID in <foreach item="item" index="index" collection="paramMap.accountIdList" open="(" separator="," close=") ">#{item}</foreach>
+			</if>
+			<if test="paramMap.accountPwdList != null and paramMap.accountPwdList.size()>0">
+			and ACCOUNT_PWD in <foreach item="item" index="index" collection="paramMap.accountPwdList" open="(" separator="," close=") ">#{item}</foreach>
+			</if>
+			<if test="paramMap.accountStatusList != null and paramMap.accountStatusList.size()>0">
+			and ACCOUNT_STATUS in <foreach item="item" index="index" collection="paramMap.accountStatusList" open="(" separator="," close=") ">#{item}</foreach>
+			</if>
+			<if test="paramMap.accountTypeList != null and paramMap.accountTypeList.size()>0">
+			and ACCOUNT_TYPE in <foreach item="item" index="index" collection="paramMap.accountTypeList" open="(" separator="," close=") ">#{item}</foreach>
+			</if>
+			<if test="paramMap.idList != null and paramMap.idList.size()>0">
+			and ID in <foreach item="item" index="index" collection="paramMap.idList" open="(" separator="," close=") ">#{item}</foreach>
+			</if>
+			<if test="paramMap.nickNameList != null and paramMap.nickNameList.size()>0">
+			and NICK_NAME in <foreach item="item" index="index" collection="paramMap.nickNameList" open="(" separator="," close=") ">#{item}</foreach>
+			</if>
+			<if test="paramMap.onlineList != null and paramMap.onlineList.size()>0">
+			and ONLINE in <foreach item="item" index="index" collection="paramMap.onlineList" open="(" separator="," close=") ">#{item}</foreach>
+			</if>
+			<if test="paramMap.saltList != null and paramMap.saltList.size()>0">
+			and SALT in <foreach item="item" index="index" collection="paramMap.saltList" open="(" separator="," close=") ">#{item}</foreach>
+			</if>
+			<if test="paramMap.tenantCodeList != null and paramMap.tenantCodeList.size()>0">
+			and TENANT_CODE in <foreach item="item" index="index" collection="paramMap.tenantCodeList" open="(" separator="," close=") ">#{item}</foreach>
+			</if>
+			<if test="paramMap.visitCountList != null and paramMap.visitCountList.size()>0">
+			and VISIT_COUNT in <foreach item="item" index="index" collection="paramMap.visitCountList" open="(" separator="," close=") ">#{item}</foreach>
+			</if>
+			<if test="paramMap.visitIpList != null and paramMap.visitIpList.size()>0">
+			and VISIT_IP in <foreach item="item" index="index" collection="paramMap.visitIpList" open="(" separator="," close=") ">#{item}</foreach>
+			</if>
 		</if>
-		<if test="accountIdList != null and accountIdList.size()>0">
-		and ACCOUNT_ID in <foreach item="item" index="index" collection="accountIdList" open="(" separator="," close=")">#{item}</foreach>
-		</if>
-		<if test="accountPwdList != null and accountPwdList.size()>0">
-		and ACCOUNT_PWD in <foreach item="item" index="index" collection="accountPwdList" open="(" separator="," close=")">#{item}</foreach>
-		</if>
-		<if test="accountStatusList != null and accountStatusList.size()>0">
-		and ACCOUNT_STATUS in <foreach item="item" index="index" collection="accountStatusList" open="(" separator="," close=")">#{item}</foreach>
-		</if>
-		<if test="accountTypeList != null and accountTypeList.size()>0">
-		and ACCOUNT_TYPE in <foreach item="item" index="index" collection="accountTypeList" open="(" separator="," close=")">#{item}</foreach>
-		</if>
-		<if test="nickNameList != null and nickNameList.size()>0">
-		and NICK_NAME in <foreach item="item" index="index" collection="nickNameList" open="(" separator="," close=")">#{item}</foreach>
-		</if>
-		<if test="onlineList != null and onlineList.size()>0">
-		and ONLINE in <foreach item="item" index="index" collection="onlineList" open="(" separator="," close=")">#{item}</foreach>
-		</if>
-		<if test="saltList != null and saltList.size()>0">
-		and SALT in <foreach item="item" index="index" collection="saltList" open="(" separator="," close=")">#{item}</foreach>
-		</if>
-		<if test="visitCountList != null and visitCountList.size()>0">
-		and VISIT_COUNT in <foreach item="item" index="index" collection="visitCountList" open="(" separator="," close=")">#{item}</foreach>
-		</if>
-		<if test="visitIpList != null and visitIpList.size()>0">
-		and VISIT_IP in <foreach item="item" index="index" collection="visitIpList" open="(" separator="," close=")">#{item}</foreach>
-		</if>
-		
 		<!-- 防止没有参数传递，导致全部删除 -->
 		or 1=2
 		</where>
 	</delete>
-
 	<!-- ######################################################################### -->
-	<!-- ##############################   基础sql结束    ############################## -->
+	<!-- ##########################   common sql end    ########################## -->
 	<!-- ######################################################################### -->
 
 </mapper>

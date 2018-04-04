@@ -3,10 +3,9 @@ package com.yffd.easy.uupm.code;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.yffd.easy.framework.base.service.GenericService;
+import com.yffd.easy.framework.common.mapper.ICommonMapper;
+import com.yffd.easy.framework.common.service.CommonServiceAbstract;
 import com.yffd.easy.framework.support.code.generator.CodeGenerator;
-import com.yffd.easy.uupm.base.UupmBaseDao;
-import com.yffd.easy.uupm.base.UupmBaseDaoTest;
 import com.yffd.easy.uupm.base.UupmBaseServiceTest;
 
 /**
@@ -25,23 +24,23 @@ public class LocalProjectConfigTest extends CodeGenerator {
 	public static String modelRootDirPath = "D:\\java\\git-easy\\easy-master\\easy-uupm-api\\src\\main\\java";
 	public static String modelPackageName = "com.yffd.easy.uupm.api.model";
 	
-	public static Class<?> baseDaoClazz = UupmBaseDao.class;
-	public static String daoPackageName = "com.yffd.easy.uupm.dao";
+	public static Class<?> superMapperClazz = ICommonMapper.class;
+	public static String mapperPackageName = "com.yffd.easy.uupm.mapper";
 	
-	public static Class<?> baseDaoTestClazz = UupmBaseDaoTest.class;
-	public static String daoTestPackageName = daoPackageName;
-	
-	public static Class<?> baseServiceClazz = GenericService.class;
+	public static Class<?> superServiceClazz = CommonServiceAbstract.class;
 	public static String servicePackageName = "com.yffd.easy.uupm.service";
 	
-	public static Class<?> baseServiceTestClazz = UupmBaseServiceTest.class;
+	public static Class<?> superServiceTestClazz = UupmBaseServiceTest.class;
 	public static String serviceTestPackageName = servicePackageName;
 	
-	public static String outRootDirPath_mapper = "D:\\java\\git-easy\\easy-master\\easy-uupm-service\\src\\main\\resources\\mybatis\\mapper\\uupm";
-	public static String outRootDirPath_dao = "D:\\java\\git-easy\\easy-master\\easy-uupm-service\\src\\main\\java";
-	public static String outRootDirPath_dao_test = "D:\\java\\git-easy\\easy-master\\easy-uupm-service\\src\\test\\java";
-	public static String outRootDirPath_service = outRootDirPath_dao;
-	public static String outRootDirPath_service_test = outRootDirPath_dao_test;
+	
+	public static String outRootDirPath_src = "D:\\java\\git-easy\\easy-master\\easy-uupm-service\\src";
+	public static String outRootDirPath_src_main = outRootDirPath_src + "\\main\\java";
+	public static String outRootDirPath_src_test = outRootDirPath_src + "\\test\\java";
+	public static String outRootDirPath_mapper_xml = outRootDirPath_src + "\\main\\resources\\mybatis\\mapper\\uupm";
+	public static String outRootDirPath_mapper_interface = outRootDirPath_src_main;
+	public static String outRootDirPath_service = outRootDirPath_src_main;
+	public static String outRootDirPath_service_test = outRootDirPath_src_test;
 	
 	List<String> skipModelNamesLike = new ArrayList<String>();
 	{

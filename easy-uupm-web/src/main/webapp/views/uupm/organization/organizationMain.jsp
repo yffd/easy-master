@@ -13,40 +13,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <jsp:include page="/common/layout/script.jsp"></jsp:include>
 
 <script type="text/javascript">
-	var $json_activeStatus = [ {id:"", text:"全部", "selected": true} ];
-	var $json_rsType = [ {id:"", text:"全部", "selected": true} ];
 	var $openWindow = this;// 当前窗口
 	var $dg;
 	$(function() {
-		// 初始化控件数据
-		$.post('/uupm/combox/findComboByDict', 
-				{'comboxKeys':'active-status,rs-type'}, 
-				function(result) {
-					if("OK"==result.status) {
-						var jsonData = result.data;
-						$json_activeStatus = $json_activeStatus.concat(jsonData['active-status']);
-						$json_rsType = $json_rsType.concat(jsonData['rs-type']);
-
-						initTreegrid();	// 初始化datagrid组件
-					}
-				}, 'json');
-		//搜索框-app
-		$("#searchbox_id").searchbox({
-			menu:"#mm_id",
-			prompt :'请输入',
-// 			height: 28,
-			searcher:function(value, name) {
-				var obj = {};
-				obj[name] = value;
-				$dg.datagrid('reload', obj); 
-		    }
-		});
+		makeGrid();	// 初始化datagrid组件
 	});
 	// 初始化datagrid组件
-	function initTreegrid() {
+	function makeGrid() {
 		$dg = $('#dg_id');
 		$dg.treegrid({
-			url: 'uupm/org/findTree',
+			url: 'uupm/organization/findList',
 		    width: 'auto',
 		    height: $(this).height()-commonui.remainHeight-20-$('#tb_id').height(),
 			rownumbers: true,
@@ -57,16 +33,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			striped: true,
 			singleSelect: true,
 			toolbar: '#tb_id',
-			idField: 'id_',
+			idField: 'id',
 			treeField: 'orgName',
 			loadFilter: function(result) {
 		    	if("OK"==result.status) {
-		    		return result.data;
+		    		return result.data || [];
 		    	} else {
 		    		$.messager.show({
 						title :commonui.msg_title,
-						msg : result.msg,
-						timeout : commonui.msg_timeout
+						timeout : commonui.msg_timeout,
+						msg : result.msg
 					});
 		    		return [];
 	    		}
@@ -85,7 +61,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	        columns: [[
 						{field: 'orgCode', title: '编号', width: 100, align: 'left'},
 						{field: 'parentCode', title: '父编号', width: 100, align: 'left'},
-						{field: 'rsPath', title: '路径', width: 100, align: 'left'},
+						{field: 'parentName', title: '父名称', width: 100, align: 'left'},
+						{field: 'dataPath', title: '路径', width: 100, align: 'left'},
 						{field: 'seqNo', title: '类型', width: 100, align: 'left'},
 						{field: 'remark', title: '备注', width: 100, align: 'left'},
 	                   ]]
@@ -94,11 +71,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	
 	// 清除搜索条件
 	function cleanSearch() {
-		$('#searchbox_id_app').searchbox('setValue', '');
+		$('#searchbox_id').searchbox('setValue', '');
 	}
 	
 	// 打开添加对话框
 	function openAddDlg() {
+		var gridData = $dg.treegrid('getData');
+		var row = $dg.treegrid('getSelected');
+		if(gridData && gridData.length>0) {
+			if(!row) {
+				$.messager.show({
+					title :commonui.msg_title,
+					msg : "请选择一行记录!",
+					timeout : commonui.msg_timeout
+				});
+				return;
+			}
+		}
 		parent.$.modalDialog({
 			title: "添加",
 			width: 800,
@@ -106,7 +95,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			href: 'views/uupm/organization/organizationEditDlg.jsp',
 			onLoad:function() {
 				var editForm = parent.$.modalDialog.handler.find("#form_id");
-				editForm.find('input[name="parentCode"]').val("-1");
+				var parentName=editForm.find('input[name="parentName"]');
+				var parentCode=editForm.find('input[name="parentCode"]');
+				if(row) {
+					parentName.val(row.orgName);
+					parentName.attr('readonly',true);
+					parentCode.val(row.orgCode);
+					parentCode.attr('readonly',true);
+				} else {
+					parentName.val("根节点");
+					parentName.attr('readonly',true);
+					parentCode.val("root");
+					parentCode.attr('readonly',true);
+				}
+				
 			},
 			buttons: [{
 				text: '确定',
@@ -115,7 +117,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					parent.$.modalDialog.openWindow = $openWindow;//定义打开对话框的窗口
 					parent.$.modalDialog.openner = $dg;//定义对话框关闭要刷新的组件
 					var editForm = parent.$.modalDialog.handler.find("#form_id");
-					editForm.attr("action", "uupm/org/add");
+					editForm.attr("action", "uupm/organization/add");
 					editForm.submit();
 				}
 			},{
@@ -127,49 +129,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				}
 			}]
 		});
-	}
-	
-	// 打开添加对话框--child
-	function openAddDlg_child() {
-		var row = $dg.treegrid('getSelected');
-		if(row) {
-			parent.$.modalDialog({
-				title: "添加子项",
-				width: 800,
-				height: 400,
-				href: 'views/uupm/organization/organizationEditDlg.jsp',
-				onLoad:function() {
-					if(row) {
-						var editForm = parent.$.modalDialog.handler.find("#form_id");
-						editForm.find('input[name="parentCode"]').val(row.orgCode);
-					}
-				},
-				buttons: [{
-					text: '确定',
-					iconCls: 'icon-ok',
-					handler: function() {
-						parent.$.modalDialog.openWindow = $openWindow;//定义打开对话框的窗口
-						parent.$.modalDialog.openner = $dg;//定义对话框关闭要刷新的组件
-						var editForm = parent.$.modalDialog.handler.find("#form_id");
-						editForm.attr("action", "uupm/org/add");
-						editForm.submit();
-					}
-				},{
-					text: '取消',
-					iconCls: 'icon-cancel',
-					handler: function() {
-						parent.$.modalDialog.handler.dialog('destroy');
-						parent.$.modalDialog.handler = undefined;
-					}
-				}]
-			});
-		} else {
-			$.messager.show({
-				title :commonui.msg_title,
-				msg : "请选择一行记录!",
-				timeout : commonui.msg_timeout
-			});
-		}
 	}
 	
 	// 打开修改对话框
@@ -184,7 +143,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				onLoad:function(){
 					var editForm = parent.$.modalDialog.handler.find("#form_id");
 					editForm.form("load", row);
-					editForm.find("#orgCode_id").attr('readonly',true);
+					editForm.find('input[name="orgCode"]').attr('readonly',true);
+					editForm.find('input[name="parentName"]').attr('readonly',true);
+					editForm.find('input[name="parentCode"]').attr('readonly',true);
 				},
 				buttons: [{
 					text: '确定',
@@ -193,7 +154,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						parent.$.modalDialog.openWindow = $openWindow;//定义打开对话框的窗口
 						parent.$.modalDialog.openner = $dg;//定义对话框关闭要刷新的组件
 						var editForm = parent.$.modalDialog.handler.find("#form_id");
-						editForm.attr("action", "uupm/org/edit");
+						editForm.attr("action", "uupm/organization/edit");
 						editForm.submit();
 					}
 				},{
@@ -220,42 +181,36 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		if(row) {
 			parent.$.messager.confirm("提示","确定要删除记录吗?",function(r){  
 			    if(r) {
-			    	var arr_id = getItemCodesFromTree(row);
+			    	var arr_id = getChildrenId(row);
 			    	var ids = arr_id.join(",");
-			    	$.post("uupm/org/delBatch", {orgCodes:ids}, function(result) {
+			    	$.post("uupm/organization/delBatch", {'ids':ids}, function(result) {
 						if(result.status=='OK') {
-							$dg.treegrid('remove', row.id_);
+							$dg.treegrid('remove', row.id);
 						}
 						$.messager.show({
 							title :commonui.msg_title,
 							msg : result.msg,
 							timeout : commonui.msg_timeout
 						});
-					}, "JSON").error(function() {
-						$.messager.show({
-							title :commonui.msg_title,
-							msg : result.msg,
-							timeout : commonui.msg_timeout
-						});
-					});
+					}, "json");
 			    }  
 			});
 		} else {
 			$.messager.show({
 				title :commonui.msg_title,
-				msg : "请选择一行【资源】记录!",
+				msg : "请选择一行记录!",
 				timeout : commonui.msg_timeout
 			});
 		}
 	}
-	// 递归获取tree的itemCode
-	function getItemCodesFromTree(treeNode) {
+	// 递归获取tree的code
+	function getChildrenId(treeNode) {
 		var arrs = [];
 		if(treeNode) {
-			arrs.push(treeNode.id_);
+			arrs.push(treeNode.id);
 			if(treeNode.children) {
 				$.each(treeNode.children, function(i, obj){
-					arrs = arrs.concat(getItemCodesFromTree(obj));
+					arrs = arrs.concat(getChildrenId(obj));
 				});
 			}
 		}
@@ -266,7 +221,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	function expandAll() {
 		var node = $dg.treegrid('getSelected');
 		if(node) {
-			$dg.treegrid('expandAll', node.orgCode);
+			$dg.treegrid('expandAll', node.id);
 		} else {
 			$dg.treegrid('expandAll');
 		}
@@ -275,7 +230,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	function collapseAll() {
 		var node = $dg.treegrid('getSelected');
 		if(node) {
-			$dg.treegrid('collapseAll', node.orgCode);
+			$dg.treegrid('collapseAll', node.id);
 		} else {
 			$dg.treegrid('collapseAll');
 		}
@@ -290,7 +245,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<div id="tb_id" style="border-bottom:1px solid #cccccc;">
 			<shiro:hasPermission name="org-add">
 			<a class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:'true'" onclick="openAddDlg();" href="javascript:void(0);">添加</a>
-			<a class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:'true'" onclick="openAddDlg_child();" href="javascript:void(0);">添加子项</a>
 			</shiro:hasPermission>
 			<shiro:hasPermission name="org-edit">
 			<a class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:'true'" onclick="openEditDlg();" href="javascript:void(0);">编辑</a>
@@ -300,15 +254,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</shiro:hasPermission>
 			<a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-undo" plain="true" onclick="expandAll();">展开</a>
 			<a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-redo" plain="true" onclick="collapseAll();">收缩</a>
-		</div>
-		
-		<div id="mm_id" class="easyui-menu" style="width:120px;">
-			<div onclick="openAddDlg_child()" data-options="iconCls:'icon-add'">添加子项</div>
-			<div onclick="openEditDlg()" data-options="iconCls:'icon-edit'">编辑</div>
-			<div onclick="removeFunc()" data-options="iconCls:'icon-remove'">删除</div>
-			<div class="menu-sep"></div>
-	        <div onclick="expandAll()" data-options="iconCls:'icon-undo'">展开</div>
-	        <div onclick="collapseAll()" data-options="iconCls:'icon-redo'">收缩</div>
 		</div>
     </div>
 		

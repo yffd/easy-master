@@ -41,13 +41,13 @@ public class UupmComboTreeSupport {
 			vo.setText(model.getRsName());		// treeNode:设置文本
 			vo.setState("open");
 			vo.setId(model.getId());
-			vo.setAppCode(model.getAppCode());
-			vo.setRsCode(model.getRsCode());
-			vo.setRsName(model.getRsName());
-			vo.setParentCode(model.getParentCode());
-			vo.setRsPath(model.getRsPath());
-			vo.setRsType(model.getRsType());
-			vo.setRsStatus(model.getRsStatus());
+//			vo.setAppCode(model.getAppCode());
+//			vo.setRsCode(model.getRsCode());
+//			vo.setRsName(model.getRsName());
+//			vo.setParentCode(model.getParentCode());
+//			vo.setRsPath(model.getRsPath());
+//			vo.setRsType(model.getRsType());
+//			vo.setRsStatus(model.getRsStatus());
 			vo.setRemark(model.getRemark());
 			voList.add(vo);
 		}
