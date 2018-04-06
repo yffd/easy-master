@@ -77,7 +77,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			toolbar: '#tb_id',
 			loadFilter: function(result) {
 		    	if("OK"==result.status) {
-		    		console.dir(result.data);
 		    		return result.data || {'total':0, 'rows':[]};
 		    	} else {
 		    		$.messager.show({

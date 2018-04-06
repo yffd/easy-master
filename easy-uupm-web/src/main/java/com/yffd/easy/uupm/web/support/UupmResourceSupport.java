@@ -38,6 +38,7 @@ public class UupmResourceSupport {
 			vo.setText(model.getNodeName());		// treeNode:设置文本
 			vo.setState("open");
 			vo.setId(model.getId());
+			vo.setTenantCode(model.getTenantCode());
 			vo.setNodeLabel(model.getNodeLabel());
 			vo.setNodeCode(model.getNodeCode());
 			vo.setNodeName(model.getNodeName());

@@ -21,7 +21,7 @@ public class LocalProjectConfigTest extends CodeGenerator {
 	public static String author = "ZhangST";
 	public static boolean covered = true;
 	
-	public static String modelRootDirPath = "D:\\java\\git-easy\\easy-master\\easy-uupm-api\\src\\main\\java";
+	public static String modelRootDirPath = "F:\\easy\\easy-master\\easy-uupm-api\\src\\main\\java";
 	public static String modelPackageName = "com.yffd.easy.uupm.api.model";
 	
 	public static Class<?> superMapperClazz = ICommonMapper.class;
@@ -34,7 +34,7 @@ public class LocalProjectConfigTest extends CodeGenerator {
 	public static String serviceTestPackageName = servicePackageName;
 	
 	
-	public static String outRootDirPath_src = "D:\\java\\git-easy\\easy-master\\easy-uupm-service\\src";
+	public static String outRootDirPath_src = "F:\\easy\\easy-master\\easy-uupm-service\\src";
 	public static String outRootDirPath_src_main = outRootDirPath_src + "\\main\\java";
 	public static String outRootDirPath_src_test = outRootDirPath_src + "\\test\\java";
 	public static String outRootDirPath_mapper_xml = outRootDirPath_src + "\\main\\resources\\mybatis\\mapper\\uupm";

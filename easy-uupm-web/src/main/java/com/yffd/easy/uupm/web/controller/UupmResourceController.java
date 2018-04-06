@@ -45,6 +45,18 @@ public class UupmResourceController extends UupmCommonController {
 		return this.successAjax();
 	}
 	
+	@RequestMapping(value="/listApp", method=RequestMethod.POST)
+	public RespModel listApp(@RequestParam Map<String, Object> paramMap) {
+		String nodeValueType = "A";
+		String nodeStatus = null;
+		List<UupmTreeResourceModel> result = this.uupmTreeResourceService.findNodeListByValueType(nodeValueType, nodeStatus, null);
+		if(null!=result && !result.isEmpty()) {
+			List<UupmResourceComboTreeVO> treeList = this.uupmResourceSupport.toSyncTreeVO(result, "root");
+			return this.successAjax(treeList);
+		}
+		return this.successAjax();
+	}
+	
 	@RequestMapping(value="/listChildren", method=RequestMethod.POST)
 	public RespModel listChildren(@RequestParam Map<String, Object> paramMap) {
 		String nodeLabel = (String) paramMap.get("nodeLabel");
@@ -54,6 +66,16 @@ public class UupmResourceController extends UupmCommonController {
 		List<UupmTreeResourceModel> result = this.uupmTreeResourceService.findChildrenNodeList(nodeLabel, nodeCode, null);
 		if(null!=result && !result.isEmpty()) {
 			List<UupmResourceComboTreeVO> treeList = this.uupmResourceSupport.toSyncTreeVO(result, nodeCode);
+			return this.successAjax(treeList);
+		}
+		return this.successAjax();
+	}
+	
+	@RequestMapping(value="/listAll", method=RequestMethod.POST)
+	public RespModel listAll(@RequestParam Map<String, Object> paramMap) {
+		List<UupmTreeResourceModel> result = this.uupmTreeResourceService.findAllNodeList(null);
+		if(null!=result && !result.isEmpty()) {
+			List<UupmResourceComboTreeVO> treeList = this.uupmResourceSupport.toSyncTreeVO(result, "root");
 			return this.successAjax(treeList);
 		}
 		return this.successAjax();

@@ -21,7 +21,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		$dg = $('#dg_id');
 		// 初始化控件数据
 		$.post('/uupm/combox/findComboByDict', 
-				{'combo':'status,rs-type'},
+				{'combo':'status'},
 				function(result) {
 					if("OK"==result.status) {
 						var jsonData = result.data;

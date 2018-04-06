@@ -202,4 +202,16 @@
 	<!-- ##########################   common sql end    ########################## -->
 	<!-- ######################################################################### -->
 
+	<select id="selectTenantResource" parameterType="java.util.Map" resultType="java.util.Map">
+		select 
+		t.VERSION as version, t.DEL_FLAG as delFlag, t.CREATE_BY as createBy, t.CREATE_TIME as createTime, t.UPDATE_BY as updateBy, 
+		t.UPDATE_TIME as updateTime, t.ID as id, t.TENANT_CODE as tenantCode, t.NODE_CODE as nodeCode, t.NODE_LABEL as nodeLabel, 
+		t.NODE_LAYER as nodeLayer, t.NODE_LEFT as nodeLeft, t.NODE_NAME as nodeName, t.NODE_RIGHT as nodeRight, t.NODE_STATUS as nodeStatus, 
+		t.NODE_VALUE as nodeValue, t.NODE_VALUE_TYPE as nodeValueType, t.PARENT_NODE_CODE as parentNodeCode, t.PARENT_NODE_NAME as parentNodeName, t.REMARK as remark, 
+		t.SEQ_NO as seqNo
+		from uupm_tenant_resource t1 left join uupm_tree_resource t on t1.RS_CODE = t.NODE_CODE
+		where t1.TENANT_CODE = #{tenantCode}
+		ORDER BY t.SEQ_NO asc, t.CREATE_TIME desc
+	</select>
+	
 </mapper>

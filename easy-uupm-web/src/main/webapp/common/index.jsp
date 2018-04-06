@@ -94,18 +94,26 @@ function initMenuLocal() {
         "children": [{
         	"id": "sys-101",
             "pid": "sys",
+            "text": "系统资源管理",
+            "state": "open",
+            "iconCls": "icon-sys",
+            "inUrl": "views/uupm/resource/resourceMain.jsp",
+            "rsType": "M"
+        },{
+        	"id": "sys-102",
+            "pid": "sys",
             "text": "应用系统管理",
             "state": "open",
             "iconCls": "icon-sys",
             "inUrl": "views/uupm/application/appMain.jsp",
             "rsType": "M"
         },{
-        	"id": "sys-102",
+        	"id": "sys-103",
             "pid": "sys",
-            "text": "系统资源管理",
+            "text": "菜单管理",
             "state": "open",
             "iconCls": "icon-sys",
-            "inUrl": "views/uupm/resource/resourceMain.jsp",
+            "inUrl": "views/uupm/menu/menuMain.jsp",
             "rsType": "M"
         }]
 	},{
@@ -116,14 +124,6 @@ function initMenuLocal() {
         	"id": "sys-111",
             "pid": "sys",
             "text": "租户信息管理",
-            "state": "open",
-            "iconCls": "icon-sys",
-            "inUrl": "views/uupm/tenant/tenantMain.jsp",
-            "rsType": "M"
-        },{
-        	"id": "sys-112",
-            "pid": "sys",
-            "text": "租户费用管理",
             "state": "open",
             "iconCls": "icon-sys",
             "inUrl": "views/uupm/tenant/tenantMain.jsp",
@@ -155,20 +155,12 @@ function initMenuLocal() {
             "text": "菜单管理",
             "state": "open",
             "iconCls": "icon-sys",
-            "inUrl": "views/uupm/dictionary/dictionaryMain.jsp",
+            "inUrl": "views/uupm/menu/menuMain.jsp",
             "rsType": "M"
         }, {
         	"id": "sys-122",
             "pid": "sys",
             "text": "数据字典管理",
-            "state": "open",
-            "iconCls": "icon-sys",
-            "inUrl": "views/uupm/dictionary/dictionaryMain.jsp",
-            "rsType": "M"
-        },{
-        	"id": "sys-123",
-            "pid": "sys",
-            "text": "系统参数管理",
             "state": "open",
             "iconCls": "icon-sys",
             "inUrl": "views/uupm/dictionary/dictionaryMain.jsp",
@@ -197,10 +189,10 @@ function initMenuLocal() {
         },{
         	"id": "sys-182",
             "pid": "sys",
-            "text": "用户授权管理",
+            "text": "用户角色定制管理",
             "state": "open",
             "iconCls": "icon-sys",
-            "inUrl": "views/uupm/user/userAuth.jsp",
+            "inUrl": "views/uupm/user/userRoleCfg.jsp",
             "rsType": "M"
         }]
 	},{
@@ -218,10 +210,10 @@ function initMenuLocal() {
         },{
         	"id": "sys-192",
             "pid": "19",
-            "text": "角色授权管理",
+            "text": "角色资源定制管理",
             "state": "open",
             "iconCls": "icon-sys",
-            "inUrl": "views/uupm/role/roleAuth.jsp",
+            "inUrl": "views/uupm/role/roleResourceCfg.jsp",
             "rsType": "M"
         }]
 	},{

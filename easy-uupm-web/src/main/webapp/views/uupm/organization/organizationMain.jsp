@@ -22,7 +22,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	function makeGrid() {
 		$dg = $('#dg_id');
 		$dg.treegrid({
-			url: 'uupm/organization/findList',
+			url: 'uupm/organization/findTree',
 		    width: 'auto',
 		    height: $(this).height()-commonui.remainHeight-20-$('#tb_id').height(),
 			rownumbers: true,

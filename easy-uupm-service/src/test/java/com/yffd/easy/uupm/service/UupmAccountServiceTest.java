@@ -5,10 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
-
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.yffd.easy.common.core.page.PageParam;
 import com.yffd.easy.common.core.page.PageResult;
@@ -17,7 +16,7 @@ import com.yffd.easy.uupm.base.UupmBaseServiceTest;
 
 /**
  * @Description  简单描述该类的功能（可选）.
- * @Date		2018年03月30日 10时32分32秒 <br/>
+ * @Date		2018年04月06日 13时40分09秒 <br/>
  * @author		ZhangST
  * @version		 1.0
  * @since		 JDK 1.7+
@@ -25,7 +24,7 @@ import com.yffd.easy.uupm.base.UupmBaseServiceTest;
  */
 public class UupmAccountServiceTest extends UupmBaseServiceTest {
 
-	@Resource
+	@Autowired
 	private UupmAccountService uupmAccountService;
 	
 	@Test
@@ -129,7 +128,7 @@ public class UupmAccountServiceTest extends UupmBaseServiceTest {
 	@Test
 	public void deleteTest() {
 		UupmAccountModel paramModel = new UupmAccountModel();
-		paramModel.setTenantCode("default-new");
+		paramModel.setTenantCode("default_0");
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		List<String> idList = new ArrayList<String>();
 		idList.add("2000");

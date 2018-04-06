@@ -37,7 +37,7 @@ public class UupmOrganizationController extends UupmCommonController {
 	@Autowired
 	private UupmOrganizationSupport uupmOrganizationSupport;
 	
-	@RequestMapping(value="/findList", method=RequestMethod.POST)
+	@RequestMapping(value="/findTree", method=RequestMethod.POST)
 	public RespModel findTree(@RequestParam Map<String, Object> paramMap) {
 		List<UupmOrganizationModel> result = this.uupmOrganizationService.findList(null, paramMap, null);
 		if(null!=result && !result.isEmpty()) {
