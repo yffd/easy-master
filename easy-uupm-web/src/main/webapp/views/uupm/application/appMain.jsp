@@ -13,48 +13,46 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <jsp:include page="/common/layout/script.jsp"></jsp:include>
 
 <script type="text/javascript">
-	var $json_status = [ {id:"", text:"全部", "selected": true} ];
-	var $json_rsType = [ {id:"", text:"全部", "selected": true} ];
+	var $json_appType = [ {id:"", text:"全部", "selected": true} ];
+	var $json_activeStatus = [ {id:"", text:"全部", "selected": true} ];
 	var $openWindow = this;// 当前窗口
-	var $dg_left;
-	var $dg_right;
+	var $dg;
 	$(function() {
+		$dg = $('#dg_id');
 		// 初始化控件数据
 		$.post('/uupm/combox/findComboByDict', 
-				{'combo':'status,rs-type'}, 
+				{'comboxKeys':'active-status,app-type'}, 
 				function(result) {
 					if("OK"==result.status) {
 						var jsonData = result.data;
-						$json_status = $json_status.concat(jsonData['combo']['status'][0]['children']);
-						$json_rsType = $json_rsType.concat(jsonData['combo']['rs-type'][0]['children']);
-						// 初始化datagrid组件
-						makeGrid_left();
+						$json_appType = $json_appType.concat(jsonData['app-type']);
+						$json_activeStatus = $json_activeStatus.concat(jsonData['active-status']);
+
+						initDatagrid();	// 初始化datagrid组件
+						
 					}
 				}, 'json');
+		
 	});
 	// 初始化datagrid组件
-	function makeGrid_left() {
-		$dg_left = $('#dg_id_left');
-		$dg_left.treegrid({
-			url:'uupm/resource/listApp',
+	function initDatagrid() {
+		$dg.datagrid({
+		    url:'uupm/app/findPage',
 		    width: 'auto',
-		    height: $(this).height()-commonui.remainHeight-20,
-		    fit:true,
-			rownumbers: false,
+		    height: $(this).height()-commonui.remainHeight-$('.search-form-div').height(),
+			pagination: true,
+			pageSize: commonui.pageSize,
+			rownumbers: true,
 			animate: true,
 			collapsible: true,
 			fitColumns: true,
-			fit:true,
 			border: false,
 			striped: true,
 			singleSelect: true,
-			showHeader: true,
-			toolbar: '',
-			idField: 'id',
-			treeField: 'nodeName',
-		    loadFilter: function(result) {
+			toolbar: '#tb_id',
+			loadFilter: function(result) {
 		    	if("OK"==result.status) {
-		    		return result.data || [];
+		    		return result.data;
 		    	} else {
 		    		$.messager.show({
 						title :commonui.msg_title,
@@ -64,84 +62,236 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		    		return [];
 	    		}
 	    	},
-			onClickRow: function(row) {
-				makeGrid_right(row);
-			},
-			columns: [[
-	                   	{field: 'nodeName', title: '名称', width:200,align: 'left'},
-						{field: 'nodeCode', title: '编号', width: 100, align: 'left'},
-						{field: 'nodeStatus', title: '状态', width: 100, align: 'left',
+	    	frozenColumns: [[
+	    	                 {field: 'appName', title: '名称', width: 200, align: 'left'}
+	    	                 ]],
+	        columns: [[
+						{field: 'appCode', title: '编号', width: 100, align: 'left'},
+						{field: 'appDomain', title: '域名/IP', width: 100, align: 'left'},
+						{field: 'appPort', title: '端口', width: 100, align: 'left'},
+						{field: 'appContextPath', title: '路径前缀', width: 100, align: 'left'},
+						{field: 'appType', title: '类型', width: 100, align: 'left',
 							formatter: function(value, row) {
-								return utils.fmtDict($json_status, value);
-							}
-						},
-						{field: 'nodeValueType', title: '类型', width: 100, align: 'left',
-							formatter: function(value, row) {
-								return utils.fmtDict($json_rsType, value);
+								return utils.fmtDict($json_appType, value);
 							}	
 						},
-						{field: 'seqNo', title: '序号', width: 100, align: 'left'},
-						{field: 'remark', title: '描述', width: 100, align: 'left'}
+						{field: 'appStatus', title: '状态', width: 100, align: 'left',
+							formatter: function(value, row) {
+								return utils.fmtDict($json_activeStatus, value);
+							}	
+						},
+						{field: 'createTime', title: '创建时间', width: 100, align: 'center',
+							formatter: function(value, row) {
+								return value?new Date(value).format("yyyy-MM-dd HH:mm:ss"):"";
+							}	
+						},
+						{field: 'remark', title: '备注', width: 100, align: 'left'},
 	                   ]]
 		});
 	}
-	
-	function makeGrid_right(row) {
-		$.post('uupm/application/findAppCfg', {'appCode': row.nodeCode}, function(result) {
-			if(result.status=='OK') {
-				var jsonData = result.data || {'total':0, 'rows':[]};
-				$('#dg_id_right').propertygrid({
-					data: jsonData,
-					fit: true,
-				    showHeader: false,
-				    showGroup: false,
-				    scrollbarSize: 0
-				});
-			}
-		}, "json");
+	// 高级查询
+	function _search() {
+		var params = {};
+		var inputs = $('#searchForm_id input');
+		if(inputs) {
+			$.each(inputs, function(i, obj) {
+				if(obj.name) params[obj.name] = obj.value;
+			});
+		}
+		$dg.datagrid('reload', params);
 	}
 	
-	/*********************************************************/
-	function saveAppCfg() {
-		try{
-			var row_app = $dg_left.datagrid('getSelected');//获取选中的行-单行
-			var rows = $('#dg_id_right').propertygrid('getChanges');
-			if(rows.length==0) {
-				$.messager.show({
-					title :commonui.msg_title,
-					timeout : commonui.msg_timeout,
-					msg : '保存成功',
-				});
-			} else {
-				var paramObj = {};
-				paramObj['appCode'] = row_app['nodeCode'];
-				$.each(rows, function(i, obj) {
-					paramObj[obj.id] = obj.value;
-				});
-			}
-			$.post('uupm/application/saveAppCfg', paramObj, function(result) {
-				$.messager.show({
-					title :commonui.msg_title,
-					msg : result.msg,
-					timeout : commonui.msg_timeout
-				});
-			}, "json");
-		}catch(err){
+	// 清除搜索条件
+	function cleanSearch() {
+		$('#searchForm_id input').val('');
+	}
+	
+	// 打开添加对话框
+	function openAddDlg() {
+		parent.$.modalDialog({
+			title: "添加",
+			width: 800,
+			height: 400,
+			href: 'views/uupm/application/appEditDlg.jsp',
+			onLoad:function(){
+				var editForm = parent.$.modalDialog.handler.find("#form_id");
+				setComboForSelected(editForm);
+			},
+			buttons: [{
+				text: '确定',
+				iconCls: 'icon-ok',
+				handler: function() {
+					parent.$.modalDialog.openWindow = $openWindow;//定义打开对话框的窗口
+					parent.$.modalDialog.openner = $dg;//定义对话框关闭要刷新的grid
+					var editForm = parent.$.modalDialog.handler.find("#form_id");
+					editForm.attr("action", "uupm/app/add");
+					editForm.submit();
+				}
+			},{
+				text: '取消',
+				iconCls: 'icon-cancel',
+				handler: function() {
+					parent.$.modalDialog.handler.dialog('destroy');
+					parent.$.modalDialog.handler = undefined;
+				}
+			}]
+		});
+	}
+	
+	// 打开修改对话框
+	function openEditDlg() {
+		var row = $dg.datagrid('getSelected');
+		if(row) {
+			parent.$.modalDialog({
+				title: "编辑",
+				width: 600,
+				height: 400,
+				href: 'views/uupm/application/appEditDlg.jsp',
+				onLoad:function(){
+					var editForm = parent.$.modalDialog.handler.find("#form_id");
+					setComboForSelected(editForm);
+					editForm.form("load", row);
+					editForm.find("#appCode_id").attr('readonly',true);
+				},
+				buttons: [{
+					text: '确定',
+					iconCls: 'icon-ok',
+					handler: function() {
+						parent.$.modalDialog.openWindow = $openWindow;//定义打开对话框的窗口
+						parent.$.modalDialog.openner = $dg;//定义对话框关闭要刷新的grid
+						var editForm = parent.$.modalDialog.handler.find("#form_id");
+						editForm.attr("action", "uupm/app/edit");
+						editForm.submit();
+					}
+				},{
+					text: '取消',
+					iconCls: 'icon-cancel',
+					handler: function() {
+						parent.$.modalDialog.handler.dialog('destroy');
+						parent.$.modalDialog.handler = undefined;
+					}
+				}]
+			});
+		} else {
+			$.messager.show({
+				title :commonui.msg_title,
+				msg : "请选择一行记录!",
+				timeout : commonui.msg_timeout
+			});
 		}
 	}
+	
+	// 删除
+	function removeFunc() {
+		var row = $dg.datagrid('getSelected');
+		if(row) {
+			parent.$.messager.confirm("提示","确定要删除记录吗?",function(r){  
+			    if(r) {
+			    	$.post("uupm/app/delById", {id:row.id}, function(result) {
+						if(result.status=='OK') {
+							var rowIndex = $dg.datagrid('getRowIndex', row);
+							$dg.datagrid('deleteRow', rowIndex);
+						}
+						$.messager.show({
+							title :commonui.msg_title,
+							msg : result.msg,
+							timeout : commonui.msg_timeout
+						});
+					}, "JSON").error(function() {
+						$.messager.show({
+							title :commonui.msg_title,
+							msg : result.msg,
+							timeout : commonui.msg_timeout
+						});
+					});
+			    }  
+			});
+		} else {
+			$.messager.show({
+				title :commonui.msg_title,
+				msg : "请选择一行记录!",
+				timeout : commonui.msg_timeout
+			});
+		}
+	}
+	// 设置控件选中
+	function setComboForSelected(selectForm) {
+		selectForm.find('#appType_id').combobox({
+			editable:false,
+			panelHeight: 120,
+			valueField:'id',
+		    textField:'text',
+		    data: $.grep($json_appType, function(n,i){
+		    	if(i==1) n['selected']=true;
+		    	return i > 0;
+		    })
+		});
+		selectForm.find('#appStatus_id').combobox({
+			editable:false,
+			panelHeight: 120,
+			valueField:'id',
+		    textField:'text',
+		    data: $.grep($json_activeStatus, function(n,i){
+		    	if(i==1) n['selected']=true;
+		    	return i > 0;
+		    })
+		});
+	}	
 </script>
 </head>
-<body class="easyui-layout">
-    <div data-options="region:'west',title:'应用系统列表',split:true,border:true" style="width:600px;">
-		<table id="dg_id_left"></table>
-    </div>
-
-    <div data-options="region:'center',title:'配置信息'" style="padding:5px;">
-    	<div id="tb_id_right" style="border-bottom:1px solid #cccccc;">
-    	<a class="easyui-linkbutton" data-options="iconCls:'icon-config',plain:'true'" onclick="saveAppCfg();" href="javascript:void(0);">保存设置</a>
+<body class="easyui-layout,fit:true">
+	<div class="search-form-div" data-options="region:'north',border:false,title:'高级查询',iconCls:'icon-search',collapsible:true">
+		<div class="badge-div-hidden" >
+			<span class="badge-title">提示</span>
+			<p style="margin:0px;padding:2px;">
+				xxx<span class="badge-info"><strong>yyy</strong></span>，
+			</p>
 		</div>
-    	<table id="dg_id_right"></table>
-    </div>
+		<form id="searchForm_id">
+			<table class="search-form-table">
+				<tr>
+					<th>名称：</th>
+					<td>
+						<input name="appName" type="text" />
+					</td>
+					<th>编号：</th>
+					<td>
+						<input name="appCode" type="text" />
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3"></td>
+					<td style="text-align:right;padding-right:20px;">
+						<a href="javascript:void(0);" class="easyui-linkbutton" onclick="_search();">查询</a> 
+						<a href="javascript:void(0);" class="easyui-linkbutton" onclick="cleanSearch();">重置</a>
+					</td>
+				</tr>
+				
+			</table>
+		</form>
+	</div>
+	
+	<div data-options="region:'center',border:false" style="overflow:hidden;">
+		<table id="dg_id" title="查询列表"></table>
+	</div>
+	
+	<div id="tb_id" style="display:none;padding:5px;height:auto">
+		<table cellpadding="0" cellspacing="0">
+			<tr>
+				<td style="padding-left:2px;padding-bottom:2px;">
+					<shiro:hasPermission name="user-add">
+					<a class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:'true'" onclick="openAddDlg();" href="javascript:void(0);">添加</a>
+					</shiro:hasPermission>
+					<shiro:hasPermission name="user-edit">
+					<a class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:'true'" onclick="openEditDlg();" href="javascript:void(0);">编辑</a>
+					</shiro:hasPermission>
+					<shiro:hasPermission name="user-del">
+					<a class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:'true'" onclick="removeFunc();" href="javascript:void(0);">删除</a>
+					</shiro:hasPermission>
+				</td>
+			</tr>
+		</table>
+	</div>
 		
 </body>
 </html>

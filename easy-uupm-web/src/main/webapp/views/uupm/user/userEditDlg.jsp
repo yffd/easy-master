@@ -1,15 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <script type="text/javascript">
-	var aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa='123';
 $(function() {
 	var $orgCombox = $("#orgCode_id").combotree({
 		width:171,
-		url:"uupm/combox/findComboTreeByOrg",
+		url:"uupm/org/findTree",
+		idFiled:'id_',
+	 	textFiled:'orgName',
+	 	parentField:'pid_',
 	 	editable:false,
 	 	loadFilter:function(data,parent) {
 	 		if("OK"==data.status) {
-	 			return data.data;
+	    		return data.data;
 	    	} else {
 	    		$.messager.show({
 					title :commonui.msg_title,
@@ -20,10 +22,7 @@ $(function() {
     		}
 		},
 		onLoadSuccess:function(node,data) {
-			if(parent.$.modalDialog.handler.checkedFirst==true){
-				if(data[0] && data[0].id) $orgCombox.combotree('setValue', data[0].id);// 设置选中
-				parent.$.modalDialog.handler.checkedFirst=undefined;
-			}
+			if(data[0] && data[0].id) $orgCombox.combotree('setValue', data[0].id);// 设置选中
         },
 		onBeforeExpand:function(node) {
 			var children = $orgCombox.tree("getChildren", node.target);

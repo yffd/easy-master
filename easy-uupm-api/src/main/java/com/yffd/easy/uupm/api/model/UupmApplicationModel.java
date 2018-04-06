@@ -22,15 +22,25 @@ public class UupmApplicationModel extends CustomPo {
 	private static final long serialVersionUID = -3316333314800573791L;
 	
 	private String appCode;			//应用系统编号
+	private String appName;			//应用系统名称
 	private String appDomain;		//应用系统域名
 	private String appPort;			//应用系统端口
 	private String appContextPath;	//应用系统上下文路径
+	private String appType;			//应用系统类型：app-local=本地系统、app-inner=内部系统、app-outer=外部系统
+	private String appStatus;		//应用系统状态：1=激活、0=冻结
+	private String remark;			//备注
 	
 	public String getAppCode() {
 		return appCode;
 	}
 	public void setAppCode(String appCode) {
 		this.appCode = appCode;
+	}
+	public String getAppName() {
+		return appName;
+	}
+	public void setAppName(String appName) {
+		this.appName = appName;
 	}
 	public String getAppDomain() {
 		return appDomain;
@@ -50,4 +60,23 @@ public class UupmApplicationModel extends CustomPo {
 	public void setAppContextPath(String appContextPath) {
 		this.appContextPath = appContextPath;
 	}
+	public String getAppType() {
+		return appType;
+	}
+	public void setAppType(String appType) {
+		this.appType = appType;
+	}
+	public String getAppStatus() {
+		return appStatus;
+	}
+	public void setAppStatus(String appStatus) {
+		this.appStatus = appStatus;
+	}
+	public String getRemark() {
+		return remark;
+	}
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+	
 }

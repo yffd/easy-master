@@ -51,8 +51,7 @@ public class UupmTenantController extends UupmCommonController {
 		paramModel.setTenantCode(model.getTenantCode());
 		UupmTenantModel hasModel = (UupmTenantModel) this.uupmTenantService.findOne(paramModel, null);
 		if(null!=hasModel) return this.errorAjax("租户编号已存在");
-//		this.uupmTenantService.addOne(model, null);
-		this.uupmTenantService.addTenantWithAccount(model, null);
+		this.uupmTenantService.addOne(model, null);
 		return this.successAjax();
 	}
 	

@@ -37,7 +37,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	function makeGrid_left() {
 		$dg_left = $('#dg_id_left');
 		$dg_left.treegrid({
-			url:'uupm/resource/listApp',
+			url:'uupm/resource/listRoot',
 		    width: 'auto',
 		    height: $(this).height()-commonui.remainHeight-20,
 		    fit:true,
@@ -104,7 +104,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    	},
 	    	onContextMenu: function(e, node){
 				e.preventDefault();
-				$dg_right.treegrid('select', node.id);
+				$dg_right.treegrid('select', node.nodeCode);
 				$('#mm_right').menu('show', {
 					left: e.pageX,
 					top: e.pageY

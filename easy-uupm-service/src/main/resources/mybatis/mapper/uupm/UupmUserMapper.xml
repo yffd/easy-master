@@ -48,8 +48,7 @@
 			<if test="map.tenantCode != null and map.tenantCode != ''"> and t.TENANT_CODE = #{map.tenantCode} </if>
 			<if test="map.orgCode != null and map.orgCode != ''"> and t.ORG_CODE = #{map.orgCode} </if>
 			<if test="map.userCode != null and map.userCode != ''"> and t.USER_CODE = #{map.userCode} </if>
-			<!-- Like query -->
-			<if test="map.userName != null and map.userName != ''"> and t.USER_NAME like CONCAT(CONCAT('%', #{map.userName}), '%') </if>
+			<if test="map.userName != null and map.userName != ''"> and t.USER_NAME = #{map.userName} </if>
 			<!-- In query -->
 			<if test="map.idList != null and map.idList.size()>0">
 			and t.ID in <foreach item="item" index="index" collection="map.idList" open="(" separator="," close=") ">#{item}</foreach>
@@ -148,7 +147,8 @@
 			<if test="old.tenantCode != null and old.tenantCode != ''"> and TENANT_CODE = #{old.tenantCode} </if>
 			<if test="old.orgCode != null and old.orgCode != ''"> and ORG_CODE = #{old.orgCode} </if>
 			<if test="old.userCode != null and old.userCode != ''"> and USER_CODE = #{old.userCode} </if>
-			<if test="old.userName != null and old.userName != ''"> and USER_NAME = #{old.userName} </if>
+			<!-- Like query -->
+			<if test="old.userName != null and old.userName != ''"> and USER_NAME like CONCAT(CONCAT('%', #{old.userName}), '%') </if>
 		</if>
 		<if test="map != null">
 			<!-- Equal query -->
@@ -240,36 +240,4 @@
 	<!-- ##########################   common sql end    ########################## -->
 	<!-- ######################################################################### -->
 
-	<select id="selectUserInfo" parameterType="java.util.Map" resultType="java.util.Map">
-		select <include refid="table_columns" />
-		, m.ORG_NAME as orgName
-		, n.ACCOUNT_ID as accountId, n.ACCOUNT_STATUS as accountStatus, n.ACCOUNT_TYPE as accountType
-		from <include refid="table_name"/>  as t 
-		left join uupm_organization m on t.ORG_CODE = m.ORG_CODE
-		left join uupm_account n on t.USER_CODE = n.ACCOUNT_ID
-		<where>
-		<include refid="conditions_where" />
-		<if test="map.accountStatus != null and map.accountStatus != ''"> and n.ACCOUNT_STATUS = #{map.accountStatus} </if>
-		<if test="map.accountType != null and map.accountType != ''"> and n.ACCOUNT_TYPE = #{map.accountType} </if>
-		</where>
-		<include refid="conditions_orderby" />
-		<include refid="conditions_limit" />
-	</select>
-	
-	<select id="selectUserInfoCount" parameterType="java.util.Map" resultType="long">
-		select count(1) from 
-		<include refid="table_name"/>  as t
-		left join uupm_account n on t.USER_CODE = n.ACCOUNT_ID
-		<where>
-		<include refid="conditions_where" />
-		<if test="map.accountStatus != null and map.accountStatus != ''"> and n.ACCOUNT_STATUS = #{map.accountStatus} </if>
-		<if test="map.accountType != null and map.accountType != ''"> and n.ACCOUNT_TYPE = #{map.accountType} </if>
-		</where>
-	</select>
-	
-	
-	
-	
-	
-	
 </mapper>

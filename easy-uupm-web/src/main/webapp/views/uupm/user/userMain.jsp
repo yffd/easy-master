@@ -13,26 +13,34 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <jsp:include page="/common/layout/script.jsp"></jsp:include>
 
 <script type="text/javascript">
-	var $json_status = [ {id:"", text:"全部", "selected": true} ];
+	var $json_activeStatus = [{id:"", text:"全部", "selected": true}];
 	var $openWindow = this;// 当前窗口
 	var $dg;
 	$(function() {
+		$dg = $('#dg_id');
 		// 初始化控件数据
 		$.post('/uupm/combox/findComboByDict', 
-				{'combo':'status'}, 
+				{'comboxKeys':'active-status,'},  
 				function(result) {
 					if("OK"==result.status) {
 						var jsonData = result.data;
-						$json_status = $json_status.concat(jsonData['combo']['status'][0]['children']);
-						// 初始化datagrid组件
-						makeGrid();	
+						$json_activeStatus = $json_activeStatus.concat(jsonData['active-status']);
+						initDatagrid();	// 初始化datagrid组件
+						$json_activeStatus[0]['selected']=true;
+						$('#accountStatus_id').combobox({
+							editable:false,
+							panelHeight: 120,
+						    valueField:'id',
+						    textField:'text',
+						    data: $json_activeStatus
+						});
+						
 					}
 				}, 'json');
 		
 	});
 	// 初始化datagrid组件
-	function makeGrid() {
-		$dg = $('#dg_id');
+	function initDatagrid() {
 		$dg.datagrid({
 		    url:'uupm/user/findPage',
 		    width: 'auto',
@@ -49,14 +57,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			toolbar: '#tb_id',
 			loadFilter: function(result) {
 		    	if("OK"==result.status) {
-		    		return result.data || {'total':0, 'rows':[]};
+		    		return result.data;
 		    	} else {
 		    		$.messager.show({
 						title :commonui.msg_title,
 						msg : result.msg,
 						timeout : commonui.msg_timeout
 					});
-		    		return {'total':0, 'rows':[]};
+		    		return [];
 	    		}
 	    	},
 	    	frozenColumns: [[
@@ -82,7 +90,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						{field: 'accountId', title: '账户ID', width: 100, align: 'left'},
 						{field: 'accountStatus', title: '账户状态', width: 100, align: 'left',
 							formatter: function(value, row) {
-								return utils.fmtDict($json_status, value);
+								return utils.fmtDict($json_activeStatus, value);
 							}	
 						},
 						{field: 'createTime', title: '创建时间', width: 100, align: 'center',
@@ -121,7 +129,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			height: 400,
 			href: 'views/uupm/user/userEditDlg.jsp',
 			onLoad:function(){
-				parent.$.modalDialog.handler.checkedFirst=true;
+				var editForm = parent.$.modalDialog.handler.find("#form_id");
+				setComboForSelected(editForm);
 			},
 			buttons: [{
 				text: '确定',
@@ -156,8 +165,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				onLoad:function(){
 					var editForm = parent.$.modalDialog.handler.find("#form_id");
 					editForm.form("load", row);
+					setComboForSelected(editForm);
 					editForm.find("input[name='userCode']").attr('readonly',true);
-					editForm.find("#orgCode_id").combotree('setValue', row.orgCode);
 				},
 				buttons: [{
 					text: '确定',
@@ -222,8 +231,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	}
 	// 修改账户状态
 	function updateStatus(accountId, accountStatus) {
-		var tmp='active';
-		if('active'==accountStatus) tmp='inactive';
+		var tmp='A';
+		if('A'==accountStatus) tmp='I';
 		$.post("uupm/account/updateStatus", {'accountId':accountId, 'accountStatus':tmp}, function(result) {
 			if(result.status=='OK') {
 				$dg.datagrid('reload');
@@ -233,8 +242,27 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				timeout : commonui.msg_timeout,
 				msg : result.msg
 			});
-		}, "JSON");
+		}, "JSON").error(function() {
+			$.messager.show({
+				title :commonui.msg_title,
+				timeout : commonui.msg_timeout,
+				msg : commonui.msg
+			});
+		});
 	}
+	// 设置控件选中
+	function setComboForSelected(selectForm) {
+		selectForm.find('input[name="accountStatus"]').combobox({
+			editable:false,
+			panelHeight: 120,
+			valueField:'id',
+		    textField:'text',
+		    data: $.grep($json_activeStatus, function(n,i){
+		    	if(i==1) n['selected']=true;
+		    	return i > 0;	//返回true，进行选取
+		    })
+		});
+	}	
 </script>
 </head>
 <body class="easyui-layout,fit:true">

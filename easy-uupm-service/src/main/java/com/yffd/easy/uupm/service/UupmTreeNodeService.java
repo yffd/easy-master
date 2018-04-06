@@ -34,19 +34,12 @@ public class UupmTreeNodeService<T extends UupmTreeNodeModel> extends CommonServ
 		return sb.toString();
 	}
 	
-	public List<T> findAllNodeList(LoginInfo loginInfo) {
-		Map<String, Object> params = new HashMap<String, Object>();
-		if(null!=loginInfo) params.put("tenantCode", loginInfo.getTenantCode());
-		return this.selectListBy("selectListBy", params, true);
-	}
-	
 	public List<T> findChildrenNodeList(String nodeLabel, String nodeCode, LoginInfo loginInfo) {
 		if(EasyStringCheckUtils.isEmpty(nodeLabel) || EasyStringCheckUtils.isEmpty(nodeCode)) 
 			throw EasyBizException.BIZ_PARAMS_ERROR();
 		T resultNode = this.findNode(nodeLabel, nodeCode, loginInfo);
 		if(null==resultNode) return null;
 		Map<String, Object> params = new HashMap<String, Object>();
-		if(null!=loginInfo) params.put("tenantCode", loginInfo.getTenantCode());
 		params.put("nodeLeft", resultNode.getNodeLeft());
 		params.put("nodeRight", resultNode.getNodeRight());
 		params.put("tenantCode", resultNode.getTenantCode());
@@ -61,7 +54,6 @@ public class UupmTreeNodeService<T extends UupmTreeNodeModel> extends CommonServ
 		T resultNode = this.findNode(nodeLabel, nodeCode, loginInfo);
 		if(null==resultNode) return null;
 		Map<String, Object> params = new HashMap<String, Object>();
-		if(null!=loginInfo) params.put("tenantCode", loginInfo.getTenantCode());
 		params.put("nodeLeft", resultNode.getNodeLeft());
 		params.put("nodeRight", resultNode.getNodeRight());
 		params.put("tenantCode", resultNode.getTenantCode());
@@ -76,7 +68,6 @@ public class UupmTreeNodeService<T extends UupmTreeNodeModel> extends CommonServ
 		T resultNode = this.findNode(nodeLabel, nodeCode, loginInfo);
 		if(null==resultNode) return null;
 		Map<String, Object> params = new HashMap<String, Object>();
-		if(null!=loginInfo) params.put("tenantCode", loginInfo.getTenantCode());
 		params.put("nodeLeft", resultNode.getNodeLeft());
 		params.put("nodeRight", resultNode.getNodeRight());
 		params.put("tenantCode", resultNode.getTenantCode());
@@ -100,16 +91,6 @@ public class UupmTreeNodeService<T extends UupmTreeNodeModel> extends CommonServ
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		if(null!=loginInfo) paramMap.put("tenantCode", loginInfo.getTenantCode());
 		paramMap.put("parentNodeCode", "root");
-		paramMap.put("nodeStatus", nodeStatus);
-		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("model", paramMap);
-		return this.selectListBy("selectListBy", params, true);
-	}
-	
-	public List<T> findNodeListByValueType(String nodeValueType, String nodeStatus, LoginInfo loginInfo) {
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		if(null!=loginInfo) paramMap.put("tenantCode", loginInfo.getTenantCode());
-		paramMap.put("nodeValueType", nodeValueType);
 		paramMap.put("nodeStatus", nodeStatus);
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("model", paramMap);
@@ -195,7 +176,6 @@ public class UupmTreeNodeService<T extends UupmTreeNodeModel> extends CommonServ
 		node.setParentNodeCode(resultParentNode.getNodeCode());
 		node.setParentNodeName(resultParentNode.getNodeName());
 		node.setNodeLayer(resultParentNode.getNodeLayer() + 1);
-		node.setTenantCode(resultParentNode.getTenantCode());
 		if(EasyStringCheckUtils.isEmpty(node.getNodeValue())) node.setNodeValue(node.getNodeCode());
 		int num = this.insertBy("insertOne", node, true);		// 添加
 		return num;
@@ -233,7 +213,6 @@ public class UupmTreeNodeService<T extends UupmTreeNodeModel> extends CommonServ
 		T resultNode = this.findNode(nodeLabel, nodeCode, loginInfo);
 		if(null==resultNode) return 0;
 		Map<String, Object> params = new HashMap<String, Object>();
-		if(null!=loginInfo) params.put("tenantCode", loginInfo.getTenantCode());
 		params.put("nodeLeft", resultNode.getNodeLeft());
 		params.put("nodeRight", resultNode.getNodeRight());
 		params.put("tenantCode", resultNode.getTenantCode());
@@ -260,7 +239,6 @@ public class UupmTreeNodeService<T extends UupmTreeNodeModel> extends CommonServ
 		T resultNode = this.findNode(nodeLabel, nodeCode, loginInfo);
 		if(null==resultNode) return 0;
 		Map<String, Object> params = new HashMap<String, Object>();
-		if(null!=loginInfo) params.put("tenantCode", loginInfo.getTenantCode());
 		params.put("nodeLeft", resultNode.getNodeLeft());
 		params.put("nodeRight", resultNode.getNodeRight());
 		params.put("tenantCode", resultNode.getTenantCode());

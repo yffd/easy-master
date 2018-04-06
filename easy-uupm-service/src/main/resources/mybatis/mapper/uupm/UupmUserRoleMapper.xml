@@ -1,91 +1,96 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.yffd.easy.uupm.mapper.IUupmUserRoleMapper">
-
-
+<mapper namespace="com.yffd.easy.uupm.dao.UupmUserRoleDao">
 	<!-- ######################################################################### -->
-	<!-- #########################   common sql begin    ######################### -->
+	<!-- ##############################   基础sql开始    ############################## -->
 	<!-- ######################################################################### -->
 	
+	<resultMap id="resutlId" type="com.yffd.easy.uupm.api.model.UupmUserRoleModel">
+		<id column="ID" property="id" />
+		<result column="VERSION" property="version" />
+		<result column="DEL_FLAG" property="delFlag" />
+		<result column="CREATE_BY" property="createBy" />
+		<result column="CREATE_TIME" property="createTime" />
+		<result column="UPDATE_BY" property="updateBy" />
+		<result column="UPDATE_TIME" property="updateTime" />
+		<result column="TENANT_CODE" property="tenantCode" />
+		<result column="ROLE_CODE" property="roleCode" />
+		<result column="USER_CODE" property="userCode" />
+	</resultMap>
+
 	<!-- 表名 -->
 	<sql id="table_name"> uupm_user_role </sql>
+
 	<!-- 列名 -->
 	<sql id="table_columns">
-		t.VERSION as version, t.DEL_FLAG as delFlag, t.CREATE_BY as createBy, t.CREATE_TIME as createTime, t.UPDATE_BY as updateBy, 
-		t.UPDATE_TIME as updateTime, t.ID as id, t.TENANT_CODE as tenantCode, t.ROLE_CODE as roleCode, t.USER_CODE as userCode
+		t.VERSION, t.DEL_FLAG, t.CREATE_BY, t.CREATE_TIME, t.UPDATE_BY, t.UPDATE_TIME, t.ID, t.TENANT_CODE, t.ROLE_CODE, t.USER_CODE
 	</sql>
+
 	<!-- 分页条件 -->
-	<sql id="conditions_limit"><if test="page != null"> limit #{page.startIndex}, #{page.pageLimit} </if></sql>
+	<sql id="conditions_limit"><if test="pageParam != null"> limit #{pageParam.startIndex}, #{pageParam.pageLimit} </if></sql>
+
 	<!-- 排序条件 -->
 	<sql id="conditions_orderby"> ORDER BY t.CREATE_TIME desc </sql>
+
 	<!-- 动态组装复合查询条件 -->
 	<sql id="conditions_where">
-		<if test="model != null">
-			<!-- Equal query -->
-			<if test="model.version != null "> and t.VERSION = #{model.version} </if>
-			<if test="model.delFlag != null and model.delFlag != ''"> and t.DEL_FLAG = #{model.delFlag} </if>
-			<if test="model.createBy != null and model.createBy != ''"> and t.CREATE_BY = #{model.createBy} </if>
-			<if test="model.createTime != null "><![CDATA[ and t.CREATE_TIME = #{model.createTime}]]> </if>
-			<if test="model.updateBy != null and model.updateBy != ''"> and t.UPDATE_BY = #{model.updateBy} </if>
-			<if test="model.updateTime != null "><![CDATA[ and t.UPDATE_TIME = #{model.updateTime}]]> </if>
-			<if test="model.id != null and model.id != ''"> and t.ID = #{model.id} </if>
-			<if test="model.tenantCode != null and model.tenantCode != ''"> and t.TENANT_CODE = #{model.tenantCode} </if>
-			<if test="model.roleCode != null and model.roleCode != ''"> and t.ROLE_CODE = #{model.roleCode} </if>
-			<if test="model.userCode != null and model.userCode != ''"> and t.USER_CODE = #{model.userCode} </if>
+		<!-- Equal query -->
+		<if test="version != null "> and t.VERSION = #{version} </if>
+		<if test="delFlag != null and delFlag != ''"> and t.DEL_FLAG = #{delFlag} </if>
+		<if test="createBy != null and createBy != ''"> and t.CREATE_BY = #{createBy} </if>
+		<if test="createTime != null "><![CDATA[ and t.CREATE_TIME = #{createTime}]]> </if>
+		<if test="updateBy != null and updateBy != ''"> and t.UPDATE_BY = #{updateBy} </if>
+		<if test="updateTime != null "><![CDATA[ and t.UPDATE_TIME = #{updateTime}]]> </if>
+		<if test="id != null and id != ''"> and t.ID = #{id} </if>
+		<if test="tenantCode != null and tenantCode != ''"> and t.TENANT_CODE = #{tenantCode} </if>
+		<if test="roleCode != null and roleCode != ''"> and t.ROLE_CODE = #{roleCode} </if>
+		<if test="userCode != null and userCode != ''"> and t.USER_CODE = #{userCode} </if>
+	
+		<!-- 非model属性：in条件处理拼写，要求List集合中的值能转换成key-value形式，例如map、自定义model对象等 -->
+		<if test="idList != null and idList.size()>0">
+		and ID in <foreach item="item" index="index" collection="idList" open="(" separator="," close=")">#{item}</foreach>
 		</if>
-		<if test="map != null">
-			<!-- Equal query -->
-			<if test="map.version != null "> and t.VERSION = #{map.version} </if>
-			<if test="map.delFlag != null and map.delFlag != ''"> and t.DEL_FLAG = #{map.delFlag} </if>
-			<if test="map.createBy != null and map.createBy != ''"> and t.CREATE_BY = #{map.createBy} </if>
-			<if test="map.createTime != null "><![CDATA[ and t.CREATE_TIME = #{map.createTime}]]> </if>
-			<if test="map.updateBy != null and map.updateBy != ''"> and t.UPDATE_BY = #{map.updateBy} </if>
-			<if test="map.updateTime != null "><![CDATA[ and t.UPDATE_TIME = #{map.updateTime}]]> </if>
-			<if test="map.id != null and map.id != ''"> and t.ID = #{map.id} </if>
-			<if test="map.tenantCode != null and map.tenantCode != ''"> and t.TENANT_CODE = #{map.tenantCode} </if>
-			<if test="map.roleCode != null and map.roleCode != ''"> and t.ROLE_CODE = #{map.roleCode} </if>
-			<if test="map.userCode != null and map.userCode != ''"> and t.USER_CODE = #{map.userCode} </if>
-			<!-- In query -->
-			<if test="map.idList != null and map.idList.size()>0">
-			and t.ID in <foreach item="item" index="index" collection="map.idList" open="(" separator="," close=") ">#{item}</foreach>
-			</if>
-			<if test="map.roleCodeList != null and map.roleCodeList.size()>0">
-			and t.ROLE_CODE in <foreach item="item" index="index" collection="map.roleCodeList" open="(" separator="," close=") ">#{item}</foreach>
-			</if>
-			<if test="map.tenantCodeList != null and map.tenantCodeList.size()>0">
-			and t.TENANT_CODE in <foreach item="item" index="index" collection="map.tenantCodeList" open="(" separator="," close=") ">#{item}</foreach>
-			</if>
-			<if test="map.userCodeList != null and map.userCodeList.size()>0">
-			and t.USER_CODE in <foreach item="item" index="index" collection="map.userCodeList" open="(" separator="," close=") ">#{item}</foreach>
-			</if>
+		<if test="tenantCodeList != null and tenantCodeList.size()>0">
+		and TENANT_CODE in <foreach item="item" index="index" collection="tenantCodeList" open="(" separator="," close=")">#{item}</foreach>
 		</if>
+		<if test="roleCodeList != null and roleCodeList.size()>0">
+		and ROLE_CODE in <foreach item="item" index="index" collection="roleCodeList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="userCodeList != null and userCodeList.size()>0">
+		and USER_CODE in <foreach item="item" index="index" collection="userCodeList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+	
 	</sql>
+
 	<!-- 条件查询 -->
-	<select id="selectListBy" parameterType="java.util.Map" resultType="com.yffd.easy.uupm.api.model.UupmUserRoleModel">
+	<select id="selectListBy" parameterType="java.util.Map" resultMap="resutlId">
 		select <include refid="table_columns" />
-		from <include refid="table_name"/> as t 
+		from <include refid="table_name"/>  as t 
 		<where>
 			<include refid="conditions_where" />
 		</where>
 		<include refid="conditions_orderby" />
 		<include refid="conditions_limit" />
 	</select>
+
 	<!-- 统计查询 -->
 	<select id="selectCountBy" parameterType="java.util.Map" resultType="long">
 		select count(1) from 
-		<include refid="table_name"/> as t 
+		<include refid="table_name"/>  as t 
 		<where>
 			<include refid="conditions_where" />
 		</where>
 	</select>
+
 	<!-- 单条查询 -->
-	<select id="selectOneBy" parameterType="java.util.Map" resultType="com.yffd.easy.uupm.api.model.UupmUserRoleModel">
+	<select id="selectOneBy" parameterType="java.util.Map" resultMap="resutlId">
 		select <include refid="table_columns" /> 
-		from <include refid="table_name"/> as t 
+		from <include refid="table_name"/>  as t 
 		<where>
 			<include refid="conditions_where" />
 		</where>
 	</select>
+
 	<!-- 单条插入 -->
 	<insert id="insertOne" parameterType="java.util.Map" keyProperty="id" useGeneratedKeys="true">
 		insert into
@@ -94,8 +99,9 @@
 		values
 		(#{version}, #{delFlag}, #{createBy}, #{createTime}, #{updateBy}, #{updateTime}, #{tenantCode}, #{roleCode}, #{userCode})
 	</insert>
+
 	<!-- 批量插入 -->
-	<insert id="insertList" parameterType="java.util.Map" keyProperty="id" useGeneratedKeys="true">
+	<insert id="insertBatch" parameterType="java.util.Map" keyProperty="id" useGeneratedKeys="true">
 		insert into <include refid="table_name" />
 		(VERSION, DEL_FLAG, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME, TENANT_CODE, ROLE_CODE, USER_CODE)
 		values
@@ -111,112 +117,89 @@
 		#{item.userCode})
 		</foreach>
 	</insert>
+
 	<!-- 更新 -->
 	<update id="updateBy" parameterType="java.util.Map">
 		update <include refid="table_name" />
 		<set>
-		<if test="model != null">
-			<if test="model.delFlag != null and model.delFlag != ''"> DEL_FLAG = #{model.delFlag},  </if>
-			<if test="model.roleCode != null and model.roleCode != ''"> ROLE_CODE = #{model.roleCode},  </if>
-			<if test="model.tenantCode != null and model.tenantCode != ''"> TENANT_CODE = #{model.tenantCode},  </if>
-			<if test="model.updateBy != null and model.updateBy != ''"> UPDATE_BY = #{model.updateBy},  </if>
-			<if test="model.updateTime != null"> UPDATE_TIME = #{model.updateTime},  </if>
-			<if test="model.userCode != null and model.userCode != ''"> USER_CODE = #{model.userCode},  </if>
+		<if test="newParam != null">
 			VERSION = VERSION + 1, 
+			<if test="newParam.delFlag != null and newParam.delFlag != ''"> DEL_FLAG = #{newParam.delFlag},  </if>
+			<if test="newParam.updateBy != null and newParam.updateBy != ''"> UPDATE_BY = #{newParam.updateBy},  </if>
+			<if test="newParam.updateTime != null"> UPDATE_TIME = #{newParam.updateTime},  </if>
+			<if test="newParam.tenantCode != null and newParam.tenantCode != ''"> TENANT_CODE = #{newParam.tenantCode},  </if>
+			<if test="newParam.roleCode != null and newParam.roleCode != ''"> ROLE_CODE = #{newParam.roleCode},  </if>
+			<if test="newParam.userCode != null and newParam.userCode != ''"> USER_CODE = #{newParam.userCode},  </if>
 		</if>
 		</set>
 		<where>
-		<if test="old != null">
-			<!-- Equal query -->
-			<if test="old.version != null "> and VERSION = #{old.version} </if>
-			<if test="old.delFlag != null and old.delFlag != ''"> and DEL_FLAG = #{old.delFlag} </if>
-			<if test="old.createBy != null and old.createBy != ''"> and CREATE_BY = #{old.createBy} </if>
-			<if test="old.createTime != null "><![CDATA[ and CREATE_TIME = #{old.createTime}]]> </if>
-			<if test="old.updateBy != null and old.updateBy != ''"> and UPDATE_BY = #{old.updateBy} </if>
-			<if test="old.updateTime != null "><![CDATA[ and UPDATE_TIME = #{old.updateTime}]]> </if>
-			<if test="old.id != null and old.id != ''"> and ID = #{old.id} </if>
-			<if test="old.tenantCode != null and old.tenantCode != ''"> and TENANT_CODE = #{old.tenantCode} </if>
-			<if test="old.roleCode != null and old.roleCode != ''"> and ROLE_CODE = #{old.roleCode} </if>
-			<if test="old.userCode != null and old.userCode != ''"> and USER_CODE = #{old.userCode} </if>
+		<if test="oldParam != null">
+			<if test="oldParam.version != null"> and VERSION = #{oldParam.version}  </if>
+			<if test="oldParam.delFlag != null and oldParam.delFlag != ''"> and DEL_FLAG = #{oldParam.delFlag}  </if>
+			<if test="oldParam.createBy != null and oldParam.createBy != ''"> and CREATE_BY = #{oldParam.createBy}  </if>
+			<if test="oldParam.createTime != null"><![CDATA[ and CREATE_TIME = #{oldParam.createTime} ]]> </if>
+			<if test="oldParam.id != null and oldParam.id != ''"> and ID = #{oldParam.id}  </if>
+			<if test="oldParam.tenantCode != null and oldParam.tenantCode != ''"> and TENANT_CODE = #{oldParam.tenantCode}  </if>
+			<if test="oldParam.roleCode != null and oldParam.roleCode != ''"> and ROLE_CODE = #{oldParam.roleCode}  </if>
+			<if test="oldParam.userCode != null and oldParam.userCode != ''"> and USER_CODE = #{oldParam.userCode}  </if>
 		</if>
-		<if test="map != null">
-			<!-- Equal query -->
-			<if test="map.version != null "> and VERSION = #{map.version} </if>
-			<if test="map.delFlag != null and map.delFlag != ''"> and DEL_FLAG = #{map.delFlag} </if>
-			<if test="map.createBy != null and map.createBy != ''"> and CREATE_BY = #{map.createBy} </if>
-			<if test="map.createTime != null "><![CDATA[ and CREATE_TIME = #{map.createTime}]]> </if>
-			<if test="map.updateBy != null and map.updateBy != ''"> and UPDATE_BY = #{map.updateBy} </if>
-			<if test="map.updateTime != null "><![CDATA[ and UPDATE_TIME = #{map.updateTime}]]> </if>
-			<if test="map.id != null and map.id != ''"> and ID = #{map.id} </if>
-			<if test="map.tenantCode != null and map.tenantCode != ''"> and TENANT_CODE = #{map.tenantCode} </if>
-			<if test="map.roleCode != null and map.roleCode != ''"> and ROLE_CODE = #{map.roleCode} </if>
-			<if test="map.userCode != null and map.userCode != ''"> and USER_CODE = #{map.userCode} </if>
-			<!-- In query -->
-			<if test="map.idList != null and map.idList.size()>0">
-			and ID in <foreach item="item" index="index" collection="map.idList" open="(" separator="," close=") ">#{item}</foreach>
+		<if test="oldInParam != null">
+			<!-- 非model属性：in条件处理拼写，要求List集合中的值能转换成key-value形式，例如map、自定义model对象等 -->
+			<if test="oldInParam.idList != null and oldInParam.idList.size()>0">
+			and ID in <foreach item="item" index="index" collection="oldInParam.idList" open="(" separator="," close=")">#{item}</foreach>
 			</if>
-			<if test="map.roleCodeList != null and map.roleCodeList.size()>0">
-			and ROLE_CODE in <foreach item="item" index="index" collection="map.roleCodeList" open="(" separator="," close=") ">#{item}</foreach>
+			<if test="oldInParam.tenantCodeList != null and oldInParam.tenantCodeList.size()>0">
+			and TENANT_CODE in <foreach item="item" index="index" collection="oldInParam.tenantCodeList" open="(" separator="," close=")">#{item}</foreach>
 			</if>
-			<if test="map.tenantCodeList != null and map.tenantCodeList.size()>0">
-			and TENANT_CODE in <foreach item="item" index="index" collection="map.tenantCodeList" open="(" separator="," close=") ">#{item}</foreach>
+			<if test="oldInParam.roleCodeList != null and oldInParam.roleCodeList.size()>0">
+			and ROLE_CODE in <foreach item="item" index="index" collection="oldInParam.roleCodeList" open="(" separator="," close=")">#{item}</foreach>
 			</if>
-			<if test="map.userCodeList != null and map.userCodeList.size()>0">
-			and USER_CODE in <foreach item="item" index="index" collection="map.userCodeList" open="(" separator="," close=") ">#{item}</foreach>
+			<if test="oldInParam.userCodeList != null and oldInParam.userCodeList.size()>0">
+			and USER_CODE in <foreach item="item" index="index" collection="oldInParam.userCodeList" open="(" separator="," close=")">#{item}</foreach>
 			</if>
 		</if>
 		<!-- 防止没有参数传递，导致全部更新 -->
 		or 1=2
 		</where>
 	</update>
+
 	<!-- 删除 -->
 	<delete id="deleteBy" parameterType="java.util.Map">
 		delete from <include refid="table_name" />
 		<where>
-		<if test="model != null">
-			<!-- Equal query -->
-			<if test="model.version != null "> and VERSION = #{model.version} </if>
-			<if test="model.delFlag != null and model.delFlag != ''"> and DEL_FLAG = #{model.delFlag} </if>
-			<if test="model.createBy != null and model.createBy != ''"> and CREATE_BY = #{model.createBy} </if>
-			<if test="model.createTime != null "><![CDATA[ and CREATE_TIME = #{model.createTime}]]> </if>
-			<if test="model.updateBy != null and model.updateBy != ''"> and UPDATE_BY = #{model.updateBy} </if>
-			<if test="model.updateTime != null "><![CDATA[ and UPDATE_TIME = #{model.updateTime}]]> </if>
-			<if test="model.id != null and model.id != ''"> and ID = #{model.id} </if>
-			<if test="model.tenantCode != null and model.tenantCode != ''"> and TENANT_CODE = #{model.tenantCode} </if>
-			<if test="model.roleCode != null and model.roleCode != ''"> and ROLE_CODE = #{model.roleCode} </if>
-			<if test="model.userCode != null and model.userCode != ''"> and USER_CODE = #{model.userCode} </if>
+		<!-- model属性： -->
+		<if test="version != null "> and VERSION = #{version} </if>
+		<if test="delFlag != null and delFlag != ''"> and DEL_FLAG = #{delFlag} </if>
+		<if test="createBy != null and createBy != ''"> and CREATE_BY = #{createBy} </if>
+		<if test="createTime != null "><![CDATA[ and CREATE_TIME = #{createTime}]]> </if>
+		<if test="updateBy != null and updateBy != ''"> and UPDATE_BY = #{updateBy} </if>
+		<if test="updateTime != null "><![CDATA[ and UPDATE_TIME = #{updateTime}]]> </if>
+		<if test="id != null and id != ''"> and ID = #{id} </if>
+		<if test="tenantCode != null and tenantCode != ''"> and TENANT_CODE = #{tenantCode} </if>
+		<if test="roleCode != null and roleCode != ''"> and ROLE_CODE = #{roleCode} </if>
+		<if test="userCode != null and userCode != ''"> and USER_CODE = #{userCode} </if>
+		
+		<!-- 非model属性：in条件处理拼写，要求List集合中的值能转换成key-value形式，例如map、自定义model对象等 -->
+		<if test="idList != null and idList.size()>0">
+		and ID in <foreach item="item" index="index" collection="idList" open="(" separator="," close=")">#{item}</foreach>
 		</if>
-		<if test="map != null">
-			<!-- Equal query -->
-			<if test="map.version != null "> and VERSION = #{map.version} </if>
-			<if test="map.delFlag != null and map.delFlag != ''"> and DEL_FLAG = #{map.delFlag} </if>
-			<if test="map.createBy != null and map.createBy != ''"> and CREATE_BY = #{map.createBy} </if>
-			<if test="map.createTime != null "><![CDATA[ and CREATE_TIME = #{map.createTime}]]> </if>
-			<if test="map.updateBy != null and map.updateBy != ''"> and UPDATE_BY = #{map.updateBy} </if>
-			<if test="map.updateTime != null "><![CDATA[ and UPDATE_TIME = #{map.updateTime}]]> </if>
-			<if test="map.id != null and map.id != ''"> and ID = #{map.id} </if>
-			<if test="map.tenantCode != null and map.tenantCode != ''"> and TENANT_CODE = #{map.tenantCode} </if>
-			<if test="map.roleCode != null and map.roleCode != ''"> and ROLE_CODE = #{map.roleCode} </if>
-			<if test="map.userCode != null and map.userCode != ''"> and USER_CODE = #{map.userCode} </if>
-			<!-- In query -->
-			<if test="map.idList != null and map.idList.size()>0">
-			and ID in <foreach item="item" index="index" collection="map.idList" open="(" separator="," close=") ">#{item}</foreach>
-			</if>
-			<if test="map.roleCodeList != null and map.roleCodeList.size()>0">
-			and ROLE_CODE in <foreach item="item" index="index" collection="map.roleCodeList" open="(" separator="," close=") ">#{item}</foreach>
-			</if>
-			<if test="map.tenantCodeList != null and map.tenantCodeList.size()>0">
-			and TENANT_CODE in <foreach item="item" index="index" collection="map.tenantCodeList" open="(" separator="," close=") ">#{item}</foreach>
-			</if>
-			<if test="map.userCodeList != null and map.userCodeList.size()>0">
-			and USER_CODE in <foreach item="item" index="index" collection="map.userCodeList" open="(" separator="," close=") ">#{item}</foreach>
-			</if>
+		<if test="tenantCodeList != null and tenantCodeList.size()>0">
+		and TENANT_CODE in <foreach item="item" index="index" collection="tenantCodeList" open="(" separator="," close=")">#{item}</foreach>
 		</if>
+		<if test="roleCodeList != null and roleCodeList.size()>0">
+		and ROLE_CODE in <foreach item="item" index="index" collection="roleCodeList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="userCodeList != null and userCodeList.size()>0">
+		and USER_CODE in <foreach item="item" index="index" collection="userCodeList" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		
 		<!-- 防止没有参数传递，导致全部删除 -->
 		or 1=2
-		</where></delete>
+		</where>
+	</delete>
+
 	<!-- ######################################################################### -->
-	<!-- ##########################   common sql end    ########################## -->
+	<!-- ##############################   基础sql结束    ############################## -->
 	<!-- ######################################################################### -->
 
 </mapper>

@@ -11,7 +11,6 @@ import com.yffd.easy.framework.web.view.vo.ComboTreeVO;
  * @see 	 
  */
 public class UupmResourceComboTreeVO extends ComboTreeVO {
-	private String tenantCode;		//租户编号
 	private String nodeLabel;		// 节点标签，目前主要用于多棵树的区分
 	private Integer nodeLayer;		// 节点层号
 	private Integer nodeLeft;		// 节点左编号，主要用于偏序遍历子节点
@@ -25,13 +24,6 @@ public class UupmResourceComboTreeVO extends ComboTreeVO {
 	private String nodeStatus;		// 节点状态：A=激活、I=冻结
 	private Integer seqNo;			// 序号
 	private String remark;			// 备注
-	
-	public String getTenantCode() {
-		return tenantCode;
-	}
-	public void setTenantCode(String tenantCode) {
-		this.tenantCode = tenantCode;
-	}
 	public String getNodeLabel() {
 		return nodeLabel;
 	}

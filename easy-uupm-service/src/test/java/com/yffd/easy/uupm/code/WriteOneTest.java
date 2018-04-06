@@ -7,7 +7,7 @@ import com.yffd.easy.framework.support.code.generator.CodeMapperInterfaceGenerat
 import com.yffd.easy.framework.support.code.generator.CodeMapperSqlGenerator;
 import com.yffd.easy.framework.support.code.generator.CodeServiceGenerator;
 import com.yffd.easy.framework.support.code.generator.CodeServiceTestGenerator;
-import com.yffd.easy.uupm.api.model.UupmApplicationModel;
+import com.yffd.easy.uupm.api.model.UupmTenantModel;
 import com.yffd.easy.uupm.api.model.UupmTreeDictionaryModel;
 
 /**
@@ -25,7 +25,7 @@ public class WriteOneTest extends LocalProjectConfigTest {
 	private CodeServiceGenerator serviceGenerator = new CodeServiceGenerator();
 	private CodeServiceTestGenerator serviceTestGenerator = new CodeServiceTestGenerator();
 	
-	private Class<?> modelClazz = UupmApplicationModel.class;
+	private Class<?> modelClazz = UupmTenantModel.class;
 	
 	/**
 	 * 所有--文件
