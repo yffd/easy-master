@@ -71,10 +71,6 @@ public class CommonServiceSupport extends EasyModelConverter {
 	
 	protected <T> PageResult<T> selectPage(Map<String, Object> paramMap, PageParam pageParam, String sqlId, String countSqlId, boolean shortName) {
 		if(EasyStringCheckUtils.isEmpty(sqlId) || EasyStringCheckUtils.isEmpty(countSqlId)) throw EasyBizException.newInstance("sqlId或 countSqlId 不能为空");
-		if(shortName) {
-			sqlId = this.getStatement(sqlId);
-			countSqlId = this.getStatement(countSqlId);
-		}
 		List<Object> recordList = this.selectRangeList(paramMap, pageParam, sqlId, countSqlId, shortName); // 获取分页数据集
 		return new PageResult(pageParam, recordList);
 	}

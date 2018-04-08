@@ -13,7 +13,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <jsp:include page="/common/layout/script.jsp"></jsp:include>
 
 <script type="text/javascript">
-	var $json_activeStatus = [ {id:"", text:"全部", "selected": true} ];
+	var $json_status = [ {id:"", text:"全部", "selected": true} ];
 	var $json_tenantStatus = [ {id:"", text:"全部", "selected": true} ];
 	var $json_tenantType = [ {id:"", text:"全部", "selected": true} ];
 	var $json_serveType = [ {id:"", text:"全部", "selected": true} ];
@@ -23,28 +23,28 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	$(function() {
 		// 初始化控件数据
 		$.post('/uupm/combox/findComboByDict', 
-				{'comboxKeys':'active-status,tenant-type,tenant-status,serve-type'}, 
+				{'combo':'status,tenant-status,tenant-type,serve-type'}, 
 				function(result) {
 					if("OK"==result.status) {
 						var jsonData = result.data;
-						$json_activeStatus = $json_activeStatus.concat(jsonData['active-status']);
-						$json_tenantStatus = $json_tenantStatus.concat(jsonData['tenant-status']);
-						$json_tenantType = $json_tenantType.concat(jsonData['tenant-type']);
-						$json_serveType = $json_serveType.concat(jsonData['serve-type']);
-						
-						initDatagrid_tenant();	// 初始化datagrid组件
-						initDatagrid_account();
+						$json_status = $json_status.concat(jsonData['combo']['status'][0]['children']);
+						$json_tenantStatus = $json_tenantStatus.concat(jsonData['combo']['tenant-status'][0]['children']);
+						$json_tenantType = $json_tenantType.concat(jsonData['combo']['tenant-type'][0]['children']);
+						$json_serveType = $json_serveType.concat(jsonData['combo']['serve-type'][0]['children']);
+						// 初始化datagrid组件
+						makeGrid_left();	
+						makeGrid_right();
 					}
 				}, 'json');
 		
 	});
 	// 初始化datagrid组件
-	function initDatagrid_tenant() {
-		$dg_tenant = $('#dg_id_tenant');
+	function makeGrid_left() {
+		$dg_tenant = $('#dg_id_left');
 		$dg_tenant.datagrid({
 		    url:'uupm/tenant/findPage',
 		    width: 'auto',
-		    height: $(this).height()-commonui.remainHeight-$('#tb_id_tenant').height(),
+		    height: $(this).height()-commonui.remainHeight-$('#tb_id_left').height(),
 			pagination: true,
 			pageSize: commonui.pageSize,
 			rownumbers: true,
@@ -54,18 +54,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			border: false,
 			striped: true,
 			singleSelect: true,
-			toolbar: '#tb_id_tenant',
+			toolbar: '#tb_id_left',
 			idField: 'tenantCode',
 			loadFilter: function(result) {
 		    	if("OK"==result.status) {
-		    		return result.data;
+		    		return result.data || {'total':0, 'rows':[]};
 		    	} else {
 		    		$.messager.show({
 						title :commonui.msg_title,
 						timeout : commonui.msg_timeout,
 						msg : result.msg
 					});
-		    		return [];
+		    		return {'total':0, 'rows':[]};
 	    		}
 	    	},
 	    	onClickRow: function(rowIndex, rowData) {
@@ -95,7 +95,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		});
 		//搜索框
 		$("#searchbox_id_tenant").searchbox({
-			menu:"#mm_id_tenant",
+			menu:"#mm_id_left",
 			prompt :'请输入',
 			searcher:function(value, name) {
 				var obj = {};
@@ -104,11 +104,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		    }
 		});
 	}
-	function initDatagrid_account() {
-		$dg_account = $('#dg_id_account');
+	function makeGrid_right() {
+		$dg_account = $('#dg_id_right');
 		$dg_account.datagrid({
 		    width: 'auto',
-		    height: $(this).height()-commonui.remainHeight-$('#tb_id_account').height(),
+		    height: $(this).height()-commonui.remainHeight-$('#tb_id_right').height(),
 		    pagination: true,
 			pageSize: commonui.pageSize,
 			rownumbers: true,
@@ -118,25 +118,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			border: false,
 			striped: true,
 			singleSelect: true,
-			toolbar: '#tb_id_account',
+			toolbar: '#tb_id_right',
 			idField: 'accountId',
 			loadFilter: function(result) {
 		    	if("OK"==result.status) {
-		    		return result.data;
+		    		return result.data || {'total':0, 'rows':[]};
 		    	} else {
 		    		$.messager.show({
 						title :commonui.msg_title,
 						timeout : commonui.msg_timeout,
 						msg : result.msg
 					});
-		    		return [];
+		    		return {'total':0, 'rows':[]};
 	    		}
 	    	},
 	        columns: [[
 						{field: 'accountId', title: '账号ID', width: 200, align: 'left'},
 						{field: 'accountStatus', title: '账号状态', width: 100, align: 'left',
 							formatter: function(value, row) {
-								return utils.fmtDict($json_activeStatus, value);
+								return utils.fmtDict($json_status, value);
 							}	
 						}
 	                   ]]
@@ -144,7 +144,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		
 		//搜索框
 		$("#searchbox_id_account").searchbox({
-			menu:"#mm_id_account",
+			menu:"#mm_id_right",
 			prompt :'请输入',
 			searcher:function(value, name) {
 				var row = $dg_tenant.datagrid('getSelected');
@@ -300,7 +300,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			panelHeight: 120,
 			valueField:'id',
 		    textField:'text',
-		    data: $.grep($json_activeStatus, function(n,i){
+		    data: $.grep($json_status, function(n,i){
 		    	if(i==1) n['selected']=true;
 		    	return i > 0;	//返回true，进行选取
 		    })
@@ -311,8 +311,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </head>
 <body class="easyui-layout">
     <div data-options="region:'west',title:'租户列表',split:true,border:true" style="width:600px;">
-    	<table id="dg_id_tenant"></table>
-    	<div id="tb_id_tenant" style="display:none;padding:5px;height:auto">
+    	<table id="dg_id_left"></table>
+    	<div id="tb_id_left" style="display:none;padding:5px;height:auto">
 	    	<table cellpadding="0" cellspacing="0">
 				<tr>
 					<td style="padding-left:10px;padding-bottom:2px;">
@@ -324,15 +324,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</tr>
 			</table>
 		</div>
-		<div id="mm_id_tenant" class="easyui-menu" style="width:120px;">
+		<div id="mm_id_left" class="easyui-menu" style="width:120px;">
 	        <div name="tenantName">&nbsp;&nbsp;名称&nbsp;&nbsp;&nbsp;&nbsp;</div>
 			<div name="tenantCode">&nbsp;&nbsp;编号&nbsp;&nbsp;&nbsp;&nbsp;</div>
 		</div>
     </div>
 
     <div data-options="region:'center',title:'账号列表'">
-    	<table id="dg_id_account"></table>
-    	<div id="tb_id_account" style="display:none;padding:5px;height:auto">
+    	<table id="dg_id_right"></table>
+    	<div id="tb_id_right" style="display:none;padding:5px;height:auto">
 			<table cellpadding="0" cellspacing="0">
 				<tr>
 					<td style="padding-left:2px;padding-bottom:2px;">
@@ -356,7 +356,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</table>
 		</div>
 	
-		<div id="mm_id_account" class="easyui-menu" style="width:120px;">
+		<div id="mm_id_right" class="easyui-menu" style="width:120px;">
 	        <div name="accountId">&nbsp;&nbsp;账号ID&nbsp;&nbsp;&nbsp;&nbsp;</div>
 		</div>
     </div>

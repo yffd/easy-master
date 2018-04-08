@@ -16,7 +16,7 @@ import com.yffd.easy.uupm.base.UupmBaseServiceTest;
 
 /**
  * @Description  简单描述该类的功能（可选）.
- * @Date		2018年04月04日 16时09分08秒 <br/>
+ * @Date		2018年04月05日 17时24分03秒 <br/>
  * @author		ZhangST
  * @version		 1.0
  * @since		 JDK 1.7+
@@ -62,11 +62,11 @@ public class UupmUserServiceTest extends UupmBaseServiceTest {
 	@Test
 	public void findCountTest() {
 		UupmUserModel paramModel = new UupmUserModel();
-		paramModel.setTenantCode("default_1");
+		paramModel.setTenantCode("default");
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		List<String> idList = new ArrayList<String>();
-		idList.add("2002");
-		idList.add("2003");
+		idList.add("2000");
+		idList.add("2001");
 		paramMap.put("idList", idList);
 		Long result = this.uupmUserService.findCount(paramModel, paramMap, null);
 		System.out.println(result);
@@ -75,11 +75,11 @@ public class UupmUserServiceTest extends UupmBaseServiceTest {
 	@Test
 	public void findOneTest() {
 		UupmUserModel paramModel = new UupmUserModel();
-		paramModel.setTenantCode("default_1");
+		paramModel.setTenantCode("default");
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		List<String> idList = new ArrayList<String>();
-		idList.add("2002");
-		idList.add("2003");
+		idList.add("2000");
+		idList.add("2001");
 		paramMap.put("idList", idList);
 		UupmUserModel result = this.uupmUserService.findOne(paramModel, paramMap, null);
 		System.out.println(result);

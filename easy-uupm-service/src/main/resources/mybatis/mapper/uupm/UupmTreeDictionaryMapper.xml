@@ -19,7 +19,7 @@
 	<!-- 分页条件 -->
 	<sql id="conditions_limit"><if test="page != null"> limit #{page.startIndex}, #{page.pageLimit} </if></sql>
 	<!-- 排序条件 -->
-	<sql id="conditions_orderby"> ORDER BY t.CREATE_TIME desc </sql>
+	<sql id="conditions_orderby"> ORDER BY t.SEQ_NO asc, t.CREATE_TIME desc </sql>
 	<!-- 动态组装复合查询条件 -->
 	<sql id="conditions_where">
 		<if test="model != null">
