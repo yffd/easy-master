@@ -16,7 +16,7 @@
 
 	<modules>
 	    <module>easy-common-core</module>
-	    <module>easy-framework</module>
+	    <module>easy-framework-core</module>
     	<module>easy-framework-web</module>
     	<module>easy-framework-domain</module>
 <!--     	<module>easy-common-support</module> -->

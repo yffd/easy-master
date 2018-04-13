@@ -13,13 +13,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <jsp:include page="/common/layout/script.jsp"></jsp:include>
 
 <script type="text/javascript">
+	var $json_status = [ {id:"", text:"全部", "selected": true} ];
 	var $openWindow = this;// 当前窗口
 	var $dg_left;
 	var $dg_right;
 	$(function() {
-		// 初始化datagrid组件
-		makeGrid_left();
-		makeGrid_right();
+		// 初始化控件数据
+		$.post('/uupm/combox/findComboByDict', 
+				{'combo':'status'}, 
+				function(result) {
+					if("OK"==result.status) {
+						var jsonData = result.data;
+						$json_status = $json_status.concat(jsonData['combo']['status'][0]['children']);
+						// 初始化datagrid组件
+						makeGrid_left();
+						makeGrid_right();
+					}
+				}, 'json');
 	});
 	
 	function makeGrid_left() {
@@ -40,7 +50,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			showHeader: false,
 			toolbar: '#tb_id_left',
 			idField: 'id',
-			treeField: 'nodeName',
+			treeField: 'keyName',
 		    loadFilter: function(result) {
 		    	if("OK"==result.status) {
 		    		return result.data || [];
@@ -55,9 +65,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    	},
 			onClickRow: function(row) {
 				$dg_right.treegrid('options').url='uupm/dictionary/listChildren';
-	    		$dg_right.treegrid('reload', {'nodeLabel': row.nodeLabel, 'nodeCode':row.nodeCode});
+				$dg_right.treegrid('loadData', {'status':'OK',data:[]});
+	    		$dg_right.treegrid('reload', {'treeId': row.treeId, 'keyCode':row.keyCode});
 			},
-			frozenColumns: [[{field: 'nodeName', title: '', width:parseInt($(this).width())}]]
+			frozenColumns: [[{field: 'keyName', title: '', width:parseInt($(this).width())}]]
 		});
 	}
 	function makeGrid_right() {
@@ -77,7 +88,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			showHeader: true,
 			toolbar: '#tb_id_right',
 			idField: 'id',
-			treeField: 'nodeName',
+			treeField: 'keyName',
 		    loadFilter: function(result) {
 		    	if("OK"==result.status) {
 		    		return result.data || [];
@@ -92,21 +103,38 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    	},
 	    	onContextMenu: function(e, node){
 				e.preventDefault();
-				$dg_right.treegrid('select', node.nodeCode);
+				$dg_right.treegrid('select', node.id);
 				$('#mm_right').menu('show', {
 					left: e.pageX,
 					top: e.pageY
 				});
 			},
+			frozenColumns: [[
+							 {field: 'operate', title: '操作', width: 100, align: 'center',
+								 formatter: function(value, row) {
+									 var text = " 激活状态 ";
+									 var style = "color: green";
+									 if('active'==row.valueStatus) {
+										 text = " 冻结状态 ";
+										 style = "color: red";
+									 }
+									 var a1 = '[<a href="javascript:void(0);" onClick="updateStatus(\''+row.treeId+'\',\''+row.keyCode+'\',\''+row.valueStatus+'\');" width="100" style="'+style+'">'+text+'</a>]';
+									 return a1 + '&nbsp;';
+								 }	
+							 }
+	    	                 ]],
 	        columns: [[
-						{field: 'nodeName', title: '名称', width:100,align: 'left'},
-						{field: 'nodeCode', title: '编号', width: 100, align: 'left'},
-						{field: 'nodeLabel', title: '节点标签', width: 100, align: 'left'},
-						{field: 'parentNodeCode', title: '父编号', width: 100, align: 'left'},
-						{field: 'parentNodeName', title: '父名称', width: 100, align: 'left'},
-						{field: 'nodeValue', title: '值', width: 200, align: 'left'},
+						{field: 'keyName', title: '名称', width:100,align: 'left'},
+						{field: 'keyCode', title: '编号', width: 100, align: 'left'},
+						{field: 'treeId', title: '树ID', width: 100, align: 'left'},
+						{field: 'parentCode', title: '父编号', width: 100, align: 'left'},
 						{field: 'seqNo', title: '序号', width: 100, align: 'left'},
-						{field: 'remark', title: '描述', width: 100, align: 'left'}
+						{field: 'valueStatus', title: '状态', width: 100, align: 'left',
+							formatter: function(value, row) {
+								return utils.fmtDict($json_status, value);
+							}
+						},
+						{field: 'valueContent', title: '值', width: 200, align: 'left'}
 	                   ]]
 		});
 	}
@@ -121,12 +149,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			href: 'views/uupm/dictionary/dictionaryEditDlg.jsp',
 			onLoad:function() {
 				var editForm = parent.$.modalDialog.handler.find("#form_id");
-				var parentNodeName=editForm.find('input[name="parentNodeName"]');
-				var parentNodeCode=editForm.find('input[name="parentNodeCode"]');
-				parentNodeName.val("根节点");
-				parentNodeName.attr('readonly',true);
-				parentNodeCode.val("root");
-				parentNodeCode.attr('readonly',true);
+				setComboForSelected(editForm);
+				var parentCode=editForm.find('input[name="parentCode"]');
+				parentCode.val("root");
+				parentCode.attr('readonly',true);
 			},
 			buttons: [{
 				text: '确定',
@@ -134,7 +160,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				handler: function() {
 					var editForm = parent.$.modalDialog.handler.find("#form_id");
 					var obj = utils.serializeObject(editForm);
-					obj.nodeName=obj['nodeName_'];
 					$.post('uupm/dictionary/addRoot', obj, function(result) {
 						if("OK"==result.status) {
 							parent.$.modalDialog.handler.dialog('close');
@@ -169,11 +194,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				href: 'views/uupm/dictionary/dictionaryEditDlg.jsp',
 				onLoad:function(){
 					var editForm = parent.$.modalDialog.handler.find("#form_id");
+					setComboForSelected(editForm);
 					editForm.form("load", row);
-					editForm.find('input[name="nodeName_"]').val(row.nodeName);
-					editForm.find('input[name="nodeCode"]').attr('readonly',true);
-					editForm.find('input[name="parentNodeName"]').attr('readonly',true);
-					editForm.find('input[name="parentNodeCode"]').attr('readonly',true);
+					editForm.find('input[name="keyCode"]').attr('readonly',true);
+					editForm.find('input[name="parentCode"]').attr('readonly',true);
 				},
 				buttons: [{
 					text: '确定',
@@ -181,11 +205,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					handler: function() {
 						var editForm = parent.$.modalDialog.handler.find("#form_id");
 						var obj = utils.serializeObject(editForm);
-						obj.nodeName=obj['nodeName_'];
 						$.post('uupm/dictionary/edit', obj, function(result) {
 							if("OK"==result.status) {
 								parent.$.modalDialog.handler.dialog('close');
-								$dg_left.treegrid('reload', {status:'OK', data:[]});
+								$dg_left.treegrid('reload');
 					    	}
 							$.messager.show({
 								title :commonui.msg_title,
@@ -218,7 +241,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		if(row) {
 			parent.$.messager.confirm("提示","确定要删除该记录吗?",function(r){  
 			    if(r) {
-			    	$.post("uupm/dictionary/del", {'nodeLabel': row.nodeLabel, 'nodeCode': row.nodeCode}, function(result) {
+			    	$.post("uupm/dictionary/del", {'treeId': row.treeId, 'keyCode': row.keyCode}, function(result) {
 						if(result.status=='OK') {
 							$dg_left.treegrid('remove', row.id); //分类：移除row
 							$dg_right.treegrid('reload', {});
@@ -256,13 +279,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				onLoad:function() {
 					if(row) {
 						var editForm = parent.$.modalDialog.handler.find("#form_id");
-						var parentNodeName=editForm.find('input[name="parentNodeName"]');
-						var parentNodeCode=editForm.find('input[name="parentNodeCode"]');
-						parentNodeName.val(row.nodeName);
-						parentNodeName.attr('readonly',true);
-						parentNodeCode.val(row.nodeCode);
-						parentNodeCode.attr('readonly',true);
-						editForm.find('input[name="nodeLabel"]').val(row.nodeLabel);
+						setComboForSelected(editForm);
+						var parentCode=editForm.find('input[name="parentCode"]');
+						parentCode.val(row.keyCode);
+						parentCode.attr('readonly',true);
+						editForm.find('input[name="treeId"]').val(row.treeId);
 					}
 				},
 				buttons: [{
@@ -271,7 +292,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					handler: function() {
 						var editForm = parent.$.modalDialog.handler.find("#form_id");
 						var obj = utils.serializeObject(editForm);
-						obj.nodeName=obj['nodeName_'];
 						$.post('uupm/dictionary/addChild', obj, function(result) {
 							if("OK"==result.status) {
 								parent.$.modalDialog.handler.dialog('close');
@@ -313,11 +333,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				href: 'views/uupm/dictionary/dictionaryEditDlg.jsp',
 				onLoad:function(){
 					var editForm = parent.$.modalDialog.handler.find("#form_id");
+					setComboForSelected(editForm);
 					editForm.form("load", row);
-					editForm.find('input[name="nodeName_"]').val(row.nodeName);
-					editForm.find('input[name="nodeCode"]').attr('readonly',true);
-					editForm.find('input[name="parentNodeName"]').attr('readonly',true);
-					editForm.find('input[name="parentNodeCode"]').attr('readonly',true);
+					editForm.find('input[name="keyCode"]').attr('readonly',true);
+					editForm.find('input[name="parentCode"]').attr('readonly',true);
 				},
 				buttons: [{
 					text: '确定',
@@ -325,7 +344,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					handler: function() {
 						var editForm = parent.$.modalDialog.handler.find("#form_id");
 						var obj = utils.serializeObject(editForm);
-						obj.nodeName=obj['nodeName_'];
 						$.post('uupm/dictionary/edit', obj, function(result) {
 							if("OK"==result.status) {
 								parent.$.modalDialog.handler.dialog('close');
@@ -362,7 +380,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		if(row) {
 			parent.$.messager.confirm("提示","确定要删除该记录吗?",function(r){  
 			    if(r) {
-			    	$.post("uupm/dictionary/del", {'nodeLabel': row.nodeLabel, 'nodeCode': row.nodeCode}, function(result) {
+			    	$.post("uupm/dictionary/del", {'treeId': row.treeId, 'keyCode': row.keyCode}, function(result) {
 						if(result.status=='OK') {
 							$dg_right.treegrid('remove', row.id);
 						}
@@ -381,6 +399,34 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				msg : "请选择一行【字典列表】记录!"
 			});
 		}
+	}
+	// 修改状态
+	function updateStatus(treeId, keyCode, valueStatus) {
+		var tmp='active';
+		if('active'==valueStatus) tmp='inactive';
+		$.post("uupm/dictionary/editStatus", {'treeId':treeId, 'keyCode':keyCode, 'valueStatus':tmp}, function(result) {
+			if(result.status=='OK') {
+				$dg_right.treegrid('reload');
+			}
+			$.messager.show({
+				title :commonui.msg_title,
+				timeout : commonui.msg_timeout,
+				msg : result.msg
+			});
+		}, "json");
+	}
+	// 设置控件选中
+	function setComboForSelected(selectForm) {
+		selectForm.find('input[name="valueStatus"]').combobox({
+			editable:false,
+			panelHeight: 120,
+			valueField:'id',
+		    textField:'text',
+		    data: $.grep($json_status, function(n,i){
+		    	if(i==1) n['selected']=true;
+		    	return i > 0;
+		    })
+		});
 	}
 	// 展开
 	function expandAll_right() {

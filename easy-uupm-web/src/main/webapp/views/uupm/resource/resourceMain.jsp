@@ -52,24 +52,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			showHeader: false,
 			toolbar: '#tb_id_left',
 			idField: 'id',
-			treeField: 'nodeName',
+			treeField: 'rsName',
 		    loadFilter: function(result) {
 		    	if("OK"==result.status) {
 		    		return result.data || [];
 		    	} else {
 		    		$.messager.show({
 						title :commonui.msg_title,
-						msg : result.msg,
-						timeout : commonui.msg_timeout
+						timeout : commonui.msg_timeout,
+						msg : result.msg
 					});
 		    		return [];
 	    		}
 	    	},
 			onClickRow: function(row) {
 				$dg_right.treegrid('options').url='uupm/resource/listChildren';
-	    		$dg_right.treegrid('reload', {'nodeLabel': row.nodeLabel, 'nodeCode':row.nodeCode});
+	    		$dg_right.treegrid('loadData', {'status':'OK',data:[]});
+	    		$dg_right.treegrid('reload', {'treeId': row.treeId, 'rsCode':row.rsCode});
 			},
-			frozenColumns: [[{field: 'nodeName', title: '', width:parseInt($(this).width())}]]
+			frozenColumns: [[{field: 'rsName', title: '', width:parseInt($(this).width())}]]
 		});
 	}
 	function makeGrid_right() {
@@ -89,15 +90,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			showHeader: true,
 			toolbar: '#tb_id_right',
 			idField: 'id',
-			treeField: 'nodeName',
+			treeField: 'rsName',
 		    loadFilter: function(result) {
 		    	if("OK"==result.status) {
 		    		return result.data;
 		    	} else {
 		    		$.messager.show({
 						title :commonui.msg_title,
-						msg : result.msg,
-						timeout : commonui.msg_timeout
+						timeout : commonui.msg_timeout,
+						msg : result.msg
 					});
 		    		return [];
 	    		}
@@ -113,36 +114,33 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			frozenColumns: [[
 							 {field: 'operate', title: '操作', width: 100, align: 'center',
 								 formatter: function(value, row) {
-									 var text = " 激活 ";
+									 var text = " 激活状态 ";
 									 var style = "color: green";
-									 if('active'==row.nodeStatus) {
-										 text = " 冻结 ";
+									 if('active'==row.rsStatus) {
+										 text = " 冻结状态 ";
 										 style = "color: red";
 									 }
-									 var a1 = '[<a href="javascript:void(0);" onClick="updateStatus(\''+row.nodeLabel+'\',\''+row.nodeCode+'\',\''+row.nodeStatus+'\');" width="100" style="'+style+'">'+text+'</a>]';
+									 var a1 = '[<a href="javascript:void(0);" onClick="updateStatus(\''+row.treeId+'\',\''+row.rsCode+'\',\''+row.rsStatus+'\');" width="100" style="'+style+'">'+text+'</a>]';
 									 return a1 + '&nbsp;';
 								 }	
 							 }
 	    	                 ]],
 	        columns: [[
-	                   	{field: 'nodeName', title: '名称', width:200,align: 'left'},
-						{field: 'nodeCode', title: '编号', width: 100, align: 'left'},
-						{field: 'nodeLabel', title: '节点标签', width: 100, align: 'left'},
-						{field: 'parentNodeCode', title: '父编号', width: 100, align: 'left'},
-						{field: 'parentNodeName', title: '父名称', width: 100, align: 'left'},
-						{field: 'nodeStatus', title: '状态', width: 100, align: 'left',
+	                   	{field: 'rsName', title: '名称', width:200,align: 'left'},
+						{field: 'rsCode', title: '编号', width: 100, align: 'left'},
+						{field: 'treeId', title: '树ID', width: 100, align: 'left'},
+						{field: 'rsStatus', title: '状态', width: 100, align: 'left',
 							formatter: function(value, row) {
 								return utils.fmtDict($json_status, value);
 							}
 						},
-						{field: 'nodeValueType', title: '类型', width: 100, align: 'left',
+						{field: 'rsType', title: '类型', width: 100, align: 'left',
 							formatter: function(value, row) {
 								return utils.fmtDict($json_rsType, value);
 							}	
 						},
-						{field: 'seqNo', title: '序号', width: 100, align: 'left'},
-						{field: 'nodeValue', title: '值', width: 200, align: 'left'},
-						{field: 'remark', title: '描述', width: 100, align: 'left'}
+						{field: 'shortUrl', title: '短链接', width: 200, align: 'left'},
+						{field: 'seqNo', title: '序号', width: 100, align: 'left'}
 	                   ]]
 		});
 	}
@@ -158,13 +156,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			onLoad:function() {
 				var editForm = parent.$.modalDialog.handler.find("#form_id");
 				setComboForSelected(editForm);
-				var parentNodeName=editForm.find('input[name="parentNodeName"]');
-				var parentNodeCode=editForm.find('input[name="parentNodeCode"]');
-				parentNodeName.val("根节点");
-				parentNodeName.attr('readonly',true);
-				parentNodeCode.val("root");
-				parentNodeCode.attr('readonly',true);
-				editForm.find('input[name="nodeStatus"]').val('active');
+				var parentCode=editForm.find('input[name="parentCode"]');
+				parentCode.val("root");
+				parentCode.attr('readonly',true);
 			},
 			buttons: [{
 				text: '确定',
@@ -172,7 +166,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				handler: function() {
 					var editForm = parent.$.modalDialog.handler.find("#form_id");
 					var obj = utils.serializeObject(editForm);
-					obj.nodeName=obj['nodeName_'];
 					$.post('uupm/resource/addRoot', obj, function(result) {
 						if("OK"==result.status) {
 							parent.$.modalDialog.handler.dialog('close');
@@ -209,10 +202,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					var editForm = parent.$.modalDialog.handler.find("#form_id");
 					setComboForSelected(editForm);
 					editForm.form("load", row);
-					editForm.find('input[name="nodeName_"]').val(row.nodeName);
-					editForm.find('input[name="nodeCode"]').attr('readonly',true);
-					editForm.find('input[name="parentNodeName"]').attr('readonly',true);
-					editForm.find('input[name="parentNodeCode"]').attr('readonly',true);
+					editForm.find('input[name="rsCode"]').attr('readonly',true);
+					editForm.find('input[name="parentCode"]').attr('readonly',true);
 				},
 				buttons: [{
 					text: '确定',
@@ -220,11 +211,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					handler: function() {
 						var editForm = parent.$.modalDialog.handler.find("#form_id");
 						var obj = utils.serializeObject(editForm);
-						obj.nodeName=obj['nodeName_'];
 						$.post('uupm/resource/edit', obj, function(result) {
 							if("OK"==result.status) {
 								parent.$.modalDialog.handler.dialog('close');
-								$dg_left.treegrid('reload', {status:'OK', data:[]});
+								$dg_left.treegrid('reload');
 					    	}
 							$.messager.show({
 								title :commonui.msg_title,
@@ -245,8 +235,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		} else {
 			$.messager.show({
 				title :commonui.msg_title,
-				msg : "请选择一行【应用系统】记录!",
-				timeout : commonui.msg_timeout
+				timeout : commonui.msg_timeout,
+				msg : "请选择一行【应用系统】记录!"
 			});
 		}
 	}
@@ -257,7 +247,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		if(row) {
 			parent.$.messager.confirm("提示","确定要删除该记录吗?",function(r){  
 			    if(r) {
-			    	$.post("uupm/resource/del", {'nodeLabel': row.nodeLabel, 'nodeCode': row.nodeCode}, function(result) {
+			    	$.post("uupm/resource/del", {'treeId': row.treeId, 'rsCode': row.rsCode}, function(result) {
 						if(result.status=='OK') {
 							$dg_left.treegrid('remove', row.id); 
 							$dg_right.treegrid('reload', {});
@@ -273,8 +263,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		} else {
 			$.messager.show({
 				title :commonui.msg_title,
-				msg : "请选择一行【应用系统】记录!",
-				timeout : commonui.msg_timeout
+				timeout : commonui.msg_timeout,
+				msg : "请选择一行【应用系统】记录!"
 			});
 		}
 	}
@@ -296,14 +286,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					if(row) {
 						var editForm = parent.$.modalDialog.handler.find("#form_id");
 						setComboForSelected(editForm);
-						var parentNodeName=editForm.find('input[name="parentNodeName"]');
-						var parentNodeCode=editForm.find('input[name="parentNodeCode"]');
-						parentNodeName.val(row.nodeName);
-						parentNodeName.attr('readonly',true);
-						parentNodeCode.val(row.nodeCode);
-						parentNodeCode.attr('readonly',true);
-						editForm.find('input[name="nodeLabel"]').val(row.nodeLabel);
-						editForm.find('input[name="nodeStatus"]').val('active');
+						var parentCode=editForm.find('input[name="parentCode"]');
+						parentCode.val(row.rsCode);
+						parentCode.attr('readonly',true);
+						editForm.find('input[name="treeId"]').val(row.treeId);
 					}
 				},
 				buttons: [{
@@ -312,7 +298,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					handler: function() {
 						var editForm = parent.$.modalDialog.handler.find("#form_id");
 						var obj = utils.serializeObject(editForm);
-						obj.nodeName=obj['nodeName_'];
 						$.post('uupm/resource/addChild', obj, function(result) {
 							if("OK"==result.status) {
 								parent.$.modalDialog.handler.dialog('close');
@@ -356,10 +341,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					var editForm = parent.$.modalDialog.handler.find("#form_id");
 					setComboForSelected(editForm);
 					editForm.form("load", row);
-					editForm.find('input[name="nodeName_"]').val(row.nodeName);
-					editForm.find('input[name="nodeCode"]').attr('readonly',true);
-					editForm.find('input[name="parentNodeName"]').attr('readonly',true);
-					editForm.find('input[name="parentNodeCode"]').attr('readonly',true);
+					editForm.find('input[name="rsCode"]').attr('readonly',true);
+					editForm.find('input[name="parentCode"]').attr('readonly',true);
 				},
 				buttons: [{
 					text: '确定',
@@ -367,7 +350,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					handler: function() {
 						var editForm = parent.$.modalDialog.handler.find("#form_id");
 						var obj = utils.serializeObject(editForm);
-						obj.nodeName=obj['nodeName_'];
 						$.post('uupm/resource/edit', obj, function(result) {
 							if("OK"==result.status) {
 								parent.$.modalDialog.handler.dialog('close');
@@ -404,7 +386,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		if(row) {
 			parent.$.messager.confirm("提示","确定要删除该记录吗?",function(r){  
 			    if(r) {
-			    	$.post("uupm/resource/del", {'nodeLabel': row.nodeLabel, 'nodeCode': row.nodeCode}, function(result) {
+			    	$.post("uupm/resource/del", {'treeId': row.treeId, 'rsCode': row.rsCode}, function(result) {
 						if(result.status=='OK') {
 							$dg_right.treegrid('remove', row.id);
 						}
@@ -424,11 +406,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			});
 		}
 	}
+	// 生成菜单
+	function saveMenuFunc() {
+		$.post("uupm/menu/saveMenuForAdmin", {}, function(result) {
+			$.messager.show({
+				title :commonui.msg_title,
+				timeout : commonui.msg_timeout,
+				msg : result.msg
+			});
+		}, "json");
+	}
+	
 	// 修改状态
-	function updateStatus(nodeLabel, nodeCode, nodeStatus) {
+	function updateStatus(treeId, rsCode, rsStatus) {
 		var tmp='active';
-		if('active'==nodeStatus) tmp='inactive';
-		$.post("uupm/resource/editStatus", {'nodeLabel':nodeLabel, 'nodeCode':nodeCode, 'nodeStatus':tmp}, function(result) {
+		if('active'==rsStatus) tmp='inactive';
+		$.post("uupm/resource/editStatus", {'treeId':treeId, 'rsCode':rsCode, 'rsStatus':tmp}, function(result) {
 			if(result.status=='OK') {
 				$dg_right.treegrid('reload');
 			}
@@ -441,12 +434,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	}
 	// 设置控件选中
 	function setComboForSelected(selectForm) {
-		selectForm.find('input[name="nodeValueType"]').combobox({
+		selectForm.find('input[name="rsType"]').combobox({
 			editable:false,
 			panelHeight: 120,
 			valueField:'id',
 		    textField:'text',
 		    data: $.grep($json_rsType, function(n,i){
+		    	if(i==1) n['selected']=true;
+		    	return i > 0;
+		    })
+		});
+		selectForm.find('input[name="rsStatus"]').combobox({
+			editable:false,
+			panelHeight: 120,
+			valueField:'id',
+		    textField:'text',
+		    data: $.grep($json_status, function(n,i){
 		    	if(i==1) n['selected']=true;
 		    	return i > 0;
 		    })
@@ -488,6 +491,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</shiro:hasPermission>
 			<shiro:hasPermission name="org-del">
 			<a class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:'true'" onclick="removeFunc();" href="javascript:void(0);">删除</a>
+			</shiro:hasPermission>
+			<shiro:hasPermission name="org-del">
+			<a class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:'true'" onclick="saveMenuFunc();" href="javascript:void(0);">生成菜单</a>
 			</shiro:hasPermission>
 		</div>
     </div>

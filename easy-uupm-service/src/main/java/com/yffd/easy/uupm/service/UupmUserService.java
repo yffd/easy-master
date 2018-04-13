@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.yffd.easy.common.core.exception.EasyBizException;
 import com.yffd.easy.common.core.page.PageParam;
 import com.yffd.easy.common.core.page.PageResult;
-import com.yffd.easy.framework.common.mapper.ICommonMapper;
-import com.yffd.easy.framework.common.service.CommonServiceAbstract;
+import com.yffd.easy.framework.core.common.mapper.ICommonMapper;
+import com.yffd.easy.framework.core.common.service.CommonServiceAbstract;
+import com.yffd.easy.framework.core.exception.BizException;
 import com.yffd.easy.framework.domain.LoginInfo;
 import com.yffd.easy.uupm.api.model.UupmAccountModel;
 import com.yffd.easy.uupm.api.model.UupmUserModel;
@@ -55,7 +55,7 @@ public class UupmUserService extends CommonServiceAbstract<UupmUserModel> {
 	
 	@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
 	public int addUserWithAccount(UupmUserModel model, LoginInfo loginInfo) {
-		if(null==model) throw EasyBizException.BIZ_PARAMS_NULL();
+		if(null==model) throw BizException.BIZ_PARAMS_IS_EMPTY();
 		int num = this.addOne(model, loginInfo);
 		// 生成账号
 		UupmAccountModel account = new UupmAccountModel();

@@ -15,12 +15,11 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.yffd.easy.common.core.util.EasyStringCheckUtils;
 import com.yffd.easy.framework.domain.RespModel;
+import com.yffd.easy.uupm.api.model.UupmResourceModel;
 import com.yffd.easy.uupm.api.model.UupmTenantResourceModel;
-import com.yffd.easy.uupm.api.model.UupmTreeResourceModel;
+import com.yffd.easy.uupm.service.UupmResourceService;
 import com.yffd.easy.uupm.service.UupmTenantResourceService;
 import com.yffd.easy.uupm.web.common.UupmCommonController;
-import com.yffd.easy.uupm.web.support.UupmResourceSupport;
-import com.yffd.easy.uupm.web.vo.UupmResourceComboTreeVO;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -37,7 +36,7 @@ public class UupmTenantResourceController extends UupmCommonController {
 	@Autowired
 	private UupmTenantResourceService uupmTenantResourceService;
 	@Autowired
-	private UupmResourceSupport uupmResourceSupport;
+	private UupmResourceService uupmResourceService;
 	
 	// 租户授权
 	@RequestMapping(value="/saveTenantResource", method=RequestMethod.POST)
@@ -75,9 +74,11 @@ public class UupmTenantResourceController extends UupmCommonController {
 	@RequestMapping(value="/findTenantResource", method=RequestMethod.POST)
 	public RespModel findTenantResource() {
 		String tenantCode = "it3.com.cn";
-		List<UupmTreeResourceModel> result = this.uupmTenantResourceService.findTenantResource(tenantCode);
+		List<UupmResourceModel> result = this.uupmTenantResourceService.findTenantResource(tenantCode);
 		if(null!=result && !result.isEmpty()) {
-			List<UupmResourceComboTreeVO> treeList = this.uupmResourceSupport.toSyncTreeVO(result, "root");
+//			List<UupmResourceComboTreeVO> treeList = this.uupmResourceSupport.toSyncTreeVO(result, "root");
+//			return this.successAjax(treeList);
+			List<UupmResourceModel> treeList = this.uupmResourceService.convertToMultiTree(result, "root");
 			return this.successAjax(treeList);
 		}
 		return this.successAjax();

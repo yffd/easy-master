@@ -4,7 +4,7 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.yffd.easy.framework.test.GenericDaoTestCase;
+import com.yffd.easy.framework.core.test.GenericDaoTestCase;
 
 /**
  * @Description  简单描述该类的功能（可选）.

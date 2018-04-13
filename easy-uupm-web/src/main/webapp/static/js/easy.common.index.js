@@ -94,7 +94,6 @@
     }
 
     var addTab = function(subtitle,url,icon) {
-    	console.info(url);
     	if(url=='login') {}
     	if(!$('#tabs').tabs('exists',subtitle)) {
     		$('#tabs').tabs('add', {

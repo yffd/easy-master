@@ -3,10 +3,10 @@ package com.yffd.easy.uupm.web.dev;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.yffd.easy.framework.support.code.generator.CodeControllerGenerator;
-import com.yffd.easy.framework.support.code.generator.CodeGenerator;
-import com.yffd.easy.uupm.api.model.UupmApplicationModel;
-import com.yffd.easy.uupm.service.UupmApplicationService;
+import com.yffd.easy.framework.core.code.generator.CodeControllerGenerator;
+import com.yffd.easy.framework.core.code.generator.CodeGenerator;
+import com.yffd.easy.uupm.api.model.UupmDictionaryModel;
+import com.yffd.easy.uupm.service.UupmDictionaryService;
 import com.yffd.easy.uupm.web.common.UupmCommonController;
 
 /**
@@ -22,11 +22,11 @@ public class CodeControllerFileHelper extends CodeGenerator {
 	
 	private static boolean covered = true;
 	private static String author = "ZhangST";
-	private static String outRootDirPath = "F:\\easy\\easy-master\\easy-uupm-web\\src\\main\\java";;
+	private static String outRootDirPath = "D:\\java\\git-easy\\easy-master\\easy-uupm-web\\src\\main\\java";;
 	private static Class<?> superControllerClazz = UupmCommonController.class;
 	private static String controllerPackageName = "com.yffd.easy.uupm.web.controller";
-	private static Class<?> modelClazz = UupmApplicationModel.class;
-	private static Class<?> serviceClazz = UupmApplicationService.class;
+	private static Class<?> modelClazz = UupmDictionaryModel.class;
+	private static Class<?> serviceClazz = UupmDictionaryService.class;
 	
 	List<String> skipModelNamesLike = new ArrayList<String>();
 	{

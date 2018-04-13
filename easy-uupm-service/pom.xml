@@ -14,7 +14,7 @@
   <url>http://maven.apache.org</url>
   <properties>
     <easy.uupm.api.version>0.0.1</easy.uupm.api.version>
-    <easy.framework.version>0.0.1</easy.framework.version>
+    <easy.framework.core.version>0.0.1</easy.framework.core.version>
     <easy.common.dubbo.version>0.0.1</easy.common.dubbo.version>
   </properties>
   
@@ -26,8 +26,8 @@
   	</dependency>
   	<dependency>
   		<groupId>com.yffd.easy</groupId>
-	  	<artifactId>easy-framework</artifactId>
-	  	<version>${easy.framework.version}</version>
+	  	<artifactId>easy-framework-core</artifactId>
+	  	<version>${easy.framework.core.version}</version>
   	</dependency>
   	<dependency>
   		<groupId>com.yffd.easy</groupId>

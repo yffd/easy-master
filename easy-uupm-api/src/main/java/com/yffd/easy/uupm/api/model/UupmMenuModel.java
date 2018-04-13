@@ -20,32 +20,19 @@ import com.yffd.easy.framework.domain.CustomPo;
 public class UupmMenuModel extends CustomPo {
 	
 	private static final long serialVersionUID = -7089319244476271520L;
-	private String tenantId;			//租户ID
-	private String applicationCode;		//应用系统编号
-	private String functionCode;		//功能编号
-	private String menuName;			//菜单名称
-	private String menuIcons;			//菜单图标
-	private int seqNo;					//菜单序号
-	private String menuUrl;				//菜单链接
-	private String remark;				//备注
+	private String menuCode;
+	private String parentCode;
+	private String menuName;
+	private String menuIcons;
+	private String menuType;			//菜单类型：上导航菜单=nav_top、上导航菜单=nav_left
+	private String accessType;			//菜单访问方式：url访问、新窗口=_blank
+	private int menuSeqNo;				//菜单序号
 	
-	public String getTenantId() {
-		return tenantId;
+	public String getMenuCode() {
+		return menuCode;
 	}
-	public void setTenantId(String tenantId) {
-		this.tenantId = tenantId;
-	}
-	public String getApplicationCode() {
-		return applicationCode;
-	}
-	public void setApplicationCode(String applicationCode) {
-		this.applicationCode = applicationCode;
-	}
-	public String getFunctionCode() {
-		return functionCode;
-	}
-	public void setFunctionCode(String functionCode) {
-		this.functionCode = functionCode;
+	public void setMenuCode(String menuCode) {
+		this.menuCode = menuCode;
 	}
 	public String getMenuName() {
 		return menuName;
@@ -53,29 +40,35 @@ public class UupmMenuModel extends CustomPo {
 	public void setMenuName(String menuName) {
 		this.menuName = menuName;
 	}
+	public String getParentCode() {
+		return parentCode;
+	}
+	public void setParentCode(String parentCode) {
+		this.parentCode = parentCode;
+	}
 	public String getMenuIcons() {
 		return menuIcons;
 	}
 	public void setMenuIcons(String menuIcons) {
 		this.menuIcons = menuIcons;
 	}
-	public int getSeqNo() {
-		return seqNo;
+	public String getMenuType() {
+		return menuType;
 	}
-	public void setSeqNo(int seqNo) {
-		this.seqNo = seqNo;
+	public void setMenuType(String menuType) {
+		this.menuType = menuType;
 	}
-	public String getMenuUrl() {
-		return menuUrl;
+	public String getAccessType() {
+		return accessType;
 	}
-	public void setMenuUrl(String menuUrl) {
-		this.menuUrl = menuUrl;
+	public void setAccessType(String accessType) {
+		this.accessType = accessType;
 	}
-	public String getRemark() {
-		return remark;
+	public int getMenuSeqNo() {
+		return menuSeqNo;
 	}
-	public void setRemark(String remark) {
-		this.remark = remark;
+	public void setMenuSeqNo(int menuSeqNo) {
+		this.menuSeqNo = menuSeqNo;
 	}
-   
+	
 }

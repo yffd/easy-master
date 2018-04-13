@@ -14,9 +14,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import com.yffd.easy.common.core.exception.EasyBizException;
-import com.yffd.easy.common.core.exception.EasySysException;
+import com.yffd.easy.common.core.exception.EasyCommonException;
 import com.yffd.easy.common.core.page.PageResult;
+import com.yffd.easy.common.core.tree.EasyTreeBuilder;
 import com.yffd.easy.common.core.util.EasyJavaBeanUtils;
 import com.yffd.easy.common.core.util.EasyNamingFormatUtils;
 
@@ -30,8 +30,15 @@ import com.yffd.easy.common.core.util.EasyNamingFormatUtils;
  */
 public class EasyModelConverter {
 
-	/**************************** model to model start ******************************************************/
+	private EasyTreeBuilder treeBuilder;
 	
+	public EasyTreeBuilder getTreeBuilder() {
+		return treeBuilder;
+	}
+	
+	
+	/**************************** model to model start ******************************************************/
+
 	/**
 	 * 自定义数据模型间内容的转换，即自定义对象属性值的复制。注：对集合类型不支持，即targetClass不能为集合类型。<br/>
 	 * @Date	2017年12月14日 下午2:02:04 <br/>
@@ -43,12 +50,12 @@ public class EasyModelConverter {
 	public <T> T model2model(Object obj, Class<?> targetClass) {
 		if(null==obj || null==targetClass) return null;
 		if(Map.class.isAssignableFrom(targetClass) || Collection.class.isAssignableFrom(targetClass)) {
-			throw EasyBizException.newInstance("数据模型转换失败，targetClass为集合类型不支持"); 
+			throw new EasyCommonException("数据模型转换失败，targetClass为集合类型不支持"); 
 		}
 		try {
 			return EasyJavaBeanUtils.copyProperties(obj, targetClass);
-		} catch (EasySysException | ReflectiveOperationException e) {
-			throw EasyBizException.newInstance("数据模型转换失败", e); 
+		} catch (EasyCommonException | ReflectiveOperationException e) {
+			throw new EasyCommonException("数据模型转换失败", e); 
 		}
 	}
 	
@@ -63,7 +70,7 @@ public class EasyModelConverter {
 	public <T> List<T> model2model(List<?> listResult, Class<?> targetClass) {
 		if(null==listResult || listResult.size()==0 || null==targetClass) return null;
 		if(Map.class.isAssignableFrom(targetClass) || Collection.class.isAssignableFrom(targetClass)) {
-			throw EasyBizException.newInstance("数据模型转换失败，targetClass为集合类型不支持"); 
+			throw new EasyCommonException("数据模型转换失败，targetClass为集合类型不支持"); 
 		}
 		List<T> list = new ArrayList<T>();
 		for(Object obj : listResult) {
@@ -84,7 +91,7 @@ public class EasyModelConverter {
 	public <T> PageResult<T> model2model(PageResult<?> pageResult, Class<?> targetClass) {
 		if(null==pageResult || null==targetClass) return null;
 		if(Map.class.isAssignableFrom(targetClass) || Collection.class.isAssignableFrom(targetClass)) {
-			throw EasyBizException.newInstance("数据模型转换失败，targetClass为集合类型不支持"); 
+			throw new EasyCommonException("数据模型转换失败，targetClass为集合类型不支持"); 
 		}
 		List<T> list = this.model2model(pageResult.getRecordList(), targetClass);
 		PageResult<T> _pageResult = new PageResult<T>();
@@ -110,7 +117,7 @@ public class EasyModelConverter {
 	public Map<String, Object> model2map(Object obj, Boolean column2name) {
 		if(null==obj) return null;
 		if(obj instanceof Map || obj instanceof Collection) {
-			throw EasyBizException.newInstance("数据模型转换失败，obj为集合类型不支持"); 
+			throw new EasyCommonException("数据模型转换失败，obj为集合类型不支持"); 
 		}
 		try {
 			Map<String, Object> retMap = new HashMap<String, Object>();
@@ -124,7 +131,7 @@ public class EasyModelConverter {
 				try {
 					value = method.invoke(obj);
 				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-					throw EasyBizException.newInstance("反射属性获取值失败[getXxx()]，name:" + pd.getName(), e);
+					throw new EasyCommonException("反射属性获取值失败[getXxx()]，name:" + pd.getName(), e);
 				}
 				String tmpName = null;
 				if(null==column2name) {
@@ -138,7 +145,7 @@ public class EasyModelConverter {
 			}
 			return retMap;
 		} catch (IntrospectionException e) {
-			throw EasyBizException.newInstance("Model到Map的属性值复制失败，obj:" + obj, e);
+			throw new EasyCommonException("Model到Map的属性值复制失败，obj:" + obj, e);
 		}
 	}
 	
@@ -162,7 +169,7 @@ public class EasyModelConverter {
 	public <T> T map2model(Map<String, Object> mapResult, Class<?> targetClass, Boolean column2name) {
 		if(null==mapResult || null==targetClass) return null;
 		if(Map.class.isAssignableFrom(targetClass) || Collection.class.isAssignableFrom(targetClass)) {
-			throw EasyBizException.newInstance("数据模型转换失败，targetClass为集合类型不支持"); 
+			throw new EasyCommonException("数据模型转换失败，targetClass为集合类型不支持"); 
 		}
 		Map<String, Object> formatMap = new HashMap<String, Object>();
 		Set<Entry<String, Object>> sets = mapResult.entrySet();
@@ -182,8 +189,8 @@ public class EasyModelConverter {
 		}
 		try {
 			return EasyJavaBeanUtils.copyProperties(formatMap, targetClass);
-		} catch (EasySysException | ReflectiveOperationException e) {
-			throw EasyBizException.newInstance("数据模型转换失败", e); 
+		} catch (EasyCommonException | ReflectiveOperationException e) {
+			throw new EasyCommonException("数据模型转换失败", e); 
 		}
 	}
 	

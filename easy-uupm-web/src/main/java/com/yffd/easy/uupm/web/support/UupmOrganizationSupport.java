@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.yffd.easy.common.core.tree.TreeBuilder;
+import com.yffd.easy.common.core.tree.EasyTreeBuilder;
 import com.yffd.easy.common.core.util.EasyStringCheckUtils;
 import com.yffd.easy.uupm.api.model.UupmOrganizationModel;
 import com.yffd.easy.uupm.web.vo.UupmOrganizationComboTreeVO;
@@ -20,7 +20,7 @@ import com.yffd.easy.uupm.web.vo.UupmOrganizationComboTreeVO;
  */
 @Component
 public class UupmOrganizationSupport {
-	private TreeBuilder treeBuilder = new TreeBuilder();
+	private EasyTreeBuilder treeBuilder = new EasyTreeBuilder();
 	
 	/**
 	 * 同步tree数据转换
@@ -30,7 +30,7 @@ public class UupmOrganizationSupport {
 	 * @param rootId
 	 * @return
 	 */
-	public List<UupmOrganizationComboTreeVO> toSyncTreeVO(List<UupmOrganizationModel> list, String rootId) {
+	public List<UupmOrganizationComboTreeVO> toSyncTreeVO(List<UupmOrganizationModel> list, String rootPid) {
 		if(null==list || list.isEmpty()) return null;
 		List<UupmOrganizationComboTreeVO> voList = new ArrayList<UupmOrganizationComboTreeVO>();
 		for(UupmOrganizationModel model : list) {
@@ -49,11 +49,8 @@ public class UupmOrganizationSupport {
 			vo.setRemark(model.getRemark());
 			voList.add(vo);
 		}
-		if(!EasyStringCheckUtils.isEmpty(rootId)) {
-			List<UupmOrganizationComboTreeVO> treeList = (List<UupmOrganizationComboTreeVO>) treeBuilder.buildByRecursive(voList, rootId);
-			return treeList;
-		}
-		List<UupmOrganizationComboTreeVO> treeList = (List<UupmOrganizationComboTreeVO>) treeBuilder.buildByRecursive(voList);
+		if(EasyStringCheckUtils.isEmpty(rootPid)) rootPid = "root";
+		List<UupmOrganizationComboTreeVO> treeList = (List<UupmOrganizationComboTreeVO>) treeBuilder.build(voList, rootPid);
 		return treeList;
 	}
 	

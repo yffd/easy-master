@@ -113,8 +113,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			striped: true,
 			singleSelect: false,
 			cascadeCheck: true,
-			idField: 'nodeCode',
-			treeField: 'nodeName',
+			idField: 'rsCode',
+			treeField: 'rsName',
 			loadFilter: function(result) {
 		    	if("OK"==result.status) {
 		    		return result.data;
@@ -129,7 +129,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    	},
 	    	onContextMenu: function(e, node){
 				e.preventDefault();
-				$dg_right.treegrid('select', node.nodeCode);
+				$dg_right.treegrid('select', node.rsCode);
 				$('#mm_id_right').menu('show', {
 					left: e.pageX,
 					top: e.pageY
@@ -137,24 +137,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			},
 	        columns: [[
 						{field: 'ck', checkbox: true},
-						{field: 'nodeName', title: '名称', width:200,align: 'left'},
-						{field: 'nodeCode', title: '编号', width: 100, align: 'left'},
-						{field: 'nodeLabel', title: '节点标签', width: 100, align: 'left'},
-						{field: 'parentNodeCode', title: '父编号', width: 100, align: 'left'},
-						{field: 'parentNodeName', title: '父名称', width: 100, align: 'left'},
-						{field: 'nodeStatus', title: '状态', width: 100, align: 'left',
+						{field: 'rsName', title: '名称', width:200,align: 'left'},
+						{field: 'rsCode', title: '编号', width: 100, align: 'left'},
+						{field: 'treeId', title: '树ID', width: 100, align: 'left'},
+						{field: 'parentCode', title: '父编号', width: 100, align: 'left'},
+						{field: 'rsStatus', title: '状态', width: 100, align: 'left',
 							formatter: function(value, row) {
 								return utils.fmtDict($json_status, value);
 							}
 						},
-						{field: 'nodeValueType', title: '类型', width: 100, align: 'left',
+						{field: 'rsType', title: '类型', width: 100, align: 'left',
 							formatter: function(value, row) {
 								return utils.fmtDict($json_rsType, value);
 							}	
 						},
 						{field: 'seqNo', title: '序号', width: 100, align: 'left'},
-						{field: 'nodeValue', title: '值', width: 200, align: 'left'},
-						{field: 'remark', title: '描述', width: 100, align: 'left'}
+						{field: 'shortUrl', title: '短链接', width: 200, align: 'left'}
 	                   ]]
 		});
 	}
@@ -165,7 +163,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		var rsCodeArr = [];
 		if(rows_rs) {
 			$.each(rows_rs, function(i, obj) {
-				rsCodeArr.push({'rsCode': obj['nodeCode']});
+				rsCodeArr.push({'rsCode': obj['rsCode']});
 			});
 		}
 		if(rsCodeArr.length==0) {
@@ -213,7 +211,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				var data = result.data;
 				if(data.length>0) {
 					$.each(data, function(i, n) {
-						$dg_right.treegrid('select', n.rsCode);
+						var row = $dg_right.treegrid('find', n.rsCode);
+						if(row) $dg_right.treegrid('select', n.rsCode);
 					});
 				} else {
 					$.messager.show({
@@ -245,7 +244,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	function expandAll() {
 		var node = $dg_right.treegrid('getSelected');
 		if(node) {
-			$dg_right.treegrid('expandAll', node.nodeCode);
+			$dg_right.treegrid('expandAll', node.rsCode);
 		} else {
 			$dg_right.treegrid('expandAll');
 		}
@@ -254,10 +253,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	function collapseAll() {
 		var node = $dg_right.treegrid('getSelected');
 		if(node) {
-			$dg_right.treegrid('collapseAll', node.nodeCode);
+			$dg_right.treegrid('collapseAll', node.rsCode);
 		} else {
 			$dg_right.treegrid('collapseAll');
 		}
+	}
+	
+	// 生成菜单
+	function saveMenuFunc() {
+		$.post("uupm/menu/saveMenuForOther", {}, function(result) {
+			$.messager.show({
+				title :commonui.msg_title,
+				timeout : commonui.msg_timeout,
+				msg : result.msg
+			});
+		}, "json");
 	}
 		
 </script>
@@ -284,6 +294,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					</td>
 					<td style="padding-left:2px">
 						<a class="easyui-linkbutton" data-options="iconCls:'icon-clear',plain:'true'" onclick="cleanSearch();" href="javascript:void(0);"></a>
+					</td>
+					<td style="padding-left:2px">
+						<a class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:'true'" onclick="saveMenuFunc();" href="javascript:void(0);">生成菜单</a>
 					</td>
 				</tr>
 			</table>

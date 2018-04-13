@@ -14,8 +14,8 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
-import com.yffd.easy.common.core.enums.CommonEnum;
 import com.yffd.easy.framework.domain.RespModel;
+import com.yffd.easy.framework.web.enums.CommonEnum;
 
 /**
  * @Description  简单描述该类的功能（可选）.

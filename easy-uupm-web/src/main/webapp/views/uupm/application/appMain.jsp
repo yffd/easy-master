@@ -51,7 +51,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			showHeader: true,
 			toolbar: '',
 			idField: 'id',
-			treeField: 'nodeName',
+			treeField: 'rsName',
 		    loadFilter: function(result) {
 		    	if("OK"==result.status) {
 		    		return result.data || [];
@@ -68,26 +68,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				makeGrid_right(row);
 			},
 			columns: [[
-	                   	{field: 'nodeName', title: '名称', width:200,align: 'left'},
-						{field: 'nodeCode', title: '编号', width: 100, align: 'left'},
-						{field: 'nodeStatus', title: '状态', width: 100, align: 'left',
+	                   	{field: 'rsName', title: '名称', width:200,align: 'left'},
+						{field: 'rsCode', title: '编号', width: 100, align: 'left'},
+						{field: 'rsStatus', title: '状态', width: 100, align: 'left',
 							formatter: function(value, row) {
 								return utils.fmtDict($json_status, value);
 							}
 						},
-						{field: 'nodeValueType', title: '类型', width: 100, align: 'left',
+						{field: 'rsType', title: '类型', width: 100, align: 'left',
 							formatter: function(value, row) {
 								return utils.fmtDict($json_rsType, value);
 							}	
 						},
-						{field: 'seqNo', title: '序号', width: 100, align: 'left'},
-						{field: 'remark', title: '描述', width: 100, align: 'left'}
+						{field: 'seqNo', title: '序号', width: 100, align: 'left'}
 	                   ]]
 		});
 	}
 	
 	function makeGrid_right(row) {
-		$.post('uupm/application/findAppCfg', {'appCode': row.nodeCode}, function(result) {
+		$.post('uupm/application/findAppCfg', {'appCode': row.rsCode}, function(result) {
 			if(result.status=='OK') {
 				var jsonData = result.data || {'total':0, 'rows':[]};
 				$('#dg_id_right').propertygrid({
@@ -101,11 +100,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		}, "json");
 	}
 	
-	/*********************************************************/
 	function saveAppCfg() {
 		try{
-			var row_app = $dg_left.datagrid('getSelected');//获取选中的行-单行
-			var rows = $('#dg_id_right').propertygrid('getChanges');
+			var row = $dg_left.treegrid('getSelected');
+			var rows = $('#dg_id_right').propertygrid('getData').rows;
+// 			var rows = $('#dg_id_right').propertygrid('getChanges');
 			if(rows.length==0) {
 				$.messager.show({
 					title :commonui.msg_title,
@@ -114,7 +113,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				});
 			} else {
 				var paramObj = {};
-				paramObj['appCode'] = row_app['nodeCode'];
+				paramObj['appCode'] = row['rsCode'];
 				$.each(rows, function(i, obj) {
 					paramObj[obj.id] = obj.value;
 				});
@@ -137,7 +136,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     </div>
 
     <div data-options="region:'center',title:'配置信息'" style="padding:5px;">
-    	<div id="tb_id_right" style="border-bottom:1px solid #cccccc;">
+    	<div id="tb_id_right" style="border-bottom:0px;">
     	<a class="easyui-linkbutton" data-options="iconCls:'icon-config',plain:'true'" onclick="saveAppCfg();" href="javascript:void(0);">保存设置</a>
 		</div>
     	<table id="dg_id_right"></table>

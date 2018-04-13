@@ -1,6 +1,6 @@
 package com.yffd.easy.uupm.mapper;
 
-import com.yffd.easy.framework.common.mapper.ICommonMapper;
+import com.yffd.easy.framework.core.common.mapper.ICommonMapper;
 import com.yffd.easy.uupm.api.model.UupmApplicationModel;
 
 /**

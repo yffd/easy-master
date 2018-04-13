@@ -25,7 +25,7 @@ public class CustomPo implements CustomObj, Serializable {
 	private String updateBy;	// 最后修改人
 	private Date updateTime;	// 最后修改时间
 	private String delFlag;		//逻辑删除标识：0=未删除、1=已删除
-	private String tenantCode;	//租户编号
+	private String tenantCode = "dft";	//租户编号
 	
 	public String getId() {
 		return id;

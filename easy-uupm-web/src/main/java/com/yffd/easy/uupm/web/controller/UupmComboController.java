@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.yffd.easy.common.core.tree.TreeBuilder;
+import com.yffd.easy.common.core.tree.EasyTreeBuilder;
 import com.yffd.easy.common.core.util.EasyStringCheckUtils;
 import com.yffd.easy.framework.domain.RespModel;
 import com.yffd.easy.framework.web.view.vo.ComboTreeVO;
+import com.yffd.easy.uupm.api.model.UupmDictionaryModel;
 import com.yffd.easy.uupm.api.model.UupmOrganizationModel;
-import com.yffd.easy.uupm.api.model.UupmTreeDictionaryModel;
+import com.yffd.easy.uupm.service.UupmDictionaryService;
 import com.yffd.easy.uupm.service.UupmOrganizationService;
-import com.yffd.easy.uupm.service.UupmTreeDictionaryService;
 import com.yffd.easy.uupm.web.common.UupmCommonController;
 
 /**
@@ -34,10 +34,10 @@ import com.yffd.easy.uupm.web.common.UupmCommonController;
 @RequestMapping("/uupm/combox")
 public class UupmComboController extends UupmCommonController {
 	
-	private TreeBuilder treeBuilder = new TreeBuilder();
+	private EasyTreeBuilder treeBuilder = new EasyTreeBuilder();
 	
 	@Autowired
-	private UupmTreeDictionaryService uupmTreeDictionaryService;
+	private UupmDictionaryService uupmDictionaryService;
 	@Autowired
 	private UupmOrganizationService uupmOrganizationService;
 	
@@ -52,10 +52,13 @@ public class UupmComboController extends UupmCommonController {
 			String[] valueArr = value.split(",");
 			Map<String, Object> tmp = new HashMap<String, Object>();
 			for(String nodeCode : valueArr) {
-				List<UupmTreeDictionaryModel> result = this.uupmTreeDictionaryService.findChildrenNodeList(key, nodeCode, null);
+				UupmDictionaryModel node = new UupmDictionaryModel();
+				node.setTreeId(key);
+				node.setKeyCode(nodeCode);
+				List<UupmDictionaryModel> result = this.uupmDictionaryService.findChildrenNodes(node , null);
 				if(null!=result && !result.isEmpty()) {
 					List<ComboTreeVO> voList = this.dict2ComboTreeVO(result);
-					List<ComboTreeVO> treeList = treeBuilder.buildByRecursive(voList, key);
+					List<ComboTreeVO> treeList = (List<ComboTreeVO>) treeBuilder.build(voList, key);
 					tmp.put(nodeCode, treeList);
 				}
 			}
@@ -74,7 +77,7 @@ public class UupmComboController extends UupmCommonController {
 		return this.successAjax();
 	}
 	
-	private List<ComboTreeVO> org2ComboTreeVO(List<UupmOrganizationModel> list, String rootId) {
+	private List<ComboTreeVO> org2ComboTreeVO(List<UupmOrganizationModel> list, String rootPid) {
 		if(null==list || list.isEmpty()) return null;
 		List<ComboTreeVO> voList = new ArrayList<ComboTreeVO>();
 		for(UupmOrganizationModel model : list) {
@@ -86,22 +89,19 @@ public class UupmComboController extends UupmCommonController {
 			vo.setState("open");
 			voList.add(vo);
 		}
-		if(!EasyStringCheckUtils.isEmpty(rootId)) {
-			List<ComboTreeVO> treeList = (List<ComboTreeVO>) treeBuilder.buildByRecursive(voList, rootId);
-			return treeList;
-		}
-		List<ComboTreeVO> treeList = (List<ComboTreeVO>) treeBuilder.buildByRecursive(voList);
+		if(EasyStringCheckUtils.isEmpty(rootPid)) rootPid = "root";
+		List<ComboTreeVO> treeList = (List<ComboTreeVO>) treeBuilder.build(voList, rootPid);
 		return treeList;
 	}
 	
-	private List<ComboTreeVO> dict2ComboTreeVO(List<UupmTreeDictionaryModel> list) {
+	private List<ComboTreeVO> dict2ComboTreeVO(List<UupmDictionaryModel> list) {
 		List<ComboTreeVO> retList = new ArrayList<ComboTreeVO>();
-		for(UupmTreeDictionaryModel model : list) {
+		for(UupmDictionaryModel model : list) {
 			ComboTreeVO vo = new ComboTreeVO();
 			vo.setId_(model.getNodeCode());
-			vo.setPid_(model.getParentNodeCode());
-			vo.setId(model.getNodeValue());
-			vo.setText(model.getNodeName());
+			vo.setPid_(model.getParentCode());
+			vo.setId(model.getKeyCode());
+			vo.setText(model.getKeyName());
 			vo.setState("open");
 			retList.add(vo);
 		}

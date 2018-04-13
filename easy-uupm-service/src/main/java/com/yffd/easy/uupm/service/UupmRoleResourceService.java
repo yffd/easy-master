@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.yffd.easy.framework.common.mapper.ICommonMapper;
-import com.yffd.easy.framework.common.service.CommonServiceAbstract;
+import com.yffd.easy.framework.core.common.mapper.ICommonMapper;
+import com.yffd.easy.framework.core.common.service.CommonServiceAbstract;
 import com.yffd.easy.framework.domain.LoginInfo;
 import com.yffd.easy.uupm.api.model.UupmRoleResourceModel;
 import com.yffd.easy.uupm.mapper.IUupmRoleResourceMapper;

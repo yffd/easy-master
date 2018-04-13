@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.yffd.easy.framework.common.mapper.ICommonMapper;
-import com.yffd.easy.framework.common.service.CommonServiceAbstract;
+import com.yffd.easy.framework.core.common.mapper.ICommonMapper;
+import com.yffd.easy.framework.core.common.service.CommonServiceAbstract;
 import com.yffd.easy.framework.domain.LoginInfo;
+import com.yffd.easy.uupm.api.model.UupmResourceModel;
 import com.yffd.easy.uupm.api.model.UupmTenantResourceModel;
-import com.yffd.easy.uupm.api.model.UupmTreeResourceModel;
 import com.yffd.easy.uupm.mapper.IUupmTenantResourceMapper;
 
 /**
@@ -60,10 +60,10 @@ public class UupmTenantResourceService extends CommonServiceAbstract<UupmTenantR
 		this.delete(paramMap);
 	}
 	 
-	public List<UupmTreeResourceModel> findTenantResource(String tenantCode) {
+	public List<UupmResourceModel> findTenantResource(String tenantCode) {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("tenantCode", tenantCode);
 		List<Map<String, Object>> list = this.selectListBy("selectTenantResource", paramMap, true);
-		return this.map2model(list, UupmTreeResourceModel.class, null);
+		return this.map2model(list, UupmResourceModel.class, null);
 	}
 }

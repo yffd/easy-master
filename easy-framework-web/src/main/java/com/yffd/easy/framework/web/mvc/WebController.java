@@ -1,7 +1,7 @@
 package com.yffd.easy.framework.web.mvc;
 
-import com.yffd.easy.common.core.enums.CommonEnum;
 import com.yffd.easy.framework.domain.RespModel;
+import com.yffd.easy.framework.web.enums.CommonEnum;
 import com.yffd.easy.framework.web.view.ViewModelConverter;
 
 /**

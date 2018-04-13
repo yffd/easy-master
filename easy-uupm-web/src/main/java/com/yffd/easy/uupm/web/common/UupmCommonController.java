@@ -7,6 +7,7 @@ import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 
+import com.yffd.easy.framework.domain.LoginInfo;
 import com.yffd.easy.framework.web.mvc.WebController;
 
 /**
@@ -26,5 +27,8 @@ public class UupmCommonController extends WebController {
 		dataBinder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));   //true:允许输入空值，false:不能为空值
     }
 	
+	public LoginInfo getLoginInfo() {
+		return new LoginInfo();
+	}
 }
 

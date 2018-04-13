@@ -5,8 +5,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.yffd.easy.framework.common.mapper.ICommonMapper;
-import com.yffd.easy.framework.common.service.CommonServiceAbstract;
+import com.yffd.easy.common.core.util.EasyStringCheckUtils;
+import com.yffd.easy.framework.core.common.mapper.ICommonMapper;
+import com.yffd.easy.framework.core.common.service.CommonServiceAbstract;
+import com.yffd.easy.framework.core.exception.BizException;
 import com.yffd.easy.framework.domain.LoginInfo;
 import com.yffd.easy.uupm.api.model.UupmApplicationModel;
 import com.yffd.easy.uupm.mapper.IUupmApplicationMapper;
@@ -37,7 +39,7 @@ public class UupmApplicationService extends CommonServiceAbstract<UupmApplicatio
 
 	@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
 	public int saveAppCfg(UupmApplicationModel model, LoginInfo loginInfo) {
-		if(null!=loginInfo) loginInfo.setTenantCode(null);
+		if(null==model || EasyStringCheckUtils.isEmpty(model.getTenantCode())) throw BizException.BIZ_TENANT_IS_EMPTY();
 		this.deleteBy("appCode", model.getAppCode());
 		return this.addOne(model, loginInfo);
 	}

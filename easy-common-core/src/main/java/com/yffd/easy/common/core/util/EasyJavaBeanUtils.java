@@ -7,8 +7,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.Converter;
 
-import com.yffd.easy.common.core.exception.EasyBizException;
-import com.yffd.easy.common.core.exception.EasySysException;
+import com.yffd.easy.common.core.exception.EasyCommonException;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -20,12 +19,12 @@ import com.yffd.easy.common.core.exception.EasySysException;
  */
 public class EasyJavaBeanUtils {
 
-	public static <E> E copyProperties(Object source, Class<?> targetClass) throws ReflectiveOperationException, EasySysException {
+	public static <E> E copyProperties(Object source, Class<?> targetClass) throws ReflectiveOperationException, EasyCommonException {
 		if(null==source) {
-			throw EasyBizException.newInstance("原始对象未指定"); 
+			throw new EasyCommonException("原始对象未指定"); 
 		}
 		if(null==targetClass) {
-			throw EasyBizException.newInstance("目标对象类未指定"); 
+			throw new EasyCommonException("目标对象类未指定"); 
 		}
 		try {
 			Object obj = targetClass.newInstance();

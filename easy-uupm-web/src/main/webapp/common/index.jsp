@@ -41,8 +41,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	
 <script type="text/javascript">
 $(function(){
-// 	initMenu();
-	initMenuLocal();
+	initMenu();
+// 	initMenuLocal();
 	if (utils.isLessThanIe8()) {
 		$.messager.show({
 			title : '警告',
@@ -55,32 +55,34 @@ $(function(){
 function initMenu(){
 	var $ma = $("#menuAccordion");
 	$ma.accordion({animate:true,fit:true,border:false});
-	$.post("pms/resource/listLeftMenu", {userCode:"1"}, function(data) {
-		if(data.respData && data.respData.length>0) {
-			$.each(data.respData, function(i, n) {
-				var menulist ="<div class=\"badge-div\">";
-	            if(n.children && n.children.length>0) {
-	                $.each(n.children, function(ci, cn) {
-	                	var effort=cn.text+"||"+cn.iconCls+"||"+cn.inUrl;
-						menulist+="<a href=\"javascript:void(0);\" class=\"easyui-linkbutton\" data-options=\"plain:true,iconCls:'"+cn.iconCls+"'\" onclick=\"addTab('"+effort+"');\">"+cn.text+"</a><br/>";
-	                });
-	            }
-	            menulist+="</div>";
+	$.post("uupm/menu/findMenuTree", {}, function(result) {
+		if(result.status=='OK') {
+			if(result.data && result.data.length>0) {
+				$.each(result.data, function(i, n) {
+					var menulist ="<div class=\"badge-div\">";
+		            if(n.children && n.children.length>0) {
+		                $.each(n.children, function(ci, cn) {
+		                	var effort=cn.text+"||"+cn.menuIcons+"||"+cn.menuUrl;
+							menulist+="<a href=\"javascript:void(0);\" class=\"easyui-linkbutton\" data-options=\"plain:true,iconCls:'"+cn.iconCls+"'\" onclick=\"addTab('"+effort+"');\">"+cn.text+"</a><br/>";
+		                });
+		            }
+		            menulist+="</div>";
 
-	    		$ma.accordion('add', {
-	                title: n.text,
-	                content: menulist,
-	                iconCls: n.iconCls,
-	                selected: false
-	            });
-	        });
-			
-			//选中第一个
-	    	var panels = $ma.accordion('panels');
-	    	var t = panels[0].panel('options').title;
-	    	$ma.accordion('select', t);
-	    	
-		} else {return;}
+		    		$ma.accordion('add', {
+		                title: n.text,
+		                content: menulist,
+		                iconCls: n.iconCls,
+		                selected: false
+		            });
+		        });
+				
+				//选中第一个
+		    	var panels = $ma.accordion('panels');
+		    	var t = panels[0].panel('options').title;
+		    	$ma.accordion('select', t);
+		    	
+			} else {return;}
+		}
 	}, "json").error(function() {
 // 		$.messager.alert("提示", "获取菜单出错,请重新登陆!");
 	});
@@ -102,7 +104,7 @@ function initMenuLocal() {
         },{
         	"id": "sys-102",
             "pid": "sys",
-            "text": "应用系统管理",
+            "text": "应用系统配置管理",
             "state": "open",
             "iconCls": "icon-sys",
             "inUrl": "views/uupm/application/appMain.jsp",
@@ -110,7 +112,7 @@ function initMenuLocal() {
         },{
         	"id": "sys-103",
             "pid": "sys",
-            "text": "菜单管理",
+            "text": "菜单配置管理",
             "state": "open",
             "iconCls": "icon-sys",
             "inUrl": "views/uupm/menu/menuMain.jsp",

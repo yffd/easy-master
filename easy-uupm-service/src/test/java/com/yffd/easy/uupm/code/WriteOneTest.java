@@ -2,13 +2,14 @@ package com.yffd.easy.uupm.code;
 
 import org.junit.Test;
 
-import com.yffd.easy.framework.support.code.generator.CodeMapperFileGenerator;
-import com.yffd.easy.framework.support.code.generator.CodeMapperInterfaceGenerator;
-import com.yffd.easy.framework.support.code.generator.CodeMapperSqlGenerator;
-import com.yffd.easy.framework.support.code.generator.CodeServiceGenerator;
-import com.yffd.easy.framework.support.code.generator.CodeServiceTestGenerator;
-import com.yffd.easy.uupm.api.model.UupmApplicationModel;
-import com.yffd.easy.uupm.api.model.UupmTreeDictionaryModel;
+import com.yffd.easy.framework.core.code.generator.CodeMapperFileGenerator;
+import com.yffd.easy.framework.core.code.generator.CodeMapperInterfaceGenerator;
+import com.yffd.easy.framework.core.code.generator.CodeMapperSqlGenerator;
+import com.yffd.easy.framework.core.code.generator.CodeMapperSqlTreeGenerator;
+import com.yffd.easy.framework.core.code.generator.CodeServiceGenerator;
+import com.yffd.easy.framework.core.code.generator.CodeServiceTestGenerator;
+import com.yffd.easy.uupm.api.model.UupmDictionaryModel;
+import com.yffd.easy.uupm.api.model.UupmResourceModel;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -22,10 +23,11 @@ public class WriteOneTest extends LocalProjectConfigTest {
 	private CodeMapperInterfaceGenerator mapperInterfaceGenerator = new CodeMapperInterfaceGenerator();
 	private CodeMapperFileGenerator mapperFileGenerator = new CodeMapperFileGenerator();
 	private CodeMapperSqlGenerator mapperSqlGenerator = new CodeMapperSqlGenerator();
+	private CodeMapperSqlTreeGenerator mapperSqlTreeGenerator = new CodeMapperSqlTreeGenerator();
 	private CodeServiceGenerator serviceGenerator = new CodeServiceGenerator();
 	private CodeServiceTestGenerator serviceTestGenerator = new CodeServiceTestGenerator();
 	
-	private Class<?> modelClazz = UupmApplicationModel.class;
+	private Class<?> modelClazz = UupmDictionaryModel.class;
 	
 	/**
 	 * 所有--文件
@@ -140,8 +142,19 @@ public class WriteOneTest extends LocalProjectConfigTest {
 		String oldAliasName = "old";
 		String mapAliasName = "map";
 		
-		Class<?> modelClazz = UupmTreeDictionaryModel.class;
+		Class<?> modelClazz = UupmResourceModel.class;
 		mapperSqlGenerator.writeToConsole(tableAliasName, modelAliasName, oldAliasName, mapAliasName, modelClazz);
+	}
+	/**
+	 * mapper sql tree--控制台
+	 * @Date	2018年2月8日 下午5:46:21 <br/>
+	 * @author  zhangST
+	 */
+	@Test
+	public void writeMapperSqlTreeToConsoleTest() {
+		
+		Class<?> modelClazz = UupmResourceModel.class;
+		mapperSqlTreeGenerator.writeToConsole(modelClazz);
 	}
 	
 	

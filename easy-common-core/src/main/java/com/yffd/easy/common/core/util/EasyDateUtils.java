@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import com.yffd.easy.common.core.exception.EasyBizException;
+import com.yffd.easy.common.core.exception.EasyCommonException;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -70,7 +70,7 @@ public class EasyDateUtils {
 					String dateReplace = dateFmt.replaceAll("\\D+", "-");
 					return tmpFmt.parse(dateReplace);
 				} catch (ParseException e) {
-					throw EasyBizException.newInstance("日期格式无效：【" + dateFmt + "】", e);
+					throw new EasyCommonException("日期格式无效：【" + dateFmt + "】", e);
 				}
 			}
 		}
@@ -86,7 +86,7 @@ public class EasyDateUtils {
 			}
 		}
 		if(null==tmpFmt) {
-			throw EasyBizException.newInstance("日期格式无效：【" + dateFmt + "】");
+			throw new EasyCommonException("日期格式无效：【" + dateFmt + "】");
 		}
 		return tmpFmt;
 	}
@@ -119,7 +119,7 @@ public class EasyDateUtils {
 	    		}
 	    	}
 	    } catch (Exception e) {
-	    	throw EasyBizException.newInstance("日期格式无效", e);
+	    	throw new EasyCommonException("日期格式无效", e);
 	    }
 	    return strSuccess;
 	}

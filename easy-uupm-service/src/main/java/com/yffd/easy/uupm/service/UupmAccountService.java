@@ -3,8 +3,8 @@ package com.yffd.easy.uupm.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.yffd.easy.framework.common.mapper.ICommonMapper;
-import com.yffd.easy.framework.common.service.CommonServiceAbstract;
+import com.yffd.easy.framework.core.common.mapper.ICommonMapper;
+import com.yffd.easy.framework.core.common.service.CommonServiceAbstract;
 import com.yffd.easy.uupm.mapper.IUupmAccountMapper;
 import com.yffd.easy.uupm.api.model.UupmAccountModel;
 

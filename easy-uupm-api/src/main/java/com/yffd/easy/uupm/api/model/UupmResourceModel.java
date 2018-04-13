@@ -1,46 +1,31 @@
-/**
- * @Copyright: Copyright (c) 2018
- * @Author:  ZhangST
- * @version 1.0
-*/
-
 package com.yffd.easy.uupm.api.model;
 
-import com.yffd.easy.framework.domain.CustomPo;
+import com.yffd.easy.framework.domain.tree.TreeModel;
 
 /**
- * 
- * @Description  应用系统功能信息.
- * @Date		 2018年2月1日 上午9:39:43 <br/>
+ * @Description  简单描述该类的功能（可选）.
+ * @Date		 2018年4月3日 下午2:00:27 <br/>
  * @author       zhangST
  * @version		 1.0
  * @since		 JDK 1.7+
- * @see
+ * @see 	 
  */
-public class UupmResourceModel extends CustomPo {
+public class UupmResourceModel extends TreeModel {
+
+	private static final long serialVersionUID = 392536829366303556L;
+	private String rsCode;
+	private String rsName;
+	private String rsStatus;
+	private String rsType;
+	private String shortUrl;
+	private Integer seqNo;
 	
-	private static final long serialVersionUID = -7487327163115556293L;
-	private String tenantCode;		//租户编号
-	private String appCode;		//应用系统编号
-	private String rsName;		//资源名称
-	private String rsCode;		//资源编号
-	private String parentCode;	//父资源名称
-	private String rsPath;		//资源路径
-	private String rsType;		//资源类型：M=菜单、O=操作
-	private String rsStatus;	//资源状态：1=激活、0=冻结
-	private String remark;		//备注
-	
-	public String getTenantCode() {
-		return tenantCode;
+	public String getRsCode() {
+		return rsCode;
 	}
-	public void setTenantCode(String tenantCode) {
-		this.tenantCode = tenantCode;
-	}
-	public String getAppCode() {
-		return appCode;
-	}
-	public void setAppCode(String appCode) {
-		this.appCode = appCode;
+	public void setRsCode(String rsCode) {
+		this.setNodeCode(rsCode);	// 设置nodeCode=rsCode
+		this.rsCode = rsCode;
 	}
 	public String getRsName() {
 		return rsName;
@@ -48,23 +33,11 @@ public class UupmResourceModel extends CustomPo {
 	public void setRsName(String rsName) {
 		this.rsName = rsName;
 	}
-	public String getRsCode() {
-		return rsCode;
+	public String getRsStatus() {
+		return rsStatus;
 	}
-	public void setRsCode(String rsCode) {
-		this.rsCode = rsCode;
-	}
-	public String getParentCode() {
-		return parentCode;
-	}
-	public void setParentCode(String parentCode) {
-		this.parentCode = parentCode;
-	}
-	public String getRsPath() {
-		return rsPath;
-	}
-	public void setRsPath(String rsPath) {
-		this.rsPath = rsPath;
+	public void setRsStatus(String rsStatus) {
+		this.rsStatus = rsStatus;
 	}
 	public String getRsType() {
 		return rsType;
@@ -72,17 +45,18 @@ public class UupmResourceModel extends CustomPo {
 	public void setRsType(String rsType) {
 		this.rsType = rsType;
 	}
-	public String getRsStatus() {
-		return rsStatus;
+	public String getShortUrl() {
+		return shortUrl;
 	}
-	public void setRsStatus(String rsStatus) {
-		this.rsStatus = rsStatus;
+	public void setShortUrl(String shortUrl) {
+		this.shortUrl = shortUrl;
 	}
-	public String getRemark() {
-		return remark;
+	public Integer getSeqNo() {
+		return seqNo;
 	}
-	public void setRemark(String remark) {
-		this.remark = remark;
+	public void setSeqNo(Integer seqNo) {
+		this.seqNo = seqNo;
 	}
-
+	
 }
+

@@ -21,7 +21,7 @@ import com.yffd.easy.framework.web.view.vo.PropertyGridVO;
 import com.yffd.easy.uupm.api.model.UupmApplicationModel;
 import com.yffd.easy.uupm.service.UupmApplicationService;
 import com.yffd.easy.uupm.web.common.UupmCommonController;
-import com.yffd.easy.uupm.web.support.UupmApplicationSupport;
+import com.yffd.easy.uupm.web.support.UupmModePropertyGridSupport;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -35,9 +35,9 @@ import com.yffd.easy.uupm.web.support.UupmApplicationSupport;
 @RequestMapping("/uupm/application")
 public class UupmApplicationController extends UupmCommonController {
 	@Autowired
-	private UupmApplicationSupport uupmApplicationSupport;
-	@Autowired
 	private UupmApplicationService uupmApplicationService;
+	@Autowired
+	private UupmModePropertyGridSupport uupmModePropertyGridSupport;
 	
 	@RequestMapping(value="/findAppCfg", method=RequestMethod.POST)
 	public RespModel findAppCfg(@RequestParam Map<String, Object> paramMap) {
@@ -47,7 +47,7 @@ public class UupmApplicationController extends UupmCommonController {
 		model.setAppCode(appCode);
 		UupmApplicationModel result = this.uupmApplicationService.findOne(model , null);
 		if(null==result) result = new UupmApplicationModel();
-		List<PropertyGridVO> listResult = this.uupmApplicationSupport.toPropertyGridVO(result);
+		List<PropertyGridVO> listResult = this.uupmModePropertyGridSupport.toAppPropertyGridVo(result);
 		DataGridVO dataGridVO = this.toDataGrid(listResult);
 		return this.successAjax(dataGridVO);
 	}

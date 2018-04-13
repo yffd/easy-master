@@ -3,9 +3,9 @@ package com.yffd.easy.uupm.code;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.yffd.easy.framework.common.mapper.ICommonMapper;
-import com.yffd.easy.framework.common.service.CommonServiceAbstract;
-import com.yffd.easy.framework.support.code.generator.CodeGenerator;
+import com.yffd.easy.framework.core.code.generator.CodeGenerator;
+import com.yffd.easy.framework.core.common.mapper.ICommonMapper;
+import com.yffd.easy.framework.core.common.service.CommonServiceAbstract;
 import com.yffd.easy.uupm.base.UupmBaseServiceTest;
 
 /**
@@ -21,7 +21,8 @@ public class LocalProjectConfigTest extends CodeGenerator {
 	public static String author = "ZhangST";
 	public static boolean covered = true;
 	
-	public static String modelRootDirPath = "F:\\easy\\easy-master\\easy-uupm-api\\src\\main\\java";
+	public static String baseDirPath = "D:\\java\\git-easy\\";
+	public static String modelRootDirPath = baseDirPath + "easy-master\\easy-uupm-api\\src\\main\\java";
 	public static String modelPackageName = "com.yffd.easy.uupm.api.model";
 	
 	public static Class<?> superMapperClazz = ICommonMapper.class;
@@ -34,7 +35,7 @@ public class LocalProjectConfigTest extends CodeGenerator {
 	public static String serviceTestPackageName = servicePackageName;
 	
 	
-	public static String outRootDirPath_src = "F:\\easy\\easy-master\\easy-uupm-service\\src";
+	public static String outRootDirPath_src = baseDirPath + "easy-master\\easy-uupm-service\\src";
 	public static String outRootDirPath_src_main = outRootDirPath_src + "\\main\\java";
 	public static String outRootDirPath_src_test = outRootDirPath_src + "\\test\\java";
 	public static String outRootDirPath_mapper_xml = outRootDirPath_src + "\\main\\resources\\mybatis\\mapper\\uupm";

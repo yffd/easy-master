@@ -1,6 +1,6 @@
 package com.yffd.easy.framework.web.view.vo;
 
-import com.yffd.easy.common.core.tree.TreeNode;
+import com.yffd.easy.common.core.tree.EasyTreeNode;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -10,7 +10,7 @@ import com.yffd.easy.common.core.tree.TreeNode;
  * @since		 JDK 1.7+
  * @see 	 
  */
-public class ComboTreeVO extends TreeNode {
+public class ComboTreeVO extends EasyTreeNode {
 
 	private String id;
 	private String text;
