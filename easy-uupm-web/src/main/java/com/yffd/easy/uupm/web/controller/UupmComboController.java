@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.yffd.easy.common.core.tree.EasyTreeBuilder;
 import com.yffd.easy.common.core.util.EasyStringCheckUtils;
 import com.yffd.easy.framework.domain.RespModel;
+import com.yffd.easy.framework.web.view.tree.TreeBuilder;
 import com.yffd.easy.framework.web.view.vo.ComboTreeVO;
 import com.yffd.easy.uupm.api.model.UupmDictionaryModel;
 import com.yffd.easy.uupm.api.model.UupmOrganizationModel;
@@ -34,7 +34,7 @@ import com.yffd.easy.uupm.web.common.UupmCommonController;
 @RequestMapping("/uupm/combox")
 public class UupmComboController extends UupmCommonController {
 	
-	private EasyTreeBuilder treeBuilder = new EasyTreeBuilder();
+	private TreeBuilder treeBuilder = new TreeBuilder();
 	
 	@Autowired
 	private UupmDictionaryService uupmDictionaryService;

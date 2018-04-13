@@ -1,4 +1,4 @@
-package com.yffd.easy.common.core.tree;
+package com.yffd.easy.framework.web.view.tree;
 
 import java.util.List;
 
@@ -10,16 +10,16 @@ import java.util.List;
  * @since		 JDK 1.7+
  * @see 	 
  */
-public class EasyTreeNode {
+public class TreeNode {
 
 	private String id_;
 	private String pid_;
-    private List<EasyTreeNode> children;
+    private List<TreeNode> children;
     
-    public EasyTreeNode() {
+    public TreeNode() {
     }
     
-    public EasyTreeNode(String id_, String pid_) {
+    public TreeNode(String id_, String pid_) {
         this.id_ = id_;
         this.pid_ = pid_;
     }
@@ -40,11 +40,11 @@ public class EasyTreeNode {
 		this.pid_ = pid_;
 	}
 
-	public List<EasyTreeNode> getChildren() {
+	public List<TreeNode> getChildren() {
 		return children;
 	}
 
-	public void setChildren(List<EasyTreeNode> children) {
+	public void setChildren(List<TreeNode> children) {
 		this.children = children;
 	}
 

@@ -16,7 +16,6 @@ import java.util.Set;
 
 import com.yffd.easy.common.core.exception.EasyCommonException;
 import com.yffd.easy.common.core.page.PageResult;
-import com.yffd.easy.common.core.tree.EasyTreeBuilder;
 import com.yffd.easy.common.core.util.EasyJavaBeanUtils;
 import com.yffd.easy.common.core.util.EasyNamingFormatUtils;
 
@@ -30,11 +29,11 @@ import com.yffd.easy.common.core.util.EasyNamingFormatUtils;
  */
 public class EasyModelConverter {
 
-	private EasyTreeBuilder treeBuilder;
-	
-	public EasyTreeBuilder getTreeBuilder() {
-		return treeBuilder;
-	}
+//	private EasyTreeBuilder treeBuilder;
+//	
+//	public EasyTreeBuilder getTreeBuilder() {
+//		return treeBuilder;
+//	}
 	
 	
 	/**************************** model to model start ******************************************************/

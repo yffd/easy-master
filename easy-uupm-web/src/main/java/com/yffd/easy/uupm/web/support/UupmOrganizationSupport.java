@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.yffd.easy.common.core.tree.EasyTreeBuilder;
 import com.yffd.easy.common.core.util.EasyStringCheckUtils;
+import com.yffd.easy.framework.web.view.tree.TreeBuilder;
 import com.yffd.easy.uupm.api.model.UupmOrganizationModel;
 import com.yffd.easy.uupm.web.vo.UupmOrganizationComboTreeVO;
 
@@ -20,7 +20,7 @@ import com.yffd.easy.uupm.web.vo.UupmOrganizationComboTreeVO;
  */
 @Component
 public class UupmOrganizationSupport {
-	private EasyTreeBuilder treeBuilder = new EasyTreeBuilder();
+	private TreeBuilder treeBuilder = new TreeBuilder();
 	
 	/**
 	 * 同步tree数据转换
