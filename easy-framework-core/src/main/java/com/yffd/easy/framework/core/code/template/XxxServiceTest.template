@@ -1,0 +1,142 @@
+package ##service_package_name##;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.yffd.easy.common.core.page.PageParam;
+import com.yffd.easy.common.core.page.PageResult;
+import ##import_model_full_name##;
+import ##import_test_super_service_full_name##;
+
+/**
+ * @Description  简单描述该类的功能（可选）.
+ * @Date		##date## <br/>
+ * @author		##author##
+ * @version		 1.0
+ * @since		 JDK 1.7+
+ * @see 	 
+ */
+public class ##test_service_name## ##test_base_service_name##{
+
+	@Autowired
+	private ##service_name## ##service_alias_name##;
+	
+	@Test
+	public void findPageTest() {
+		PageParam pageParam = new PageParam(1L, 10L);
+		##model_simple_name## paramModel = new ##model_simple_name##();
+		paramModel.setTenantCode("default");
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		List<String> idList = new ArrayList<String>();
+		idList.add("2000");
+		idList.add("2001");
+		paramMap.put("idList", idList);
+		PageResult<##model_simple_name##> pageResult = this.##service_alias_name##.findPage(paramModel, paramMap, pageParam, null);
+		Assert.assertNotNull(pageResult);
+		Assert.assertNotNull(pageResult.getRecordList());
+		System.out.println(pageResult.getRecordList().size());
+		for(Object obj : pageResult.getRecordList()) {
+			System.out.println(obj);
+		}
+	}
+	
+	@Test
+	public void findListTest() {
+		##model_simple_name## paramModel = new ##model_simple_name##();
+		paramModel.setTenantCode("default");
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		List<String> idList = new ArrayList<String>();
+		idList.add("2000");
+		idList.add("2001");
+		paramMap.put("idList", idList);
+		List<##model_simple_name##> result = this.##service_alias_name##.findList(paramModel, paramMap, null);
+		System.out.println(result);
+	}
+	
+	@Test
+	public void findCountTest() {
+		##model_simple_name## paramModel = new ##model_simple_name##();
+		paramModel.setTenantCode("default");
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		List<String> idList = new ArrayList<String>();
+		idList.add("2000");
+		idList.add("2001");
+		paramMap.put("idList", idList);
+		Long result = this.##service_alias_name##.findCount(paramModel, paramMap, null);
+		System.out.println(result);
+	}
+	
+	@Test
+	public void findOneTest() {
+		##model_simple_name## paramModel = new ##model_simple_name##();
+		paramModel.setTenantCode("default");
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		List<String> idList = new ArrayList<String>();
+		idList.add("2000");
+		idList.add("2001");
+		paramMap.put("idList", idList);
+		##model_simple_name## result = this.##service_alias_name##.findOne(paramModel, paramMap, null);
+		System.out.println(result);
+	}
+	
+	@Test
+	public void addOneTest() {
+		##model_simple_name## paramModel = new ##model_simple_name##();
+		paramModel.setTenantCode("default");
+		int result = this.##service_alias_name##.addOne(paramModel, null);
+		System.out.println(result);
+		System.out.println(paramModel.getId());
+	}
+	
+	@Test
+	public void addListTest() {
+		List<##model_simple_name##> list = new ArrayList<##model_simple_name##>();
+		for(int i=0;i<5;i++) {
+			##model_simple_name## paramModel = new ##model_simple_name##();
+			paramModel.setTenantCode("default_" + i);
+			list.add(paramModel);
+		}
+		int result = this.##service_alias_name##.addList(list, null);
+		System.out.println(result);
+		for(##model_simple_name## model : list) {
+			System.out.println(model.getId());
+		}
+	}
+	
+	@Test
+	public void updateTest() {
+		##model_simple_name## newModel = new ##model_simple_name##();
+		newModel.setTenantCode("default-new");
+		##model_simple_name## oldModel = new ##model_simple_name##();
+		oldModel.setTenantCode("default");
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		List<String> idList = new ArrayList<String>();
+		idList.add("2000");
+		idList.add("2001");
+		paramMap.put("idList", idList);
+		
+		int result = this.##service_alias_name##.update(newModel, oldModel, paramMap, null);
+		System.out.println(result);
+	}
+	
+	@Test
+	public void deleteTest() {
+		##model_simple_name## paramModel = new ##model_simple_name##();
+		paramModel.setTenantCode("default_0");
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		List<String> idList = new ArrayList<String>();
+		idList.add("2000");
+		idList.add("2001");
+		paramMap.put("idList", idList);
+
+		int result = this.##service_alias_name##.delete(paramModel, paramMap);
+		System.out.println(result);
+	}
+	
+}

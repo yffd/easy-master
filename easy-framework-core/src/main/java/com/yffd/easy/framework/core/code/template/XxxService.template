@@ -1,0 +1,35 @@
+package ##service_package_name##;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.yffd.easy.framework.core.common.mapper.ICommonMapper;
+import ##import_super_service_full_name##;
+import ##import_mapper_full_name##;
+import ##import_model_full_name##;
+
+/**
+ * @Description  简单描述该类的功能（可选）.
+ * @Date		##date## <br/>
+ * @author		##author##
+ * @version		 1.0
+ * @since		 JDK 1.7+
+ * @see 	 
+ */
+@Service
+public class ##service_name## ##super_service_name##{
+
+	@Autowired
+	private ##mapper_name## ##mapper_alias_name##;
+	
+	@Override
+	public ICommonMapper<##model_simple_name##> getMapper() {
+		return this.##mapper_alias_name##;
+	}
+
+	@Override
+	public Class<?> getMapperClass() {
+		return ##mapper_name##.class;
+	}
+
+}
