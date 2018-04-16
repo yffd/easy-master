@@ -17,8 +17,6 @@ import com.yffd.easy.framework.domain.RespModel;
 import com.yffd.easy.uupm.api.model.UupmOrganizationModel;
 import com.yffd.easy.uupm.service.UupmOrganizationService;
 import com.yffd.easy.uupm.web.common.UupmCommonController;
-import com.yffd.easy.uupm.web.support.UupmOrganizationSupport;
-import com.yffd.easy.uupm.web.vo.UupmOrganizationComboTreeVO;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -34,15 +32,14 @@ public class UupmOrganizationController extends UupmCommonController {
 
 	@Autowired
 	private UupmOrganizationService uupmOrganizationService;
-	@Autowired
-	private UupmOrganizationSupport uupmOrganizationSupport;
 	
 	@RequestMapping(value="/findTree", method=RequestMethod.POST)
 	public RespModel findTree(@RequestParam Map<String, Object> paramMap) {
 		List<UupmOrganizationModel> result = this.uupmOrganizationService.findList(null, paramMap, null);
 		if(null!=result && !result.isEmpty()) {
-			List<UupmOrganizationComboTreeVO> treeList = this.uupmOrganizationSupport.toSyncTreeVO(result, "root");
-			return this.successAjax(treeList);
+			String jsonTree = this.uupmOrganizationService.getTreeJsonBuilder()
+					.buildTreeJson(UupmOrganizationModel.class, "orgCode", "parentCode", "root", result);
+			return this.successAjax(jsonTree);
 		}
 		return this.successAjax();
 	}

@@ -29,13 +29,6 @@ import com.yffd.easy.common.core.util.EasyNamingFormatUtils;
  */
 public class EasyModelConverter {
 
-//	private EasyTreeBuilder treeBuilder;
-//	
-//	public EasyTreeBuilder getTreeBuilder() {
-//		return treeBuilder;
-//	}
-	
-	
 	/**************************** model to model start ******************************************************/
 
 	/**

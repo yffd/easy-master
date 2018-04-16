@@ -37,7 +37,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			treeField: 'orgName',
 			loadFilter: function(result) {
 		    	if("OK"==result.status) {
-		    		return result.data || [];
+		    		return JSON.parse(result.data) || [];
 		    	} else {
 		    		$.messager.show({
 						title :commonui.msg_title,
@@ -61,7 +61,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	        columns: [[
 						{field: 'orgCode', title: '编号', width: 100, align: 'left'},
 						{field: 'parentCode', title: '父编号', width: 100, align: 'left'},
-						{field: 'parentName', title: '父名称', width: 100, align: 'left'},
 						{field: 'dataPath', title: '路径', width: 100, align: 'left'},
 						{field: 'seqNo', title: '类型', width: 100, align: 'left'},
 						{field: 'remark', title: '备注', width: 100, align: 'left'},

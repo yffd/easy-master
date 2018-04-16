@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.yffd.easy.common.core.util.EasyStringCheckUtils;
 import com.yffd.easy.framework.core.common.mapper.ICommonMapper;
-import com.yffd.easy.framework.core.common.service.TreeNodeServiceAbstract;
+import com.yffd.easy.framework.core.common.service.CommonTreeServiceAbstract;
 import com.yffd.easy.framework.core.exception.BizException;
 import com.yffd.easy.framework.domain.LoginInfo;
 import com.yffd.easy.uupm.api.model.UupmResourceModel;
@@ -20,7 +20,7 @@ import com.yffd.easy.uupm.mapper.IUupmResourceMapper;
  * @see 	 
  */
 @Service
-public class UupmResourceService extends TreeNodeServiceAbstract<UupmResourceModel> {
+public class UupmResourceService extends CommonTreeServiceAbstract<UupmResourceModel> {
 
 	@Autowired
 	private IUupmResourceMapper uupmResourceMapper;

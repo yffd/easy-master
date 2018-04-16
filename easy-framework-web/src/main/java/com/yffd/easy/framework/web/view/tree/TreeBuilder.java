@@ -146,8 +146,6 @@ public class TreeBuilder extends EasyTreeCustomBuilder {
 			if(node.getPid_().equals(rootNode.getId_())) {
 				if(null==rootNode.getChildren()) rootNode.setChildren(new ArrayList<TreeNode>());
 				rootNode.getChildren().add(node);
-				treeNodes.remove(i);
-				i--;
 				this.recursiveNodes(treeNodes, node);
 			} 
 		}
