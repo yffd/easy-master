@@ -1,4 +1,4 @@
-package com.yffd.easy.framework.web.plugin.interceptor;
+package com.yffd.easy.framework.web.mvc.interceptor;
 
 import java.io.IOException;
 import java.io.PrintWriter;
