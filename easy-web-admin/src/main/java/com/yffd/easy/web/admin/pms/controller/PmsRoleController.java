@@ -43,7 +43,7 @@ public class PmsRoleController extends AdminBaseController {
 	
 	@RequestMapping(value="/findPage", method=RequestMethod.POST)
 	@ResponseBody
-	public RespModel findPage(PmsRole role, SearchVO searchVO) {
+	public RespData findPage(PmsRole role, SearchVO searchVO) {
 		PageParam pageParam = this.getPageParam(searchVO);
 		PageResult<PmsRole> pageResult = this.pmsRoleService.findPage(role, pageParam);
 		DataGridVO dataGridVO = this.toDataGrid(pageResult);
@@ -52,7 +52,7 @@ public class PmsRoleController extends AdminBaseController {
 	
 	@RequestMapping(value="/findList", method=RequestMethod.POST)
 	@ResponseBody
-	public RespModel list(PmsRole role) {
+	public RespData list(PmsRole role) {
 		List<PmsRole> pageResult = this.pmsRoleService.findList(role);
 		DataGridVO dataGridVO = this.toDataGrid(pageResult);
 		return this.successAjax(dataGridVO);
@@ -61,7 +61,7 @@ public class PmsRoleController extends AdminBaseController {
 	@RequiresPermissions("role-add")
 	@RequestMapping(value="/add", method=RequestMethod.POST)
 	@ResponseBody
-	public RespModel add(PmsRole role) {
+	public RespData add(PmsRole role) {
 		if(ValidUtils.isNull(role) 
 				|| ValidUtils.isEmpty(role.getRoleCode())
 				|| ValidUtils.isEmpty(role.getRoleName())) {
@@ -79,7 +79,7 @@ public class PmsRoleController extends AdminBaseController {
 	@RequiresPermissions("role-edit")
 	@RequestMapping(value="/edit", method=RequestMethod.POST)
 	@ResponseBody
-	public RespModel edit(PmsRole role) {
+	public RespData edit(PmsRole role) {
 		if(ValidUtils.isNull(role) 
 				|| ValidUtils.isEmpty(role.getRoleCode())) {
 			return this.error("参数无效");
@@ -92,7 +92,7 @@ public class PmsRoleController extends AdminBaseController {
 	@RequiresPermissions("role-del")
 	@RequestMapping(value="/del", method=RequestMethod.POST)
 	@ResponseBody
-	public RespModel del(HttpServletRequest req) {
+	public RespData del(HttpServletRequest req) {
 		String roleCode = req.getParameter("roleCode");
 		if(ValidUtils.isEmpty(roleCode)) {
 			return this.errorAjax("参数无效");
@@ -103,7 +103,7 @@ public class PmsRoleController extends AdminBaseController {
 	
 	@RequestMapping(value="/saveRoleResource", method=RequestMethod.POST)
 	@ResponseBody
-	public RespModel saveRoleResource(HttpServletRequest req) {
+	public RespData saveRoleResource(HttpServletRequest req) {
 		String roleCode = req.getParameter("roleCode");
 		String rsCodes = req.getParameter("rsCodes");
 		if(ValidUtils.isEmpty(roleCode)) {
@@ -119,7 +119,7 @@ public class PmsRoleController extends AdminBaseController {
 	
 	@RequestMapping(value="/findRoleResource", method=RequestMethod.POST)
 	@ResponseBody
-	public RespModel findRoleResource(HttpServletRequest req) {
+	public RespData findRoleResource(HttpServletRequest req) {
 		String roleCode = req.getParameter("roleCode");
 		if(ValidUtils.isEmpty(roleCode)) {
 			return this.error("参数无效");
@@ -130,7 +130,7 @@ public class PmsRoleController extends AdminBaseController {
 	
 	@RequestMapping(value="/saveRoleUser", method=RequestMethod.POST)
 	@ResponseBody
-	public RespModel saveRoleUser(HttpServletRequest req) {
+	public RespData saveRoleUser(HttpServletRequest req) {
 		String userCode = req.getParameter("userCode");
 		String roleCodes = req.getParameter("roleCodes");
 		if(ValidUtils.isEmpty(userCode)) {
@@ -146,7 +146,7 @@ public class PmsRoleController extends AdminBaseController {
 	
 	@RequestMapping(value="/findRoleUser", method=RequestMethod.POST)
 	@ResponseBody
-	public RespModel findRoleUser(HttpServletRequest req) {
+	public RespData findRoleUser(HttpServletRequest req) {
 		String userCode = req.getParameter("userCode");
 		if(ValidUtils.isEmpty(userCode)) {
 			return this.error("参数无效");

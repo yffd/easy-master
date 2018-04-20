@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import com.yffd.easy.common.core.util.EasyStringCheckUtils;
-import com.yffd.easy.framework.domain.CustomPo;
 
 /**
  * @Description  Mapper中的sql片段拼写生成器.
@@ -532,7 +531,7 @@ public class CodeMapperSqlGenerator extends CodeGenerator {
 		String modelAliasName = "model";
 		String oldAliasName = "old";
 		String mapAliasName = "map";
-		Class<?> modelClazz = CustomPo.class;
+		Class<?> modelClazz = null;
 		
 		String tableName = generator.tableName(modelClazz);
 		System.out.println(">>>>>>>>>>>>>>>>>>>start::tableName");

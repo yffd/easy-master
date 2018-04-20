@@ -45,7 +45,7 @@ public class PmsResourceController extends AdminBaseController {
 	 */
 	@RequestMapping(value="/listAll", method=RequestMethod.POST)
 	@ResponseBody
-	public RespModel listAll(HttpServletRequest req) {
+	public RespData listAll(HttpServletRequest req) {
 		List<PmsResource> list = this.pmsResourceService.findAll();
 		if(!ValidUtils.isEmpty(list)) {
 			List<PmsResourceTreeGridVO> treeList = this.pmsResourceSupport.toSyncTreeGridVO(list);
@@ -62,7 +62,7 @@ public class PmsResourceController extends AdminBaseController {
 	 */
 	@RequestMapping(value="/listAllMenu", method=RequestMethod.POST)
 	@ResponseBody
-	public RespModel listAllMenu(HttpServletRequest req) {
+	public RespData listAllMenu(HttpServletRequest req) {
 		List<PmsResource> list = this.pmsResourceService.findAllMenu();
 		if(!ValidUtils.isEmpty(list)) {
 			List<PmsResourceTreeGridVO> treeList = this.pmsResourceSupport.toSyncTreeGridVO(list);
@@ -80,7 +80,7 @@ public class PmsResourceController extends AdminBaseController {
 	 */
 	@RequestMapping(value="/listLeftMenu", method=RequestMethod.POST)
 	@ResponseBody
-	public RespModel listMenu(HttpServletRequest req) {
+	public RespData listMenu(HttpServletRequest req) {
 		LoginInfo info = this.currentLoginInfo();
 		if(null!=info && !"".equals(info.getUserCode())) {
 			List<PmsResource> list = this.pmsResourceService.findMenuByUser(info.getUserCode());
@@ -102,7 +102,7 @@ public class PmsResourceController extends AdminBaseController {
 	@RequiresPermissions("rs-view")
 	@RequestMapping(value="/asyncList", method=RequestMethod.POST)
 	@ResponseBody
-	public RespModel asyncList(HttpServletRequest req) {
+	public RespData asyncList(HttpServletRequest req) {
 		String parentCode = req.getParameter("id");
 		if(ValidUtils.isEmpty(parentCode)) {
 			parentCode = "-1";
@@ -126,7 +126,7 @@ public class PmsResourceController extends AdminBaseController {
 	@RequiresPermissions("rs-add")
 	@RequestMapping(value="/add", method=RequestMethod.POST)
 	@ResponseBody
-	public RespModel add(HttpServletRequest req, PmsResource resource) {
+	public RespData add(HttpServletRequest req, PmsResource resource) {
 		if(ValidUtils.isNull(resource) || ValidUtils.isEmpty(resource.getRsCode())) {
 			return this.error("参数无效");
 		}
@@ -153,7 +153,7 @@ public class PmsResourceController extends AdminBaseController {
 	@RequiresPermissions("rs-edit")
 	@RequestMapping(value="/edit", method=RequestMethod.POST)
 	@ResponseBody
-	public RespModel edit(HttpServletRequest req, PmsResource resource) {
+	public RespData edit(HttpServletRequest req, PmsResource resource) {
 		if(ValidUtils.isNull(resource) || ValidUtils.isEmpty(resource.getRsCode())) {
 			return this.error("参数无效");
 		}
@@ -175,7 +175,7 @@ public class PmsResourceController extends AdminBaseController {
 	@RequiresPermissions("rs-del")
 	@RequestMapping(value="/del", method=RequestMethod.POST)
 	@ResponseBody
-	public RespModel del(HttpServletRequest req) {
+	public RespData del(HttpServletRequest req) {
 		String funcCode = req.getParameter("rsCode");
 		if(ValidUtils.isEmpty(funcCode)) {
 			return this.errorAjax("参数无效");

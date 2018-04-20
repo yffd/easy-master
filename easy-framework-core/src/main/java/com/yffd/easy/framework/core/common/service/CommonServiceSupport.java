@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.yffd.easy.common.core.page.PageParam;
 import com.yffd.easy.common.core.page.PageResult;
 import com.yffd.easy.common.core.util.EasyStringCheckUtils;
-import com.yffd.easy.framework.core.common.converter.CommonTreeConverter;
+import com.yffd.easy.framework.core.common.service.support.CommonTreeConverter;
 import com.yffd.easy.framework.core.exception.BizException;
 
 /**

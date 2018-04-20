@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.yffd.easy.common.core.util.EasyStringCheckUtils;
-import com.yffd.easy.framework.domain.RespModel;
-import com.yffd.easy.uupm.api.model.UupmDictionaryModel;
+import com.yffd.easy.framework.web.model.RespData;
+import com.yffd.easy.uupm.pojo.entity.UupmDictionaryEntity;
 import com.yffd.easy.uupm.service.UupmDictionaryService;
 import com.yffd.easy.uupm.web.common.UupmCommonController;
 
@@ -31,96 +31,96 @@ public class UupmDictionaryController extends UupmCommonController {
 	private UupmDictionaryService uupmDictionaryService;
 	
 	@RequestMapping(value="/listRoot", method=RequestMethod.POST)
-	public RespModel listRoot(@RequestParam Map<String, Object> paramMap) {
-		UupmDictionaryModel paramNode = new UupmDictionaryModel();
+	public RespData listRoot(@RequestParam Map<String, Object> paramMap) {
+		UupmDictionaryEntity paramNode = new UupmDictionaryEntity();
 		paramNode.setTenantCode(this.getLoginInfo().getTenantCode());
-		List<UupmDictionaryModel> result = this.uupmDictionaryService.findRootNodes(paramNode, null);
+		List<UupmDictionaryEntity> result = this.uupmDictionaryService.findRootNodes(paramNode);
 		if(null!=result && !result.isEmpty()) {
-			List<UupmDictionaryModel> treeList = this.uupmDictionaryService.convertToMultiTree(result, "root");
+			List<UupmDictionaryEntity> treeList = this.uupmDictionaryService.convertToMultiTree(result, "root");
 			return this.successAjax(treeList);
 		}
 		return this.successAjax();
 	}
 	
 	@RequestMapping(value="/listChildren", method=RequestMethod.POST)
-	public RespModel listChildren(@RequestParam Map<String, Object> paramMap) {
+	public RespData listChildren(@RequestParam Map<String, Object> paramMap) {
 		String treeId = (String) paramMap.get("treeId");
 		String keyCode = (String) paramMap.get("keyCode");
 		if(EasyStringCheckUtils.isEmpty(treeId) || EasyStringCheckUtils.isEmpty(keyCode)) return this.error("参数无效");
-		UupmDictionaryModel paramNode = new UupmDictionaryModel();
+		UupmDictionaryEntity paramNode = new UupmDictionaryEntity();
 		paramNode.setTenantCode(this.getLoginInfo().getTenantCode());
 		paramNode.setTreeId(treeId);
 		paramNode.setKeyCode(keyCode);
-		List<UupmDictionaryModel> result = this.uupmDictionaryService.findChildrenNodes(paramNode, this.getLoginInfo());
+		List<UupmDictionaryEntity> result = this.uupmDictionaryService.findChildrenNodes(paramNode);
 		if(null!=result && !result.isEmpty()) {
-			List<UupmDictionaryModel> treeList = this.uupmDictionaryService.convertToMultiTree(result, "root");
+			List<UupmDictionaryEntity> treeList = this.uupmDictionaryService.convertToMultiTree(result, "root");
 			return this.successAjax(treeList);
 		}
 		return this.successAjax();
 	}
 	
 	@RequestMapping(value="/addRoot", method=RequestMethod.POST)
-	public RespModel addRoot(UupmDictionaryModel model) {
+	public RespData addRoot(UupmDictionaryEntity model) {
 		if(null==model || EasyStringCheckUtils.isEmpty(model.getKeyCode())) return this.error("参数无效");
 		model.setTreeId(model.getKeyCode());
 		// 存在判断
-		UupmDictionaryModel paramNode = new UupmDictionaryModel();
+		UupmDictionaryEntity paramNode = new UupmDictionaryEntity();
 		paramNode.setTenantCode(this.getLoginInfo().getTenantCode());
-		boolean existRootNode = this.uupmDictionaryService.existRootNode(paramNode, this.getLoginInfo());
+		boolean existRootNode = this.uupmDictionaryService.existRootNode(paramNode);
 		if(existRootNode) return this.error("编号已存在");
-		this.uupmDictionaryService.addRootNode(model, this.getLoginInfo());
+		this.uupmDictionaryService.addRootNode(model);
 		return this.successAjax();
 	}
 	
 	@RequestMapping(value="/addChild", method=RequestMethod.POST)
-	public RespModel addChild(UupmDictionaryModel model) {
+	public RespData addChild(UupmDictionaryEntity model) {
 		if(null==model || EasyStringCheckUtils.isEmpty(model.getTreeId()) 
 				|| EasyStringCheckUtils.isEmpty(model.getKeyCode())) return this.error("参数无效");
 		// 存在判断
-		UupmDictionaryModel paramNode = new UupmDictionaryModel();
+		UupmDictionaryEntity paramNode = new UupmDictionaryEntity();
 		paramNode.setTenantCode(this.getLoginInfo().getTenantCode());
 		paramNode.setKeyCode(model.getKeyCode());
-		boolean exsist = this.uupmDictionaryService.exsist(paramNode, getLoginInfo());
+		boolean exsist = this.uupmDictionaryService.exsist(paramNode);
 		if(exsist) return this.error("编号已存在");
-		this.uupmDictionaryService.addChildNode(model, getLoginInfo());
+		this.uupmDictionaryService.addChildNode(model);
 		return this.successAjax();
 	}
 	
 	@RequestMapping(value="/edit", method=RequestMethod.POST)
-	public RespModel edit(UupmDictionaryModel model) {
+	public RespData edit(UupmDictionaryEntity model) {
 		if(null==model || EasyStringCheckUtils.isEmpty(model.getTreeId()) 
 				|| EasyStringCheckUtils.isEmpty(model.getKeyCode())) return this.error("参数无效");
-		UupmDictionaryModel oldNode = new UupmDictionaryModel();
+		UupmDictionaryEntity oldNode = new UupmDictionaryEntity();
 		oldNode.setTreeId(model.getTreeId());
 		oldNode.setKeyCode(model.getKeyCode());
-		this.uupmDictionaryService.update(model, oldNode, null, getLoginInfo());
+		this.uupmDictionaryService.update(model, oldNode, null);
 		return this.successAjax();
 	}
 	
 	@RequestMapping(value="/editStatus", method=RequestMethod.POST)
-	public RespModel editStatus(UupmDictionaryModel model) {
+	public RespData editStatus(UupmDictionaryEntity model) {
 		if(null==model || EasyStringCheckUtils.isEmpty(model.getTreeId()) 
 				|| EasyStringCheckUtils.isEmpty(model.getKeyCode())
 				|| EasyStringCheckUtils.isEmpty(model.getValueStatus())) return this.error("参数无效");
-		UupmDictionaryModel newNode = new UupmDictionaryModel();
+		UupmDictionaryEntity newNode = new UupmDictionaryEntity();
 		newNode.setValueStatus(model.getValueStatus());	// 待修改的属性
 		
-		UupmDictionaryModel oldNode = new UupmDictionaryModel();	// 更新条件
+		UupmDictionaryEntity oldNode = new UupmDictionaryEntity();	// 更新条件
 		oldNode.setTreeId(model.getTreeId());
 		oldNode.setKeyCode(model.getKeyCode());
-		this.uupmDictionaryService.updateNodes(newNode, oldNode, getLoginInfo());
+		this.uupmDictionaryService.updateNodes(newNode, oldNode);
 		return this.successAjax();
 	}
 	
 	@RequestMapping(value="/del", method=RequestMethod.POST)
-	public RespModel del(UupmDictionaryModel model) {
+	public RespData del(UupmDictionaryEntity model) {
 		if(null==model || EasyStringCheckUtils.isEmpty(model.getTreeId()) 
 				|| EasyStringCheckUtils.isEmpty(model.getKeyCode())) return this.error("参数无效");
-		UupmDictionaryModel paramNode = new UupmDictionaryModel();
+		UupmDictionaryEntity paramNode = new UupmDictionaryEntity();
 		paramNode.setTenantCode(this.getLoginInfo().getTenantCode());
 		paramNode.setTreeId(model.getTreeId());
 		paramNode.setKeyCode(model.getKeyCode());
-		this.uupmDictionaryService.deleteNodes(model, getLoginInfo());
+		this.uupmDictionaryService.deleteNodes(model);
 		return this.successAjax();
 	}
 	

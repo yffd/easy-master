@@ -1,7 +1,7 @@
 package com.yffd.easy.uupm.mapper;
 
 import com.yffd.easy.framework.core.common.mapper.ICommonMapper;
-import com.yffd.easy.uupm.api.model.UupmRoleResourceModel;
+import com.yffd.easy.uupm.pojo.entity.UupmRoleResourceEntity;
 
 /**
  * @Description	简单描述该类的功能（可选）.
@@ -12,6 +12,6 @@ import com.yffd.easy.uupm.api.model.UupmRoleResourceModel;
  * @see
  */
 
-public interface IUupmRoleResourceMapper extends ICommonMapper<UupmRoleResourceModel> {
+public interface IUupmRoleResourceMapper extends ICommonMapper<UupmRoleResourceEntity> {
 
 }

@@ -13,27 +13,33 @@
   <name>easy-uupm-service</name>
   <url>http://maven.apache.org</url>
   <properties>
-    <easy.uupm.api.version>0.0.1</easy.uupm.api.version>
-    <easy.framework.core.version>0.0.1</easy.framework.core.version>
+<!--     <easy.uupm.api.version>0.0.1</easy.uupm.api.version> -->
+    <easy.uupm.pojo.version>0.0.1</easy.uupm.pojo.version>
     <easy.common.dubbo.version>0.0.1</easy.common.dubbo.version>
+    <easy.framework.core.version>0.0.1</easy.framework.core.version>
   </properties>
   
   <dependencies>
+<!--   	<dependency> -->
+<!-- 	  	<groupId>com.yffd.easy</groupId> -->
+<!--   		<artifactId>easy-uupm-api</artifactId> -->
+<!-- 	    <version>${easy.uupm.api.version}</version> -->
+<!--   	</dependency> -->
   	<dependency>
 	  	<groupId>com.yffd.easy</groupId>
-  		<artifactId>easy-uupm-api</artifactId>
-	    <version>${easy.uupm.api.version}</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>com.yffd.easy</groupId>
-	  	<artifactId>easy-framework-core</artifactId>
-	  	<version>${easy.framework.core.version}</version>
+  		<artifactId>easy-uupm-pojo</artifactId>
+	    <version>${easy.uupm.pojo.version}</version>
   	</dependency>
   	<dependency>
   		<groupId>com.yffd.easy</groupId>
 	  	<artifactId>easy-common-dubbo</artifactId>
 	  	<version>${easy.common.dubbo.version}</version>
 	  	<type>pom</type>
+  	</dependency>
+  	<dependency>
+  		<groupId>com.yffd.easy</groupId>
+	  	<artifactId>easy-framework-core</artifactId>
+	  	<version>${easy.framework.core.version}</version>
   	</dependency>
     <dependency>
       <groupId>junit</groupId>

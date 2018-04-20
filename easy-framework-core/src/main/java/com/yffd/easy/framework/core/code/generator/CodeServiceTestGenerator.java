@@ -7,8 +7,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Date;
 
-import com.yffd.easy.framework.domain.CustomPo;
-
 /**
  * @Description  XxxServiceTest代码生成器.
  * @Date		 2018年2月6日 下午1:55:18 <br/>
@@ -113,7 +111,7 @@ public class CodeServiceTestGenerator extends CodeGenerator {
 	public static void main(String[] args) {
 		CodeServiceTestGenerator generator = new CodeServiceTestGenerator();
 		String author = "ZhangST";
-		Class<?> modelClazz = CustomPo.class;
+		Class<?> modelClazz = null;
 		Class<?> superServiceTestClazz = null;
 		String serviceTestPackageName = "com.yffd.easy.xxx.service";
 		generator.writeToConsole(modelClazz, superServiceTestClazz, serviceTestPackageName, author);

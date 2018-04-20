@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.yffd.easy.common.core.page.PageParam;
 import com.yffd.easy.common.core.page.PageResult;
 import com.yffd.easy.common.core.util.EasyStringCheckUtils;
-import com.yffd.easy.framework.domain.RespModel;
+import com.yffd.easy.framework.web.model.RespData;
 import com.yffd.easy.framework.web.view.vo.DataGridVO;
 import com.yffd.easy.framework.web.view.vo.PropertyGridVO;
-import com.yffd.easy.uupm.api.model.UupmApplicationModel;
+import com.yffd.easy.uupm.pojo.entity.UupmApplicationEntity;
 import com.yffd.easy.uupm.service.UupmApplicationService;
 import com.yffd.easy.uupm.web.common.UupmCommonController;
 import com.yffd.easy.uupm.web.support.UupmModePropertyGridSupport;
@@ -40,66 +40,66 @@ public class UupmApplicationController extends UupmCommonController {
 	private UupmModePropertyGridSupport uupmModePropertyGridSupport;
 	
 	@RequestMapping(value="/findAppCfg", method=RequestMethod.POST)
-	public RespModel findAppCfg(@RequestParam Map<String, Object> paramMap) {
+	public RespData findAppCfg(@RequestParam Map<String, Object> paramMap) {
 		String appCode = (String) paramMap.get("appCode");
 		if(EasyStringCheckUtils.isEmpty(appCode)) return this.error("参数无效");
-		UupmApplicationModel model = new UupmApplicationModel();
+		UupmApplicationEntity model = new UupmApplicationEntity();
 		model.setAppCode(appCode);
-		UupmApplicationModel result = this.uupmApplicationService.findOne(model , null);
-		if(null==result) result = new UupmApplicationModel();
+		UupmApplicationEntity result = this.uupmApplicationService.findOne(model );
+		if(null==result) result = new UupmApplicationEntity();
 		List<PropertyGridVO> listResult = this.uupmModePropertyGridSupport.toAppPropertyGridVo(result);
 		DataGridVO dataGridVO = this.toDataGrid(listResult);
 		return this.successAjax(dataGridVO);
 	}
 	
 	@RequestMapping(value="/saveAppCfg", method=RequestMethod.POST)
-	public RespModel saveAppCfg(UupmApplicationModel model) {
+	public RespData saveAppCfg(UupmApplicationEntity model) {
 		if(null==model || EasyStringCheckUtils.isEmpty(model.getAppCode())) return this.error("参数无效");
-		int result = this.uupmApplicationService.saveAppCfg(model, null);
+		int result = this.uupmApplicationService.saveAppCfg(model);
 		if(result==0) return this.error("保存配置失败");
 		return this.successAjax();
 	}
 	
 	@RequestMapping(value="/findPage", method=RequestMethod.POST)
-	public RespModel findPage(@RequestParam Map<String, Object> paramMap) {
+	public RespData findPage(@RequestParam Map<String, Object> paramMap) {
 		PageParam paramPage = this.getPageParam(paramMap);
-		PageResult<UupmApplicationModel> pageResult = this.uupmApplicationService.findPage(null, paramMap, paramPage, null);
+		PageResult<UupmApplicationEntity> pageResult = this.uupmApplicationService.findPage(null, paramMap, paramPage);
 		DataGridVO dataGridVO = this.toDataGrid(pageResult);
 		return this.successAjax(dataGridVO);
 	}
 	
 	@RequestMapping(value="/findOne", method=RequestMethod.POST)
-	public RespModel findOne(UupmApplicationModel model) {
+	public RespData findOne(UupmApplicationEntity model) {
 		if(null==model || EasyStringCheckUtils.isEmpty(model.getId())) return this.error("参数无效");
-		UupmApplicationModel result = this.uupmApplicationService.findOne(model, null);
+		UupmApplicationEntity result = this.uupmApplicationService.findOne(model);
 		return this.successAjax(result);
 	}
 	
 	@RequestMapping(value="/add", method=RequestMethod.POST)
-	public RespModel add(UupmApplicationModel model) {
+	public RespData add(UupmApplicationEntity model) {
 		if(null==model) return this.error("参数无效");
 		// 存在校验
-		UupmApplicationModel paramModel = new UupmApplicationModel();
+		UupmApplicationEntity paramModel = new UupmApplicationEntity();
 		paramModel.setTenantCode(model.getTenantCode());
-		UupmApplicationModel resultModel = this.uupmApplicationService.findOne(paramModel, null);
+		UupmApplicationEntity resultModel = this.uupmApplicationService.findOne(paramModel);
 		if(null!=resultModel) return this.error("数据已存在");
-		int result = this.uupmApplicationService.addOne(model, null);
+		int result = this.uupmApplicationService.addOne(model);
 		if(result==0) return this.error("添加失败");
 		return this.successAjax();
 	}
 	
 	@RequestMapping(value="/edit", method=RequestMethod.POST)
-	public RespModel edit(UupmApplicationModel model) {
+	public RespData edit(UupmApplicationEntity model) {
 		if(null==model || EasyStringCheckUtils.isEmpty(model.getId())) return this.error("参数无效");
-		UupmApplicationModel paramOld = new UupmApplicationModel();
+		UupmApplicationEntity paramOld = new UupmApplicationEntity();
 		paramOld.setId(model.getId());
-		int result = this.uupmApplicationService.update(model, paramOld, null, null);
+		int result = this.uupmApplicationService.update(model, paramOld, null);
 		if(result==0) return this.error("更新失败");
 		return this.successAjax();
 	}
 	
 	@RequestMapping(value="/delById", method=RequestMethod.POST)
-	public RespModel delById(String id) {
+	public RespData delById(String id) {
 		if(EasyStringCheckUtils.isEmpty(id)) return this.errorAjax("参数无效");
 		int result = this.uupmApplicationService.deleteBy("id", id);
 		if(result==0) return this.error("删除失败");
@@ -107,7 +107,7 @@ public class UupmApplicationController extends UupmCommonController {
 	}
 	
 	@RequestMapping(value="/delBatch", method=RequestMethod.POST)
-	public RespModel delBatch(HttpServletRequest req) {
+	public RespData delBatch(HttpServletRequest req) {
 		String ids = req.getParameter("ids");
 		if(EasyStringCheckUtils.isEmpty(ids)) return this.error("参数无效");
 		String[] idsArr = ids.split(",");

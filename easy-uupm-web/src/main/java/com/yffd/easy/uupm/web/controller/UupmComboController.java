@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.yffd.easy.common.core.util.EasyStringCheckUtils;
-import com.yffd.easy.framework.domain.RespModel;
+import com.yffd.easy.framework.web.model.RespData;
 import com.yffd.easy.framework.web.view.tree.TreeBuilder;
 import com.yffd.easy.framework.web.view.vo.ComboTreeVO;
-import com.yffd.easy.uupm.api.model.UupmDictionaryModel;
-import com.yffd.easy.uupm.api.model.UupmOrganizationModel;
+import com.yffd.easy.uupm.pojo.entity.UupmDictionaryEntity;
+import com.yffd.easy.uupm.pojo.entity.UupmOrganizationEntity;
 import com.yffd.easy.uupm.service.UupmDictionaryService;
 import com.yffd.easy.uupm.service.UupmOrganizationService;
 import com.yffd.easy.uupm.web.common.UupmCommonController;
@@ -42,7 +42,7 @@ public class UupmComboController extends UupmCommonController {
 	private UupmOrganizationService uupmOrganizationService;
 	
 	@RequestMapping(value="/findComboByDict", method=RequestMethod.POST)
-	public RespModel findTreeByDict(@RequestParam Map<String, Object> paramMap) {
+	public RespData findTreeByDict(@RequestParam Map<String, Object> paramMap) {
 		if(null==paramMap) return this.error("参数无效");
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		Set<String> keys = paramMap.keySet();
@@ -52,10 +52,10 @@ public class UupmComboController extends UupmCommonController {
 			String[] valueArr = value.split(",");
 			Map<String, Object> tmp = new HashMap<String, Object>();
 			for(String nodeCode : valueArr) {
-				UupmDictionaryModel node = new UupmDictionaryModel();
+				UupmDictionaryEntity node = new UupmDictionaryEntity();
 				node.setTreeId(key);
 				node.setKeyCode(nodeCode);
-				List<UupmDictionaryModel> result = this.uupmDictionaryService.findChildrenNodes(node , null);
+				List<UupmDictionaryEntity> result = this.uupmDictionaryService.findChildrenNodes(node );
 				if(null!=result && !result.isEmpty()) {
 					List<ComboTreeVO> voList = this.dict2ComboTreeVO(result);
 					List<ComboTreeVO> treeList = (List<ComboTreeVO>) treeBuilder.build(voList, key);
@@ -68,8 +68,8 @@ public class UupmComboController extends UupmCommonController {
 	}
 	
 	@RequestMapping(value="/findComboTreeByOrg", method=RequestMethod.POST)
-	public RespModel findTree(@RequestParam Map<String, Object> paramMap) {
-		List<UupmOrganizationModel> result = this.uupmOrganizationService.findList(null, paramMap, null);
+	public RespData findTree(@RequestParam Map<String, Object> paramMap) {
+		List<UupmOrganizationEntity> result = this.uupmOrganizationService.findList(null, paramMap);
 		if(null!=result && !result.isEmpty()) {
 			List<ComboTreeVO> treeList = this.org2ComboTreeVO(result, "root");
 			return this.successAjax(treeList);
@@ -77,10 +77,10 @@ public class UupmComboController extends UupmCommonController {
 		return this.successAjax();
 	}
 	
-	private List<ComboTreeVO> org2ComboTreeVO(List<UupmOrganizationModel> list, String rootPid) {
+	private List<ComboTreeVO> org2ComboTreeVO(List<UupmOrganizationEntity> list, String rootPid) {
 		if(null==list || list.isEmpty()) return null;
 		List<ComboTreeVO> voList = new ArrayList<ComboTreeVO>();
-		for(UupmOrganizationModel model : list) {
+		for(UupmOrganizationEntity model : list) {
 			ComboTreeVO vo = new ComboTreeVO();
 			vo.setId_(model.getOrgCode());			// treeNode:设置父子关系
 			vo.setPid_(model.getParentCode());		// treeNode:设置父子关系
@@ -94,9 +94,9 @@ public class UupmComboController extends UupmCommonController {
 		return treeList;
 	}
 	
-	private List<ComboTreeVO> dict2ComboTreeVO(List<UupmDictionaryModel> list) {
+	private List<ComboTreeVO> dict2ComboTreeVO(List<UupmDictionaryEntity> list) {
 		List<ComboTreeVO> retList = new ArrayList<ComboTreeVO>();
-		for(UupmDictionaryModel model : list) {
+		for(UupmDictionaryEntity model : list) {
 			ComboTreeVO vo = new ComboTreeVO();
 			vo.setId_(model.getNodeCode());
 			vo.setPid_(model.getParentCode());

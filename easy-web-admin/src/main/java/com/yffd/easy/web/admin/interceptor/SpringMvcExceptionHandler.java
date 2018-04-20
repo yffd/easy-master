@@ -15,7 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
 import com.yffd.easy.common.core.enums.CommonEnum;
-import com.yffd.easy.framework.domain.RespModel;
+import com.yffd.easy.framework.web.model.RespData;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -37,7 +37,7 @@ public class SpringMvcExceptionHandler implements HandlerExceptionResolver {
 //		if(request.getHeader("x-requested-with")!=null && request.getHeader("x-requested-with").equals("XMLHttpRequest")) {
 //		} else { }
 		
-		RespModel entity = new RespModel();
+		RespData entity = new RespData();
 		entity.setRespType(CommonEnum.REQUEST_SYNC.getValue());
 		entity.setStatusCode(CommonEnum.ERROR.getValue());
 		entity.setRespData(ex.getClass().getName());

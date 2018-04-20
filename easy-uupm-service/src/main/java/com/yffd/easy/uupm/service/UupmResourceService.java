@@ -7,9 +7,8 @@ import com.yffd.easy.common.core.util.EasyStringCheckUtils;
 import com.yffd.easy.framework.core.common.mapper.ICommonMapper;
 import com.yffd.easy.framework.core.common.service.CommonTreeServiceAbstract;
 import com.yffd.easy.framework.core.exception.BizException;
-import com.yffd.easy.framework.domain.LoginInfo;
-import com.yffd.easy.uupm.api.model.UupmResourceModel;
 import com.yffd.easy.uupm.mapper.IUupmResourceMapper;
+import com.yffd.easy.uupm.pojo.entity.UupmResourceEntity;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -20,13 +19,13 @@ import com.yffd.easy.uupm.mapper.IUupmResourceMapper;
  * @see 	 
  */
 @Service
-public class UupmResourceService extends CommonTreeServiceAbstract<UupmResourceModel> {
+public class UupmResourceService extends CommonTreeServiceAbstract<UupmResourceEntity> {
 
 	@Autowired
 	private IUupmResourceMapper uupmResourceMapper;
 	
 	@Override
-	public ICommonMapper<UupmResourceModel> getMapper() {
+	public ICommonMapper<UupmResourceEntity> getMapper() {
 		return this.uupmResourceMapper;
 	}
 
@@ -36,12 +35,12 @@ public class UupmResourceService extends CommonTreeServiceAbstract<UupmResourceM
 	}
 
 	@Override
-	public boolean exsist(UupmResourceModel model, LoginInfo loginInfo) {
+	public boolean exsist(UupmResourceEntity model) {
 		if(null==model || EasyStringCheckUtils.isEmpty(model.getTenantCode()) 
 				|| EasyStringCheckUtils.isEmpty(model.getRsCode())) throw BizException.BIZ_PARAMS_IS_EMPTY();
-		UupmResourceModel paramModel = new UupmResourceModel();
+		UupmResourceEntity paramModel = new UupmResourceEntity();
 		paramModel.setRsCode(model.getRsCode());
-		return super.exsist(model, loginInfo);
+		return super.exsist(model);
 	}
 
 	

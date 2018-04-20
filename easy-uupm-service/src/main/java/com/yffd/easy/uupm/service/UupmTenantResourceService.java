@@ -11,10 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.yffd.easy.framework.core.common.mapper.ICommonMapper;
 import com.yffd.easy.framework.core.common.service.CommonServiceAbstract;
-import com.yffd.easy.framework.domain.LoginInfo;
-import com.yffd.easy.uupm.api.model.UupmResourceModel;
-import com.yffd.easy.uupm.api.model.UupmTenantResourceModel;
 import com.yffd.easy.uupm.mapper.IUupmTenantResourceMapper;
+import com.yffd.easy.uupm.pojo.entity.UupmResourceEntity;
+import com.yffd.easy.uupm.pojo.entity.UupmTenantResourceEntity;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -25,13 +24,13 @@ import com.yffd.easy.uupm.mapper.IUupmTenantResourceMapper;
  * @see 	 
  */
 @Service
-public class UupmTenantResourceService extends CommonServiceAbstract<UupmTenantResourceModel> {
+public class UupmTenantResourceService extends CommonServiceAbstract<UupmTenantResourceEntity> {
 
 	@Autowired
 	private IUupmTenantResourceMapper uupmTenantResourceMapper;
 	
 	@Override
-	public ICommonMapper<UupmTenantResourceModel> getMapper() {
+	public ICommonMapper<UupmTenantResourceEntity> getMapper() {
 		return this.uupmTenantResourceMapper;
 	}
 
@@ -49,9 +48,9 @@ public class UupmTenantResourceService extends CommonServiceAbstract<UupmTenantR
 	}
 	
 	@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
-	public void saveTenantResource(String tenantCode, List<UupmTenantResourceModel> modelList, LoginInfo loginInfo) {
+	public void saveTenantResource(String tenantCode, List<UupmTenantResourceEntity> modelList) {
 		this.delByTenantCode(tenantCode);
-		this.addList(modelList, loginInfo);
+		this.addList(modelList);
 	}
 	
 	public void delByTenantCode(String tenantCode) {
@@ -60,10 +59,10 @@ public class UupmTenantResourceService extends CommonServiceAbstract<UupmTenantR
 		this.delete(paramMap);
 	}
 	 
-	public List<UupmResourceModel> findTenantResource(String tenantCode) {
+	public List<UupmResourceEntity> findTenantResource(String tenantCode) {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("tenantCode", tenantCode);
 		List<Map<String, Object>> list = this.selectListBy("selectTenantResource", paramMap, true);
-		return this.map2model(list, UupmResourceModel.class, null);
+		return this.map2model(list, UupmResourceEntity.class, null);
 	}
 }

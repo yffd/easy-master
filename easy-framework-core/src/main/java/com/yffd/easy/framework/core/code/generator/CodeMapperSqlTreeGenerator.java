@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import com.yffd.easy.framework.domain.CustomPo;
-
 /**
  * @Description  sql tree代码生成器.
  * @Date		 2018年2月6日 下午1:55:18 <br/>
@@ -47,7 +45,7 @@ public class CodeMapperSqlTreeGenerator extends CodeGenerator {
 	
 	public static void main(String[] args) {
 		CodeMapperSqlTreeGenerator generator = new CodeMapperSqlTreeGenerator();
-		Class<?> modelClazz = CustomPo.class;
+		Class<?> modelClazz = null;
 		generator.writeToConsole(modelClazz);
 	}
 }

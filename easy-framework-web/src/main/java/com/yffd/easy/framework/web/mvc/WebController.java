@@ -1,7 +1,12 @@
 package com.yffd.easy.framework.web.mvc;
 
-import com.yffd.easy.framework.domain.RespModel;
-import com.yffd.easy.framework.web.enums.CommonEnum;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
+
+import com.yffd.easy.framework.web.enums.WebCommonEnum;
+import com.yffd.easy.framework.web.model.LoginInfo;
+import com.yffd.easy.framework.web.model.RespData;
 import com.yffd.easy.framework.web.view.ViewModelConverter;
 
 /**
@@ -13,6 +18,30 @@ import com.yffd.easy.framework.web.view.ViewModelConverter;
  * @see 	 
  */
 public abstract class WebController extends ViewModelConverter {
+	public static final String KEY_SESSION_LOGIN_INFO = "_LOGIN_INFO";
+	
+	/**
+	 * 获取当前session对象
+	 * @Date	2018年4月17日 上午11:27:27 <br/>
+	 * @author  zhangST
+	 * @return
+	 */
+	protected Session getSession() {
+		Subject subject = SecurityUtils.getSubject();
+		Session session = subject.getSession();
+		return session;
+	}
+	
+	/**
+	 * 获取当前登录信息
+	 * @Date	2018年4月17日 上午11:27:32 <br/>
+	 * @author  zhangST
+	 * @return
+	 */
+	protected LoginInfo loginInfo() {
+		LoginInfo info = (LoginInfo) this.getSession().getAttribute(KEY_SESSION_LOGIN_INFO);
+		return info;
+	}
 	
 	/**
 	 * 同步请求：成功
@@ -20,11 +49,11 @@ public abstract class WebController extends ViewModelConverter {
 	 * @author  zhangST
 	 * @return
 	 */
-	protected RespModel success() {
-		RespModel entity = new RespModel();
-		entity.setType(CommonEnum.REQUEST_SYNC.getValue());
-		entity.setStatus(CommonEnum.SUCCESS.getValue());
-		entity.setMsg(CommonEnum.SUCCESS.getDesc());
+	protected RespData success() {
+		RespData entity = new RespData();
+		entity.setType(WebCommonEnum.REQUEST_SYNC.getValue());
+		entity.setStatus(WebCommonEnum.SUCCESS.getValue());
+		entity.setMsg(WebCommonEnum.SUCCESS.getDesc());
 		return entity;
 	}
 	
@@ -36,10 +65,10 @@ public abstract class WebController extends ViewModelConverter {
 	 * @param objects
 	 * @return
 	 */
-	protected RespModel success(String msg, Object...objects) {
-		RespModel entity = new RespModel();
-		entity.setType(CommonEnum.REQUEST_SYNC.getValue());
-		entity.setStatus(CommonEnum.SUCCESS.getValue());
+	protected RespData success(String msg, Object...objects) {
+		RespData entity = new RespData();
+		entity.setType(WebCommonEnum.REQUEST_SYNC.getValue());
+		entity.setStatus(WebCommonEnum.SUCCESS.getValue());
 		entity.setMsg(msg);
 		entity.setData(objects);
 		return entity;
@@ -51,11 +80,11 @@ public abstract class WebController extends ViewModelConverter {
 	 * @author  zhangST
 	 * @return
 	 */
-	protected RespModel successAjax() {
-		RespModel entity = new RespModel();
-		entity.setType(CommonEnum.REQUEST_ASYNC.getValue());
-		entity.setStatus(CommonEnum.SUCCESS.getValue());
-		entity.setMsg(CommonEnum.SUCCESS.getDesc());
+	protected RespData successAjax() {
+		RespData entity = new RespData();
+		entity.setType(WebCommonEnum.REQUEST_ASYNC.getValue());
+		entity.setStatus(WebCommonEnum.SUCCESS.getValue());
+		entity.setMsg(WebCommonEnum.SUCCESS.getDesc());
 		return entity;
 	}
 	
@@ -66,11 +95,11 @@ public abstract class WebController extends ViewModelConverter {
 	 * @param respData		响应数据
 	 * @return
 	 */
-	protected RespModel successAjax(Object respData) {
-		RespModel entity = new RespModel();
-		entity.setType(CommonEnum.REQUEST_ASYNC.getValue());
-		entity.setStatus(CommonEnum.SUCCESS.getValue());
-		entity.setMsg(CommonEnum.SUCCESS.getDesc());
+	protected RespData successAjax(Object respData) {
+		RespData entity = new RespData();
+		entity.setType(WebCommonEnum.REQUEST_ASYNC.getValue());
+		entity.setStatus(WebCommonEnum.SUCCESS.getValue());
+		entity.setMsg(WebCommonEnum.SUCCESS.getDesc());
 		entity.setData(respData);
 		return entity;
 	}
@@ -83,10 +112,10 @@ public abstract class WebController extends ViewModelConverter {
 	 * @param objects
 	 * @return
 	 */
-	protected RespModel successAjax(String msg, Object...objects) {
-		RespModel entity = new RespModel();
-		entity.setType(CommonEnum.REQUEST_ASYNC.getValue());
-		entity.setStatus(CommonEnum.SUCCESS.getValue());
+	protected RespData successAjax(String msg, Object...objects) {
+		RespData entity = new RespData();
+		entity.setType(WebCommonEnum.REQUEST_ASYNC.getValue());
+		entity.setStatus(WebCommonEnum.SUCCESS.getValue());
 		entity.setMsg(msg);
 		entity.setData(objects);
 		return entity;
@@ -98,11 +127,11 @@ public abstract class WebController extends ViewModelConverter {
 	 * @author  zhangST
 	 * @return
 	 */
-	protected RespModel error() {
-		RespModel entity = new RespModel();
-		entity.setType(CommonEnum.REQUEST_SYNC.getValue());
-		entity.setStatus(CommonEnum.ERROR.getValue());
-		entity.setMsg(CommonEnum.ERROR.getDesc());
+	protected RespData error() {
+		RespData entity = new RespData();
+		entity.setType(WebCommonEnum.REQUEST_SYNC.getValue());
+		entity.setStatus(WebCommonEnum.ERROR.getValue());
+		entity.setMsg(WebCommonEnum.ERROR.getDesc());
 		return entity;
 	}
 	
@@ -114,10 +143,10 @@ public abstract class WebController extends ViewModelConverter {
 	 * @param objects
 	 * @return
 	 */
-	protected RespModel error(String msg, Object...objects) {
-		RespModel entity = new RespModel();
-		entity.setType(CommonEnum.REQUEST_SYNC.getValue());
-		entity.setStatus(CommonEnum.ERROR.getValue());
+	protected RespData error(String msg, Object...objects) {
+		RespData entity = new RespData();
+		entity.setType(WebCommonEnum.REQUEST_SYNC.getValue());
+		entity.setStatus(WebCommonEnum.ERROR.getValue());
 		entity.setMsg(msg);
 		entity.setData(objects);
 		return entity;
@@ -129,11 +158,11 @@ public abstract class WebController extends ViewModelConverter {
 	 * @author  zhangST
 	 * @return
 	 */
-	protected RespModel errorAjax() {
-		RespModel entity = new RespModel();
-		entity.setType(CommonEnum.REQUEST_ASYNC.getValue());
-		entity.setStatus(CommonEnum.ERROR.getValue());
-		entity.setMsg(CommonEnum.ERROR.getDesc());
+	protected RespData errorAjax() {
+		RespData entity = new RespData();
+		entity.setType(WebCommonEnum.REQUEST_ASYNC.getValue());
+		entity.setStatus(WebCommonEnum.ERROR.getValue());
+		entity.setMsg(WebCommonEnum.ERROR.getDesc());
 		return entity;
 	}
 	
@@ -145,10 +174,10 @@ public abstract class WebController extends ViewModelConverter {
 	 * @param objects
 	 * @return
 	 */
-	protected RespModel errorAjax(String msg, Object...objects) {
-		RespModel entity = new RespModel();
-		entity.setType(CommonEnum.REQUEST_ASYNC.getValue());
-		entity.setStatus(CommonEnum.ERROR.getValue());
+	protected RespData errorAjax(String msg, Object...objects) {
+		RespData entity = new RespData();
+		entity.setType(WebCommonEnum.REQUEST_ASYNC.getValue());
+		entity.setStatus(WebCommonEnum.ERROR.getValue());
 		entity.setMsg(msg);
 		entity.setData(objects);
 		return entity;

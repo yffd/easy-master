@@ -1,20 +1,14 @@
 package com.yffd.easy.framework.core.common.service;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.yffd.easy.common.core.page.PageParam;
 import com.yffd.easy.common.core.page.PageResult;
+import com.yffd.easy.common.core.pojo.IPOJO;
 import com.yffd.easy.common.core.util.EasyStringCheckUtils;
-import com.yffd.easy.framework.core.common.CommonConstants;
 import com.yffd.easy.framework.core.common.mapper.ICommonMapper;
-import com.yffd.easy.framework.domain.CustomPo;
-import com.yffd.easy.framework.domain.LoginInfo;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -24,7 +18,7 @@ import com.yffd.easy.framework.domain.LoginInfo;
  * @since		 JDK 1.7+
  * @see 	 
  */
-public abstract class CommonServiceAbstract<PO extends CustomPo> extends CommonServiceSupport {
+public abstract class CommonServiceAbstract<PO> extends CommonServiceSupport {
 
 	public abstract ICommonMapper<PO> getMapper();
 
@@ -48,22 +42,20 @@ public abstract class CommonServiceAbstract<PO extends CustomPo> extends CommonS
 	 * @param model
 	 * @param paramMap
 	 * @param paramPage
-	 * @param loginInfo
 	 * @return
 	 */
-	public PageResult<PO> findPage(PO model, Map<String, Object> paramMap, PageParam paramPage, LoginInfo loginInfo) {
+	public PageResult<PO> findPage(PO model, Map<String, Object> paramMap, PageParam paramPage) {
 		if(null==paramPage) return null;
-		Long totalRecord = this.findCount(model, paramMap, loginInfo);
+		Long totalRecord = this.findCount(model, paramMap);
 		paramPage.setTotalRecord(totalRecord);
 		if(totalRecord==0) return null;
-		this.checkAndSetForQuery(model, paramMap, loginInfo);
 		List<PO> recordList = this.getMapper().selectListBy(model, paramMap, paramPage);
 		return new PageResult<PO>(paramPage, recordList);
 	}
 	
-	public PageResult<PO> findPage(PO model, PageParam paramPage, LoginInfo loginInfo) {
+	public PageResult<PO> findPage(PO model, PageParam paramPage) {
 		if(null==paramPage) return null;
-		return this.findPage(model, null, paramPage, loginInfo);
+		return this.findPage(model, null, paramPage);
 	}
 	
 	/**
@@ -72,16 +64,14 @@ public abstract class CommonServiceAbstract<PO extends CustomPo> extends CommonS
 	 * @author  zhangST
 	 * @param model
 	 * @param paramMap
-	 * @param loginInfo
 	 * @return
 	 */
-	public Long findCount(PO model, Map<String, Object> paramMap, LoginInfo loginInfo) {
-		this.checkAndSetForQuery(model, paramMap, loginInfo);
+	public Long findCount(PO model, Map<String, Object> paramMap) {
 		return this.getMapper().selectCountBy(model, paramMap);
 	}
 	
-	public Long findCount(PO model, LoginInfo loginInfo) {
-		return this.findCount(model, null, loginInfo);
+	public Long findCount(PO model) {
+		return this.findCount(model, null);
 	}
 	
 	/**
@@ -90,16 +80,14 @@ public abstract class CommonServiceAbstract<PO extends CustomPo> extends CommonS
 	 * @author  zhangST
 	 * @param model
 	 * @param paramMap
-	 * @param loginInfo
 	 * @return
 	 */
-	public List<PO> findList(PO model, Map<String, Object> paramMap, LoginInfo loginInfo) {
-		this.checkAndSetForQuery(model, paramMap, loginInfo);
+	public List<PO> findList(PO model, Map<String, Object> paramMap) {
 		return this.getMapper().selectListBy(model, paramMap, null);
 	}
 	
-	public List<PO> findList(PO model, LoginInfo loginInfo) {
-		return this.findList(model, null, loginInfo);
+	public List<PO> findList(PO model) {
+		return this.findList(model, null);
 	}
 	
 	/**
@@ -108,36 +96,32 @@ public abstract class CommonServiceAbstract<PO extends CustomPo> extends CommonS
 	 * @author  zhangST
 	 * @param model
 	 * @param paramMap
-	 * @param loginInfo
 	 * @return
 	 */
-	public PO findOne(PO model, Map<String, Object> paramMap, LoginInfo loginInfo) {
+	public PO findOne(PO model, Map<String, Object> paramMap) {
 		if(null==model && (null==paramMap || paramMap.isEmpty())) return null;
-		this.checkAndSetForQuery(model, paramMap, loginInfo);
 		return this.getMapper().selectOneBy(model, paramMap);
 	}
 	
-	public PO findOne(PO model, LoginInfo loginInfo) {
+	public PO findOne(PO model) {
 		if(null==model) return null;
-		return this.findOne(model, null, loginInfo);
+		return this.findOne(model, null);
 	}
 	
-	public boolean exsist(PO model, LoginInfo loginInfo) {
-		List<PO> resultList = this.findList(model, loginInfo);
+	public boolean exsist(PO model) {
+		List<PO> resultList = this.findList(model);
 		return !(null==resultList || resultList.size()==0);
 	}
 	
 	/**************************************** 添加 ****************************************/
 	
-	public int addOne(PO model, LoginInfo loginInfo) {
+	public int addOne(PO model) {
 		if(null==model) return 0;
-		this.checkAndSetForAdd(model, loginInfo);
 		return this.getMapper().insertOne(model);
 	}
 	
-	public int addList(List<PO> models, LoginInfo loginInfo) {
+	public int addList(List<PO> models) {
 		if(null==models || models.isEmpty()) return 0;
-		this.checkAndSetForAdd(models, loginInfo);
 		return this.getMapper().insertList(models);
 	}
 	
@@ -153,23 +137,22 @@ public abstract class CommonServiceAbstract<PO extends CustomPo> extends CommonS
 	 * @param paramMap			条件-指定“属性名-值”对集合
 	 * @return
 	 */
-	public int update(PO model, PO modelOld, Map<String, Object> paramMap, LoginInfo loginInfo) {
+	public int update(PO model, PO modelOld, Map<String, Object> paramMap) {
 		if(null==model) return 0;
 		if(null==modelOld && (null==paramMap || paramMap.isEmpty())) return 0;
-		this.checkAndSetForUpdate(model, modelOld, paramMap, loginInfo);
 		return this.getMapper().updateBy(model, modelOld, paramMap);
 	}
 	
-	public int update(PO model, Map<String, Object> paramMap, LoginInfo loginInfo) {
-		return this.update(model, null, paramMap, loginInfo);
+	public int update(PO model, Map<String, Object> paramMap) {
+		return this.update(model, null, paramMap);
 	}
 	
-	public int updateBy(PO model, String attributeName, Object value, LoginInfo loginInfo) {
+	public int updateBy(PO model, String attributeName, Object value) {
 		if(null==model) return 0;
 		if(EasyStringCheckUtils.isEmpty(attributeName) && null==value) return 0;
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put(attributeName, value);
-		return this.update(model, null, paramMap, loginInfo);
+		return this.update(model, null, paramMap);
 	}
 	
 	
@@ -215,97 +198,97 @@ public abstract class CommonServiceAbstract<PO extends CustomPo> extends CommonS
 	
 	/************************************* 默认属性值设置 ************************************/
 	
-	private static final Logger LOG = LoggerFactory.getLogger(CommonServiceAbstract.class);
-	/**
-	 * 检查和设置属性值-添加
-	 * @Date	2018年3月28日 下午2:07:54 <br/>
-	 * @author  zhangST
-	 * @param parameter
-	 * @param loginInfo
-	 */
-	protected void checkAndSetForAdd(CustomPo po, LoginInfo loginInfo) {
-		if(null==po) return;
-		if(null==po.getVersion()) po.setVersion(0);
-		if(null==po.getDelFlag()) po.setDelFlag("0");
-		if(null==po.getCreateTime()) po.setCreateTime(new Date());
-		if(null==po.getCreateBy()) {
-			if(null!=loginInfo) po.setCreateBy(loginInfo.getUserCode());
-		}
-		if(EasyStringCheckUtils.isEmpty(po.getTenantCode())) {
-//			LOG.warn("【添加】未指定【租户】警告，【mapper=" + this.getMapperClass().getName() + "】，【model=" + po.getClass().getName() + "】");
-			LOG.warn("【添加】未指定【租户】警告，【service=" + this.getClass().getName() + "】，【model=" + po.getClass().getName() + "】");
-		} else {
-//			LOG.info("【添加】【租户=" + po.getTenantCode() + "】，【mapper=" + this.getMapperClass().getName() + "】，【model=" + po.getClass().getName() + "】");
-			LOG.info("【添加】【租户=" + po.getTenantCode() + "】，【service=" + this.getClass().getName() + "】，【model=" + po.getClass().getName() + "】");
-		}
-	}
-	
-	/**
-	 * 检查和设置属性值-添加
-	 * @Date	2018年3月28日 下午3:05:24 <br/>
-	 * @author  zhangST
-	 * @param pos
-	 * @param loginInfo
-	 */
-	protected void checkAndSetForAdd(List<? extends CustomPo> pos, LoginInfo loginInfo) {
-		if(null==pos || pos.isEmpty()) return;
-		for(CustomPo po : pos) {
-			this.checkAndSetForAdd(po, loginInfo);
-		}
-	}
-	
-	/**
-	 * 检查和设置属性值-修改
-	 * @Date	2018年3月28日 下午2:08:17 <br/>
-	 * @author  zhangST
-	 * @param parameter
-	 * @param loginInfo
-	 */
-	protected void checkAndSetForUpdate(PO modelNew, PO modelOld, Map<String, Object> paramMap, LoginInfo loginInfo) {
-		if(null==modelNew.getUpdateTime()) modelNew.setUpdateTime(new Date()); 
-		if(null==modelNew.getUpdateBy()) {
-			if(null!=loginInfo) modelNew.setUpdateBy(loginInfo.getUserCode());
-		}
-		// 租户检查
-		String tenantCode = null;
-		if(null!=modelOld && !EasyStringCheckUtils.isEmpty(modelOld.getTenantCode())) {
-			tenantCode = modelOld.getTenantCode();
-		}
-		if(null==tenantCode && null!=paramMap && null!=paramMap.get(CommonConstants.KEY_TENANT_CODE)) {
-			tenantCode = (String) paramMap.get(CommonConstants.KEY_TENANT_CODE);
-		}
-		if(null!=tenantCode) {
-//			LOG.warn("【更新条件】未指定【租户】警告，【mapper=" + this.getMapperClass().getName() + "】，【model=" + tenantCode + "】");
-			LOG.warn("【更新条件】未指定【租户】警告，【service=" + this.getClass().getName() + "】，【model=" + tenantCode + "】");
-		} else {
-//			LOG.info("【更新条件】【租户=" + tenantCode + "】，【mapper=" + this.getMapperClass().getName() + "】");
-			LOG.info("【更新条件】【租户=" + tenantCode + "】，【service=" + this.getClass().getName() + "】");
-		}
-	}
-	
-	/**
-	 * 检查和设置属性值-查询
-	 * @Date	2018年3月28日 下午2:07:54 <br/>
-	 * @author  zhangST
-	 * @param parameter
-	 * @param loginInfo
-	 */
-	protected void checkAndSetForQuery(PO model, Map<String, Object> paramMap, LoginInfo loginInfo) {
-		// 租户检查
-		String tenantCode = null;
-		if(null!=model && !EasyStringCheckUtils.isEmpty(model.getTenantCode())) {
-			tenantCode = model.getTenantCode();
-		}
-		if(null==tenantCode && null!=paramMap && null!=paramMap.get(CommonConstants.KEY_TENANT_CODE)) {
-			tenantCode = (String) paramMap.get(CommonConstants.KEY_TENANT_CODE);
-		}
-		if(null!=tenantCode) {
-//			LOG.warn("【查询条件】未指定【租户】警告，【mapper=" + this.getMapperClass().getName() + "】，【model=" + tenantCode + "】");
-			LOG.warn("【查询条件】未指定【租户】警告，【service=" + this.getClass().getName() + "】，【model=" + tenantCode + "】");
-		} else {
-//			LOG.info("【查询条件】【租户=" + tenantCode + "】，【mapper=" + this.getMapperClass().getName() + "】");
-			LOG.info("【查询条件】【租户=" + tenantCode + "】，【service=" + this.getClass().getName() + "】");
-		}
-	}
+//	private static final Logger LOG = LoggerFactory.getLogger(CommonServiceAbstract.class);
+//	/**
+//	 * 检查和设置属性值-添加
+//	 * @Date	2018年3月28日 下午2:07:54 <br/>
+//	 * @author  zhangST
+//	 * @param parameter
+//	 * @param loginInfo
+//	 */
+//	protected void checkAndSetForAdd(CustomPo po, LoginInfo loginInfo) {
+//		if(null==po) return;
+//		if(null==po.getVersion()) po.setVersion(0);
+//		if(null==po.getDelFlag()) po.setDelFlag("0");
+//		if(null==po.getCreateTime()) po.setCreateTime(new Date());
+//		if(null==po.getCreateBy()) {
+//			if(null!=loginInfo) po.setCreateBy(loginInfo.getUserCode());
+//		}
+//		if(EasyStringCheckUtils.isEmpty(po.getTenantCode())) {
+////			LOG.warn("【添加】未指定【租户】警告，【mapper=" + this.getMapperClass().getName() + "】，【model=" + po.getClass().getName() + "】");
+//			LOG.warn("【添加】未指定【租户】警告，【service=" + this.getClass().getName() + "】，【model=" + po.getClass().getName() + "】");
+//		} else {
+////			LOG.info("【添加】【租户=" + po.getTenantCode() + "】，【mapper=" + this.getMapperClass().getName() + "】，【model=" + po.getClass().getName() + "】");
+//			LOG.info("【添加】【租户=" + po.getTenantCode() + "】，【service=" + this.getClass().getName() + "】，【model=" + po.getClass().getName() + "】");
+//		}
+//	}
+//	
+//	/**
+//	 * 检查和设置属性值-添加
+//	 * @Date	2018年3月28日 下午3:05:24 <br/>
+//	 * @author  zhangST
+//	 * @param pos
+//	 * @param loginInfo
+//	 */
+//	protected void checkAndSetForAdd(List<? extends CustomPo> pos, LoginInfo loginInfo) {
+//		if(null==pos || pos.isEmpty()) return;
+//		for(CustomPo po : pos) {
+//			this.checkAndSetForAdd(po, loginInfo);
+//		}
+//	}
+//	
+//	/**
+//	 * 检查和设置属性值-修改
+//	 * @Date	2018年3月28日 下午2:08:17 <br/>
+//	 * @author  zhangST
+//	 * @param parameter
+//	 * @param loginInfo
+//	 */
+//	protected void checkAndSetForUpdate(PO modelNew, PO modelOld, Map<String, Object> paramMap, LoginInfo loginInfo) {
+//		if(null==modelNew.getUpdateTime()) modelNew.setUpdateTime(new Date()); 
+//		if(null==modelNew.getUpdateBy()) {
+//			if(null!=loginInfo) modelNew.setUpdateBy(loginInfo.getUserCode());
+//		}
+//		// 租户检查
+//		String tenantCode = null;
+//		if(null!=modelOld && !EasyStringCheckUtils.isEmpty(modelOld.getTenantCode())) {
+//			tenantCode = modelOld.getTenantCode();
+//		}
+//		if(null==tenantCode && null!=paramMap && null!=paramMap.get(CommonConstants.KEY_TENANT_CODE)) {
+//			tenantCode = (String) paramMap.get(CommonConstants.KEY_TENANT_CODE);
+//		}
+//		if(null!=tenantCode) {
+////			LOG.warn("【更新条件】未指定【租户】警告，【mapper=" + this.getMapperClass().getName() + "】，【model=" + tenantCode + "】");
+//			LOG.warn("【更新条件】未指定【租户】警告，【service=" + this.getClass().getName() + "】，【model=" + tenantCode + "】");
+//		} else {
+////			LOG.info("【更新条件】【租户=" + tenantCode + "】，【mapper=" + this.getMapperClass().getName() + "】");
+//			LOG.info("【更新条件】【租户=" + tenantCode + "】，【service=" + this.getClass().getName() + "】");
+//		}
+//	}
+//	
+//	/**
+//	 * 检查和设置属性值-查询
+//	 * @Date	2018年3月28日 下午2:07:54 <br/>
+//	 * @author  zhangST
+//	 * @param parameter
+//	 * @param loginInfo
+//	 */
+//	protected void checkAndSetForQuery(PO model, Map<String, Object> paramMap, LoginInfo loginInfo) {
+//		// 租户检查
+//		String tenantCode = null;
+//		if(null!=model && !EasyStringCheckUtils.isEmpty(model.getTenantCode())) {
+//			tenantCode = model.getTenantCode();
+//		}
+//		if(null==tenantCode && null!=paramMap && null!=paramMap.get(CommonConstants.KEY_TENANT_CODE)) {
+//			tenantCode = (String) paramMap.get(CommonConstants.KEY_TENANT_CODE);
+//		}
+//		if(null!=tenantCode) {
+////			LOG.warn("【查询条件】未指定【租户】警告，【mapper=" + this.getMapperClass().getName() + "】，【model=" + tenantCode + "】");
+//			LOG.warn("【查询条件】未指定【租户】警告，【service=" + this.getClass().getName() + "】，【model=" + tenantCode + "】");
+//		} else {
+////			LOG.info("【查询条件】【租户=" + tenantCode + "】，【mapper=" + this.getMapperClass().getName() + "】");
+//			LOG.info("【查询条件】【租户=" + tenantCode + "】，【service=" + this.getClass().getName() + "】");
+//		}
+//	}
 }
 

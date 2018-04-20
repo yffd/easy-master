@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.yffd.easy.common.core.page.PageParam;
 import com.yffd.easy.common.core.page.PageResult;
 import com.yffd.easy.common.core.util.EasyStringCheckUtils;
-import com.yffd.easy.framework.domain.RespModel;
+import com.yffd.easy.framework.web.model.RespData;
 import com.yffd.easy.framework.web.view.vo.DataGridVO;
-import com.yffd.easy.uupm.api.model.UupmUserModel;
+import com.yffd.easy.uupm.pojo.entity.UupmUserEntity;
 import com.yffd.easy.uupm.service.UupmUserService;
 import com.yffd.easy.uupm.web.common.UupmCommonController;
 
@@ -37,47 +37,47 @@ public class UupmUserController extends UupmCommonController {
 	private UupmUserService uupmUserService;
 	
 	@RequestMapping(value="/findPage", method=RequestMethod.POST)
-	public RespModel findPage(@RequestParam Map<String, Object> paramMap) {
+	public RespData findPage(@RequestParam Map<String, Object> paramMap) {
 		PageParam paramPage = this.getPageParam(paramMap);
 		//TODO  租户条件
-		PageResult<Map<String, Object>> pageResult = this.uupmUserService.findUserInfo(paramMap, paramPage, null);
+		PageResult<Map<String, Object>> pageResult = this.uupmUserService.findUserInfo(paramMap, paramPage);
 		DataGridVO dataGridVO = this.toDataGrid(pageResult);
 		return this.successAjax(dataGridVO);
 	}
 	
 	@RequestMapping(value="/findOne", method=RequestMethod.POST)
-	public RespModel findOne(UupmUserModel model) {
+	public RespData findOne(UupmUserEntity model) {
 		if(null==model || EasyStringCheckUtils.isEmpty(model.getId())) return this.error("参数无效");
-		UupmUserModel result = this.uupmUserService.findOne(model, null);
+		UupmUserEntity result = this.uupmUserService.findOne(model);
 		return this.successAjax(result);
 	}
 	
 	@RequestMapping(value="/add", method=RequestMethod.POST)
-	public RespModel add(UupmUserModel model) {
+	public RespData add(UupmUserEntity model) {
 		if(null==model) return this.error("参数无效");
 		// 存在校验
-		UupmUserModel paramModel = new UupmUserModel();
+		UupmUserEntity paramModel = new UupmUserEntity();
 		paramModel.setTenantCode(model.getTenantCode());
 		paramModel.setUserCode(model.getUserCode());
-		UupmUserModel resultModel = this.uupmUserService.findOne(paramModel, null);
+		UupmUserEntity resultModel = this.uupmUserService.findOne(paramModel);
 		if(null!=resultModel) return this.error("数据已存在");
-		int result = this.uupmUserService.addUserWithAccount(model, null);
+		int result = this.uupmUserService.addUserWithAccount(model);
 		if(result==0) return this.error("添加失败");
 		return this.successAjax();
 	}
 	
 	@RequestMapping(value="/edit", method=RequestMethod.POST)
-	public RespModel edit(UupmUserModel model) {
+	public RespData edit(UupmUserEntity model) {
 		if(null==model || EasyStringCheckUtils.isEmpty(model.getId())) return this.error("参数无效");
-		UupmUserModel paramOld = new UupmUserModel();
+		UupmUserEntity paramOld = new UupmUserEntity();
 		paramOld.setId(model.getId());
-		int result = this.uupmUserService.update(model, paramOld, null, null);
+		int result = this.uupmUserService.update(model, paramOld, null);
 		if(result==0) return this.error("更新失败");
 		return this.successAjax();
 	}
 	
 	@RequestMapping(value="/delById", method=RequestMethod.POST)
-	public RespModel delById(String id) {
+	public RespData delById(String id) {
 		if(EasyStringCheckUtils.isEmpty(id)) return this.errorAjax("参数无效");
 		int result = this.uupmUserService.deleteBy("id", id);
 		if(result==0) return this.error("删除失败");
@@ -85,7 +85,7 @@ public class UupmUserController extends UupmCommonController {
 	}
 	
 	@RequestMapping(value="/delBatch", method=RequestMethod.POST)
-	public RespModel delBatch(HttpServletRequest req) {
+	public RespData delBatch(HttpServletRequest req) {
 		String ids = req.getParameter("ids");
 		if(EasyStringCheckUtils.isEmpty(ids)) return this.error("参数无效");
 		String[] idsArr = ids.split(",");

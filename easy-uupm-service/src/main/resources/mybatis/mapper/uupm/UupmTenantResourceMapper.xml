@@ -56,7 +56,7 @@
 		</if>
 	</sql>
 	<!-- 条件查询 -->
-	<select id="selectListBy" parameterType="java.util.Map" resultType="com.yffd.easy.uupm.api.model.UupmTenantResourceModel">
+	<select id="selectListBy" parameterType="java.util.Map" resultType="com.yffd.easy.uupm.entity.UupmTenantResourceEntity">
 		select <include refid="table_columns" />
 		from <include refid="table_name"/> as t 
 		<where>
@@ -74,7 +74,7 @@
 		</where>
 	</select>
 	<!-- 单条查询 -->
-	<select id="selectOneBy" parameterType="java.util.Map" resultType="com.yffd.easy.uupm.api.model.UupmTenantResourceModel">
+	<select id="selectOneBy" parameterType="java.util.Map" resultType="com.yffd.easy.uupm.entity.UupmTenantResourceEntity">
 		select <include refid="table_columns" /> 
 		from <include refid="table_name"/> as t 
 		<where>

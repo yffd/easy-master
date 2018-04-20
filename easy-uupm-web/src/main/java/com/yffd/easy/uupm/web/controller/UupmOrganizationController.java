@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.yffd.easy.common.core.util.EasyStringCheckUtils;
-import com.yffd.easy.framework.domain.RespModel;
-import com.yffd.easy.uupm.api.model.UupmOrganizationModel;
+import com.yffd.easy.framework.web.model.RespData;
+import com.yffd.easy.uupm.pojo.entity.UupmOrganizationEntity;
 import com.yffd.easy.uupm.service.UupmOrganizationService;
 import com.yffd.easy.uupm.web.common.UupmCommonController;
 
@@ -34,55 +34,55 @@ public class UupmOrganizationController extends UupmCommonController {
 	private UupmOrganizationService uupmOrganizationService;
 	
 	@RequestMapping(value="/findTree", method=RequestMethod.POST)
-	public RespModel findTree(@RequestParam Map<String, Object> paramMap) {
-		List<UupmOrganizationModel> result = this.uupmOrganizationService.findList(null, paramMap, null);
+	public RespData findTree(@RequestParam Map<String, Object> paramMap) {
+		List<UupmOrganizationEntity> result = this.uupmOrganizationService.findList(null, paramMap);
 		if(null!=result && !result.isEmpty()) {
 			String jsonTree = this.uupmOrganizationService.getTreeJsonBuilder()
-					.buildTreeJson(UupmOrganizationModel.class, "orgCode", "parentCode", "root", result);
+					.buildTreeJson(UupmOrganizationEntity.class, "orgCode", "parentCode", "root", result);
 			return this.successAjax(jsonTree);
 		}
 		return this.successAjax();
 	}
 	
 	@RequestMapping(value="/findOne", method=RequestMethod.POST)
-	public RespModel findOne(UupmOrganizationModel model) {
+	public RespData findOne(UupmOrganizationEntity model) {
 		if(null==model || EasyStringCheckUtils.isEmpty(model.getId())) return this.error("参数无效");
-		UupmOrganizationModel result = this.uupmOrganizationService.findOne(model, null);
+		UupmOrganizationEntity result = this.uupmOrganizationService.findOne(model);
 		return this.successAjax(result);
 	}
 	
 	@RequestMapping(value="/add", method=RequestMethod.POST)
-	public RespModel add(UupmOrganizationModel model) {
+	public RespData add(UupmOrganizationEntity model) {
 		if(null==model) return this.error("参数无效");
 		// 存在校验
-		UupmOrganizationModel paramModel = new UupmOrganizationModel();
+		UupmOrganizationEntity paramModel = new UupmOrganizationEntity();
 		paramModel.setOrgCode(model.getOrgCode());
-		UupmOrganizationModel result = this.uupmOrganizationService.findOne(paramModel, null);
+		UupmOrganizationEntity result = this.uupmOrganizationService.findOne(paramModel);
 		if(null!=result) return this.error("数据已存在");
-		this.uupmOrganizationService.addOne(model, null);
+		this.uupmOrganizationService.addOne(model);
 		return this.successAjax();
 	}
 	
 	@RequestMapping(value="/edit", method=RequestMethod.POST)
-	public RespModel edit(UupmOrganizationModel model) {
+	public RespData edit(UupmOrganizationEntity model) {
 		if(null==model || EasyStringCheckUtils.isEmpty(model.getId())) {
 			return this.error("参数无效");
 		}
-		UupmOrganizationModel paramOld = new UupmOrganizationModel();
+		UupmOrganizationEntity paramOld = new UupmOrganizationEntity();
 		paramOld.setId(model.getId());
-		this.uupmOrganizationService.update(model, paramOld, null, null);
+		this.uupmOrganizationService.update(model, paramOld, null);
 		return this.successAjax();
 	}
 	
 	@RequestMapping(value="/delById", method=RequestMethod.POST)
-	public RespModel delById(String id) {
+	public RespData delById(String id) {
 		if(EasyStringCheckUtils.isEmpty(id)) return this.errorAjax("参数无效");
 		this.uupmOrganizationService.deleteBy("id", id);
 		return this.successAjax();
 	}
 	
 	@RequestMapping(value="/delBatch", method=RequestMethod.POST)
-	public RespModel delBatch(HttpServletRequest req) {
+	public RespData delBatch(HttpServletRequest req) {
 		String ids = req.getParameter("ids");
 		if(EasyStringCheckUtils.isEmpty(ids)) return this.error("参数无效");
 		String[] idsArr = ids.split(",");

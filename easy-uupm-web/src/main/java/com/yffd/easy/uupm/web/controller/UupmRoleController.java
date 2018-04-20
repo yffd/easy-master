@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.yffd.easy.common.core.page.PageParam;
 import com.yffd.easy.common.core.page.PageResult;
 import com.yffd.easy.common.core.util.EasyStringCheckUtils;
-import com.yffd.easy.framework.domain.RespModel;
+import com.yffd.easy.framework.web.model.RespData;
 import com.yffd.easy.framework.web.view.vo.DataGridVO;
-import com.yffd.easy.uupm.api.model.UupmRoleModel;
+import com.yffd.easy.uupm.pojo.entity.UupmRoleEntity;
 import com.yffd.easy.uupm.service.UupmRoleService;
 import com.yffd.easy.uupm.web.common.UupmCommonController;
 
@@ -38,44 +38,44 @@ public class UupmRoleController extends UupmCommonController {
 	private UupmRoleService uupmRoleService;
 	
 	@RequestMapping(value="/findPage", method=RequestMethod.POST)
-	public RespModel findPage(@RequestParam Map<String, Object> paramMap) {
+	public RespData findPage(@RequestParam Map<String, Object> paramMap) {
 		PageParam pageParam = this.getPageParam(paramMap);
-		PageResult<UupmRoleModel> pageResult = this.uupmRoleService.findPage(null, paramMap, pageParam, null);
+		PageResult<UupmRoleEntity> pageResult = this.uupmRoleService.findPage(null, paramMap, pageParam);
 		DataGridVO dataGridVO = this.toDataGrid(pageResult);
 		return this.successAjax(dataGridVO);
 	}
 	
 	@RequestMapping(value="/findOne", method=RequestMethod.POST)
-	public RespModel findOne(UupmRoleModel model) {
+	public RespData findOne(UupmRoleEntity model) {
 		if(null==model || EasyStringCheckUtils.isEmpty(model.getId())) return this.error("参数无效");
-		UupmRoleModel result = this.uupmRoleService.findOne(model, null);
+		UupmRoleEntity result = this.uupmRoleService.findOne(model);
 		return this.successAjax(result);
 	}
 	
 	@RequestMapping(value="/add", method=RequestMethod.POST)
-	public RespModel add(UupmRoleModel model) {
+	public RespData add(UupmRoleEntity model) {
 		if(null==model || EasyStringCheckUtils.isEmpty(model.getRoleCode())) return this.error("参数无效");
-		UupmRoleModel paramModel = new UupmRoleModel();
+		UupmRoleEntity paramModel = new UupmRoleEntity();
 		paramModel.setRoleCode(model.getRoleCode());
-		UupmRoleModel resultModel = this.uupmRoleService.findOne(paramModel, null);
+		UupmRoleEntity resultModel = this.uupmRoleService.findOne(paramModel);
 		if(null!=resultModel) return this.error("编号已存在");
-		int result = this.uupmRoleService.addOne(model, null);
+		int result = this.uupmRoleService.addOne(model);
 		if(result==0) return this.error("添加失败");
 		return this.successAjax();
 	}
 	
 	@RequestMapping(value="/edit", method=RequestMethod.POST)
-	public RespModel edit(UupmRoleModel model) {
+	public RespData edit(UupmRoleEntity model) {
 		if(null==model || EasyStringCheckUtils.isEmpty(model.getId())) return this.error("参数无效");
-		UupmRoleModel old = new UupmRoleModel();
+		UupmRoleEntity old = new UupmRoleEntity();
 		old.setId(model.getId());
-		int result = this.uupmRoleService.update(model, old, null, null);
+		int result = this.uupmRoleService.update(model, old, null);
 		if(result==0) return this.error("更新失败");
 		return this.successAjax();
 	}
 	
 	@RequestMapping(value="/delById", method=RequestMethod.POST)
-	public RespModel delById(String id) {
+	public RespData delById(String id) {
 		if(EasyStringCheckUtils.isEmpty(id)) return this.errorAjax("参数无效");
 		int result = this.uupmRoleService.deleteBy("id", id);
 		if(result==0) return this.error("删除失败");
@@ -83,7 +83,7 @@ public class UupmRoleController extends UupmCommonController {
 	}
 	
 	@RequestMapping(value="/delBatch", method=RequestMethod.POST)
-	public RespModel delBatch(HttpServletRequest req) {
+	public RespData delBatch(HttpServletRequest req) {
 		String ids = req.getParameter("ids");
 		if(EasyStringCheckUtils.isEmpty(ids)) return this.error("参数无效");
 		String[] idsArr = ids.split(",");

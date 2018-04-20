@@ -1,8 +1,11 @@
 package com.yffd.easy.uupm.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,9 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.yffd.easy.framework.core.common.mapper.ICommonMapper;
 import com.yffd.easy.framework.core.common.service.CommonServiceAbstract;
-import com.yffd.easy.framework.domain.LoginInfo;
-import com.yffd.easy.uupm.api.model.UupmRoleResourceModel;
 import com.yffd.easy.uupm.mapper.IUupmRoleResourceMapper;
+import com.yffd.easy.uupm.pojo.entity.UupmRoleResourceEntity;
+import com.yffd.easy.uupm.pojo.entity.UupmUserRoleEntity;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -24,13 +27,13 @@ import com.yffd.easy.uupm.mapper.IUupmRoleResourceMapper;
  * @see 	 
  */
 @Service
-public class UupmRoleResourceService extends CommonServiceAbstract<UupmRoleResourceModel> {
+public class UupmRoleResourceService extends CommonServiceAbstract<UupmRoleResourceEntity> {
 
 	@Autowired
 	private IUupmRoleResourceMapper uupmRoleResourceMapper;
 	
 	@Override
-	public ICommonMapper<UupmRoleResourceModel> getMapper() {
+	public ICommonMapper<UupmRoleResourceEntity> getMapper() {
 		return this.uupmRoleResourceMapper;
 	}
 
@@ -48,9 +51,9 @@ public class UupmRoleResourceService extends CommonServiceAbstract<UupmRoleResou
 	}
 
 	@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
-	public void saveRoleResource(String roleCode, List<UupmRoleResourceModel> modelList, LoginInfo loginInfo) {
+	public void saveRoleResource(String roleCode, List<UupmRoleResourceEntity> modelList) {
 		this.delByRoleCode(roleCode);
-		this.addList(modelList, loginInfo);
+		this.addList(modelList);
 	}
 	
 	public void delByRoleCode(String roleCode) {
@@ -59,4 +62,38 @@ public class UupmRoleResourceService extends CommonServiceAbstract<UupmRoleResou
 		this.delete(paramMap);
 	}
 	
+	public Set<String> findRsCode(String roleCode) {
+		UupmRoleResourceEntity paramModel = new UupmRoleResourceEntity();
+		paramModel.setRoleCode(roleCode);
+		List<UupmRoleResourceEntity> resultList = this.findList(paramModel, null);
+		if(null==resultList ||resultList.size()==0) return null;
+		Set<String> rsCodes = new HashSet<String>();
+		for(UupmRoleResourceEntity model : resultList) {
+			rsCodes.add(model.getRsCode());
+		}
+		return rsCodes;
+	}
+	
+	public Set<String> findRsCode(Set<String> roleCodes) {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("rsCodeList", roleCodes);
+		List<UupmRoleResourceEntity> resultList = this.findList(null, paramMap);
+		if(null==resultList ||resultList.size()==0) return null;
+		Set<String> rsCodes = new HashSet<String>();
+		for(UupmRoleResourceEntity model : resultList) {
+			rsCodes.add(model.getRsCode());
+		}
+		return rsCodes;
+	}
+	
+	public List<UupmRoleResourceEntity> findRsCode(List<UupmUserRoleEntity> userRoleList) {
+		if(null==userRoleList || userRoleList.size()==0) return null;
+		List<String> roleCodeList = new ArrayList<String>();
+		for(UupmUserRoleEntity model : userRoleList) {
+			roleCodeList.add(model.getRoleCode());
+		}
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("rsCodeList", roleCodeList);
+		return this.findList(null, paramMap);
+	}
 }

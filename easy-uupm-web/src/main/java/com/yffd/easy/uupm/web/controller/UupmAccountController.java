@@ -15,9 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.yffd.easy.common.core.page.PageParam;
 import com.yffd.easy.common.core.page.PageResult;
 import com.yffd.easy.common.core.util.EasyStringCheckUtils;
-import com.yffd.easy.framework.domain.RespModel;
+import com.yffd.easy.framework.web.model.RespData;
+import com.yffd.easy.framework.web.shiro.password.PasswordEncrypt;
 import com.yffd.easy.framework.web.view.vo.DataGridVO;
-import com.yffd.easy.uupm.api.model.UupmAccountModel;
+import com.yffd.easy.uupm.pojo.entity.UupmAccountEntity;
 import com.yffd.easy.uupm.service.UupmAccountService;
 import com.yffd.easy.uupm.web.common.UupmCommonController;
 
@@ -37,47 +38,52 @@ public class UupmAccountController extends UupmCommonController {
 	private UupmAccountService uupmAccountService;
 	
 	@RequestMapping(value="/findPage", method=RequestMethod.POST)
-	public RespModel findPage(@RequestParam Map<String, Object> paramMap) {
+	public RespData findPage(@RequestParam Map<String, Object> paramMap) {
 		PageParam paramPage = this.getPageParam(paramMap);
 		paramMap.put("accountType", "admin");
-		PageResult<UupmAccountModel> pageResult = this.uupmAccountService.findPage(null, paramMap, paramPage, null);
+		PageResult<UupmAccountEntity> pageResult = this.uupmAccountService.findPage(null, paramMap, paramPage);
 		DataGridVO dataGridVO = this.toDataGrid(pageResult);
 		return this.successAjax(dataGridVO);
 	}
 	
 	@RequestMapping(value="/findOne", method=RequestMethod.POST)
-	public RespModel findOne(UupmAccountModel model) {
+	public RespData findOne(UupmAccountEntity model) {
 		if(null==model || EasyStringCheckUtils.isEmpty(model.getId())) return this.error("参数无效");
-		UupmAccountModel result = this.uupmAccountService.findOne(model, null);
+		UupmAccountEntity result = this.uupmAccountService.findOne(model);
 		return this.successAjax(result);
 	}
 	
 	@RequestMapping(value="/add", method=RequestMethod.POST)
-	public RespModel add(UupmAccountModel model) {
-		if(null==model) return this.error("参数无效");
+	public RespData add(UupmAccountEntity model) {
+		if(null==model || EasyStringCheckUtils.isEmpty(model.getAccountId())
+				|| EasyStringCheckUtils.isEmpty(model.getAccountPwd())) return this.error("参数无效");
 		// 存在校验
-		UupmAccountModel paramModel = new UupmAccountModel();
+		UupmAccountEntity paramModel = new UupmAccountEntity();
 		paramModel.setTenantCode(model.getTenantCode());
 		paramModel.setAccountId(model.getAccountId());
-		UupmAccountModel resultModel = this.uupmAccountService.findOne(paramModel, null);
+		UupmAccountEntity resultModel = this.uupmAccountService.findOne(paramModel);
 		if(null!=resultModel) return this.error("数据已存在");
-		int result = this.uupmAccountService.addOne(model, null);
+		// 生成盐串和密码串
+		String salt = PasswordEncrypt.getRandomSalt();
+		String encryptPwd = PasswordEncrypt.getEncryptPassword(model.getAccountId(), model.getAccountPwd(), salt);
+		
+		int result = this.uupmAccountService.addAccount(model, encryptPwd, salt);
 		if(result==0) return this.error("添加失败");
 		return this.successAjax();
 	}
 	
 	@RequestMapping(value="/edit", method=RequestMethod.POST)
-	public RespModel edit(UupmAccountModel model) {
+	public RespData edit(UupmAccountEntity model) {
 		if(null==model || EasyStringCheckUtils.isEmpty(model.getId())) return this.error("参数无效");
-		UupmAccountModel paramOld = new UupmAccountModel();
+		UupmAccountEntity paramOld = new UupmAccountEntity();
 		paramOld.setId(model.getId());
-		int result = this.uupmAccountService.update(model, paramOld, null, null);
+		int result = this.uupmAccountService.update(model, paramOld, null);
 		if(result==0) return this.error("更新失败");
 		return this.successAjax();
 	}
 	
 	@RequestMapping(value="/delById", method=RequestMethod.POST)
-	public RespModel delById(String id) {
+	public RespData delById(String id) {
 		if(EasyStringCheckUtils.isEmpty(id)) return this.errorAjax("参数无效");
 		int result = this.uupmAccountService.deleteBy("id", id);
 		if(result==0) return this.error("删除失败");
@@ -85,7 +91,7 @@ public class UupmAccountController extends UupmCommonController {
 	}
 	
 	@RequestMapping(value="/delBatch", method=RequestMethod.POST)
-	public RespModel delBatch(HttpServletRequest req) {
+	public RespData delBatch(HttpServletRequest req) {
 		String ids = req.getParameter("ids");
 		if(EasyStringCheckUtils.isEmpty(ids)) return this.error("参数无效");
 		String[] idsArr = ids.split(",");

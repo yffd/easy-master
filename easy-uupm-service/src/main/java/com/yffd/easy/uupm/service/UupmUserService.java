@@ -14,10 +14,9 @@ import com.yffd.easy.common.core.page.PageResult;
 import com.yffd.easy.framework.core.common.mapper.ICommonMapper;
 import com.yffd.easy.framework.core.common.service.CommonServiceAbstract;
 import com.yffd.easy.framework.core.exception.BizException;
-import com.yffd.easy.framework.domain.LoginInfo;
-import com.yffd.easy.uupm.api.model.UupmAccountModel;
-import com.yffd.easy.uupm.api.model.UupmUserModel;
 import com.yffd.easy.uupm.mapper.IUupmUserMapper;
+import com.yffd.easy.uupm.pojo.entity.UupmAccountEntity;
+import com.yffd.easy.uupm.pojo.entity.UupmUserEntity;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -28,7 +27,7 @@ import com.yffd.easy.uupm.mapper.IUupmUserMapper;
  * @see 	 
  */
 @Service
-public class UupmUserService extends CommonServiceAbstract<UupmUserModel> {
+public class UupmUserService extends CommonServiceAbstract<UupmUserEntity> {
 
 	@Autowired
 	private UupmAccountService uupmAccountService;
@@ -37,7 +36,7 @@ public class UupmUserService extends CommonServiceAbstract<UupmUserModel> {
 	private IUupmUserMapper uupmUserMapper;
 	
 	@Override
-	public ICommonMapper<UupmUserModel> getMapper() {
+	public ICommonMapper<UupmUserEntity> getMapper() {
 		return this.uupmUserMapper;
 	}
 
@@ -46,7 +45,7 @@ public class UupmUserService extends CommonServiceAbstract<UupmUserModel> {
 		return IUupmUserMapper.class;
 	}
 
-	public PageResult<Map<String, Object>> findUserInfo(Map<String, Object> paramMap, PageParam pageParam, LoginInfo loginInfo) {
+	public PageResult<Map<String, Object>> findUserInfo(Map<String, Object> paramMap, PageParam pageParam) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("map", paramMap);
 		params.put("page", pageParam);
@@ -54,16 +53,16 @@ public class UupmUserService extends CommonServiceAbstract<UupmUserModel> {
 	}
 	
 	@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
-	public int addUserWithAccount(UupmUserModel model, LoginInfo loginInfo) {
+	public int addUserWithAccount(UupmUserEntity model) {
 		if(null==model) throw BizException.BIZ_PARAMS_IS_EMPTY();
-		int num = this.addOne(model, loginInfo);
+		int num = this.addOne(model);
 		// 生成账号
-		UupmAccountModel account = new UupmAccountModel();
+		UupmAccountEntity account = new UupmAccountEntity();
 		account.setAccountId(model.getUserCode());
 		account.setAccountPwd("123456");
 		account.setAccountStatus("active");
 		account.setAccountType("default");
-		this.uupmAccountService.addOne(account, loginInfo);
+		this.uupmAccountService.addOne(account);
 		return num;
 	}
 	

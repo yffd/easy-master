@@ -38,7 +38,7 @@ public class PmsUserController extends AdminBaseController {
 	
 	@RequestMapping(value="/findPage", method=RequestMethod.POST)
 	@ResponseBody
-	public RespModel listPage(PmsUser user, SearchVO searchVO) {
+	public RespData listPage(PmsUser user, SearchVO searchVO) {
 		PageParam pageParam = this.getPageParam(searchVO);
 		PageResult<PmsUser> pageResult = this.pmsUserService.findList(user, pageParam );
 		DataGridVO dataGridVO = this.toDataGrid(pageResult);
@@ -48,7 +48,7 @@ public class PmsUserController extends AdminBaseController {
 	@RequiresPermissions("user-add")
 	@RequestMapping(value="/add", method=RequestMethod.POST)
 	@ResponseBody
-	public RespModel add(PmsUser user) {
+	public RespData add(PmsUser user) {
 		if(ValidUtils.isNull(user) 
 				|| ValidUtils.isEmpty(user.getUserCode())
 				|| ValidUtils.isEmpty(user.getUserName())) {
@@ -70,7 +70,7 @@ public class PmsUserController extends AdminBaseController {
 	@RequiresPermissions("user-edit")
 	@RequestMapping(value="/edit", method=RequestMethod.POST)
 	@ResponseBody
-	public RespModel edit(PmsUser user) {
+	public RespData edit(PmsUser user) {
 		if(ValidUtils.isNull(user) 
 				|| ValidUtils.isEmpty(user.getUserCode())) {
 			return this.error("参数无效");
@@ -83,7 +83,7 @@ public class PmsUserController extends AdminBaseController {
 	@RequiresPermissions("user-del")
 	@RequestMapping(value="/del", method=RequestMethod.POST)
 	@ResponseBody
-	public RespModel del(HttpServletRequest req) {
+	public RespData del(HttpServletRequest req) {
 		String userCode = req.getParameter("userCode");
 		if(ValidUtils.isEmpty(userCode)) {
 			return this.errorAjax("参数无效");
@@ -94,7 +94,7 @@ public class PmsUserController extends AdminBaseController {
 	
 	@RequestMapping(value="/changeStatus", method=RequestMethod.POST)
 	@ResponseBody
-	public RespModel changeUserStatus(HttpServletRequest req) {
+	public RespData changeUserStatus(HttpServletRequest req) {
 		String userCode = req.getParameter("userCode");
 		String userStatus = req.getParameter("userStatus");
 		if(ValidUtils.isEmpty(userCode) || ValidUtils.isEmpty(userStatus)) {
@@ -113,7 +113,7 @@ public class PmsUserController extends AdminBaseController {
 	
 	@RequestMapping(value="/resetPassword", method=RequestMethod.POST)
 	@ResponseBody
-	public RespModel resetPassword(HttpServletRequest req) {
+	public RespData resetPassword(HttpServletRequest req) {
 		String userCode = req.getParameter("userCode");
 		if(ValidUtils.isEmpty(userCode)) {
 			return this.errorAjax("参数无效");
@@ -128,7 +128,7 @@ public class PmsUserController extends AdminBaseController {
 	
 	@RequestMapping(value="/changePassword", method=RequestMethod.POST)
 	@ResponseBody
-	public RespModel changePassword(HttpServletRequest req) {
+	public RespData changePassword(HttpServletRequest req) {
 		LoginInfo info = this.currentLoginInfo();
 		if(null==info) return this.error("session失效");
 		String userCode = info.getUserCode();

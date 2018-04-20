@@ -8,10 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.yffd.easy.framework.core.common.mapper.ICommonMapper;
 import com.yffd.easy.framework.core.common.service.CommonServiceAbstract;
 import com.yffd.easy.framework.core.exception.BizException;
-import com.yffd.easy.framework.domain.LoginInfo;
-import com.yffd.easy.uupm.api.model.UupmAccountModel;
-import com.yffd.easy.uupm.api.model.UupmTenantModel;
 import com.yffd.easy.uupm.mapper.IUupmTenantMapper;
+import com.yffd.easy.uupm.pojo.entity.UupmAccountEntity;
+import com.yffd.easy.uupm.pojo.entity.UupmTenantEntity;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -22,7 +21,7 @@ import com.yffd.easy.uupm.mapper.IUupmTenantMapper;
  * @see 	 
  */
 @Service
-public class UupmTenantService extends CommonServiceAbstract<UupmTenantModel> {
+public class UupmTenantService extends CommonServiceAbstract<UupmTenantEntity> {
 
 	@Autowired
 	private UupmAccountService uupmAccountService;
@@ -31,7 +30,7 @@ public class UupmTenantService extends CommonServiceAbstract<UupmTenantModel> {
 	private IUupmTenantMapper uupmTenantMapper;
 	
 	@Override
-	public ICommonMapper<UupmTenantModel> getMapper() {
+	public ICommonMapper<UupmTenantEntity> getMapper() {
 		return this.uupmTenantMapper;
 	}
 
@@ -41,16 +40,16 @@ public class UupmTenantService extends CommonServiceAbstract<UupmTenantModel> {
 	}
 	
 	@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
-	public int addTenantWithAccount(UupmTenantModel model, LoginInfo loginInfo) {
+	public int addTenantWithAccount(UupmTenantEntity model) {
 		if(null==model) throw BizException.BIZ_PARAMS_IS_EMPTY();
-		int num = this.addOne(model, loginInfo);
+		int num = this.addOne(model);
 		// 生成账号
-		UupmAccountModel account = new UupmAccountModel();
+		UupmAccountEntity account = new UupmAccountEntity();
 		account.setAccountId(model.getTenantCode());
 		account.setAccountPwd("123456");
 		account.setAccountStatus("active");
 		account.setAccountType("default");
-		this.uupmAccountService.addOne(account, loginInfo);
+		this.uupmAccountService.addOne(account);
 		return num;
 	}
 

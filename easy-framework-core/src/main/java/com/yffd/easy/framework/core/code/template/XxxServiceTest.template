@@ -37,7 +37,7 @@ public class ##test_service_name## ##test_base_service_name##{
 		idList.add("2000");
 		idList.add("2001");
 		paramMap.put("idList", idList);
-		PageResult<##model_simple_name##> pageResult = this.##service_alias_name##.findPage(paramModel, paramMap, pageParam, null);
+		PageResult<##model_simple_name##> pageResult = this.##service_alias_name##.findPage(paramModel, paramMap, pageParam);
 		Assert.assertNotNull(pageResult);
 		Assert.assertNotNull(pageResult.getRecordList());
 		System.out.println(pageResult.getRecordList().size());
@@ -55,7 +55,7 @@ public class ##test_service_name## ##test_base_service_name##{
 		idList.add("2000");
 		idList.add("2001");
 		paramMap.put("idList", idList);
-		List<##model_simple_name##> result = this.##service_alias_name##.findList(paramModel, paramMap, null);
+		List<##model_simple_name##> result = this.##service_alias_name##.findList(paramModel, paramMap);
 		System.out.println(result);
 	}
 	
@@ -68,7 +68,7 @@ public class ##test_service_name## ##test_base_service_name##{
 		idList.add("2000");
 		idList.add("2001");
 		paramMap.put("idList", idList);
-		Long result = this.##service_alias_name##.findCount(paramModel, paramMap, null);
+		Long result = this.##service_alias_name##.findCount(paramModel, paramMap);
 		System.out.println(result);
 	}
 	
@@ -81,7 +81,7 @@ public class ##test_service_name## ##test_base_service_name##{
 		idList.add("2000");
 		idList.add("2001");
 		paramMap.put("idList", idList);
-		##model_simple_name## result = this.##service_alias_name##.findOne(paramModel, paramMap, null);
+		##model_simple_name## result = this.##service_alias_name##.findOne(paramModel, paramMap);
 		System.out.println(result);
 	}
 	
@@ -89,7 +89,7 @@ public class ##test_service_name## ##test_base_service_name##{
 	public void addOneTest() {
 		##model_simple_name## paramModel = new ##model_simple_name##();
 		paramModel.setTenantCode("default");
-		int result = this.##service_alias_name##.addOne(paramModel, null);
+		int result = this.##service_alias_name##.addOne(paramModel);
 		System.out.println(result);
 		System.out.println(paramModel.getId());
 	}
@@ -102,7 +102,7 @@ public class ##test_service_name## ##test_base_service_name##{
 			paramModel.setTenantCode("default_" + i);
 			list.add(paramModel);
 		}
-		int result = this.##service_alias_name##.addList(list, null);
+		int result = this.##service_alias_name##.addList(list);
 		System.out.println(result);
 		for(##model_simple_name## model : list) {
 			System.out.println(model.getId());
@@ -121,7 +121,7 @@ public class ##test_service_name## ##test_base_service_name##{
 		idList.add("2001");
 		paramMap.put("idList", idList);
 		
-		int result = this.##service_alias_name##.update(newModel, oldModel, paramMap, null);
+		int result = this.##service_alias_name##.update(newModel, oldModel, paramMap);
 		System.out.println(result);
 	}
 	

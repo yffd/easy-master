@@ -1,7 +1,7 @@
 package com.yffd.easy.uupm.mapper;
 
 import com.yffd.easy.framework.core.common.mapper.ICommonMapper;
-import com.yffd.easy.uupm.api.model.UupmUserModel;
+import com.yffd.easy.uupm.pojo.entity.UupmUserEntity;
 
 /**
  * @Description	简单描述该类的功能（可选）.
@@ -12,6 +12,6 @@ import com.yffd.easy.uupm.api.model.UupmUserModel;
  * @see
  */
 
-public interface IUupmUserMapper extends ICommonMapper<UupmUserModel> {
+public interface IUupmUserMapper extends ICommonMapper<UupmUserEntity> {
 
 }

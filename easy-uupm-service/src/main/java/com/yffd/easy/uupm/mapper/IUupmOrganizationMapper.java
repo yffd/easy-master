@@ -1,7 +1,7 @@
 package com.yffd.easy.uupm.mapper;
 
 import com.yffd.easy.framework.core.common.mapper.ICommonMapper;
-import com.yffd.easy.uupm.api.model.UupmOrganizationModel;
+import com.yffd.easy.uupm.pojo.entity.UupmOrganizationEntity;
 
 /**
  * @Description	简单描述该类的功能（可选）.
@@ -12,6 +12,6 @@ import com.yffd.easy.uupm.api.model.UupmOrganizationModel;
  * @see
  */
 
-public interface IUupmOrganizationMapper extends ICommonMapper<UupmOrganizationModel> {
+public interface IUupmOrganizationMapper extends ICommonMapper<UupmOrganizationEntity> {
 
 }

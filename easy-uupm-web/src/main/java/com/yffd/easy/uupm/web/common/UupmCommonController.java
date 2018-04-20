@@ -7,7 +7,7 @@ import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 
-import com.yffd.easy.framework.domain.LoginInfo;
+import com.yffd.easy.framework.web.model.LoginInfo;
 import com.yffd.easy.framework.web.mvc.WebController;
 
 /**

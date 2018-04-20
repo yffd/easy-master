@@ -77,7 +77,7 @@ $(function() {
 				<img src="static/images/toplogo-jeecg.png" />
 			</div>
 			<div class="formLogin">
-				<form id="formLogin" action="login" method="post">
+				<form id="formLogin" action="login/" method="post">
 					<div>
 						<input name="username" type="text"/>
 					</div>

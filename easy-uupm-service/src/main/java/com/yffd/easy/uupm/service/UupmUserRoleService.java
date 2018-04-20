@@ -9,12 +9,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.yffd.easy.common.core.util.EasyStringCheckUtils;
 import com.yffd.easy.framework.core.common.mapper.ICommonMapper;
 import com.yffd.easy.framework.core.common.service.CommonServiceAbstract;
-import com.yffd.easy.framework.domain.LoginInfo;
 import com.yffd.easy.uupm.mapper.IUupmUserRoleMapper;
-import com.yffd.easy.uupm.api.model.UupmRoleResourceModel;
-import com.yffd.easy.uupm.api.model.UupmUserRoleModel;
+import com.yffd.easy.uupm.pojo.entity.UupmUserRoleEntity;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -25,13 +24,13 @@ import com.yffd.easy.uupm.api.model.UupmUserRoleModel;
  * @see 	 
  */
 @Service
-public class UupmUserRoleService extends CommonServiceAbstract<UupmUserRoleModel> {
+public class UupmUserRoleService extends CommonServiceAbstract<UupmUserRoleEntity> {
 
 	@Autowired
 	private IUupmUserRoleMapper uupmUserRoleMapper;
 	
 	@Override
-	public ICommonMapper<UupmUserRoleModel> getMapper() {
+	public ICommonMapper<UupmUserRoleEntity> getMapper() {
 		return this.uupmUserRoleMapper;
 	}
 
@@ -41,9 +40,9 @@ public class UupmUserRoleService extends CommonServiceAbstract<UupmUserRoleModel
 	}
 
 	@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
-	public void saveUserRole(String tennantCode, String userCode, List<UupmUserRoleModel> modelList, LoginInfo loginInfo) {
+	public void saveUserRole(String tennantCode, String userCode, List<UupmUserRoleEntity> modelList) {
 		this.delByUserCode(tennantCode, userCode);
-		this.addList(modelList, loginInfo);
+		this.addList(modelList);
 	}
 	
 	public void delByUserCode(String tennantCode, String userCode) {
@@ -52,5 +51,21 @@ public class UupmUserRoleService extends CommonServiceAbstract<UupmUserRoleModel
 		paramMap.put("userCode", userCode);
 		this.delete(paramMap);
 	}
+	
+	public List<UupmUserRoleEntity> findRoleCodes(UupmUserRoleEntity paramModel) {
+		if(null==paramModel || EasyStringCheckUtils.isEmpty(paramModel.getUserCode())) {}
+		List<UupmUserRoleEntity> resultList = this.findList(paramModel, null);
+		return resultList;
+	}
+//	public Set<String> findRoleCodes(UupmUserRoleModel paramModel) {
+//		if(null==paramModel || EasyStringCheckUtils.isEmpty(paramModel.getUserCode())) {}
+//		List<UupmUserRoleModel> resultList = this.findList(paramModel, null);
+//		if(null==resultList || resultList.size()==0) return null;
+//		Set<String> roleCodes = new HashSet<String>();
+//		for(UupmUserRoleModel model : resultList) {
+//			roleCodes.add(model.getRoleCode());
+//		}
+//		return roleCodes;
+//	}
 	
 }

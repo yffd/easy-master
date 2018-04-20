@@ -19,10 +19,10 @@ import com.alibaba.fastjson.TypeReference;
 import com.yffd.easy.common.core.page.PageParam;
 import com.yffd.easy.common.core.page.PageResult;
 import com.yffd.easy.common.core.util.EasyStringCheckUtils;
-import com.yffd.easy.framework.domain.RespModel;
+import com.yffd.easy.framework.web.model.RespData;
 import com.yffd.easy.framework.web.view.vo.DataGridVO;
-import com.yffd.easy.uupm.api.model.UupmRoleResourceModel;
-import com.yffd.easy.uupm.api.model.UupmTenantResourceModel;
+import com.yffd.easy.uupm.pojo.entity.UupmRoleResourceEntity;
+import com.yffd.easy.uupm.pojo.entity.UupmTenantResourceEntity;
 import com.yffd.easy.uupm.service.UupmRoleResourceService;
 import com.yffd.easy.uupm.web.common.UupmCommonController;
 
@@ -43,17 +43,17 @@ public class UupmRoleResourceController extends UupmCommonController {
 	
 	// 角色授权
 	@RequestMapping(value="/saveRoleResource", method=RequestMethod.POST)
-	public RespModel saveRoleResource(HttpServletRequest req) {
+	public RespData saveRoleResource(HttpServletRequest req) {
 		String roleCode = req.getParameter("roleCode");
 		String resource = req.getParameter("resource");
 		if(EasyStringCheckUtils.isEmpty(roleCode) || EasyStringCheckUtils.isEmpty(resource)) return this.errorAjax("参数错误");
 		ArrayList<Map<String, String>> list = JSON.parseObject(resource, new TypeReference<ArrayList<Map<String, String>>>(){});
 		if(null==list || list.size()==0) return this.errorAjax("参数错误");
-		List<UupmRoleResourceModel> modelList = new ArrayList<UupmRoleResourceModel>();
+		List<UupmRoleResourceEntity> modelList = new ArrayList<UupmRoleResourceEntity>();
 		for(Map<String, String> map : list) {
 			String tenantCode = map.get("tenantCode");
 			String rsCode = map.get("rsCode");
-			UupmRoleResourceModel model = new UupmRoleResourceModel();
+			UupmRoleResourceEntity model = new UupmRoleResourceEntity();
 			model.setTenantCode(tenantCode);
 			model.setRsCode(rsCode);
 			model.setRoleCode(roleCode);
@@ -61,17 +61,17 @@ public class UupmRoleResourceController extends UupmCommonController {
 		}
 		if(modelList.size()==0) return this.errorAjax("参数错误");
 		
-		this.uupmRoleResourceService.saveRoleResource(roleCode, modelList, null);
+		this.uupmRoleResourceService.saveRoleResource(roleCode, modelList);
 		return this.successAjax();
 	}
 	// 角色授权
 	@RequestMapping(value="/findResourceByRoleCode", method=RequestMethod.POST)
-	public RespModel findResourceByRoleCode(String tenantCode, String roleCode) {
+	public RespData findResourceByRoleCode(String tenantCode, String roleCode) {
 		if(EasyStringCheckUtils.isEmpty(roleCode)) return this.errorAjax("参数错误");
-		UupmRoleResourceModel model = new UupmRoleResourceModel();
+		UupmRoleResourceEntity model = new UupmRoleResourceEntity();
 		model.setTenantCode(tenantCode);
 		model.setRoleCode(roleCode);
-		List<UupmRoleResourceModel> listResult = this.uupmRoleResourceService.findList(model, null);
+		List<UupmRoleResourceEntity> listResult = this.uupmRoleResourceService.findList(model);
 		return this.successAjax(listResult);
 	}
 	

@@ -38,7 +38,7 @@ public class PmsOrganizationController extends AdminBaseController {
 	
 	@RequestMapping(value="/orgTree", method=RequestMethod.POST)
 	@ResponseBody
-	public RespModel listTree(HttpServletRequest req) {
+	public RespData listTree(HttpServletRequest req) {
 		List<PmsOrganization> list = this.pmsOrganizationService.findAll();
 		if(!ValidUtils.isEmpty(list)) {
 			List<PmsOrganizationTreeGridVO> treeList = this.pmsOrganizationSupport.toSyncTreeGridVO(list);
@@ -50,7 +50,7 @@ public class PmsOrganizationController extends AdminBaseController {
 	@RequiresPermissions("org-view")
 	@RequestMapping(value="/list", method=RequestMethod.POST)
 	@ResponseBody
-	public RespModel list(HttpServletRequest req) {
+	public RespData list(HttpServletRequest req) {
 		String code = req.getParameter("id");
 		if(ValidUtils.isEmpty(code)) {
 			code = "-1";
@@ -66,7 +66,7 @@ public class PmsOrganizationController extends AdminBaseController {
 	@RequiresPermissions("org-add")
 	@RequestMapping(value="/add", method=RequestMethod.POST)
 	@ResponseBody
-	public RespModel add(HttpServletRequest req, PmsOrganization organization) {
+	public RespData add(HttpServletRequest req, PmsOrganization organization) {
 		if(ValidUtils.isNull(organization) 
 				|| ValidUtils.isEmpty(organization.getOrgCode())) {
 			return this.error("参数无效");
@@ -86,7 +86,7 @@ public class PmsOrganizationController extends AdminBaseController {
 	@RequiresPermissions("org-edit")
 	@RequestMapping(value="/edit", method=RequestMethod.POST)
 	@ResponseBody
-	public RespModel edit(HttpServletRequest req, PmsOrganization organization) {
+	public RespData edit(HttpServletRequest req, PmsOrganization organization) {
 		if(ValidUtils.isNull(organization) 
 				|| ValidUtils.isEmpty(organization.getOrgCode())) {
 			return this.error("参数无效");
@@ -102,7 +102,7 @@ public class PmsOrganizationController extends AdminBaseController {
 	@RequiresPermissions("org-del")
 	@RequestMapping(value="/del", method=RequestMethod.POST)
 	@ResponseBody
-	public RespModel del(HttpServletRequest req) {
+	public RespData del(HttpServletRequest req) {
 		String orgCode = req.getParameter("orgCode");
 		if(ValidUtils.isEmpty(orgCode)) {
 			return this.errorAjax("参数无效");

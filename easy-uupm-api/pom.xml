@@ -13,19 +13,13 @@
   <name>easy-uupm-api</name>
   <url>http://maven.apache.org</url>
   <properties>
-    <easy.common.core.version>0.0.1</easy.common.core.version>
-    <easy.framework.domain.version>0.0.1</easy.framework.domain.version>
+    <easy.uupm.model.version>0.0.1</easy.uupm.model.version>
   </properties>
   <dependencies>
     <dependency>
 		<groupId>com.yffd.easy</groupId>
-		<artifactId>easy-common-core</artifactId>
-		<version>${easy.common.core.version}</version>
-	</dependency>
-	<dependency>
-		<groupId>com.yffd.easy</groupId>
-	  	<artifactId>easy-framework-domain</artifactId>
-	  	<version>${easy.framework.domain.version}</version>
+  		<artifactId>easy-uupm-model</artifactId>
+		<version>${easy.uupm.model.version}</version>
 	</dependency>
   </dependencies>
 </project>

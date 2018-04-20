@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.yffd.easy.framework.web.view.vo.PropertyGridVO;
-import com.yffd.easy.uupm.api.model.UupmApplicationModel;
+import com.yffd.easy.uupm.pojo.entity.UupmApplicationEntity;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -19,7 +19,7 @@ import com.yffd.easy.uupm.api.model.UupmApplicationModel;
 @Component
 public class UupmModePropertyGridSupport {
 
-	public List<PropertyGridVO> toAppPropertyGridVo(UupmApplicationModel model) {
+	public List<PropertyGridVO> toAppPropertyGridVo(UupmApplicationEntity model) {
 		if(null==model) return null;
 		List<PropertyGridVO> retList = new ArrayList<PropertyGridVO>();
 		String appDomain = model.getAppDomain();

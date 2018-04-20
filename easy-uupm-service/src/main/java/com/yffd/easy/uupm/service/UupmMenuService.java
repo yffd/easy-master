@@ -12,9 +12,8 @@ import com.yffd.easy.common.core.util.EasyStringCheckUtils;
 import com.yffd.easy.framework.core.common.mapper.ICommonMapper;
 import com.yffd.easy.framework.core.common.service.CommonServiceAbstract;
 import com.yffd.easy.framework.core.exception.BizException;
-import com.yffd.easy.framework.domain.LoginInfo;
-import com.yffd.easy.uupm.api.model.UupmMenuModel;
 import com.yffd.easy.uupm.mapper.IUupmMenuMapper;
+import com.yffd.easy.uupm.pojo.entity.UupmMenuEntity;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -25,13 +24,13 @@ import com.yffd.easy.uupm.mapper.IUupmMenuMapper;
  * @see 	 
  */
 @Service
-public class UupmMenuService extends CommonServiceAbstract<UupmMenuModel> {
+public class UupmMenuService extends CommonServiceAbstract<UupmMenuEntity> {
 
 	@Autowired
 	private IUupmMenuMapper uupmMenuMapper;
 	
 	@Override
-	public ICommonMapper<UupmMenuModel> getMapper() {
+	public ICommonMapper<UupmMenuEntity> getMapper() {
 		return this.uupmMenuMapper;
 	}
 
@@ -48,12 +47,12 @@ public class UupmMenuService extends CommonServiceAbstract<UupmMenuModel> {
 		return this.selectListBy("selectMenu", paramMap, true);
 	}
 	
-	public int addMenuForAdmin(String tenantCode, LoginInfo loginInfo) {
+	public int addMenuForAdmin(String tenantCode) {
 		List<Map<String, Object>> list = this.findPlanMenuForAdmin(tenantCode);
 		if(null==list || list.size()==0) return 0;
-		List<UupmMenuModel> modelList = new ArrayList<UupmMenuModel>();
+		List<UupmMenuEntity> modelList = new ArrayList<UupmMenuEntity>();
 		for(Map<String, Object> map : list) {
-			UupmMenuModel model = new UupmMenuModel();
+			UupmMenuEntity model = new UupmMenuEntity();
 			model.setTenantCode(tenantCode);
 			model.setMenuCode((String) map.get("rsCode"));
 			model.setMenuName((String) map.get("rsName"));
@@ -71,15 +70,15 @@ public class UupmMenuService extends CommonServiceAbstract<UupmMenuModel> {
 			modelList.add(model);
 		}
 		if(modelList.size()==0) return 0;
-		return this.addList(modelList, loginInfo);
+		return this.addList(modelList);
 	}
 	
-	public int addMenuForOther(String tenantCode, LoginInfo loginInfo) {
+	public int addMenuForOther(String tenantCode) {
 		List<Map<String, Object>> list = this.findPlanMenuForOther(tenantCode);
 		if(null==list || list.size()==0) return 0;
-		List<UupmMenuModel> modelList = new ArrayList<UupmMenuModel>();
+		List<UupmMenuEntity> modelList = new ArrayList<UupmMenuEntity>();
 		for(Map<String, Object> map : list) {
-			UupmMenuModel model = new UupmMenuModel();
+			UupmMenuEntity model = new UupmMenuEntity();
 			model.setTenantCode(tenantCode);
 			model.setMenuCode((String) map.get("rsCode"));
 			model.setMenuName((String) map.get("rsName"));
@@ -97,7 +96,7 @@ public class UupmMenuService extends CommonServiceAbstract<UupmMenuModel> {
 			modelList.add(model);
 		}
 		if(modelList.size()==0) return 0;
-		return this.addList(modelList, loginInfo);
+		return this.addList(modelList);
 	}
 	
 	public List<Map<String, Object>> findPlanMenuForAdmin(String tenantCode) {

@@ -9,9 +9,8 @@ import com.yffd.easy.common.core.util.EasyStringCheckUtils;
 import com.yffd.easy.framework.core.common.mapper.ICommonMapper;
 import com.yffd.easy.framework.core.common.service.CommonServiceAbstract;
 import com.yffd.easy.framework.core.exception.BizException;
-import com.yffd.easy.framework.domain.LoginInfo;
-import com.yffd.easy.uupm.api.model.UupmApplicationModel;
 import com.yffd.easy.uupm.mapper.IUupmApplicationMapper;
+import com.yffd.easy.uupm.pojo.entity.UupmApplicationEntity;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -22,13 +21,13 @@ import com.yffd.easy.uupm.mapper.IUupmApplicationMapper;
  * @see 	 
  */
 @Service
-public class UupmApplicationService extends CommonServiceAbstract<UupmApplicationModel> {
+public class UupmApplicationService extends CommonServiceAbstract<UupmApplicationEntity> {
 
 	@Autowired
 	private IUupmApplicationMapper uupmApplicationMapper;
 	
 	@Override
-	public ICommonMapper<UupmApplicationModel> getMapper() {
+	public ICommonMapper<UupmApplicationEntity> getMapper() {
 		return this.uupmApplicationMapper;
 	}
 
@@ -38,9 +37,9 @@ public class UupmApplicationService extends CommonServiceAbstract<UupmApplicatio
 	}
 
 	@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
-	public int saveAppCfg(UupmApplicationModel model, LoginInfo loginInfo) {
+	public int saveAppCfg(UupmApplicationEntity model) {
 		if(null==model || EasyStringCheckUtils.isEmpty(model.getTenantCode())) throw BizException.BIZ_TENANT_IS_EMPTY();
 		this.deleteBy("appCode", model.getAppCode());
-		return this.addOne(model, loginInfo);
+		return this.addOne(model);
 	}
 }

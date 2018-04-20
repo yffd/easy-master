@@ -2,8 +2,7 @@ package com.yffd.easy.framework.core.code.generator;
 
 import java.io.File;
 
-import com.yffd.easy.framework.domain.CustomPo;
-import com.yffd.easy.framework.domain.tree.TreeModel;
+import com.yffd.easy.framework.core.common.pojo.entity.CommonTreeEntity;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -125,7 +124,7 @@ public class CodeMapperFileGenerator extends CodeGenerator {
 		String deleteByStr = this.mapperSqlGenerator.deleteBy(modelClazz, modelAliasName, mapAliasName);
 		sb.append(this.fmtLine(deleteByStr, "\t", ""));
 		
-		if(TreeModel.class.isAssignableFrom(modelClazz)) {
+		if(CommonTreeEntity.class.isAssignableFrom(modelClazz)) {
 			CodeMapperSqlTreeGenerator sqlTreeGenerator = new CodeMapperSqlTreeGenerator();
 			String sqlTreeStr = sqlTreeGenerator.makeContent(modelClazz);
 			sb.append(this.fmtLine("<!-- 树结构相关操作 -->", "\t", ""));
@@ -142,7 +141,7 @@ public class CodeMapperFileGenerator extends CodeGenerator {
 	
 	public static void main(String[] args) {
 		CodeMapperFileGenerator mapperFileGenerator = new CodeMapperFileGenerator();
-		Class<?> modelClazz = CustomPo.class;
+		Class<?> modelClazz = null;
 		String mapperPackageName = "com.yffd.easy.uupm.mapper";
 		String outRootDirPath = "D:\\ddd\\code\\xml";
 		

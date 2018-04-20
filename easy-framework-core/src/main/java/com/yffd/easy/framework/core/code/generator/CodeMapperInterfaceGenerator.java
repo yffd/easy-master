@@ -3,8 +3,6 @@ package com.yffd.easy.framework.core.code.generator;
 import java.io.File;
 import java.util.Date;
 
-import com.yffd.easy.framework.domain.CustomPo;
-
 /**
  * @Description  mapper interface代码生成器.
  * @Date		 2018年2月6日 上午10:54:12 <br/>
@@ -110,7 +108,7 @@ public class CodeMapperInterfaceGenerator extends CodeGenerator {
 	
 	public static void main(String[] args) {
 		CodeMapperInterfaceGenerator generator = new CodeMapperInterfaceGenerator();
-		Class<?> modelClazz = CustomPo.class;
+		Class<?> modelClazz = null;
 		Class<?> superClazz = null;
 		String mapperPackageName = "com.yffd.easy.xxx.mapper";
 		String author = "ZhangST";

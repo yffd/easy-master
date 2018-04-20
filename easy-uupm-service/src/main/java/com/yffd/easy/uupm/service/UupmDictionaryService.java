@@ -7,9 +7,8 @@ import com.yffd.easy.common.core.util.EasyStringCheckUtils;
 import com.yffd.easy.framework.core.common.mapper.ICommonMapper;
 import com.yffd.easy.framework.core.common.service.CommonTreeServiceAbstract;
 import com.yffd.easy.framework.core.exception.BizException;
-import com.yffd.easy.framework.domain.LoginInfo;
-import com.yffd.easy.uupm.api.model.UupmDictionaryModel;
 import com.yffd.easy.uupm.mapper.IUupmDictionaryMapper;
+import com.yffd.easy.uupm.pojo.entity.UupmDictionaryEntity;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -20,13 +19,13 @@ import com.yffd.easy.uupm.mapper.IUupmDictionaryMapper;
  * @see 	 
  */
 @Service
-public class UupmDictionaryService extends CommonTreeServiceAbstract<UupmDictionaryModel> {
+public class UupmDictionaryService extends CommonTreeServiceAbstract<UupmDictionaryEntity> {
 
 	@Autowired
 	private IUupmDictionaryMapper uupmDictionaryMapper;
 	
 	@Override
-	public ICommonMapper<UupmDictionaryModel> getMapper() {
+	public ICommonMapper<UupmDictionaryEntity> getMapper() {
 		return this.uupmDictionaryMapper;
 	}
 
@@ -36,12 +35,12 @@ public class UupmDictionaryService extends CommonTreeServiceAbstract<UupmDiction
 	}
 
 	@Override
-	public boolean exsist(UupmDictionaryModel model, LoginInfo loginInfo) {
+	public boolean exsist(UupmDictionaryEntity model) {
 		if(null==model || EasyStringCheckUtils.isEmpty(model.getTenantCode()) 
 				|| EasyStringCheckUtils.isEmpty(model.getKeyCode())) throw BizException.BIZ_PARAMS_IS_EMPTY();
-		UupmDictionaryModel paramModel = new UupmDictionaryModel();
+		UupmDictionaryEntity paramModel = new UupmDictionaryEntity();
 		paramModel.setKeyCode(model.getKeyCode());
-		return super.exsist(model, loginInfo);
+		return super.exsist(model);
 	}
 
 }

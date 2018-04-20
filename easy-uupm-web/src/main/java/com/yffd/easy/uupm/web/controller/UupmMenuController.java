@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.yffd.easy.common.core.util.EasyStringCheckUtils;
-import com.yffd.easy.framework.domain.RespModel;
-import com.yffd.easy.uupm.api.model.UupmMenuModel;
+import com.yffd.easy.framework.web.model.RespData;
+import com.yffd.easy.uupm.pojo.entity.UupmMenuEntity;
 import com.yffd.easy.uupm.service.UupmMenuService;
 import com.yffd.easy.uupm.web.common.UupmCommonController;
 import com.yffd.easy.uupm.web.support.UupmMenuSupport;
@@ -38,7 +38,7 @@ public class UupmMenuController extends UupmCommonController {
 	private UupmMenuService uupmMenuService;
 	
 	@RequestMapping(value="/findMenuTree", method=RequestMethod.POST)
-	public RespModel findMenuTree(@RequestParam Map<String, Object> paramMap) {
+	public RespData findMenuTree(@RequestParam Map<String, Object> paramMap) {
 		// TODO 租户编号
 		String tenantCode = "admin";
 		String parentCode = null;//"root";
@@ -51,53 +51,53 @@ public class UupmMenuController extends UupmCommonController {
 	}
 	
 	@RequestMapping(value="/findOne", method=RequestMethod.POST)
-	public RespModel findOne(UupmMenuModel model) {
+	public RespData findOne(UupmMenuEntity model) {
 		if(null==model || EasyStringCheckUtils.isEmpty(model.getId())) return this.error("参数无效");
-		UupmMenuModel result = this.uupmMenuService.findOne(model, null);
+		UupmMenuEntity result = this.uupmMenuService.findOne(model);
 		return this.successAjax(result);
 	}
 	
 	@RequestMapping(value="/saveMenuForAdmin", method=RequestMethod.POST)
-	public RespModel saveMenuForAdmin() {
+	public RespData saveMenuForAdmin() {
 		String tenantCode = "admin";
-		this.uupmMenuService.addMenuForAdmin(tenantCode, null);
+		this.uupmMenuService.addMenuForAdmin(tenantCode);
 		return this.successAjax();
 	}
 	
 	@RequestMapping(value="/saveMenuForOther", method=RequestMethod.POST)
-	public RespModel saveMenuForOther() {
+	public RespData saveMenuForOther() {
 		String tenantCode = "nuoyuan";
-		this.uupmMenuService.addMenuForOther(tenantCode, null);
+		this.uupmMenuService.addMenuForOther(tenantCode);
 		return this.successAjax();
 	}
 	
 	@RequestMapping(value="/add", method=RequestMethod.POST)
-	public RespModel add(UupmMenuModel model) {
+	public RespData add(UupmMenuEntity model) {
 		if(null==model) return this.error("参数无效");
 		// 存在校验
-		UupmMenuModel paramModel = new UupmMenuModel();
+		UupmMenuEntity paramModel = new UupmMenuEntity();
 		// TODO 租户编号
 		paramModel.setTenantCode("admin");
 		paramModel.setMenuCode(model.getMenuCode());
-		UupmMenuModel resultModel = this.uupmMenuService.findOne(paramModel, null);
+		UupmMenuEntity resultModel = this.uupmMenuService.findOne(paramModel);
 		if(null!=resultModel) return this.error("数据已存在");
-		int result = this.uupmMenuService.addOne(model, null);
+		int result = this.uupmMenuService.addOne(model);
 		if(result==0) return this.error("添加失败");
 		return this.successAjax();
 	}
 	
 	@RequestMapping(value="/edit", method=RequestMethod.POST)
-	public RespModel edit(UupmMenuModel model) {
+	public RespData edit(UupmMenuEntity model) {
 		if(null==model || EasyStringCheckUtils.isEmpty(model.getId())) return this.error("参数无效");
-		UupmMenuModel paramOld = new UupmMenuModel();
+		UupmMenuEntity paramOld = new UupmMenuEntity();
 		paramOld.setId(model.getId());
-		int result = this.uupmMenuService.update(model, paramOld, null, null);
+		int result = this.uupmMenuService.update(model, paramOld, null);
 		if(result==0) return this.error("更新失败");
 		return this.successAjax();
 	}
 	
 	@RequestMapping(value="/delById", method=RequestMethod.POST)
-	public RespModel delById(String id) {
+	public RespData delById(String id) {
 		if(EasyStringCheckUtils.isEmpty(id)) return this.errorAjax("参数无效");
 		int result = this.uupmMenuService.deleteBy("id", id);
 		if(result==0) return this.error("删除失败");
@@ -105,7 +105,7 @@ public class UupmMenuController extends UupmCommonController {
 	}
 	
 	@RequestMapping(value="/delBatch", method=RequestMethod.POST)
-	public RespModel delBatch(HttpServletRequest req) {
+	public RespData delBatch(HttpServletRequest req) {
 		String ids = req.getParameter("ids");
 		if(EasyStringCheckUtils.isEmpty(ids)) return this.error("参数无效");
 		String[] idsArr = ids.split(",");

@@ -1,13 +1,17 @@
 package com.yffd.easy.uupm.service;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.yffd.easy.framework.core.common.mapper.ICommonMapper;
 import com.yffd.easy.framework.core.common.service.CommonServiceAbstract;
-import com.yffd.easy.framework.domain.LoginInfo;
 import com.yffd.easy.uupm.mapper.IUupmOrganizationMapper;
-import com.yffd.easy.uupm.api.model.UupmOrganizationModel;
+import com.yffd.easy.uupm.pojo.entity.UupmOrganizationEntity;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -18,13 +22,13 @@ import com.yffd.easy.uupm.api.model.UupmOrganizationModel;
  * @see 	 
  */
 @Service
-public class UupmOrganizationService extends CommonServiceAbstract<UupmOrganizationModel> {
+public class UupmOrganizationService extends CommonServiceAbstract<UupmOrganizationEntity> {
 
 	@Autowired
 	private IUupmOrganizationMapper uupmOrganizationMapper;
 	
 	@Override
-	public ICommonMapper<UupmOrganizationModel> getMapper() {
+	public ICommonMapper<UupmOrganizationEntity> getMapper() {
 		return this.uupmOrganizationMapper;
 	}
 
@@ -34,16 +38,36 @@ public class UupmOrganizationService extends CommonServiceAbstract<UupmOrganizat
 	}
 
 	@Override
-	public int addOne(UupmOrganizationModel paramPo, LoginInfo loginInfo) {
+	public int addOne(UupmOrganizationEntity paramPo) {
 		if("root".equals(paramPo.getParentCode())) {
 			paramPo.setDataPath("root." + paramPo.getOrgCode());
 		} else {
-			UupmOrganizationModel param = new UupmOrganizationModel();
+			UupmOrganizationEntity param = new UupmOrganizationEntity();
 			param.setOrgCode(paramPo.getParentCode());
-			UupmOrganizationModel parent = this.findOne(param, loginInfo);
+			UupmOrganizationEntity parent = this.findOne(param);
 			paramPo.setDataPath(parent.getDataPath()  + "." + paramPo.getOrgCode());
 		}
-		return super.addOne(paramPo, loginInfo);
+		return super.addOne(paramPo);
+	}
+	
+	public String findParentNamePath(UupmOrganizationEntity paramPo) {
+		UupmOrganizationEntity result = this.findOne(paramPo, null);
+		if(null==result) return "";
+		String dataPath = result.getDataPath();
+		String[] orgCodes = dataPath.split("\\");
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("orgCodeList", Arrays.asList(orgCodes));
+		List<UupmOrganizationEntity> resultList = this.findList(null, paramMap);
+		if(null==resultList || resultList.size()==0) return "";
+		StringBuilder sb = new StringBuilder();
+		for(String orgCode : orgCodes) {
+			for(UupmOrganizationEntity model : resultList) {
+				if(orgCode.equals(model.getOrgCode())) {
+					sb.append(model.getOrgName()).append("\\");
+				}
+			}
+		}
+		return sb.length()>0 ? sb.substring(0, sb.length()-1) : sb.toString();
 	}
 
 }

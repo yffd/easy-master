@@ -99,7 +99,7 @@
 		</if>
 	</sql>
 	<!-- 条件查询 -->
-	<select id="selectListBy" parameterType="java.util.Map" resultType="com.yffd.easy.uupm.api.model.UupmDictionaryModel">
+	<select id="selectListBy" parameterType="java.util.Map" resultType="com.yffd.easy.uupm.entity.UupmDictionaryEntity">
 		select <include refid="table_columns" />
 		from <include refid="table_name"/> as t 
 		<where>
@@ -117,7 +117,7 @@
 		</where>
 	</select>
 	<!-- 单条查询 -->
-	<select id="selectOneBy" parameterType="java.util.Map" resultType="com.yffd.easy.uupm.api.model.UupmDictionaryModel">
+	<select id="selectOneBy" parameterType="java.util.Map" resultType="com.yffd.easy.uupm.entity.UupmDictionaryEntity">
 		select <include refid="table_columns" /> 
 		from <include refid="table_name"/> as t 
 		<where>
@@ -328,7 +328,7 @@
 	</delete>
 	<!-- 树结构相关操作 -->
 	<!-- 查询子节点列表 -->
-	<select id="selectChildrenNodes" parameterType="java.util.Map" resultType="com.yffd.easy.uupm.api.model.UupmDictionaryModel">
+	<select id="selectChildrenNodes" parameterType="java.util.Map" resultType="com.yffd.easy.uupm.entity.UupmDictionaryEntity">
 		select <include refid="table_columns" />
 		from <include refid="table_name"/> as t 
 		<where>
@@ -340,7 +340,7 @@
 		order by t.SEQ_NO asc
 	</select>
 	<!-- 查询父节点列表 -->
-	<select id="selectParentNodes" parameterType="java.util.Map" resultType="com.yffd.easy.uupm.api.model.UupmDictionaryModel">
+	<select id="selectParentNodes" parameterType="java.util.Map" resultType="com.yffd.easy.uupm.entity.UupmDictionaryEntity">
 		select <include refid="table_columns" />
 		from <include refid="table_name"/> as t 
 		<where>

@@ -8,8 +8,8 @@ import com.yffd.easy.framework.core.code.generator.CodeMapperSqlGenerator;
 import com.yffd.easy.framework.core.code.generator.CodeMapperSqlTreeGenerator;
 import com.yffd.easy.framework.core.code.generator.CodeServiceGenerator;
 import com.yffd.easy.framework.core.code.generator.CodeServiceTestGenerator;
-import com.yffd.easy.uupm.api.model.UupmDictionaryModel;
-import com.yffd.easy.uupm.api.model.UupmResourceModel;
+import com.yffd.easy.uupm.pojo.entity.UupmDictionaryEntity;
+import com.yffd.easy.uupm.pojo.entity.UupmResourceEntity;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -27,7 +27,7 @@ public class WriteOneTest extends LocalProjectConfigTest {
 	private CodeServiceGenerator serviceGenerator = new CodeServiceGenerator();
 	private CodeServiceTestGenerator serviceTestGenerator = new CodeServiceTestGenerator();
 	
-	private Class<?> modelClazz = UupmDictionaryModel.class;
+	private Class<?> modelClazz = UupmDictionaryEntity.class;
 	
 	/**
 	 * 所有--文件
@@ -142,7 +142,7 @@ public class WriteOneTest extends LocalProjectConfigTest {
 		String oldAliasName = "old";
 		String mapAliasName = "map";
 		
-		Class<?> modelClazz = UupmResourceModel.class;
+		Class<?> modelClazz = UupmResourceEntity.class;
 		mapperSqlGenerator.writeToConsole(tableAliasName, modelAliasName, oldAliasName, mapAliasName, modelClazz);
 	}
 	/**
@@ -153,7 +153,7 @@ public class WriteOneTest extends LocalProjectConfigTest {
 	@Test
 	public void writeMapperSqlTreeToConsoleTest() {
 		
-		Class<?> modelClazz = UupmResourceModel.class;
+		Class<?> modelClazz = UupmResourceEntity.class;
 		mapperSqlTreeGenerator.writeToConsole(modelClazz);
 	}
 	

@@ -67,7 +67,7 @@ public class PermissionRealm extends AuthorizingRealm {
 
 	@Override
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-		LOG.info("=========shiro PermissionRealm [doGetAuthenticationInfo]");
+		LOG.info("=========shiro PermissionRealm [登录认证]");
 		String userCode = (String)token.getPrincipal();
 		if(ValidUtils.isBlank(userCode)) {
 			throw new UnknownAccountException();// 没找到帐号

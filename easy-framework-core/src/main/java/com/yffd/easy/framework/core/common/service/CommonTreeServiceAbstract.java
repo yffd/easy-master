@@ -8,9 +8,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.yffd.easy.common.core.util.EasyStringCheckUtils;
+import com.yffd.easy.framework.core.common.pojo.entity.CommonTreeEntity;
 import com.yffd.easy.framework.core.exception.BizException;
-import com.yffd.easy.framework.domain.LoginInfo;
-import com.yffd.easy.framework.domain.tree.TreeModel;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -20,20 +19,20 @@ import com.yffd.easy.framework.domain.tree.TreeModel;
  * @since		 JDK 1.7+
  * @see 	 
  */
-public abstract class CommonTreeServiceAbstract<T extends TreeModel> extends CommonServiceAbstract<T>{
+public abstract class CommonTreeServiceAbstract<T extends CommonTreeEntity> extends CommonServiceAbstract<T>{
 
 	// set nodeCode
 //	public abstract String replaceNodeCode(T node);
 	
-	public T findTreeNode(T node, LoginInfo loginInfo) {
+	public T findTreeNode(T node) {
 //		String nodeCode = this.replaceNodeCode(node);	// nodeCode映射
 		String nodeCode = node.getNodeCode();	// nodeCode映射
 		if(null==node || EasyStringCheckUtils.isEmpty(node.getTreeId())
 				|| EasyStringCheckUtils.isEmpty(nodeCode)) return null;
-		TreeModel paramModel = null;
+		CommonTreeEntity paramModel = null;
 		try {
 			paramModel = node.getClass().newInstance();
-			paramModel.setTenantCode(node.getTenantCode());
+//			paramModel.setTenantCode(node.getTenantCode());
 			paramModel.setTreeId(node.getTreeId());
 			paramModel.setNodeCode(nodeCode);
 		} catch (Exception e) {
@@ -44,12 +43,12 @@ public abstract class CommonTreeServiceAbstract<T extends TreeModel> extends Com
 		return this.selectOneBy("selectOneBy", params, true);
 	}
 	
-	public List<T> findChildrenNodes(T node, LoginInfo loginInfo) {
+	public List<T> findChildrenNodes(T node) {
 		if(null==node || EasyStringCheckUtils.isEmpty(node.getTreeId())) return null;
-		T resultNode = this.findTreeNode(node, loginInfo);
+		T resultNode = this.findTreeNode(node);
 		if(null==resultNode) return null;
-		TreeModel paramModel = new TreeModel();
-		paramModel.setTenantCode(node.getTenantCode());
+		CommonTreeEntity paramModel = new CommonTreeEntity();
+//		paramModel.setTenantCode(node.getTenantCode());
 		paramModel.setTreeId(node.getTreeId());
 		paramModel.setNodeLeft(resultNode.getNodeLeft());
 		paramModel.setNodeRight(resultNode.getNodeRight());
@@ -58,12 +57,12 @@ public abstract class CommonTreeServiceAbstract<T extends TreeModel> extends Com
 		return this.selectListBy("selectChildrenNodes", paramModel, true);
 	}
 	
-	public List<T> findChildrenNodes(T node, int layer, LoginInfo loginInfo) {
+	public List<T> findChildrenNodes(T node, int layer) {
 		if(null==node || EasyStringCheckUtils.isEmpty(node.getTreeId())) return null;
-		T resultNode = this.findTreeNode(node, loginInfo);
+		T resultNode = this.findTreeNode(node);
 		if(null==resultNode) return null;
-		TreeModel paramModel = new TreeModel();
-		paramModel.setTenantCode(node.getTenantCode());
+		CommonTreeEntity paramModel = new CommonTreeEntity();
+//		paramModel.setTenantCode(node.getTenantCode());
 		paramModel.setTreeId(node.getTreeId());
 		paramModel.setNodeLeft(resultNode.getNodeLeft());
 		paramModel.setNodeRight(resultNode.getNodeRight());
@@ -71,12 +70,12 @@ public abstract class CommonTreeServiceAbstract<T extends TreeModel> extends Com
 		return this.selectListBy("selectChildrenNodes", paramModel, true);
 	}
 	
-	public List<T> findParentNodes(T node, LoginInfo loginInfo) {
+	public List<T> findParentNodes(T node) {
 		if(null==node || EasyStringCheckUtils.isEmpty(node.getTreeId())) return null;
-		T resultNode = this.findTreeNode(node, loginInfo);
+		T resultNode = this.findTreeNode(node);
 		if(null==resultNode) return null;
-		TreeModel paramModel = new TreeModel();
-		paramModel.setTenantCode(node.getTenantCode());
+		CommonTreeEntity paramModel = new CommonTreeEntity();
+//		paramModel.setTenantCode(node.getTenantCode());
 		paramModel.setTreeId(node.getTreeId());
 		paramModel.setNodeLeft(resultNode.getNodeLeft());
 		paramModel.setNodeRight(resultNode.getNodeRight());
@@ -85,8 +84,8 @@ public abstract class CommonTreeServiceAbstract<T extends TreeModel> extends Com
 		return parentNodeList;
 	}
 	
-	public String findNodePath(T node, LoginInfo loginInfo) {
-		List<T> parentNodeList = findParentNodes(node, loginInfo);
+	public String findNodePath(T node) {
+		List<T> parentNodeList = findParentNodes(node);
 		if(null==parentNodeList || parentNodeList.size()==0) return null;
 		StringBuffer sb = new StringBuffer();
 		for(T model : parentNodeList) {
@@ -95,16 +94,16 @@ public abstract class CommonTreeServiceAbstract<T extends TreeModel> extends Com
 		return sb.length()>0?sb.substring(0, sb.length()-1) : sb.toString();
 	}
 	
-	public long countNodeLayer(T node, LoginInfo loginInfo) {
+	public long countNodeLayer(T node) {
 		if(null==node || EasyStringCheckUtils.isEmpty(node.getTreeId())) return 0;
-		T resultNode = this.findTreeNode(node, loginInfo);
+		T resultNode = this.findTreeNode(node);
 		if(null==resultNode) return 0;
 		return this.selectCountBy("countLayer", resultNode, true);
 	}
 	
 	
 	// add root section
-	public List<T> findRootNodes(T node, LoginInfo loginInfo) {
+	public List<T> findRootNodes(T node) {
 		if(null==node) return null;
 //		String nodeCode = this.replaceNodeCode(node);	// nodeCode映射
 		String nodeCode = node.getNodeCode();	// nodeCode映射
@@ -115,7 +114,7 @@ public abstract class CommonTreeServiceAbstract<T extends TreeModel> extends Com
 		return this.selectListBy("selectListBy", params, true);
 	}
 	
-	public boolean existRootNode(T node, LoginInfo loginInfo) {
+	public boolean existRootNode(T node) {
 //		String nodeCode = this.replaceNodeCode(node);	// nodeCode映射
 		String nodeCode = node.getNodeCode();	// nodeCode映射
 		if(null==node || EasyStringCheckUtils.isEmpty(nodeCode)) throw BizException.BIZ_PARAMS_IS_EMPTY();
@@ -127,7 +126,7 @@ public abstract class CommonTreeServiceAbstract<T extends TreeModel> extends Com
 		return !(null==resultList || resultList.size()==0);
 	}
 	
-	public int addRootNode(T node, LoginInfo loginInfo) {
+	public int addRootNode(T node) {
 //		String nodeCode = this.replaceNodeCode(node);	// nodeCode映射
 		String nodeCode = node.getNodeCode();	// nodeCode映射
 		if(null==node || EasyStringCheckUtils.isEmpty(node.getTreeId()) 
@@ -143,13 +142,13 @@ public abstract class CommonTreeServiceAbstract<T extends TreeModel> extends Com
 	
 	
 	// add child section
-	public T findParentNode(T node, LoginInfo loginInfo) {
+	public T findParentNode(T node) {
 		if(null==node || EasyStringCheckUtils.isEmpty(node.getTreeId()) 
 				|| EasyStringCheckUtils.isEmpty(node.getParentCode())) return null;
-		TreeModel paramModel = null;
+		CommonTreeEntity paramModel = null;
 		try {
 			paramModel = node.getClass().newInstance();
-			paramModel.setTenantCode(node.getTenantCode());
+//			paramModel.setTenantCode(node.getTenantCode());
 			paramModel.setTreeId(node.getTreeId());
 			paramModel.setNodeCode(node.getParentCode());
 		} catch (Exception e) {
@@ -162,12 +161,12 @@ public abstract class CommonTreeServiceAbstract<T extends TreeModel> extends Com
 	}
 	
 	@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
-	public int addChildNode(T node, LoginInfo loginInfo) {
+	public int addChildNode(T node) {
 //		String nodeCode = this.replaceNodeCode(node);	// nodeCode映射
 		String nodeCode = node.getNodeCode();	// nodeCode映射
 		if(null==node || EasyStringCheckUtils.isEmpty(node.getTreeId()) 
 				|| EasyStringCheckUtils.isEmpty(nodeCode)) return 0;
-		T resultParentNode = this.findParentNode(node, loginInfo);
+		T resultParentNode = this.findParentNode(node);
 		if(null==resultParentNode) return 0;
 		// 先更新节点左右偏序号，再插入节点，顺序不能变
 		// 1.先更新节点左右偏序号
@@ -175,7 +174,7 @@ public abstract class CommonTreeServiceAbstract<T extends TreeModel> extends Com
 		this.updateRightForAdd(resultParentNode);  			// 修改右编号
 		
 		node.setNodeCode(nodeCode);
-		node.setTenantCode(resultParentNode.getTenantCode());
+//		node.setTenantCode(resultParentNode.getTenantCode());
 		node.setNodeLeft(resultParentNode.getNodeRight());
 		node.setNodeRight(resultParentNode.getNodeRight() + 1);
 		node.setParentCode(resultParentNode.getNodeCode());
@@ -193,24 +192,23 @@ public abstract class CommonTreeServiceAbstract<T extends TreeModel> extends Com
 	 * @author  zhangST
 	 * @param node
 	 * @param oldNode
-	 * @param loginInfo
 	 * @return
 	 */
-	public int updateNodes(T node, T oldNode, LoginInfo loginInfo) {
+	public int updateNodes(T node, T oldNode) {
 		if(null==node || null==oldNode || EasyStringCheckUtils.isEmpty(oldNode.getTreeId())) return 0;
-		T resultUpdateNode = this.findTreeNode(oldNode, loginInfo);
+		T resultUpdateNode = this.findTreeNode(oldNode);
 		if(null==resultUpdateNode) return 0;
 		// 不进行更新属性
-		node.setTenantCode(null);
+//		node.setTenantCode(null);
 		node.setTreeId(null);
 		node.setNodeLeft(null);
 		node.setNodeRight(null);
 		node.setParentCode(null);
 		
-		TreeModel paramModel = null;
+		CommonTreeEntity paramModel = null;
 		try {
 			paramModel = node.getClass().newInstance();
-			paramModel.setTenantCode(resultUpdateNode.getTenantCode());
+//			paramModel.setTenantCode(resultUpdateNode.getTenantCode());
 			paramModel.setTreeId(resultUpdateNode.getTreeId());
 			paramModel.setNodeLeft(resultUpdateNode.getNodeLeft());
 			paramModel.setNodeRight(resultUpdateNode.getNodeRight());
@@ -232,19 +230,18 @@ public abstract class CommonTreeServiceAbstract<T extends TreeModel> extends Com
 	 * @Date	2018年4月11日 上午10:19:32 <br/>
 	 * @author  zhangST
 	 * @param node
-	 * @param loginInfo
 	 * @return
 	 */
 	@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
-	public int deleteNodes(T node, LoginInfo loginInfo) {
+	public int deleteNodes(T node) {
 		if(null==node || EasyStringCheckUtils.isEmpty(node.getTreeId())) return 0;
-		T resultDeleteNode = this.findTreeNode(node, loginInfo);
+		T resultDeleteNode = this.findTreeNode(node);
 		if(null==resultDeleteNode) return 0;
 		// 先删除节点，再更新节点左右偏序号，顺序不能变
-		TreeModel paramModel = null;
+		CommonTreeEntity paramModel = null;
 		try {
 			paramModel = node.getClass().newInstance();
-			paramModel.setTenantCode(resultDeleteNode.getTenantCode());
+//			paramModel.setTenantCode(resultDeleteNode.getTenantCode());
 			paramModel.setTreeId(resultDeleteNode.getTreeId());
 			paramModel.setNodeLeft(resultDeleteNode.getNodeLeft());
 			paramModel.setNodeRight(resultDeleteNode.getNodeRight());
@@ -269,7 +266,7 @@ public abstract class CommonTreeServiceAbstract<T extends TreeModel> extends Com
 		if(null==node || EasyStringCheckUtils.isEmpty(node.getTreeId()) ||
 				null==node.getNodeRight()) throw BizException.BIZ_PARAMS_IS_EMPTY(); 
 		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("tenantCode", node.getTenantCode());
+//		paramMap.put("tenantCode", node.getTenantCode());
 		paramMap.put("treeId", node.getTreeId());
 		paramMap.put("nodeRight", node.getNodeRight());
 		paramMap.put("nodeStep", 2);
@@ -280,7 +277,7 @@ public abstract class CommonTreeServiceAbstract<T extends TreeModel> extends Com
 		if(null==node || EasyStringCheckUtils.isEmpty(node.getTreeId())
 				|| null==node.getNodeRight()) throw BizException.BIZ_PARAMS_IS_EMPTY(); 
 		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("tenantCode", node.getTenantCode());
+//		paramMap.put("tenantCode", node.getTenantCode());
 		paramMap.put("treeId", node.getTreeId());
 		paramMap.put("nodeRight", node.getNodeRight());
 		paramMap.put("nodeStep", 2);
@@ -291,7 +288,7 @@ public abstract class CommonTreeServiceAbstract<T extends TreeModel> extends Com
 		if(null==node || EasyStringCheckUtils.isEmpty(node.getTreeId())
 				|| null==node.getNodeRight() || null==node.getNodeLeft()) throw BizException.BIZ_PARAMS_IS_EMPTY(); 
 		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("tenantCode", node.getTenantCode());
+//		paramMap.put("tenantCode", node.getTenantCode());
 		paramMap.put("treeId", node.getTreeId());
 		paramMap.put("nodeLeft", node.getNodeLeft());
 		int nodeStep = node.getNodeRight() - node.getNodeLeft() + 1;
@@ -303,7 +300,7 @@ public abstract class CommonTreeServiceAbstract<T extends TreeModel> extends Com
 		if(null==node || EasyStringCheckUtils.isEmpty(node.getTreeId())
 				|| null==node.getNodeRight() || null==node.getNodeLeft()) throw BizException.BIZ_PARAMS_IS_EMPTY(); 
 		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("tenantCode", node.getTenantCode());
+//		paramMap.put("tenantCode", node.getTenantCode());
 		paramMap.put("treeId", node.getTreeId());
 		paramMap.put("nodeRight", node.getNodeRight());
 		int nodeStep = node.getNodeRight() - node.getNodeLeft() + 1;

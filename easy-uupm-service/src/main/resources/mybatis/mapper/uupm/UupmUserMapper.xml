@@ -69,7 +69,7 @@
 		</if>
 	</sql>
 	<!-- 条件查询 -->
-	<select id="selectListBy" parameterType="java.util.Map" resultType="com.yffd.easy.uupm.api.model.UupmUserModel">
+	<select id="selectListBy" parameterType="java.util.Map" resultType="com.yffd.easy.uupm.entity.UupmUserEntity">
 		select <include refid="table_columns" />
 		from <include refid="table_name"/> as t 
 		<where>
@@ -87,7 +87,7 @@
 		</where>
 	</select>
 	<!-- 单条查询 -->
-	<select id="selectOneBy" parameterType="java.util.Map" resultType="com.yffd.easy.uupm.api.model.UupmUserModel">
+	<select id="selectOneBy" parameterType="java.util.Map" resultType="com.yffd.easy.uupm.entity.UupmUserEntity">
 		select <include refid="table_columns" /> 
 		from <include refid="table_name"/> as t 
 		<where>

@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.yffd.easy.common.core.util.EasyStringCheckUtils;
-import com.yffd.easy.framework.domain.RespModel;
-import com.yffd.easy.uupm.api.model.UupmResourceModel;
-import com.yffd.easy.uupm.api.model.UupmTenantResourceModel;
+import com.yffd.easy.framework.web.model.RespData;
+import com.yffd.easy.uupm.pojo.entity.UupmResourceEntity;
+import com.yffd.easy.uupm.pojo.entity.UupmTenantResourceEntity;
 import com.yffd.easy.uupm.service.UupmResourceService;
 import com.yffd.easy.uupm.service.UupmTenantResourceService;
 import com.yffd.easy.uupm.web.common.UupmCommonController;
@@ -40,45 +40,45 @@ public class UupmTenantResourceController extends UupmCommonController {
 	
 	// 租户授权
 	@RequestMapping(value="/saveTenantResource", method=RequestMethod.POST)
-	public RespModel saveTenantResource(HttpServletRequest req) {
+	public RespData saveTenantResource(HttpServletRequest req) {
 		String tenantCode = req.getParameter("tenantCode");
 		String resource = req.getParameter("resource");
 		if(EasyStringCheckUtils.isEmpty(tenantCode) || EasyStringCheckUtils.isEmpty(resource)) return this.errorAjax("参数错误");
 		ArrayList<Map<String, String>> list = JSON.parseObject(resource, new TypeReference<ArrayList<Map<String, String>>>(){});
 		if(null==list || list.size()==0) return this.errorAjax("参数错误");
-		List<UupmTenantResourceModel> modelList = new ArrayList<UupmTenantResourceModel>();
+		List<UupmTenantResourceEntity> modelList = new ArrayList<UupmTenantResourceEntity>();
 		for(Map<String, String> map : list) {
 			String rsCode = map.get("rsCode");
-			UupmTenantResourceModel model = new UupmTenantResourceModel();
+			UupmTenantResourceEntity model = new UupmTenantResourceEntity();
 			model.setTenantCode(tenantCode);
 			model.setRsCode(rsCode);
 			modelList.add(model);
 		}
 		if(modelList.size()==0) return this.errorAjax("参数错误");
 		
-		this.uupmTenantResourceService.saveTenantResource(tenantCode, modelList, null);
+		this.uupmTenantResourceService.saveTenantResource(tenantCode, modelList);
 		return this.successAjax();
 	}
 		
 	// 租户授权
 	@RequestMapping(value="/findResourceByTenantCode", method=RequestMethod.POST)
-	public RespModel findResourceByTenantCode(String tenantCode) {
+	public RespData findResourceByTenantCode(String tenantCode) {
 		if(EasyStringCheckUtils.isEmpty(tenantCode)) return this.errorAjax("参数错误");
-		UupmTenantResourceModel model = new UupmTenantResourceModel();
+		UupmTenantResourceEntity model = new UupmTenantResourceEntity();
 		model.setTenantCode(tenantCode);
-		List<UupmTenantResourceModel> listResult = this.uupmTenantResourceService.findList(model , null);
+		List<UupmTenantResourceEntity> listResult = this.uupmTenantResourceService.findList(model);
 		return this.successAjax(listResult);
 	}
 	
 	// 租户资源
 	@RequestMapping(value="/findTenantResource", method=RequestMethod.POST)
-	public RespModel findTenantResource() {
+	public RespData findTenantResource() {
 		String tenantCode = "it3.com.cn";
-		List<UupmResourceModel> result = this.uupmTenantResourceService.findTenantResource(tenantCode);
+		List<UupmResourceEntity> result = this.uupmTenantResourceService.findTenantResource(tenantCode);
 		if(null!=result && !result.isEmpty()) {
 //			List<UupmResourceComboTreeVO> treeList = this.uupmResourceSupport.toSyncTreeVO(result, "root");
 //			return this.successAjax(treeList);
-			List<UupmResourceModel> treeList = this.uupmResourceService.convertToMultiTree(result, "root");
+			List<UupmResourceEntity> treeList = this.uupmResourceService.convertToMultiTree(result, "root");
 			return this.successAjax(treeList);
 		}
 		return this.successAjax();

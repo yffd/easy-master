@@ -43,7 +43,7 @@ public class LoginController extends AdminBaseController {
 	
 	@RequestMapping(value="/login")
 	@ResponseBody
-	public RespModel login(HttpServletRequest req, HttpServletResponse resp) {
+	public RespData login(HttpServletRequest req, HttpServletResponse resp) {
 		if("GET".equalsIgnoreCase(req.getMethod())) {
 			try {
 				resp.sendRedirect("/admin/login.jsp");
@@ -73,7 +73,7 @@ public class LoginController extends AdminBaseController {
 	
 	@RequestMapping(value="/logout", method=RequestMethod.POST)
 	@ResponseBody
-	public RespModel logout() {
+	public RespData logout() {
 		if(null==this.getSession()) {
 			return this.successAjax();
 		}
@@ -83,7 +83,7 @@ public class LoginController extends AdminBaseController {
 	
 	@RequestMapping(value="/showLoginUserInfo", method=RequestMethod.POST)
 	@ResponseBody
-	public RespModel showLoginUserInfo() {
+	public RespData showLoginUserInfo() {
 		LoginInfo info = this.currentLoginInfo();
 		if(null==info) return this.successAjax();
 		

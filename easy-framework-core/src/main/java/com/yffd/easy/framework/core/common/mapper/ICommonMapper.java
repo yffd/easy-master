@@ -6,7 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 
 import com.yffd.easy.common.core.page.PageParam;
-import com.yffd.easy.framework.domain.CustomPo;
+import com.yffd.easy.common.core.pojo.IPOJO;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -16,21 +16,21 @@ import com.yffd.easy.framework.domain.CustomPo;
  * @since		 JDK 1.7+
  * @see 	 
  */
-public interface ICommonMapper<PO extends CustomPo> {
+public interface ICommonMapper<PO> {
 	
-	public List<PO> selectListBy(@Param("model") PO model, @Param("map") Map<String, Object> map, @Param("page") PageParam page);
+	public List<PO> selectListBy(@Param("po") PO po, @Param("map") Map<String, Object> map, @Param("page") PageParam page);
 	
-	public Long selectCountBy(@Param("model") PO model, @Param("map") Map<String, Object> map);
+	public Long selectCountBy(@Param("po") PO po, @Param("map") Map<String, Object> map);
 	
-	public PO selectOneBy(@Param("model") PO model, @Param("map") Map<String, Object> map);
+	public PO selectOneBy(@Param("po") PO po, @Param("map") Map<String, Object> map);
 	
-	public int insertOne(PO model);
+	public int insertOne(PO po);
 	
-	public int insertList(List<PO> modelList);
+	public int insertList(List<PO> poList);
 	
-	public int updateBy(@Param("model") PO model, @Param("old") PO old, @Param("map") Map<String, ?> map);
+	public int updateBy(@Param("po") PO po, @Param("old") PO old, @Param("map") Map<String, Object> map);
 	
-	public int deleteBy(@Param("model") PO model, @Param("map") Map<String, Object> map);
+	public int deleteBy(@Param("po") PO po, @Param("map") Map<String, Object> map);
 	
 }
 

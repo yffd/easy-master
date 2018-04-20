@@ -14,8 +14,8 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
-import com.yffd.easy.framework.domain.RespModel;
-import com.yffd.easy.framework.web.enums.CommonEnum;
+import com.yffd.easy.framework.web.enums.WebCommonEnum;
+import com.yffd.easy.framework.web.model.RespData;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -35,9 +35,9 @@ public class SpringMvcExceptionHandler implements HandlerExceptionResolver {
 			HttpServletResponse response, Object handler, Exception ex) {
 		//判断ajax请求
 		if(request.getHeader("x-requested-with")!=null && request.getHeader("x-requested-with").equals("XMLHttpRequest")) {
-			RespModel entity = new RespModel();
-			entity.setType(CommonEnum.REQUEST_SYNC.getValue());
-			entity.setStatus(CommonEnum.ERROR.getValue());
+			RespData entity = new RespData();
+			entity.setType(WebCommonEnum.REQUEST_SYNC.getValue());
+			entity.setStatus(WebCommonEnum.ERROR.getValue());
 			entity.setMsg("系统异常");
 			entity.setData(ex.getClass().getName());
 			String msg = JSON.toJSONString(entity);
