@@ -7,7 +7,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.yffd.easy.framework.common.dao.bak.BakICommonExtDao;
+import com.yffd.easy.framework.common.dao.ICommonBaseDao;
 import com.yffd.easy.framework.common.service.impl.CommonSimpleServiceImpl;
 import com.yffd.easy.uupm.dao.UupmAccountDao;
 import com.yffd.easy.uupm.entity.UupmAccountEntity;
@@ -28,7 +28,7 @@ import com.yffd.easy.uupm.pojo.vo.UupmLoginInfoVo;
 public class UupmAccountService extends CommonSimpleServiceImpl<UupmAccountEntity> {
 
 	@Override
-	protected BakICommonExtDao<UupmAccountEntity> getBindDao() {
+	protected ICommonBaseDao<UupmAccountEntity> getBindDao() {
 		return this.uupmAccountDao;
 	}
 	

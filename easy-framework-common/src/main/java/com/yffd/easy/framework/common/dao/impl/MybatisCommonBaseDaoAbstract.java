@@ -19,52 +19,52 @@ public abstract class MybatisCommonBaseDaoAbstract<E> extends MybatisCommonMappe
 
 	@Override
 	public Integer save(E entity) {
-		return super.save(entity);
+		return super.save_(entity);
 	}
 
 	@Override
 	public Integer save(List<E> modelList) {
-		return super.save(modelList);
+		return super.save_(modelList);
 	}
 
 	@Override
 	public Integer update(E entity, E entityOld) {
-		return super.update(entity, entityOld, null);
+		return super.update_(entity, entityOld, null);
 	}
 	
 	@Override
 	public Integer delete(E entity) {
-		return super.delete(entity, null);
+		return super.delete_(entity, null);
 	}
 
 	@Override
 	public Integer findCount(E entity) {
-		return super.findCount(entity, null);
+		return super.findCount_(entity, null);
 	}
 	
 	@Override
 	public E findOne(E entity) {
-		return super.findOne(entity, null);
+		return super.findOne_(entity, null);
 	}
 
 	@Override
 	public List<E> findListWithOrder(E entity, String orderBy) {
-		return super.findList(entity, null, orderBy);
+		return super.findList_(entity, null, orderBy);
 	}
 
 	@Override
 	public PageResult<E> findPageWithOrder(E entity, String orderBy, PageParam page) {
-		return super.findPage(entity, null, orderBy, page);
+		return super.findPage_(entity, null, orderBy, page);
 	}
 
 	@Override
 	public Boolean exsistAndUnique(E entity) {
-		return super.exsistAndUnique(entity, null);
+		return super.exsistAndUnique_(entity, null);
 	}
 
 	@Override
 	public Boolean exsist(E entity) {
-		return super.exsist(entity, null);
+		return super.exsist_(entity, null);
 	}
 
 }

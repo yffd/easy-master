@@ -25,10 +25,10 @@ public class UupmUserDao extends UupmCommonDao<UupmUserEntity> {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("map", paramMap);
 		params.put("page", pageParam);
-		return this.selectPageByCustom(paramMap, pageParam, "selectUserInfo", "selectUserInfoCount", true);
+		return this.customSelectPageBy(paramMap, pageParam, "selectUserInfo", "selectUserInfoCount", true);
 	}
 	
 	public List<Map<String, Object>> findUserInfo(Map<String, Object> paramMap) {
-		return this.selectListByCustom("selectUserInfo", paramMap, true);
+		return this.customSelectListBy("selectUserInfo", paramMap, true);
 	}
 }

@@ -23,6 +23,6 @@ public class UupmOrganizationDao extends UupmCommonDao<UupmOrganizationEntity> {
 	public List<UupmOrganizationEntity> findByOrgCodes(List<String> orgCodes) {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("orgCodeList", Arrays.asList(orgCodes));
-		return this.findList(paramMap);
+		return this.findList(null, paramMap);
 	}
 }

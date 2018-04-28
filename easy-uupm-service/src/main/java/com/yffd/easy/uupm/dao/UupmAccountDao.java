@@ -17,6 +17,6 @@ import com.yffd.easy.uupm.pojo.vo.UupmLoginInfoVo;
 public class UupmAccountDao extends UupmCommonDao<UupmAccountEntity> {
 
 	public UupmLoginInfoVo findLoginInfo(UupmLoginInfoVo loginInfoVo) {
-		return this.selectOneByCustom("selectLoginInfo", loginInfoVo, true);
+		return this.customSelectOneBy("selectLoginInfo", loginInfoVo, true);
 	}
 }

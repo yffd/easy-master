@@ -19,6 +19,6 @@ import com.yffd.easy.uupm.entity.UupmTenantResourceEntity;
 public class UupmTenantResourceDao extends UupmCommonDao<UupmTenantResourceEntity> {
 
 	public List<Map<String, Object>> findTenantResource(Map<String, Object> paramMap) {
-		return this.selectListByCustom("selectTenantResource", paramMap, true);
+		return this.customSelectListBy("selectTenantResource", paramMap, true);
 	}
 }

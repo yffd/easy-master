@@ -19,14 +19,14 @@ import com.yffd.easy.uupm.pojo.vo.UupmMenuInfoVo;
 public class UupmMenuDao extends UupmCommonDao<UupmMenuEntity> {
 
 	public List<UupmMenuInfoVo> findMenuInfoList(UupmMenuInfoVo menuInfoVo) {
-		return this.selectListByCustom("selectMenuInfo", menuInfoVo, true);
+		return this.customSelectListBy("selectMenuInfo", menuInfoVo, true);
 	}
 	
 	public List<UupmMenuInfoVo> findMenuInfoForAdminList(UupmMenuInfoVo menuInfoVo) {
-		return this.selectListByCustom("selectMenuInfoForAdmin", menuInfoVo, true);
+		return this.customSelectListBy("selectMenuInfoForAdmin", menuInfoVo, true);
 	}
 	
 	public List<UupmMenuInfoVo> findMenuInfoForDefaultList(UupmMenuInfoVo menuInfoVo) {
-		return this.selectListByCustom("selectMenuInfoForDefault", menuInfoVo, true);
+		return this.customSelectListBy("selectMenuInfoForDefault", menuInfoVo, true);
 	}
 }

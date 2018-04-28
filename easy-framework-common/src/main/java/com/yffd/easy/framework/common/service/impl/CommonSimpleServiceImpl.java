@@ -7,7 +7,7 @@ import java.util.Map;
 import com.yffd.easy.common.core.page.PageParam;
 import com.yffd.easy.common.core.page.PageResult;
 import com.yffd.easy.common.core.util.EasyStringCheckUtils;
-import com.yffd.easy.framework.common.dao.bak.BakICommonExtDao;
+import com.yffd.easy.framework.common.dao.ICommonGenericDao;
 import com.yffd.easy.framework.common.service.ICommonService;
 
 /**
@@ -20,7 +20,7 @@ import com.yffd.easy.framework.common.service.ICommonService;
  */
 public abstract class CommonSimpleServiceImpl<VO> implements ICommonService<VO> {
 
-	protected abstract BakICommonExtDao<VO> getBindDao();
+	protected abstract ICommonGenericDao<VO> getBindDao();
 	
 	@Override
 	public Integer save(VO vo) {

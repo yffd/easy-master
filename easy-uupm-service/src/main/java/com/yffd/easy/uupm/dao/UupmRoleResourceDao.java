@@ -23,12 +23,12 @@ public class UupmRoleResourceDao extends UupmCommonDao<UupmRoleResourceEntity> {
 	public List<UupmRoleResourceEntity> findByRoleCodes(Set<String> roleCodes) {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("rsCodeList", roleCodes);
-		return this.findList(paramMap);
+		return this.findList(null, paramMap);
 	}
 	
 	public List<UupmRoleResourceEntity> findByResourceCodes(List<String> resourceCodes) {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("rsCodeList", resourceCodes);
-		return this.findList(paramMap);
+		return this.findList(null, paramMap);
 	}
 }

@@ -1,6 +1,6 @@
 package com.yffd.easy.uupm.dao;
 
-import com.yffd.easy.framework.common.dao.bak.BakMybatisCommonExtDaoImpl;
+import com.yffd.easy.framework.common.dao.impl.MybatisCommonGenericDaoImpl;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -10,7 +10,7 @@ import com.yffd.easy.framework.common.dao.bak.BakMybatisCommonExtDaoImpl;
  * @since		 JDK 1.7+
  * @see 	 
  */
-public class UupmCommonDao<E> extends BakMybatisCommonExtDaoImpl<E> {
+public class UupmCommonDao<E> extends MybatisCommonGenericDaoImpl<E> {
 
 	@Override
 	protected String getStatement(String sqlId) {

@@ -23,41 +23,41 @@ public abstract class MybatisCommonMapperDaoSupport<E> extends MybatisCommonCust
 	
 	public abstract Class<?> getBindMapperClass();
 	
-	protected Integer save(E entity) {
+	protected Integer save_(E entity) {
 		if(null==entity) return 0;
 		return this.getBindMapper().insertOne(entity);
 	}
 
-	protected Integer save(List<E> entityList) {
+	protected Integer save_(List<E> entityList) {
 		if(null==entityList || entityList.isEmpty()) return 0;
 		return this.getBindMapper().insertList(entityList);
 	}
 	
-	protected Integer update(E entity, E entityOld, Map<String, Object> propsMap) {
+	protected Integer update_(E entity, E entityOld, Map<String, Object> propsMap) {
 		if(null==entity) return 0;
 		if(null==entityOld && (null==propsMap || propsMap.isEmpty())) return 0;
 		return this.getBindMapper().updateBy(entity, entityOld, propsMap);
 	}
 	
-	protected Integer delete(E entity, Map<String, Object> propsMap) {
+	protected Integer delete_(E entity, Map<String, Object> propsMap) {
 		if(null==entity && (null==propsMap || propsMap.isEmpty())) return 0;
 		return this.getBindMapper().deleteBy(entity, propsMap);
 	}
 
-	protected Integer findCount(E entity, Map<String, Object> propsMap) {
+	protected Integer findCount_(E entity, Map<String, Object> propsMap) {
 		return this.getBindMapper().selectCountBy(entity, propsMap);
 	}
 	
-	protected E findOne(E entity, Map<String, Object> propsMap) {
+	protected E findOne_(E entity, Map<String, Object> propsMap) {
 		if(null==entity && (null==propsMap || propsMap.isEmpty())) return null;
 		return this.getBindMapper().selectOneBy(entity, propsMap);
 	}
 
-	protected List<E> findList(E entity, Map<String, Object> propsMap, String orderBy) {
+	protected List<E> findList_(E entity, Map<String, Object> propsMap, String orderBy) {
 		return this.getBindMapper().selectListBy(entity, propsMap, orderBy, null);
 	}
 
-	protected PageResult<E> findPage(E entity, Map<String, Object> propsMap, String orderBy, PageParam page) {
+	protected PageResult<E> findPage_(E entity, Map<String, Object> propsMap, String orderBy, PageParam page) {
 		if(null==page) return null;
 		Integer totalRecord = this.getBindMapper().selectCountBy(entity, propsMap);
 		page.setTotalRecord(totalRecord);
@@ -66,19 +66,19 @@ public abstract class MybatisCommonMapperDaoSupport<E> extends MybatisCommonCust
 		return new PageResult<E>(page, recordList);
 	}
 
-	protected Boolean exsistAndUnique(E entity, Map<String, Object> propsMap) {
-		Integer count = this.findCount(entity, propsMap);
+	protected Boolean exsistAndUnique_(E entity, Map<String, Object> propsMap) {
+		Integer count = this.findCount_(entity, propsMap);
 		return count==0;
 	}
 
-	protected Boolean exsist(E entity, Map<String, Object> propsMap) {
-		Integer count = this.findCount(entity, propsMap);
+	protected Boolean exsist_(E entity, Map<String, Object> propsMap) {
+		Integer count = this.findCount_(entity, propsMap);
 		return count>0;
 	}
 
 	///////////////属性////////////////////
 	
-	protected Integer updateByProperty(E entity, String propertyName, Object value) {
+	protected Integer updateByProperty_(E entity, String propertyName, Object value) {
 		if(null==entity) return 0;
 		if(EasyStringCheckUtils.isEmpty(propertyName) || null==value) return 0;
 		Map<String, Object> paramMap = new HashMap<String, Object>();
@@ -86,40 +86,40 @@ public abstract class MybatisCommonMapperDaoSupport<E> extends MybatisCommonCust
 		return this.getBindMapper().updateBy(entity, null, paramMap);
 	}
 	
-	protected Integer deleteByProperty(String propertyName, Object value) {
+	protected Integer deleteByProperty_(String propertyName, Object value) {
 		if(EasyStringCheckUtils.isEmpty(propertyName) || null==value) return 0;
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put(propertyName, value);
-		return this.delete(null, paramMap);
+		return this.delete_(null, paramMap);
 	}
 
-	protected Integer findCountByProperty(String propertyName, Object value) {
+	protected Integer findCountByProperty_(String propertyName, Object value) {
 		if(EasyStringCheckUtils.isEmpty(propertyName) || null==value) return 0;
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put(propertyName, value);
-		return this.findCount(null, paramMap);
+		return this.findCount_(null, paramMap);
 	}
 
-	protected E findOneByProperty(String propertyName, Object value) {
+	protected E findOneByProperty_(String propertyName, Object value) {
 		if(EasyStringCheckUtils.isEmpty(propertyName) || null==value) return null;
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put(propertyName, value);
-		return this.findOne(null, paramMap);
+		return this.findOne_(null, paramMap);
 	}
 
-	protected List<E> findListByProperty(String propertyName, Object value, String orderBy) {
+	protected List<E> findListByProperty_(String propertyName, Object value, String orderBy) {
 		if(EasyStringCheckUtils.isEmpty(propertyName) || null==value) return null;
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put(propertyName, value);
-		return this.findList(null, paramMap, orderBy);
+		return this.findList_(null, paramMap, orderBy);
 	}
 
-	protected PageResult<E> findPageByProperty(String propertyName, Object value, String orderBy,
+	protected PageResult<E> findPageByProperty_(String propertyName, Object value, String orderBy,
 			PageParam page) {
 		if(EasyStringCheckUtils.isEmpty(propertyName) || null==value) return null;
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put(propertyName, value);
-		return this.findPage(null, paramMap, orderBy, page);
+		return this.findPage_(null, paramMap, orderBy, page);
 	}
 
 }
