@@ -5,12 +5,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.yffd.easy.framework.core.common.mapper.ICommonMapper;
-import com.yffd.easy.framework.core.common.service.CommonServiceAbstract;
+import com.yffd.easy.framework.common.dao.bak.BakICommonExtDao;
+import com.yffd.easy.framework.common.service.impl.CommonSimpleServiceImpl;
 import com.yffd.easy.framework.core.exception.BizException;
-import com.yffd.easy.uupm.mapper.IUupmTenantMapper;
-import com.yffd.easy.uupm.pojo.entity.UupmAccountEntity;
-import com.yffd.easy.uupm.pojo.entity.UupmTenantEntity;
+import com.yffd.easy.uupm.dao.UupmTenantDao;
+import com.yffd.easy.uupm.entity.UupmAccountEntity;
+import com.yffd.easy.uupm.entity.UupmTenantEntity;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -21,35 +21,31 @@ import com.yffd.easy.uupm.pojo.entity.UupmTenantEntity;
  * @see 	 
  */
 @Service
-public class UupmTenantService extends CommonServiceAbstract<UupmTenantEntity> {
+public class UupmTenantService extends CommonSimpleServiceImpl<UupmTenantEntity> {
 
 	@Autowired
 	private UupmAccountService uupmAccountService;
 	
 	@Autowired
-	private IUupmTenantMapper uupmTenantMapper;
+	private UupmTenantDao uupmTenantDao;
 	
 	@Override
-	public ICommonMapper<UupmTenantEntity> getMapper() {
-		return this.uupmTenantMapper;
+	protected BakICommonExtDao<UupmTenantEntity> getBindDao() {
+		return this.uupmTenantDao;
 	}
 
-	@Override
-	public Class<?> getMapperClass() {
-		return IUupmTenantMapper.class;
-	}
-	
+
 	@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
 	public int addTenantWithAccount(UupmTenantEntity model) {
 		if(null==model) throw BizException.BIZ_PARAMS_IS_EMPTY();
-		int num = this.addOne(model);
+		int num = this.getBindDao().save(model);
 		// 生成账号
 		UupmAccountEntity account = new UupmAccountEntity();
 		account.setAccountId(model.getTenantCode());
 		account.setAccountPwd("123456");
 		account.setAccountStatus("active");
 		account.setAccountType("default");
-		this.uupmAccountService.addOne(account);
+		this.uupmAccountService.save(account);
 		return num;
 	}
 

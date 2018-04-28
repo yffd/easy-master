@@ -1,17 +1,15 @@
 package com.yffd.easy.uupm.service;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.yffd.easy.framework.core.common.mapper.ICommonMapper;
-import com.yffd.easy.framework.core.common.service.CommonServiceAbstract;
-import com.yffd.easy.uupm.mapper.IUupmOrganizationMapper;
-import com.yffd.easy.uupm.pojo.entity.UupmOrganizationEntity;
+import com.yffd.easy.framework.common.dao.bak.BakICommonExtDao;
+import com.yffd.easy.framework.common.service.impl.CommonSimpleServiceImpl;
+import com.yffd.easy.uupm.dao.UupmOrganizationDao;
+import com.yffd.easy.uupm.entity.UupmOrganizationEntity;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -22,23 +20,18 @@ import com.yffd.easy.uupm.pojo.entity.UupmOrganizationEntity;
  * @see 	 
  */
 @Service
-public class UupmOrganizationService extends CommonServiceAbstract<UupmOrganizationEntity> {
+public class UupmOrganizationService extends CommonSimpleServiceImpl<UupmOrganizationEntity> {
 
 	@Autowired
-	private IUupmOrganizationMapper uupmOrganizationMapper;
+	private UupmOrganizationDao uupmOrganizationDao;
 	
 	@Override
-	public ICommonMapper<UupmOrganizationEntity> getMapper() {
-		return this.uupmOrganizationMapper;
+	protected BakICommonExtDao<UupmOrganizationEntity> getBindDao() {
+		return uupmOrganizationDao;
 	}
 
 	@Override
-	public Class<?> getMapperClass() {
-		return IUupmOrganizationMapper.class;
-	}
-
-	@Override
-	public int addOne(UupmOrganizationEntity paramPo) {
+	public Integer save(UupmOrganizationEntity paramPo) {
 		if("root".equals(paramPo.getParentCode())) {
 			paramPo.setDataPath("root." + paramPo.getOrgCode());
 		} else {
@@ -47,7 +40,7 @@ public class UupmOrganizationService extends CommonServiceAbstract<UupmOrganizat
 			UupmOrganizationEntity parent = this.findOne(param);
 			paramPo.setDataPath(parent.getDataPath()  + "." + paramPo.getOrgCode());
 		}
-		return super.addOne(paramPo);
+		return super.save(paramPo);
 	}
 	
 	public String findParentNamePath(UupmOrganizationEntity paramPo) {
@@ -55,9 +48,7 @@ public class UupmOrganizationService extends CommonServiceAbstract<UupmOrganizat
 		if(null==result) return "";
 		String dataPath = result.getDataPath();
 		String[] orgCodes = dataPath.split("\\");
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("orgCodeList", Arrays.asList(orgCodes));
-		List<UupmOrganizationEntity> resultList = this.findList(null, paramMap);
+		List<UupmOrganizationEntity> resultList = this.uupmOrganizationDao.findByOrgCodes(Arrays.asList(orgCodes));
 		if(null==resultList || resultList.size()==0) return "";
 		StringBuilder sb = new StringBuilder();
 		for(String orgCode : orgCodes) {

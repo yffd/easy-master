@@ -7,8 +7,8 @@ import com.yffd.easy.common.core.util.EasyStringCheckUtils;
 import com.yffd.easy.framework.core.common.mapper.ICommonMapper;
 import com.yffd.easy.framework.core.common.service.CommonTreeServiceAbstract;
 import com.yffd.easy.framework.core.exception.BizException;
+import com.yffd.easy.uupm.entity.UupmDictionaryEntity;
 import com.yffd.easy.uupm.mapper.IUupmDictionaryMapper;
-import com.yffd.easy.uupm.pojo.entity.UupmDictionaryEntity;
 
 /**
  * @Description  简单描述该类的功能（可选）.

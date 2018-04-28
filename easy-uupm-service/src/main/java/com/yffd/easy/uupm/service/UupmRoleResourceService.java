@@ -1,10 +1,8 @@
 package com.yffd.easy.uupm.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +10,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.yffd.easy.framework.core.common.mapper.ICommonMapper;
-import com.yffd.easy.framework.core.common.service.CommonServiceAbstract;
-import com.yffd.easy.uupm.mapper.IUupmRoleResourceMapper;
-import com.yffd.easy.uupm.pojo.entity.UupmRoleResourceEntity;
-import com.yffd.easy.uupm.pojo.entity.UupmUserRoleEntity;
+import com.yffd.easy.framework.common.dao.bak.BakICommonExtDao;
+import com.yffd.easy.framework.common.service.impl.CommonSimpleServiceImpl;
+import com.yffd.easy.uupm.dao.UupmRoleResourceDao;
+import com.yffd.easy.uupm.entity.UupmRoleResourceEntity;
+import com.yffd.easy.uupm.entity.UupmUserRoleEntity;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -27,39 +25,26 @@ import com.yffd.easy.uupm.pojo.entity.UupmUserRoleEntity;
  * @see 	 
  */
 @Service
-public class UupmRoleResourceService extends CommonServiceAbstract<UupmRoleResourceEntity> {
+public class UupmRoleResourceService extends CommonSimpleServiceImpl<UupmRoleResourceEntity> {
 
 	@Autowired
-	private IUupmRoleResourceMapper uupmRoleResourceMapper;
+	private UupmRoleResourceDao uupmRoleResourceDao;
 	
 	@Override
-	public ICommonMapper<UupmRoleResourceEntity> getMapper() {
-		return this.uupmRoleResourceMapper;
-	}
-
-	@Override
-	public Class<?> getMapperClass() {
-		return IUupmRoleResourceMapper.class;
-	}
-	
-	@Override
-	protected String getStatement(String sqlId) {
-		String namespace = IUupmRoleResourceMapper.class.getName();
-		StringBuilder sb = new StringBuilder();
-		sb.append(namespace).append(".").append(sqlId);
-		return sb.toString();
+	protected BakICommonExtDao<UupmRoleResourceEntity> getBindDao() {
+		return uupmRoleResourceDao;
 	}
 
 	@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
 	public void saveRoleResource(String roleCode, List<UupmRoleResourceEntity> modelList) {
 		this.delByRoleCode(roleCode);
-		this.addList(modelList);
+		this.save(modelList);
 	}
 	
 	public void delByRoleCode(String roleCode) {
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("roleCode", roleCode);
-		this.delete(paramMap);
+		UupmRoleResourceEntity entity = new UupmRoleResourceEntity();
+		entity.setRoleCode(roleCode);
+		this.delete(entity);
 	}
 	
 	public Set<String> findRsCode(String roleCode) {
@@ -75,9 +60,7 @@ public class UupmRoleResourceService extends CommonServiceAbstract<UupmRoleResou
 	}
 	
 	public Set<String> findRsCode(Set<String> roleCodes) {
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("rsCodeList", roleCodes);
-		List<UupmRoleResourceEntity> resultList = this.findList(null, paramMap);
+		List<UupmRoleResourceEntity> resultList = this.uupmRoleResourceDao.findByRoleCodes(roleCodes);
 		if(null==resultList ||resultList.size()==0) return null;
 		Set<String> rsCodes = new HashSet<String>();
 		for(UupmRoleResourceEntity model : resultList) {
@@ -86,14 +69,12 @@ public class UupmRoleResourceService extends CommonServiceAbstract<UupmRoleResou
 		return rsCodes;
 	}
 	
-	public List<UupmRoleResourceEntity> findRsCode(List<UupmUserRoleEntity> userRoleList) {
+	public List<UupmRoleResourceEntity> findResources(List<UupmUserRoleEntity> userRoleList) {
 		if(null==userRoleList || userRoleList.size()==0) return null;
 		List<String> roleCodeList = new ArrayList<String>();
 		for(UupmUserRoleEntity model : userRoleList) {
 			roleCodeList.add(model.getRoleCode());
 		}
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("rsCodeList", roleCodeList);
-		return this.findList(null, paramMap);
+		return this.uupmRoleResourceDao.findByResourceCodes(roleCodeList);
 	}
 }

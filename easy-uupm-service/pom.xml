@@ -16,6 +16,7 @@
 <!--     <easy.uupm.api.version>0.0.1</easy.uupm.api.version> -->
     <easy.uupm.pojo.version>0.0.1</easy.uupm.pojo.version>
     <easy.common.dubbo.version>0.0.1</easy.common.dubbo.version>
+    <easy.framework.common.version>0.0.1</easy.framework.common.version>
     <easy.framework.core.version>0.0.1</easy.framework.core.version>
   </properties>
   
@@ -35,6 +36,11 @@
 	  	<artifactId>easy-common-dubbo</artifactId>
 	  	<version>${easy.common.dubbo.version}</version>
 	  	<type>pom</type>
+  	</dependency>
+  	<dependency>
+  		<groupId>com.yffd.easy</groupId>
+  		<artifactId>easy-framework-common</artifactId>
+	  	<version>${easy.framework.core.version}</version>
   	</dependency>
   	<dependency>
   		<groupId>com.yffd.easy</groupId>

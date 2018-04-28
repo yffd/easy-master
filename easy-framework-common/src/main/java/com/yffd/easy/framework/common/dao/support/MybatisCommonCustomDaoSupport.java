@@ -15,7 +15,7 @@ import com.yffd.easy.common.core.util.EasyStringCheckUtils;
 import com.yffd.easy.framework.common.exception.CommonBizException;
 
 /**
- * @Description  mybatis dao常用操作类，默认以具体的dao实现类的完整类名作为mapper sql的命名空间.
+ * @Description  mybatis dao常用操作类.
  * @Date		 2018年4月18日 下午5:39:08 <br/>
  * @author       zhangST
  * @version		 1.0
@@ -39,42 +39,42 @@ public class MybatisCommonCustomDaoSupport {
         return sb.toString();
 	}
     
-	protected Integer selectCountByCustom(String sqlId, Object parameter, boolean shortName) {
+	protected Integer customSelectCountBy(String sqlId, Object parameter, boolean shortName) {
 		if(EasyStringCheckUtils.isEmpty(sqlId)) throw CommonBizException.newInstance("sqlId 不能为空");
 		if(shortName) sqlId = this.getStatement(sqlId);
 		LOG.info("===sqlId[selectCount]:" + sqlId);
         return this.getSqlSession().selectOne(sqlId, parameter);
 	}
 
-	protected <T> List<T> selectListByCustom(String sqlId, Object parameter, boolean shortName) {
+	protected <T> List<T> customSelectListBy(String sqlId, Object parameter, boolean shortName) {
 		if(EasyStringCheckUtils.isEmpty(sqlId)) throw CommonBizException.newInstance("sqlId 不能为空");
 		if(shortName) sqlId = this.getStatement(sqlId);
 		LOG.info("===sqlId[selectList]:" + sqlId);
 		return this.getSqlSession().selectList(sqlId, parameter);
 	}
 
-	protected <T> T selectOneByCustom(String sqlId, Object parameter, boolean shortName) {
+	protected <T> T customSelectOneBy(String sqlId, Object parameter, boolean shortName) {
 		if(EasyStringCheckUtils.isEmpty(sqlId)) throw CommonBizException.newInstance("sqlId 不能为空");
 		if(shortName) sqlId = this.getStatement(sqlId);
 		LOG.info("===sqlId[selectOne]:" + sqlId);
 		return this.getSqlSession().selectOne(sqlId, parameter);
 	}
 
-	protected Integer insertByCustom(String sqlId, Object parameter, boolean shortName) {
+	protected Integer customInsertBy(String sqlId, Object parameter, boolean shortName) {
 		if(EasyStringCheckUtils.isEmpty(sqlId)) throw CommonBizException.newInstance("sqlId 不能为空");
 		if(shortName) sqlId = this.getStatement(sqlId);
 		LOG.info("===sqlId[insert]:" + sqlId);
 		return this.getSqlSession().insert(sqlId, parameter);
 	}
 
-	protected Integer updateByCustom(String sqlId, Object parameter, boolean shortName) {
+	protected Integer customUpdateBy(String sqlId, Object parameter, boolean shortName) {
 		if(EasyStringCheckUtils.isEmpty(sqlId)) throw CommonBizException.newInstance("sqlId 不能为空");
 		if(shortName) sqlId = this.getStatement(sqlId);
 		LOG.info("===sqlId[update]:" + sqlId);
 		return this.getSqlSession().update(sqlId, parameter);
 	}
 
-	protected Integer deleteByCustom(String sqlId, Object parameter, boolean shortName) {
+	protected Integer customDeleteBy(String sqlId, Object parameter, boolean shortName) {
 		if(EasyStringCheckUtils.isEmpty(sqlId)) throw CommonBizException.newInstance("sqlId 不能为空");
 		if(shortName) sqlId = this.getStatement(sqlId);
 		LOG.info("===sqlId[delete]:" + sqlId);
@@ -84,13 +84,13 @@ public class MybatisCommonCustomDaoSupport {
 	/*************************************************************************************/
 	/*************************************************************************************/
 	
-	protected <T> PageResult<T> selectPageByCustom(Map<String, Object> paramMap, PageParam pageParam, String sqlId, String countSqlId, boolean shortName) {
+	protected <T> PageResult<T> customSelectPageBy(Map<String, Object> paramMap, PageParam pageParam, String sqlId, String countSqlId, boolean shortName) {
 		if(EasyStringCheckUtils.isEmpty(sqlId) || EasyStringCheckUtils.isEmpty(countSqlId)) throw CommonBizException.newInstance("sqlId或 countSqlId 不能为空");
-		List<Object> recordList = this.selectRangeListByCustom(paramMap, pageParam, sqlId, countSqlId, shortName); // 获取分页数据集
-		return new PageResult(pageParam, recordList);
+		List<T> recordList = this.customSelectRangeListBy(paramMap, pageParam, sqlId, countSqlId, shortName); // 获取分页数据集
+		return new PageResult<T>(pageParam, recordList);
 	}
 	
-	protected <T> List<T> selectRangeListByCustom(Map<String, Object> paramMap, PageParam pageParam, String sqlId, String countSqlId, boolean shortName) {
+	protected <T> List<T> customSelectRangeListBy(Map<String, Object> paramMap, PageParam pageParam, String sqlId, String countSqlId, boolean shortName) {
 		if(null==paramMap) paramMap = new HashMap<String, Object>();
 		if(null!=pageParam) {
 			if(EasyStringCheckUtils.isEmpty(countSqlId)) throw CommonBizException.newInstance("countSqlId 不能为空");
@@ -127,6 +127,18 @@ public class MybatisCommonCustomDaoSupport {
 			}
 		}
 		return sb.length()>0 ? sb.substring(0, sb.lastIndexOf(",")) : null;
+	}
+	
+	protected String makeOrderBy(String orderPropertyName, String orderByType) {
+		String orderBy = null;
+		if(!EasyStringCheckUtils.isEmpty(orderPropertyName)) {
+			if(!EasyStringCheckUtils.isEmpty(orderByType)) {
+				orderBy = orderPropertyName + " " + orderByType;
+			} else {
+				orderBy = orderPropertyName + " asc";
+			}
+		}
+		return orderBy;
 	}
 	
 }

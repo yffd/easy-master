@@ -10,8 +10,8 @@ import ##import_model_full_name##;
 
 /**
  * @Description  简单描述该类的功能（可选）.
- * @Date		##date## <br/>
- * @author		##author##
+ * @Date		 ##date## <br/>
+ * @author		 ##author##
  * @version		 1.0
  * @since		 JDK 1.7+
  * @see 	 

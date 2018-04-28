@@ -9,11 +9,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.yffd.easy.framework.core.common.mapper.ICommonMapper;
-import com.yffd.easy.framework.core.common.service.CommonServiceAbstract;
-import com.yffd.easy.uupm.mapper.IUupmTenantResourceMapper;
-import com.yffd.easy.uupm.pojo.entity.UupmResourceEntity;
-import com.yffd.easy.uupm.pojo.entity.UupmTenantResourceEntity;
+import com.yffd.easy.framework.common.dao.bak.BakICommonExtDao;
+import com.yffd.easy.framework.common.service.impl.CommonSimpleServiceImpl;
+import com.yffd.easy.uupm.dao.UupmTenantResourceDao;
+import com.yffd.easy.uupm.entity.UupmTenantResourceEntity;
+import com.yffd.easy.uupm.pojo.vo.UupmTenantResourceVo;
+import com.yffd.easy.uupm.pojo.vo.factory.UupmTenantResourceVoFactory;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -24,45 +25,35 @@ import com.yffd.easy.uupm.pojo.entity.UupmTenantResourceEntity;
  * @see 	 
  */
 @Service
-public class UupmTenantResourceService extends CommonServiceAbstract<UupmTenantResourceEntity> {
+public class UupmTenantResourceService extends CommonSimpleServiceImpl<UupmTenantResourceEntity> {
 
 	@Autowired
-	private IUupmTenantResourceMapper uupmTenantResourceMapper;
+	private UupmTenantResourceVoFactory uupmTenantResourceVoFactory;
+	
+	@Autowired
+	private UupmTenantResourceDao uupmTenantResourceDao;
 	
 	@Override
-	public ICommonMapper<UupmTenantResourceEntity> getMapper() {
-		return this.uupmTenantResourceMapper;
+	protected BakICommonExtDao<UupmTenantResourceEntity> getBindDao() {
+		return this.uupmTenantResourceDao;
 	}
 
-	@Override
-	public Class<?> getMapperClass() {
-		return IUupmTenantResourceMapper.class;
-	}
-
-	@Override
-	protected String getStatement(String sqlId) {
-		String namespace = IUupmTenantResourceMapper.class.getName();
-		StringBuilder sb = new StringBuilder();
-		sb.append(namespace).append(".").append(sqlId);
-		return sb.toString();
-	}
-	
 	@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
 	public void saveTenantResource(String tenantCode, List<UupmTenantResourceEntity> modelList) {
 		this.delByTenantCode(tenantCode);
-		this.addList(modelList);
+		this.save(modelList);
 	}
 	
 	public void delByTenantCode(String tenantCode) {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("tenantCode", tenantCode);
-		this.delete(paramMap);
+		this.delete(null, paramMap);
 	}
 	 
-	public List<UupmResourceEntity> findTenantResource(String tenantCode) {
+	public List<UupmTenantResourceVo> findTenantResource(String tenantCode) {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("tenantCode", tenantCode);
-		List<Map<String, Object>> list = this.selectListBy("selectTenantResource", paramMap, true);
-		return this.map2model(list, UupmResourceEntity.class, null);
+		List<Map<String, Object>> list = this.uupmTenantResourceDao.findTenantResource(paramMap);
+		return uupmTenantResourceVoFactory.create(list);
 	}
 }

@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.yffd.easy.framework.web.view.vo.PropertyGridVO;
-import com.yffd.easy.uupm.pojo.entity.UupmApplicationEntity;
+import com.yffd.easy.uupm.entity.UupmApplicationEntity;
 
 /**
  * @Description  简单描述该类的功能（可选）.

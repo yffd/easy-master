@@ -307,7 +307,7 @@
 	<!-- ##########################   common sql end    ########################## -->
 	<!-- ######################################################################### -->
 
-	<select id="selectMenu" parameterType="java.util.Map" resultType="java.util.Map">
+	<select id="selectMenuInfo" parameterType="java.util.Map" resultType="java.util.Map">
 		select 
 		t.ID as id, t.TENANT_CODE as tenantCode, t.ACCESS_TYPE as accessType, t.MENU_CODE as menuCode, 
 		t.MENU_ICONS as menuIcons, t.MENU_NAME as menuName, t.MENU_SEQ_NO as menuSeqNo, t.MENU_TYPE as menuType, t.PARENT_CODE as parentCode
@@ -321,7 +321,7 @@
 	</select>
 	
 	<!-- 管理员租户-待生成的菜单 -->
-	<select id="selectPlanMenuForAdmin" parameterType="java.util.Map" resultType="java.util.Map">
+	<select id="selectMenuInfoForAdmin" parameterType="java.util.Map" resultType="java.util.Map">
 		select t.TREE_ID as treeId, t.RS_NAME as rsName, t.RS_CODE as rsCode, t.PARENT_CODE as parentCode, t.SEQ_NO as seqNo
 		, t1.menuCode 
 		from uupm_resource t
@@ -331,7 +331,7 @@
 		where t.RS_TYPE='M' and t1.menuCode is null
 	</select>
 	<!-- 非管理员租户-待生成的菜单 -->
-	<select id="selectPlanMenuForOther" parameterType="java.util.Map" resultType="java.util.Map">
+	<select id="selectMenuInfoForDefault" parameterType="java.util.Map" resultType="java.util.Map">
 		select t.TREE_ID as treeId, t.RS_NAME as rsName, t.RS_CODE as rsCode, t.PARENT_CODE as parentCode, t.SEQ_NO as seqNo
 		, t1.menuCode 
 		from uupm_tenant_resource t2 

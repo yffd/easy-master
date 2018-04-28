@@ -32,7 +32,7 @@ import com.yffd.easy.common.core.converter.EasyModelConverter;
  */
 public class CodeGenerator extends EasyModelConverter {
 	private static final SimpleDateFormat DATE_FMT = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分ss秒");
-	
+	private String modelSuffix = "Entity";
 	private List<String> sortedAttributeNameList = new ArrayList<String>();
 	private List<String> skipModelNamesLike = new ArrayList<String>();
 	
@@ -113,6 +113,19 @@ public class CodeGenerator extends EasyModelConverter {
 	}
 	
 	/**
+	 * 格式化Dao完整类名，即包名+类名
+	 * @Date	2018年2月6日 上午10:41:11 <br/>
+	 * @author  zhangST
+	 * @param modelClazz
+	 * @param packageName
+	 * @return
+	 */
+	protected String fmtDaoFullClassName(Class<?> modelClazz, String packageName) {
+		String mapperSimpleName = this.fmtModelName(modelClazz, "", "Dao");
+		return packageName + "." + mapperSimpleName;
+	}
+	
+	/**
 	 * 格式化Service类名称，简短名称，非完整类名
 	 * @Date	2018年2月6日 上午11:05:08 <br/>
 	 * @author  zhangST
@@ -121,6 +134,17 @@ public class CodeGenerator extends EasyModelConverter {
 	 */
 	protected String fmtServiceSimpleName(Class<?> modelClazz) {
 		return this.fmtModelName(modelClazz, null, "Service");
+	}
+	
+	/**
+	 * 格式化Dao类名称，简短名称，非完整类名
+	 * @Date	2018年2月6日 上午11:05:08 <br/>
+	 * @author  zhangST
+	 * @param modelClazz
+	 * @return
+	 */
+	protected String fmtDaoSimpleName(Class<?> modelClazz) {
+		return this.fmtModelName(modelClazz, null, "Dao");
 	}
 	
 	/**
@@ -156,8 +180,8 @@ public class CodeGenerator extends EasyModelConverter {
 	 */
 	protected String fmtModelName(Class<?> modelClazz, String prefix, String suffix) {
 		String modelName = modelClazz.getSimpleName();
-		if(modelName.lastIndexOf("Model")!=-1)
-			modelName = modelName.substring(0, modelName.lastIndexOf("Model"));
+		if(modelName.lastIndexOf(modelSuffix)!=-1)
+			modelName = modelName.substring(0, modelName.lastIndexOf(modelSuffix));
 		
 		StringBuilder sb = new StringBuilder();
 		if(null!=prefix && !"".equals(prefix.trim())) {

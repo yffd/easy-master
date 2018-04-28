@@ -10,10 +10,10 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.yffd.easy.common.core.util.EasyStringCheckUtils;
-import com.yffd.easy.framework.core.common.mapper.ICommonMapper;
-import com.yffd.easy.framework.core.common.service.CommonServiceAbstract;
-import com.yffd.easy.uupm.mapper.IUupmUserRoleMapper;
-import com.yffd.easy.uupm.pojo.entity.UupmUserRoleEntity;
+import com.yffd.easy.framework.common.dao.bak.BakICommonExtDao;
+import com.yffd.easy.framework.common.service.impl.CommonSimpleServiceImpl;
+import com.yffd.easy.uupm.dao.UupmUserRoleDao;
+import com.yffd.easy.uupm.entity.UupmUserRoleEntity;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -24,35 +24,30 @@ import com.yffd.easy.uupm.pojo.entity.UupmUserRoleEntity;
  * @see 	 
  */
 @Service
-public class UupmUserRoleService extends CommonServiceAbstract<UupmUserRoleEntity> {
+public class UupmUserRoleService extends CommonSimpleServiceImpl<UupmUserRoleEntity> {
 
 	@Autowired
-	private IUupmUserRoleMapper uupmUserRoleMapper;
+	private UupmUserRoleDao uupmUserRoleDao;
 	
 	@Override
-	public ICommonMapper<UupmUserRoleEntity> getMapper() {
-		return this.uupmUserRoleMapper;
-	}
-
-	@Override
-	public Class<?> getMapperClass() {
-		return IUupmUserRoleMapper.class;
+	protected BakICommonExtDao<UupmUserRoleEntity> getBindDao() {
+		return uupmUserRoleDao;
 	}
 
 	@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
 	public void saveUserRole(String tennantCode, String userCode, List<UupmUserRoleEntity> modelList) {
 		this.delByUserCode(tennantCode, userCode);
-		this.addList(modelList);
+		this.save(modelList);
 	}
 	
 	public void delByUserCode(String tennantCode, String userCode) {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("tennantCode", tennantCode);
 		paramMap.put("userCode", userCode);
-		this.delete(paramMap);
+		this.delete(null, paramMap);
 	}
 	
-	public List<UupmUserRoleEntity> findRoleCodes(UupmUserRoleEntity paramModel) {
+	public List<UupmUserRoleEntity> findRoles(UupmUserRoleEntity paramModel) {
 		if(null==paramModel || EasyStringCheckUtils.isEmpty(paramModel.getUserCode())) {}
 		List<UupmUserRoleEntity> resultList = this.findList(paramModel, null);
 		return resultList;

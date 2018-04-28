@@ -80,7 +80,7 @@ public class CommonServiceSupport extends CommonTreeConverter {
 		if(null!=pageParam) {
 			if(EasyStringCheckUtils.isEmpty(countSqlId)) throw BizException.newInstance("countSqlId 不能为空");
 			if(shortName) countSqlId = this.getStatement(countSqlId);
-			Long totalRecord = this.getSqlSession().selectOne(countSqlId, paramMap); // 统计总记录数
+			Integer totalRecord = this.getSqlSession().selectOne(countSqlId, paramMap); // 统计总记录数
 			pageParam.setTotalRecord(totalRecord);
 			paramMap.put("page", pageParam); // 根据页面传来的分页参数构造SQL分页参数
 		}

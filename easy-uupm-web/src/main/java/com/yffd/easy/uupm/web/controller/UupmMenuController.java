@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.yffd.easy.common.core.util.EasyStringCheckUtils;
 import com.yffd.easy.framework.web.model.RespData;
-import com.yffd.easy.uupm.pojo.entity.UupmMenuEntity;
+import com.yffd.easy.uupm.entity.UupmMenuEntity;
 import com.yffd.easy.uupm.service.UupmMenuService;
 import com.yffd.easy.uupm.web.common.UupmCommonController;
 import com.yffd.easy.uupm.web.support.UupmMenuSupport;

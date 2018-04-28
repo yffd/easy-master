@@ -19,17 +19,17 @@ public interface ICommonMapper<E> {
 	
 	public int insertOne(E entity);
 	
-	public int insertList(List<E> poList);
+	public int insertList(List<E> entityList);
 	
-	public int updateBy(@Param("entity") E entity, @Param("oldEntity") E oldEntity, @Param("map") Map<String, Object> map);
+	public int updateBy(@Param("entity") E entity, @Param("entityOld") E entityOld, @Param("propsMap") Map<String, Object> propsMap);
 	
-	public int deleteBy(@Param("entity") E entity, @Param("map") Map<String, Object> map);
+	public int deleteBy(@Param("entity") E entity, @Param("propsMap") Map<String, Object> propsMap);
 	
-	public E selectOneBy(@Param("entity") E entity, @Param("map") Map<String, Object> map);
+	public E selectOneBy(@Param("entity") E entity, @Param("propsMap") Map<String, Object> propsMap);
 	
-	public Integer selectCountBy(@Param("entity") E entity, @Param("map") Map<String, Object> map);
+	public Integer selectCountBy(@Param("entity") E entity, @Param("propsMap") Map<String, Object> propsMap);
 	
-	public List<E> selectListBy(@Param("entity") E entity, @Param("map") Map<String, Object> map, @Param("orderBy") String orderBy, @Param("page") PageParam page);
+	public List<E> selectListBy(@Param("entity") E entity, @Param("propsMap") Map<String, Object> propsMap, @Param("orderBy") String orderBy, @Param("page") PageParam page);
 	
 }
 

@@ -88,7 +88,7 @@ public class BaseDaoImpl<T> extends EasyModelConverter implements IBaseDao<T> {
         }
         paramMap.remove("pageParam"); // 与 listRange区分，保证越过分页拦截器
         // 统计总记录数
-        Long totalRecord = sqlSession.selectOne(getStatement(SQL_SELECT_COUNT_BY), paramMap);
+        int totalRecord = sqlSession.selectOne(getStatement(SQL_SELECT_COUNT_BY), paramMap);
         pageParam.setTotalRecord(totalRecord);
         paramMap.put("pageParam", pageParam);
         // 获取分页数据集

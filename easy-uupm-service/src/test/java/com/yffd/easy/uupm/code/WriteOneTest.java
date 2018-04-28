@@ -8,8 +8,10 @@ import com.yffd.easy.framework.core.code.generator.CodeMapperSqlGenerator;
 import com.yffd.easy.framework.core.code.generator.CodeMapperSqlTreeGenerator;
 import com.yffd.easy.framework.core.code.generator.CodeServiceGenerator;
 import com.yffd.easy.framework.core.code.generator.CodeServiceTestGenerator;
-import com.yffd.easy.uupm.pojo.entity.UupmDictionaryEntity;
-import com.yffd.easy.uupm.pojo.entity.UupmResourceEntity;
+import com.yffd.easy.framework.core.code.generator.CodeTemplateDaoMapperGenerator;
+import com.yffd.easy.framework.core.code.generator.CodeTemplateMapperInterfaceGenerator;
+import com.yffd.easy.uupm.entity.UupmResourceEntity;
+import com.yffd.easy.uupm.entity.UupmRoleEntity;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -20,118 +22,27 @@ import com.yffd.easy.uupm.pojo.entity.UupmResourceEntity;
  * @see 	 
  */
 public class WriteOneTest extends LocalProjectConfigTest {
-	private CodeMapperInterfaceGenerator mapperInterfaceGenerator = new CodeMapperInterfaceGenerator();
 	private CodeMapperFileGenerator mapperFileGenerator = new CodeMapperFileGenerator();
 	private CodeMapperSqlGenerator mapperSqlGenerator = new CodeMapperSqlGenerator();
 	private CodeMapperSqlTreeGenerator mapperSqlTreeGenerator = new CodeMapperSqlTreeGenerator();
-	private CodeServiceGenerator serviceGenerator = new CodeServiceGenerator();
-	private CodeServiceTestGenerator serviceTestGenerator = new CodeServiceTestGenerator();
 	
-	private Class<?> modelClazz = UupmDictionaryEntity.class;
+	private Class<?> modelClazz = UupmRoleEntity.class;
 	
-	/**
-	 * 所有--文件
-	 * @Date	2018年2月8日 下午5:45:00 <br/>
-	 * @author  zhangST
-	 */
 	@Test
-	public void writeAllOfOneToFileTest() {
-		mapperInterfaceGenerator.writeToFile(modelClazz, superMapperClazz, mapperPackageName, author, outRootDirPath_mapper_interface, true);
-		mapperFileGenerator.writeToFile(modelClazz, mapperPackageName, outRootDirPath_mapper_xml, covered);
-		serviceGenerator.writeToFile(modelClazz, superServiceClazz, servicePackageName, mapperPackageName, author, outRootDirPath_service, true);
-		serviceTestGenerator.writeToFile(modelClazz, superServiceTestClazz, serviceTestPackageName, author, outRootDirPath_service_test, true);
-	}
-	
-	/**
-	 * service--test--文件
-	 * @Date	2018年2月8日 下午5:46:11 <br/>
-	 * @author  zhangST
-	 */
-	@Test
-	public void writeServiceTestToFile() {
-		serviceTestGenerator.writeToFile(modelClazz, superServiceTestClazz, serviceTestPackageName, author, outRootDirPath_service_test, true);
-	}
-	
-	/**
-	 * service--文件
-	 * @Date	2018年2月8日 下午5:45:49 <br/>
-	 * @author  zhangST
-	 */
-	@Test
-	public void writeServiceToFile() {
-		serviceGenerator.writeToFile(modelClazz, superServiceClazz, servicePackageName, mapperPackageName, author, outRootDirPath_service, true);
-	}
-	
-	/**
-	 * mapper interface--test--文件
-	 * @Date	2018年2月8日 下午5:47:35 <br/>
-	 * @author  zhangST
-	 */
-	@Test
-	public void writeMapperInterfaceToFile() {
-		mapperInterfaceGenerator.writeToFile(modelClazz, superMapperClazz, mapperPackageName, author, outRootDirPath_mapper_interface, true);
-	}
-	
-	/**
-	 * mapper--文件
-	 * @Date	2018年2月8日 下午5:46:37 <br/>
-	 * @author  zhangST
-	 */
-	@Test
-	public void writeMapperToFile() {
+	public void writeTo_File_Mapper() {
 		mapperFileGenerator.writeToFile(modelClazz, mapperPackageName, outRootDirPath_mapper_xml, covered);
 	}
 	
 	/*****************************************************************************/
 	/*****************************************************************************/
 	
-	/**
-	 * service--test--控制台
-	 * @Date	2018年2月8日 下午5:45:58 <br/>
-	 * @author  zhangST
-	 */
 	@Test
-	public void writeServiceTestToConsole() {
-		serviceTestGenerator.writeToConsole(modelClazz, superServiceTestClazz, serviceTestPackageName, author);
-	}
-	
-	/**
-	 * service--控制台
-	 * @Date	2018年2月8日 下午5:45:15 <br/>
-	 * @author  zhangST
-	 */
-	@Test
-	public void writeServiceToConsole() {
-		serviceGenerator.writeToConsole(modelClazz, superServiceClazz, servicePackageName, mapperPackageName, author);
-	}
-	
-	/**
-	 * mapper interface--test--文件
-	 * @Date	2018年2月8日 下午5:47:35 <br/>
-	 * @author  zhangST
-	 */
-	@Test
-	public void writeMapperInterfaceToConsoleTest() {
-		mapperInterfaceGenerator.writeToConsole(modelClazz, superMapperClazz, mapperPackageName, author);
-	}
-	
-	/**
-	 * mapper--控制台
-	 * @Date	2018年2月8日 下午5:46:21 <br/>
-	 * @author  zhangST
-	 */
-	@Test
-	public void writeMapperToConsoleTest() {
+	public void writeTo_Console_Mapper() {
 		mapperFileGenerator.writeToConsole(modelClazz, mapperPackageName);
 	}
 	
-	/**
-	 * mapper sql--控制台
-	 * @Date	2018年2月8日 下午5:46:21 <br/>
-	 * @author  zhangST
-	 */
 	@Test
-	public void writeMapperSqlToConsoleTest() {
+	public void writeTo_Console_MapperSql() {
 //		String tableAliasName = "";
 //		String modelAliasName = "";
 //		String oldAliasName = "";
@@ -145,18 +56,17 @@ public class WriteOneTest extends LocalProjectConfigTest {
 		Class<?> modelClazz = UupmResourceEntity.class;
 		mapperSqlGenerator.writeToConsole(tableAliasName, modelAliasName, oldAliasName, mapAliasName, modelClazz);
 	}
-	/**
-	 * mapper sql tree--控制台
-	 * @Date	2018年2月8日 下午5:46:21 <br/>
-	 * @author  zhangST
-	 */
+	
 	@Test
-	public void writeMapperSqlTreeToConsoleTest() {
+	public void writeTo_Console_MapperSqlTree() {
 		
 		Class<?> modelClazz = UupmResourceEntity.class;
 		mapperSqlTreeGenerator.writeToConsole(modelClazz);
 	}
 	
 	
+	///////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
+
 }
 

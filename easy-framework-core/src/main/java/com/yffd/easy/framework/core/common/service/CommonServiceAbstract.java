@@ -46,7 +46,7 @@ public abstract class CommonServiceAbstract<PO> extends CommonServiceSupport {
 	 */
 	public PageResult<PO> findPage(PO model, Map<String, Object> paramMap, PageParam paramPage) {
 		if(null==paramPage) return null;
-		Long totalRecord = this.findCount(model, paramMap);
+		Integer totalRecord = this.findCount(model, paramMap);
 		paramPage.setTotalRecord(totalRecord);
 		if(totalRecord==0) return null;
 		List<PO> recordList = this.getMapper().selectListBy(model, paramMap, paramPage);
@@ -66,11 +66,11 @@ public abstract class CommonServiceAbstract<PO> extends CommonServiceSupport {
 	 * @param paramMap
 	 * @return
 	 */
-	public Long findCount(PO model, Map<String, Object> paramMap) {
+	public Integer findCount(PO model, Map<String, Object> paramMap) {
 		return this.getMapper().selectCountBy(model, paramMap);
 	}
 	
-	public Long findCount(PO model) {
+	public Integer findCount(PO model) {
 		return this.findCount(model, null);
 	}
 	

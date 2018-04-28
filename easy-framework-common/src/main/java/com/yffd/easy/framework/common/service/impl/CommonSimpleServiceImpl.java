@@ -4,70 +4,157 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.yffd.easy.common.core.page.PageParam;
 import com.yffd.easy.common.core.page.PageResult;
 import com.yffd.easy.common.core.util.EasyStringCheckUtils;
-import com.yffd.easy.framework.common.dao.impl.MybatisCommonDaoImpl;
-import com.yffd.easy.framework.common.pojo.entity.CommonEntity;
-import com.yffd.easy.framework.common.service.ICommonSimpleService;
+import com.yffd.easy.framework.common.dao.bak.BakICommonExtDao;
+import com.yffd.easy.framework.common.service.ICommonService;
 
 /**
- * @Description  entity对象贯穿全局的方式，以entity的完整类名作为mapper sql 的命名空间.
- * @Date		 2018年4月19日 上午11:22:22 <br/>
+ * @Description  VO与PO一样.
+ * @Date		 2018年4月25日 上午10:41:15 <br/>
  * @author       zhangST
  * @version		 1.0
  * @since		 JDK 1.7+
  * @see 	 
  */
-public abstract class CommonSimpleServiceImpl<E extends CommonEntity> extends MybatisCommonDaoImpl<E> implements ICommonSimpleService<E> {
+public abstract class CommonSimpleServiceImpl<VO> implements ICommonService<VO> {
 
-	/**
-	 * 根据主键更新其它属性
-	 * @Date	2018年4月20日 上午10:45:51 <br/>
-	 * @author  zhangST
-	 * @param model
-	 * @return
-	 */
+	protected abstract BakICommonExtDao<VO> getBindDao();
+	
 	@Override
-	public Integer saveOrUpdate(E model) {
-		if(null==model) return 0;
-		E old = null;
-		if(!EasyStringCheckUtils.isEmpty(model.getId())) old = this.findOneByPrimaryId(model.getId());
-		Integer num = 0;
-		if(null==old) {
-			num = super.save(model);
-		} else {
-			model.setId(old.getId());
-			num = super.update(model);
-		} 
-		return num;
+	public Integer save(VO vo) {
+		if(null==vo) return 0;
+		return this.getBindDao().save(vo);
 	}
 
 	@Override
-	@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
-	public Integer saveOrUpdate(List<E> modelList) {
-		if(null==modelList || modelList.size()==0) return 0;
-		Integer num = 0;
-		for(E model : modelList) {
-			num += this.saveOrUpdate(model);
-		}
-		return num;
+	public Integer save(List<VO> voList) {
+		if(null==voList || voList.isEmpty()) return 0;
+		return this.getBindDao().save(voList);
 	}
 
+	@Override
+	public Integer update(VO vo, VO oldVo, Map<String, Object> map) {
+		if(null==vo || (null==oldVo && (null==map || map.isEmpty()))) return 0;
+		return this.getBindDao().update(vo, oldVo, map);
+	}
+
+	@Override
+	public Integer update(VO vo, VO oldVo) {
+		return this.update(vo, oldVo, null);
+	}
+
+	@Override
+	public Integer delete(VO vo, Map<String, Object> map) {
+		if(null==vo || (null==map || map.isEmpty())) return 0;
+		return this.getBindDao().delete(vo, map);
+	}
+
+	@Override
+	public Integer delete(VO vo) {
+		return this.delete(vo, null);
+	}
+
+	@Override
+	public Integer queryCount(VO vo, Map<String, Object> map) {
+		return this.getBindDao().findCount(vo, map);
+	}
+
+	@Override
+	public Integer queryCount(VO vo) {
+		return this.queryCount(vo, null);
+	}
+
+	@Override
+	public VO findOne(VO vo, Map<String, Object> map) {
+		return this.getBindDao().findOne(vo, map);
+	}
+
+	@Override
+	public VO findOne(VO vo) {
+		return this.findOne(vo, null);
+	}
+
+	@Override
+	public List<VO> findListWithOrder(VO vo, Map<String, Object> map, String orderBy) {
+		return this.getBindDao().findListWithOrder(vo, map, orderBy);
+	}
+
+	@Override
+	public List<VO> findListWithOrder(VO vo, String orderBy) {
+		return this.findListWithOrder(vo, null, orderBy);
+	}
+
+	@Override
+	public List<VO> findList(VO vo, Map<String, Object> map) {
+		return this.findListWithOrder(vo, map, null);
+	}
+	
+	@Override
+	public List<VO> findList(VO vo) {
+		return this.findListWithOrder(vo, null, null);
+	}
+	
+	@Override
+	public List<VO> findAll() {
+		return this.findList(null);
+	}
+	
+	@Override
+	public List<VO> findAllWithOrder(String orderBy) {
+		return this.findListWithOrder(null, orderBy);
+	}
+	
+	@Override
+	public PageResult<VO> findPageWithOrder(VO vo, Map<String, Object> map, String orderBy, PageParam page) {
+		return this.getBindDao().findPageWithOrder(vo, map, orderBy, page);
+	}
+
+	@Override
+	public PageResult<VO> findPageWithOrder(VO vo, String orderBy, PageParam page) {
+		return this.findPageWithOrder(vo, null, orderBy, page);
+	}
+
+	@Override
+	public PageResult<VO> findPage(VO vo, Map<String, Object> map, PageParam page) {
+		return this.findPageWithOrder(vo, map, null, page);
+	}
+	
+	@Override
+	public PageResult<VO> findPage(VO vo, PageParam page) {
+		return this.findPageWithOrder(vo, null, null, page);
+	}
+	
+	@Override
+	public Boolean exsistAndUnique(VO vo, Map<String, Object> map) {
+		Integer result = this.getBindDao().findCount(vo, map);
+		return result == 1;
+	}
+
+	@Override
+	public Boolean exsistAndUnique(VO vo) {
+		return this.exsistAndUnique(vo, null);
+	}
+
+	@Override
+	public Boolean exsist(VO vo, Map<String, Object> map) {
+		Integer result = this.getBindDao().findCount(vo, map);
+		return result > 0;
+	}
+
+	@Override
+	public Boolean exsist(VO vo) {
+		return this.exsist(vo, null);
+	}
+	
+	
+	
 	@Override
 	public Integer deleteByProperty(String propertyName, Object value) {
-		if(EasyStringCheckUtils.isEmpty(propertyName) || null==value) return 0;
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put(propertyName, value);
-		return super.delete(null, map);
-	}
-
-	@Override
-	public Integer deleteByPrimaryId(String primaryId) {
-		return this.deleteByProperty("id", primaryId);
+		return this.delete(null, map);
 	}
 
 	@Override
@@ -76,78 +163,94 @@ public abstract class CommonSimpleServiceImpl<E extends CommonEntity> extends My
 	}
 
 	@Override
-	public E findOneByProperty(String propertyName, Object value) {
-		if(EasyStringCheckUtils.isEmpty(propertyName) || null==value) return null;
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put(propertyName, value);
-		return super.findOne(null, map);
-	}
-
-	@Override
-	public E findOneByPrimaryId(String primaryId) {
-		return this.findOneByProperty("id", primaryId);
+	public Integer deleteByPrimaryId(String primaryId) {
+		return this.deleteByProperty("id", primaryId);
 	}
 
 	@Override
 	public Integer queryCountByProperty(String propertyName, Object value) {
-		if(EasyStringCheckUtils.isEmpty(propertyName) || null==value) return 0;
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put(propertyName, value);
-		return super.findCount(null, map);
+		return this.queryCount(null, map);
 	}
 
 	@Override
-	public List<E> findListByProperty(String propertyName, Object value, String[] orderPropertyNames,
-			String[] orderByTypes) {
-		if(EasyStringCheckUtils.isEmpty(propertyName) || null==value) return null;
+	public VO findOneByProperty(String propertyName, Object value) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put(propertyName, value);
-		String orderBy = this.makeOrderBy(orderPropertyNames, orderByTypes);
-		return super.findListByOrder(null, map, orderBy);
+		return this.findOne(null, map);
 	}
 
 	@Override
-	public List<E> findListByProperty(String propertyName, Object value, String orderBy) {
-		if(EasyStringCheckUtils.isEmpty(propertyName) || null==value) return null;
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put(propertyName, value);
-		return super.findListByOrder(null, map, orderBy);
+	public VO findOneByPrimaryId(String primaryId) {
+		return this.findOneByProperty("id", primaryId);
 	}
 
 	@Override
-	public List<E> findListByProperty(String propertyName, Object value) {
-		if(EasyStringCheckUtils.isEmpty(propertyName) || null==value) return null;
+	public List<VO> findListWithOrderByProperty(String propertyName, Object value, String orderBy) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put(propertyName, value);
-		return super.findList(null, map);
+		return this.findListWithOrder(null, map, orderBy);
+	}
+
+	@Override
+	public List<VO> findListByProperty(String propertyName, Object value) {
+		return this.findListWithOrderByProperty(propertyName, value, null);
+	}
+
+	@Override
+	public PageResult<VO> findPageWithOrderByProperty(String propertyName, Object value, String orderBy,
+			PageParam page) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put(propertyName, value);
+		return this.findPageWithOrder(null, map, orderBy, page);
+	}
+
+	@Override
+	public PageResult<VO> findPageWithOrderByProperty(String propertyName, Object value, String orderPropertyName,
+			String orderByType, PageParam page) {
+		String orderBy = this.makeOrderBy(orderPropertyName, orderByType);
+		return this.findPageWithOrderByProperty(orderPropertyName, value, orderBy, page);
+	}
+
+	@Override
+	public PageResult<VO> findPageByProperty(String propertyName, Object value, PageParam page) {
+		return this.findPageWithOrderByProperty(propertyName, value, null, null, page);
+	}
+
+	protected String makeOrderBy(String[] orderPropertyNames, String[] orderByTypes) {
+		if(null==orderPropertyNames) return null;
+		String defaultType = "asc";
+		StringBuilder sb = new StringBuilder();
+		if(null==orderByTypes) {
+			for(String name : orderPropertyNames) {
+				sb.append(name).append(" ").append(defaultType).append(", ");
+			}
+		} else {
+			Integer len1 = orderPropertyNames.length;
+			Integer len2 = orderByTypes.length;
+			for(Integer i=0;i<len1;i++) {
+				sb.append(orderPropertyNames[i]).append(" ");
+				if(i<len2) {
+					sb.append(orderByTypes[i]).append(", ");
+				} else {
+					sb.append(defaultType).append(", ");
+				}
+			}
+		}
+		return sb.length()>0 ? sb.substring(0, sb.lastIndexOf(",")) : null;
 	}
 	
-	@Override
-	public PageResult<E> findPageByProperty(String propertyName, Object value, String[] orderPropertyNames,
-			String[] orderByTypes, PageParam page) {
-		if(EasyStringCheckUtils.isEmpty(propertyName) || null==value) return null;
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put(propertyName, value);
-		String orderBy = this.makeOrderBy(orderPropertyNames, orderByTypes);
-		return super.findPageByOrder(map, orderBy, page);
+	protected String makeOrderBy(String orderPropertyName, String orderByType) {
+		String orderBy = null;
+		if(!EasyStringCheckUtils.isEmpty(orderPropertyName)) {
+			if(!EasyStringCheckUtils.isEmpty(orderByType)) {
+				orderBy = orderPropertyName + " " + orderByType;
+			} else {
+				orderBy = orderPropertyName + " asc";
+			}
+		}
+		return orderBy;
 	}
-	
-	@Override
-	public PageResult<E> findPageByProperty(String propertyName, Object value, String orderBy, PageParam page) {
-		if(EasyStringCheckUtils.isEmpty(propertyName) || null==value) return null;
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put(propertyName, value);
-		return super.findPageByOrder(map, orderBy, page);
-	}
-
-	@Override
-	public PageResult<E> findPageByProperty(String propertyName, Object value, PageParam page) {
-		if(EasyStringCheckUtils.isEmpty(propertyName) || null==value) return null;
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put(propertyName, value);
-		return super.findPage(map, page);
-	}
-
-
 }
 

@@ -18,7 +18,7 @@ import com.yffd.easy.common.core.util.EasyStringCheckUtils;
 import com.yffd.easy.framework.web.model.RespData;
 import com.yffd.easy.framework.web.view.vo.DataGridVO;
 import com.yffd.easy.framework.web.view.vo.PropertyGridVO;
-import com.yffd.easy.uupm.pojo.entity.UupmApplicationEntity;
+import com.yffd.easy.uupm.entity.UupmApplicationEntity;
 import com.yffd.easy.uupm.service.UupmApplicationService;
 import com.yffd.easy.uupm.web.common.UupmCommonController;
 import com.yffd.easy.uupm.web.support.UupmModePropertyGridSupport;

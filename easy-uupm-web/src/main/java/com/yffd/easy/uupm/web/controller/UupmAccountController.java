@@ -18,7 +18,7 @@ import com.yffd.easy.common.core.util.EasyStringCheckUtils;
 import com.yffd.easy.framework.web.model.RespData;
 import com.yffd.easy.framework.web.shiro.password.PasswordEncrypt;
 import com.yffd.easy.framework.web.view.vo.DataGridVO;
-import com.yffd.easy.uupm.pojo.entity.UupmAccountEntity;
+import com.yffd.easy.uupm.entity.UupmAccountEntity;
 import com.yffd.easy.uupm.service.UupmAccountService;
 import com.yffd.easy.uupm.web.common.UupmCommonController;
 

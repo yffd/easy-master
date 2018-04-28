@@ -1,19 +1,20 @@
 package com.yffd.easy.uupm.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.yffd.easy.common.core.exception.EasyCommonException;
+import com.yffd.easy.common.core.util.EasyJavaBeanUtils;
 import com.yffd.easy.common.core.util.EasyStringCheckUtils;
-import com.yffd.easy.framework.core.common.mapper.ICommonMapper;
-import com.yffd.easy.framework.core.common.service.CommonServiceAbstract;
+import com.yffd.easy.framework.common.dao.bak.BakICommonExtDao;
+import com.yffd.easy.framework.common.service.impl.CommonSimpleServiceImpl;
 import com.yffd.easy.framework.core.exception.BizException;
-import com.yffd.easy.uupm.mapper.IUupmMenuMapper;
-import com.yffd.easy.uupm.pojo.entity.UupmMenuEntity;
+import com.yffd.easy.uupm.dao.UupmMenuDao;
+import com.yffd.easy.uupm.entity.UupmMenuEntity;
+import com.yffd.easy.uupm.pojo.vo.UupmMenuInfoVo;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -24,90 +25,81 @@ import com.yffd.easy.uupm.pojo.entity.UupmMenuEntity;
  * @see 	 
  */
 @Service
-public class UupmMenuService extends CommonServiceAbstract<UupmMenuEntity> {
+public class UupmMenuService extends CommonSimpleServiceImpl<UupmMenuEntity> {
 
 	@Autowired
-	private IUupmMenuMapper uupmMenuMapper;
+	private UupmMenuDao uupmMenuDao;
 	
 	@Override
-	public ICommonMapper<UupmMenuEntity> getMapper() {
-		return this.uupmMenuMapper;
+	protected BakICommonExtDao<UupmMenuEntity> getBindDao() {
+		return uupmMenuDao;
 	}
 
-	@Override
-	public Class<?> getMapperClass() {
-		return IUupmMenuMapper.class;
-	}
-
-	public List<Map<String, Object>> findMenuList(String tenantCode, String parentCode) {
+	public List<UupmMenuInfoVo> findMenuList(String tenantCode, String parentCode) {
 		if(EasyStringCheckUtils.isEmpty(tenantCode)) throw BizException.BIZ_TENANT_IS_EMPTY();
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("tenantCode", tenantCode);
-		paramMap.put("parentCode", parentCode);
-		return this.selectListBy("selectMenu", paramMap, true);
+		UupmMenuInfoVo menuInfoVo = new UupmMenuInfoVo();
+		menuInfoVo.setTenantCode(tenantCode);
+		menuInfoVo.setParentCode(parentCode);
+		return this.uupmMenuDao.findMenuInfoList(menuInfoVo);
 	}
 	
 	public int addMenuForAdmin(String tenantCode) {
-		List<Map<String, Object>> list = this.findPlanMenuForAdmin(tenantCode);
+		List<UupmMenuInfoVo> list = this.findMenuInfoForAdmin(tenantCode);
 		if(null==list || list.size()==0) return 0;
 		List<UupmMenuEntity> modelList = new ArrayList<UupmMenuEntity>();
-		for(Map<String, Object> map : list) {
-			UupmMenuEntity model = new UupmMenuEntity();
-			model.setTenantCode(tenantCode);
-			model.setMenuCode((String) map.get("rsCode"));
-			model.setMenuName((String) map.get("rsName"));
-			model.setMenuSeqNo((int) map.get("seqNo"));
-			model.setMenuIcons("icon-sys");
-			model.setMenuType("nav_left");
-			model.setAccessType("url");
-			String nodeLabel = (String) map.get("nodeLabel");
-			String parentCode = (String) map.get("parentCode");
-			if(nodeLabel.equals(parentCode)) {
-				model.setParentCode("root");
-			} else {
-				model.setParentCode(parentCode);
+		for(UupmMenuInfoVo vo : list) {
+			try {
+				UupmMenuEntity model = EasyJavaBeanUtils.copyProperties(vo, UupmMenuEntity.class);
+				model.setTenantCode(tenantCode);
+//			String nodeLabel = (String) map.get("nodeLabel");
+//			String parentCode = (String) map.get("parentCode");
+//			if(nodeLabel.equals(parentCode)) {
+//				model.setParentCode("root");
+//			} else {
+//				model.setParentCode(parentCode);
+//			}
+				modelList.add(model);
+			} catch (EasyCommonException | ReflectiveOperationException e) {
+				e.printStackTrace();
 			}
-			modelList.add(model);
 		}
 		if(modelList.size()==0) return 0;
-		return this.addList(modelList);
+		return this.save(modelList);
 	}
 	
 	public int addMenuForOther(String tenantCode) {
-		List<Map<String, Object>> list = this.findPlanMenuForOther(tenantCode);
+		List<UupmMenuInfoVo> list = this.findMenuInfoForDefault(tenantCode);
 		if(null==list || list.size()==0) return 0;
 		List<UupmMenuEntity> modelList = new ArrayList<UupmMenuEntity>();
-		for(Map<String, Object> map : list) {
-			UupmMenuEntity model = new UupmMenuEntity();
-			model.setTenantCode(tenantCode);
-			model.setMenuCode((String) map.get("rsCode"));
-			model.setMenuName((String) map.get("rsName"));
-			model.setMenuSeqNo((int) map.get("seqNo"));
-			model.setMenuIcons("icon-sys");
-			model.setMenuType("nav_left");
-			model.setAccessType("url");
-			String nodeLabel = (String) map.get("nodeLabel");
-			String parentCode = (String) map.get("parentCode");
-			if(nodeLabel.equals(parentCode)) {
-				model.setParentCode("root");
-			} else {
-				model.setParentCode(parentCode);
+		for(UupmMenuInfoVo vo : list) {
+			try {
+				UupmMenuEntity model = EasyJavaBeanUtils.copyProperties(vo, UupmMenuEntity.class);
+				model.setTenantCode(tenantCode);
+//			String nodeLabel = (String) map.get("nodeLabel");
+//			String parentCode = (String) map.get("parentCode");
+//			if(nodeLabel.equals(parentCode)) {
+//				model.setParentCode("root");
+//			} else {
+//				model.setParentCode(parentCode);
+//			}
+				modelList.add(model);
+			} catch (EasyCommonException | ReflectiveOperationException e) {
+				e.printStackTrace();
 			}
-			modelList.add(model);
 		}
 		if(modelList.size()==0) return 0;
-		return this.addList(modelList);
+		return this.save(modelList);
 	}
 	
-	public List<Map<String, Object>> findPlanMenuForAdmin(String tenantCode) {
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("tenantCode", tenantCode);
-		return this.selectListBy("selectPlanMenuForAdmin", paramMap, true);
+	public List<UupmMenuInfoVo> findMenuInfoForAdmin(String tenantCode) {
+		UupmMenuInfoVo menuInfoVo = new UupmMenuInfoVo();
+		menuInfoVo.setTenantCode(tenantCode);
+		return this.uupmMenuDao.findMenuInfoForAdminList(menuInfoVo);
 	}
 	
-	public List<Map<String, Object>> findPlanMenuForOther(String tenantCode) {
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("tenantCode", tenantCode);
-		return this.selectListBy("selectPlanMenuForOther", paramMap, true);
+	public List<UupmMenuInfoVo> findMenuInfoForDefault(String tenantCode) {
+		UupmMenuInfoVo menuInfoVo = new UupmMenuInfoVo();
+		menuInfoVo.setTenantCode(tenantCode);
+		return this.uupmMenuDao.findMenuInfoForDefaultList(menuInfoVo);
 	}
 }

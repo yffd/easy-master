@@ -1,0 +1,40 @@
+package ##PACKAGE_SERVICE##;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.yffd.easy.framework.common.dao.ICommonExtDao;
+import ##IMPORT_SERVICE_SUPER##;
+import ##IMPORT_DAO##;
+import ##IMPORT_MODEL##;
+
+/**
+ * @Description  简单描述该类的功能（可选）.
+ * @Date		 ##DATE## <br/>
+ * @author		 ##AUTHOR##
+ * @version		 1.0
+ * @since		 JDK 1.7+
+ * @see 	 
+ */
+@Service
+public class ##SIMPLE_SERVICE## ##SIMPLE_SERVICE_SUPER##{
+
+	@Autowired
+	private ##SIMPLE_DAO## ##ALIAS_DAO##;
+	
+	@Override
+	protected ICommonExtDao<##SIMPLE_MODEL_PO##> getBindDao() {
+		return this.##ALIAS_DAO##;
+	}
+
+	@Override
+	protected Class<##SIMPLE_MODEL_VO##> getBindVoClass() {
+		return ##SIMPLE_MODEL_VO##.class;
+	}
+
+	@Override
+	protected Class<##SIMPLE_MODEL_PO##> getBindPoClass() {
+		return ##SIMPLE_MODEL_PO##.class;
+	}
+	
+}

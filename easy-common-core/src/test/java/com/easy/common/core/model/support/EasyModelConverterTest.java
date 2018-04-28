@@ -56,7 +56,7 @@ public class EasyModelConverterTest {
 		
 		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>");
 		
-		PageParam pageParam = new PageParam(1L, 10L);
+		PageParam pageParam = new PageParam(1, 10);
 		PageResult<DemoPO> pageResult = new PageResult<DemoPO>();
 		pageResult.setRecordList(listResult);
 		pageResult.setPageParam(pageParam);
@@ -94,7 +94,7 @@ public class EasyModelConverterTest {
 		
 		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>");
 		
-		PageParam pageParam = new PageParam(1L, 10L);
+		PageParam pageParam = new PageParam(1, 10);
 		PageResult<Map<String, Object>> pageResult = new PageResult<Map<String, Object>>();
 		pageResult.setRecordList(listResult);
 		pageResult.setPageParam(pageParam);

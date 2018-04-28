@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.yffd.easy.common.core.util.EasyStringCheckUtils;
 import com.yffd.easy.framework.web.model.RespData;
-import com.yffd.easy.uupm.pojo.entity.UupmDictionaryEntity;
+import com.yffd.easy.uupm.entity.UupmDictionaryEntity;
 import com.yffd.easy.uupm.service.UupmDictionaryService;
 import com.yffd.easy.uupm.web.common.UupmCommonController;
 

@@ -20,17 +20,17 @@ public interface ICommonMapper<PO> {
 	
 	public List<PO> selectListBy(@Param("po") PO po, @Param("map") Map<String, Object> map, @Param("page") PageParam page);
 	
-	public Long selectCountBy(@Param("po") PO po, @Param("map") Map<String, Object> map);
+	public Integer selectCountBy(@Param("po") PO po, @Param("map") Map<String, Object> map);
 	
 	public PO selectOneBy(@Param("po") PO po, @Param("map") Map<String, Object> map);
 	
-	public int insertOne(PO po);
+	public Integer insertOne(PO po);
 	
-	public int insertList(List<PO> poList);
+	public Integer insertList(List<PO> poList);
 	
-	public int updateBy(@Param("po") PO po, @Param("old") PO old, @Param("map") Map<String, Object> map);
+	public Integer updateBy(@Param("po") PO po, @Param("old") PO old, @Param("map") Map<String, Object> map);
 	
-	public int deleteBy(@Param("po") PO po, @Param("map") Map<String, Object> map);
+	public Integer deleteBy(@Param("po") PO po, @Param("map") Map<String, Object> map);
 	
 }
 

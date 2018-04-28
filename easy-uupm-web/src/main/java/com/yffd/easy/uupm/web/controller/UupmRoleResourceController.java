@@ -21,8 +21,8 @@ import com.yffd.easy.common.core.page.PageResult;
 import com.yffd.easy.common.core.util.EasyStringCheckUtils;
 import com.yffd.easy.framework.web.model.RespData;
 import com.yffd.easy.framework.web.view.vo.DataGridVO;
-import com.yffd.easy.uupm.pojo.entity.UupmRoleResourceEntity;
-import com.yffd.easy.uupm.pojo.entity.UupmTenantResourceEntity;
+import com.yffd.easy.uupm.entity.UupmRoleResourceEntity;
+import com.yffd.easy.uupm.entity.UupmTenantResourceEntity;
 import com.yffd.easy.uupm.service.UupmRoleResourceService;
 import com.yffd.easy.uupm.web.common.UupmCommonController;
 

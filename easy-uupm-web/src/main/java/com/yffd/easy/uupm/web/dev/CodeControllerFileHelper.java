@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.yffd.easy.framework.core.code.generator.CodeControllerGenerator;
 import com.yffd.easy.framework.core.code.generator.CodeGenerator;
-import com.yffd.easy.uupm.pojo.entity.UupmDictionaryEntity;
+import com.yffd.easy.uupm.entity.UupmDictionaryEntity;
 import com.yffd.easy.uupm.service.UupmDictionaryService;
 import com.yffd.easy.uupm.web.common.UupmCommonController;
 

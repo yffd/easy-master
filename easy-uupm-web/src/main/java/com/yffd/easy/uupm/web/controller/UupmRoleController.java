@@ -1,7 +1,5 @@
 package com.yffd.easy.uupm.web.controller;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +15,7 @@ import com.yffd.easy.common.core.page.PageResult;
 import com.yffd.easy.common.core.util.EasyStringCheckUtils;
 import com.yffd.easy.framework.web.model.RespData;
 import com.yffd.easy.framework.web.view.vo.DataGridVO;
-import com.yffd.easy.uupm.pojo.entity.UupmRoleEntity;
+import com.yffd.easy.uupm.entity.UupmRoleEntity;
 import com.yffd.easy.uupm.service.UupmRoleService;
 import com.yffd.easy.uupm.web.common.UupmCommonController;
 
@@ -59,7 +57,7 @@ public class UupmRoleController extends UupmCommonController {
 		paramModel.setRoleCode(model.getRoleCode());
 		UupmRoleEntity resultModel = this.uupmRoleService.findOne(paramModel);
 		if(null!=resultModel) return this.error("编号已存在");
-		int result = this.uupmRoleService.addOne(model);
+		int result = this.uupmRoleService.save(model);
 		if(result==0) return this.error("添加失败");
 		return this.successAjax();
 	}
@@ -77,7 +75,7 @@ public class UupmRoleController extends UupmCommonController {
 	@RequestMapping(value="/delById", method=RequestMethod.POST)
 	public RespData delById(String id) {
 		if(EasyStringCheckUtils.isEmpty(id)) return this.errorAjax("参数无效");
-		int result = this.uupmRoleService.deleteBy("id", id);
+		int result = this.uupmRoleService.deleteByPrimaryId(id);
 		if(result==0) return this.error("删除失败");
 		return this.successAjax();
 	}
@@ -87,8 +85,7 @@ public class UupmRoleController extends UupmCommonController {
 		String ids = req.getParameter("ids");
 		if(EasyStringCheckUtils.isEmpty(ids)) return this.error("参数无效");
 		String[] idsArr = ids.split(",");
-		List<String> idsList = Arrays.asList(idsArr);
-		int result = this.uupmRoleService.delete("idList", idsList);
+		int result = this.uupmRoleService.deleteByPrimaryIds(idsArr);
 		if(result==0) return this.error("删除失败");
 		return this.successAjax();
 	}

@@ -1,7 +1,5 @@
 package com.yffd.easy.uupm.service;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +9,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.yffd.easy.common.core.page.PageParam;
 import com.yffd.easy.common.core.page.PageResult;
-import com.yffd.easy.framework.core.common.mapper.ICommonMapper;
-import com.yffd.easy.framework.core.common.service.CommonServiceAbstract;
+import com.yffd.easy.framework.common.dao.bak.BakICommonExtDao;
+import com.yffd.easy.framework.common.service.impl.CommonSimpleServiceImpl;
 import com.yffd.easy.framework.core.exception.BizException;
-import com.yffd.easy.uupm.mapper.IUupmUserMapper;
-import com.yffd.easy.uupm.pojo.entity.UupmAccountEntity;
-import com.yffd.easy.uupm.pojo.entity.UupmUserEntity;
+import com.yffd.easy.uupm.dao.UupmUserDao;
+import com.yffd.easy.uupm.entity.UupmAccountEntity;
+import com.yffd.easy.uupm.entity.UupmUserEntity;
 
 /**
  * @Description  简单描述该类的功能（可选）.
@@ -27,54 +25,35 @@ import com.yffd.easy.uupm.pojo.entity.UupmUserEntity;
  * @see 	 
  */
 @Service
-public class UupmUserService extends CommonServiceAbstract<UupmUserEntity> {
+public class UupmUserService extends CommonSimpleServiceImpl<UupmUserEntity> {
 
 	@Autowired
 	private UupmAccountService uupmAccountService;
 	
 	@Autowired
-	private IUupmUserMapper uupmUserMapper;
-	
-	@Override
-	public ICommonMapper<UupmUserEntity> getMapper() {
-		return this.uupmUserMapper;
-	}
+	private UupmUserDao uupmUserDao;
 
 	@Override
-	public Class<?> getMapperClass() {
-		return IUupmUserMapper.class;
+	protected BakICommonExtDao<UupmUserEntity> getBindDao() {
+		return this.uupmUserDao;
 	}
 
 	public PageResult<Map<String, Object>> findUserInfo(Map<String, Object> paramMap, PageParam pageParam) {
-		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("map", paramMap);
-		params.put("page", pageParam);
-		return this.selectPage(params, pageParam, "selectUserInfo", "selectUserInfoCount", true);
+		return this.uupmUserDao.findUserInfo(paramMap, pageParam);
 	}
 	
 	@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
 	public int addUserWithAccount(UupmUserEntity model) {
 		if(null==model) throw BizException.BIZ_PARAMS_IS_EMPTY();
-		int num = this.addOne(model);
+		int num = this.uupmUserDao.save(model);
 		// 生成账号
 		UupmAccountEntity account = new UupmAccountEntity();
 		account.setAccountId(model.getUserCode());
 		account.setAccountPwd("123456");
 		account.setAccountStatus("active");
 		account.setAccountType("default");
-		this.uupmAccountService.addOne(account);
+		this.uupmAccountService.save(account);
 		return num;
 	}
 	
-	private List<Map<String, Object>> findUserInfo(String tenantCode) {
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("tenantCode", tenantCode);
-		return this.selectListBy("selectUserInfo", paramMap, true);
-	}
-	
-	private long findUserInfoCount(String tenantCode) {
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("tenantCode", tenantCode);
-		return this.selectOneBy("selectUserInfoCount", paramMap, true);
-	}
 }

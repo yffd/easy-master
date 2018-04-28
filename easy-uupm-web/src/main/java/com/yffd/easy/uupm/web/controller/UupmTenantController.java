@@ -17,7 +17,7 @@ import com.yffd.easy.common.core.page.PageResult;
 import com.yffd.easy.common.core.util.EasyStringCheckUtils;
 import com.yffd.easy.framework.web.model.RespData;
 import com.yffd.easy.framework.web.view.vo.DataGridVO;
-import com.yffd.easy.uupm.pojo.entity.UupmTenantEntity;
+import com.yffd.easy.uupm.entity.UupmTenantEntity;
 import com.yffd.easy.uupm.service.UupmTenantService;
 import com.yffd.easy.uupm.web.common.UupmCommonController;
 
